@@ -99,11 +99,27 @@
       font-size: 0.9rem;
       margin-top: 2rem;
     }
+      @media (max-width: 768px) {
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
+      .product img[alt="Hot Selling Badge"] {
+        width: 40px !important;
+        top: -5px !important;
+        left: -5px !important;
+      }
+    }
   </style>
 </head>
 <body>
   <header>
-    <h1>Rich Academy Global</h1>
+    <h1>Forever Living by Mohd Arvind Isa</h1>
     <p>Bringing health and wealth together</p>
   </header>
 
@@ -222,28 +238,98 @@
         <p>RM117.70</p>
         <button onclick="addToWhatsApp('Aloe-Jojoba Conditioner', 117.70)">Add to Cart</button>
       </div>
-      <!-- END ADDITIONAL PRODUCTS -->
+      <div class="product">
+  <img src="aloe-sunscreen.jpg" alt="Aloe Sunscreen">
+  <h3>Aloe Sunscreen</h3>
+  <p>RM89.07</p>
+  <button onclick="addToWhatsApp('Aloe Sunscreen', 89.07)">Add to Cart</button>
+</div>
+<div class="product">
+  <img src="avocado-soap.jpg" alt="Avocado Face & Body Soap">
+  <h3>Avocado Face & Body Soap</h3>
+  <p>RM30.68</p>
+  <button onclick="addToWhatsApp('Avocado Face & Body Soap', 30.68)">Add to Cart</button>
+</div>
+<div class="product">
+  <img src="forever-deodorant.jpg" alt="Forever Deodorant Stick">
+  <h3>Forever Deodorant Stick</h3>
+  <p>RM50.73</p>
+  <button onclick="addToWhatsApp('Forever Deodorant Stick', 50.73)">Add to Cart</button>
+</div>
+<!-- END ADDITIONAL PRODUCTS -->
 
 </div> <!-- closes .product-grid -->
 
   <section id="cds">
-    <h2>💪 Cabaran Detox Sihat (CDS)</h2>
-    <p>Join our healthy detox challenge and transform your body the natural way with Forever Living!</p>
+    <h2>💪 Rich Academy Global: Cabaran Detox Sihat (CDS)</h2>
+    <p>Join our health transformation challenge and start your journey with Rich Academy Global and Forever Living!</p>
     <p>Scan below to register & learn more:</p>
     <img src="qr-cds.png" alt="QR to Cabaran Detox Sihat" style="width: 200px; height: 200px;">
   </section>
 
+  <section id="recruit">
+    <h2>🤝 Join Rich Academy Global</h2>
+    <p>Want to build your own business with Forever Living? Rich Academy Global is recruiting new agents across Malaysia.</p>
+    <p>Click the button below to chat with us directly on WhatsApp!</p>
+    <a href="https://wa.me/601111033154?text=Hi%2C%20I%27m%20interested%20to%20join%20Rich%20Academy%20Global%20as%20a%20business%20partner" style="display: inline-block; background-color: #25D366; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold;">Join via WhatsApp</a>
+  </section>
+
   <footer>
-    <p>Copyright © 2025 Rich Academy Global</p>
+    <p>Copyright © 2025 Forever Living by Mohd Arvind Isa</p>
   </footer>
 
   <script>
-    function addToWhatsApp(product, price) {
-      const phone = '601111033154';
-      const message = `I'm interested in buying: ${product} (RM${price})`;
-      const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-      window.open(url, '_blank');
+  let cart = [];
+
+  function addToWhatsApp(product, price) {
+    const existing = cart.find(item => item.name === product);
+    if (existing) {
+      existing.qty++;
+    } else {
+      cart.push({ name: product, price: price, qty: 1 });
     }
-  </script>
+    alert(`${product} added to cart.`);
+  }
+
+  function placeOrder() {
+    if (cart.length === 0) {
+      alert("Cart is empty.");
+      return;
+    }
+
+    const consent = confirm("Do you agree to share your name and phone number for order processing in accordance with the PDPA Act?");
+    if (!consent) {
+      alert("Order cancelled. We respect your privacy.");
+      return;
+    }
+    const name = prompt("Enter your name:");
+    const phone = prompt("Enter your phone number:");
+    if (!name || !phone) {
+      alert("Name and phone number are required.");
+      return;
+    }
+
+    let message = `Order by: ${name}
+Phone: ${phone}
+
+Items:
+`;
+    let total = 0;
+    cart.forEach(item => {
+      const subtotal = item.price * item.qty;
+      total += subtotal;
+      message += `- ${item.name} x${item.qty} = RM${subtotal.toFixed(2)}
+`;
+    });
+    message += `
+Total: RM${total.toFixed(2)}`;
+
+    const url = `https://wa.me/601111033154?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+  }
+</script>
+
+<button onclick="placeOrder()" style="position: fixed; bottom: 20px; right: 20px; background: #0b5f5c; color: white; padding: 12px 20px; border-radius: 50px; font-size: 16px; border: none; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">🛒 Place Order</button>
 </body>
 </html>
+
