@@ -123,6 +123,13 @@
     <p>Bringing health and wealth together</p>
   </header>
 
+  <div id="cart-panel" style="position:fixed; top:80px; right:20px; background:#fff; border:1px solid #ccc; padding:15px; max-width:300px; z-index:9999; box-shadow: 0 2px 10px rgba(0,0,0,0.2); display:none;">
+    <h3 style="margin-top:0;">🛒 Your Cart</h3>
+    <ul id="cart-items" style="list-style:none; padding:0; margin:0 0 10px;"></ul>
+    <p id="cart-total" style="font-weight:bold;">Total: RM0.00</p>
+    <button onclick="placeOrder()" style="background:#25D366; color:#fff; border:none; padding:10px 15px; border-radius:5px; cursor:pointer; width:100%;">Checkout via WhatsApp</button>
+  </div>
+
   <section id="products">
     <h2>🔥 Hot Selling Products</h2>
     <div class="product-grid">
@@ -281,6 +288,30 @@
   <script>
   let cart = [];
 
+function updateCartUI() {
+  const panel = document.getElementById("cart-panel");
+  const list = document.getElementById("cart-items");
+  const total = document.getElementById("cart-total");
+  list.innerHTML = "";
+
+  let totalPrice = 0;
+  cart.forEach((item, index) => {
+    const subtotal = item.price * item.qty;
+    totalPrice += subtotal;
+    const li = document.createElement("li");
+    li.innerHTML = `${item.name} x${item.qty} = RM${subtotal.toFixed(2)} <button onclick="removeItem(${index})" style='margin-left:5px;'>❌</button>`;
+    list.appendChild(li);
+  });
+
+  total.textContent = `Total: RM${totalPrice.toFixed(2)}`;
+  panel.style.display = cart.length > 0 ? "block" : "none";
+}
+
+function removeItem(index) {
+  cart.splice(index, 1);
+  updateCartUI();
+}
+
   function addToWhatsApp(product, price) {
     const existing = cart.find(item => item.name === product);
     if (existing) {
@@ -288,7 +319,7 @@
     } else {
       cart.push({ name: product, price: price, qty: 1 });
     }
-    alert(`${product} added to cart.`);
+    updateCartUI();
   }
 
   function placeOrder() {
