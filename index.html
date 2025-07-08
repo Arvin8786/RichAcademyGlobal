@@ -1,200 +1,183 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.5">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rich Academy Global - Forever Living Products</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fffaf7;
+      color: #333;
+    }
+
+    header {
+      background: #0b5f5c;
+      color: white;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      font-size: 1.2rem;
+    }
+
+    h2 {
+      text-align: center;
+      color: #0b5f5c;
+      margin-top: 2rem;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .product {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .product img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 1rem;
+    }
+
+    .product h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .product p {
+      font-size: 1rem;
+      color: #222;
+    }
+
+    .product button {
+      background-color: #0b5f5c;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 0.5rem;
+    }
+
+    .product button:hover {
+      background-color: #0d726e;
+    }
+
+    #cds {
+      padding: 2rem;
+      text-align: center;
+      background: #e0f8f6;
+      margin-top: 2rem;
+    }
+
+    footer {
+      background: #0b5f5c;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      margin-top: 2rem;
+    }
   </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Rich Academy Global - Forever Living Products&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>body {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-family: 'Segoe UI', sans-serif;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin: 0;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 0;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: #fffaf7;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: #333;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>header {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: #0b5f5c;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 2rem 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>header h1 {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 2.5rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 0.5rem;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>header p {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 1.2rem;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>h2 {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: #0b5f5c;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.product-grid {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: grid;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));</p>
-<p class="p1"><span class="Apple-converted-space">      </span>gap: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>max-width: 1200px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin: auto;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.product {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: white;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border: 1px solid #ddd;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.product img {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>max-width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>height: auto;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.product h3 {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 1.1rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 0.5rem;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.product p {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: #222;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.product button {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background-color: #0b5f5c;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border: none;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 0.5rem 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 4px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>transition: background-color 0.3s ease;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 0.5rem;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.product button:hover {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background-color: #0d726e;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>#cds {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: #e0f8f6;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>footer {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: #0b5f5c;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 0.9rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;header&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;Rich Academy Global&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;Bringing health and wealth together&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/header&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;section id="products"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;🔥 Hot Selling Products&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="product-grid"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="product"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;img src="teh-tarik.jpg" alt="Teh Tarik Halia"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;Teh Tarik Halia&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;RM25.90&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button onclick="addToWhatsApp('Teh Tarik Halia', 25.90)"&gt;Add to Cart&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="product"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;img src="aloe-vera-gel.jpg" alt="Aloe Vera Gel"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;Aloe Vera Gel&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;RM116.79&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button onclick="addToWhatsApp('Aloe Vera Gel', 116.79)"&gt;Add to Cart&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="product"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;img src="aloe-berry.jpg" alt="Aloe Berry Nectar"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;Aloe Berry Nectar&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;RM116.79&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button onclick="addToWhatsApp('Aloe Berry Nectar', 116.79)"&gt;Add to Cart&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="product"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;img src="bee-honey.jpg" alt="Bee Honey"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;Bee Honey&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;RM132.57&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button onclick="addToWhatsApp('Bee Honey', 132.57)"&gt;Add to Cart&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="product"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;img src="bright-toothgel.jpg" alt="Bright Toothgel"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;Bright Toothgel&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;RM41.29&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button onclick="addToWhatsApp('Bright Toothgel', 41.29)"&gt;Add to Cart&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="product"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;img src="royal-jelly.jpg" alt="Royal Jelly"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;Royal Jelly&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;RM139.21&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button onclick="addToWhatsApp('Royal Jelly', 139.21)"&gt;Add to Cart&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="product"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;img src="aloe-peaches.jpg" alt="Aloe Peaches"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;Aloe Peaches&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;RM116.79&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button onclick="addToWhatsApp('Aloe Peaches', 116.79)"&gt;Add to Cart&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="product"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;img src="aloe-first.jpg" alt="Aloe First"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;Aloe First&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;RM90.83&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button onclick="addToWhatsApp('Aloe First', 90.83)"&gt;Add to Cart&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>$1</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;section id="cds"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;💪 Cabaran Detox Sihat (CDS)&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;Join our healthy detox challenge and transform your body the natural way with Forever Living!&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;Scan below to register &amp; learn more:&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;img src="qr-cds.png" alt="QR to Cabaran Detox Sihat" style="width: 200px; height: 200px;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;footer&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;Copyright © 2025 Rich Academy Global&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/footer&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>function addToWhatsApp(product, price) {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const phone = '601111033154';</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const message = `I'm interested in buying: ${product} (RM${price})`;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>window.open(url, '_blank');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
-<p class="p1">I</p>
+  <header>
+    <h1>Rich Academy Global</h1>
+    <p>Bringing health and wealth together</p>
+  </header>
+
+  <section id="products">
+    <h2>🔥 Hot Selling Products</h2>
+    <div class="product-grid">
+      <div class="product">
+        <img src="teh-tarik.jpg" alt="Teh Tarik Halia">
+        <h3>Teh Tarik Halia</h3>
+        <p>RM25.90</p>
+        <button onclick="addToWhatsApp('Teh Tarik Halia', 25.90)">Add to Cart</button>
+      </div>
+      <div class="product">
+        <img src="aloe-vera-gel.jpg" alt="Aloe Vera Gel">
+        <h3>Aloe Vera Gel</h3>
+        <p>RM116.79</p>
+        <button onclick="addToWhatsApp('Aloe Vera Gel', 116.79)">Add to Cart</button>
+      </div>
+      <div class="product">
+        <img src="aloe-berry.jpg" alt="Aloe Berry Nectar">
+        <h3>Aloe Berry Nectar</h3>
+        <p>RM116.79</p>
+        <button onclick="addToWhatsApp('Aloe Berry Nectar', 116.79)">Add to Cart</button>
+      </div>
+      <div class="product">
+        <img src="bee-honey.jpg" alt="Bee Honey">
+        <h3>Bee Honey</h3>
+        <p>RM132.57</p>
+        <button onclick="addToWhatsApp('Bee Honey', 132.57)">Add to Cart</button>
+      </div>
+      <div class="product">
+        <img src="bright-toothgel.jpg" alt="Bright Toothgel">
+        <h3>Bright Toothgel</h3>
+        <p>RM41.29</p>
+        <button onclick="addToWhatsApp('Bright Toothgel', 41.29)">Add to Cart</button>
+      </div>
+      <div class="product">
+        <img src="royal-jelly.jpg" alt="Royal Jelly">
+        <h3>Royal Jelly</h3>
+        <p>RM139.21</p>
+        <button onclick="addToWhatsApp('Royal Jelly', 139.21)">Add to Cart</button>
+      </div>
+    <div class="product">
+        <img src="aloe-peaches.jpg" alt="Aloe Peaches">
+        <h3>Aloe Peaches</h3>
+        <p>RM116.79</p>
+        <button onclick="addToWhatsApp('Aloe Peaches', 116.79)">Add to Cart</button>
+      </div>
+      <div class="product">
+        <img src="aloe-first.jpg" alt="Aloe First">
+        <h3>Aloe First</h3>
+        <p>RM90.83</p>
+        <button onclick="addToWhatsApp('Aloe First', 90.83)">Add to Cart</button>
+      </div>
+    </div> <!-- closes .product-grid -->
+
+  <section id="cds">
+    <h2>💪 Cabaran Detox Sihat (CDS)</h2>
+    <p>Join our healthy detox challenge and transform your body the natural way with Forever Living!</p>
+    <p>Scan below to register & learn more:</p>
+    <img src="qr-cds.png" alt="QR to Cabaran Detox Sihat" style="width: 200px; height: 200px;">
+  </section>
+
+  <footer>
+    <p>Copyright © 2025 Rich Academy Global</p>
+  </footer>
+
+  <script>
+    function addToWhatsApp(product, price) {
+      const phone = '601111033154';
+      const message = `I'm interested in buying: ${product} (RM${price})`;
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+      window.open(url, '_blank');
+    }
+  </script>
 </body>
 </html>
