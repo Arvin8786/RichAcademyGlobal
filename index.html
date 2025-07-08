@@ -302,7 +302,7 @@
 
   <footer>
     <p>Copyright © 2025 Forever Living by Mohd Arvind Isa</p>
-  <div style="text-align: center; padding: 1rem; font-size: 0.9rem; background: #f3f3f3;">
+  <div style="text-align: center; padding: 1rem; font-size: 0.9rem; background: #0b5f5c; color: white;">
   <p><strong>Disclaimer:</strong> Product suggestions are for informational purposes only and do not replace professional medical advice. Please consult your doctor or healthcare provider before consuming any supplements.</p>
   <p><strong>About Forever Living:</strong> Forever Living Products is a global wellness brand known for its high-quality Aloe Vera-based health and skincare products. Certified Halal and distributed in over 160 countries worldwide.</p>
 </div>
@@ -392,51 +392,35 @@ function suggestProducts() {
   const symptom = document.getElementById("symptom-input").value.toLowerCase();
   const match = [];
 
-  if (symptom.includes("fatigue") || symptom.includes("tired")) match.push("Royal Jelly", "Bee Pollen");
-  if (symptom.includes("skin") || symptom.includes("eczema") || symptom.includes("allergy")) match.push("Aloe Propolis Creme", "Avocado Face & Body Soap", "Aloe First");
-  if (symptom.includes("immunity") || symptom.includes("flu")) match.push("Absorbent-C", "Bee Propolis", "Aloe Vera Gel");
-  if (symptom.includes("digestion") || symptom.includes("bloating") || symptom.includes("gut")) match.push("Aloe Vera Gel", "Fields of Greens", "Aloe Peaches");
-  if (symptom.includes("detox") || symptom.includes("cleanse")) match.push("Aloe Berry Nectar", "Fields of Greens", "Teh Tarik Halia");
+  if (symptom.includes("fatigue") || symptom.includes("tired") || symptom.includes("lethargic")) match.push("Royal Jelly", "Bee Pollen", "Aloe Vera Gel");
+  if (symptom.includes("skin") || symptom.includes("eczema") || symptom.includes("allergy") || symptom.includes("rash") || symptom.includes("itch")) match.push("Aloe Propolis Creme", "Avocado Face & Body Soap", "Aloe First");
+  if (symptom.includes("immunity") || symptom.includes("flu") || symptom.includes("sick") || symptom.includes("cold")) match.push("Absorbent-C", "Bee Propolis", "Aloe Vera Gel");
+  if (symptom.includes("digestion") || symptom.includes("bloating") || symptom.includes("gut") || symptom.includes("constipation")) match.push("Aloe Vera Gel", "Fields of Greens", "Aloe Peaches");
+  if (symptom.includes("detox") || symptom.includes("cleanse") || symptom.includes("cleaning")) match.push("Aloe Berry Nectar", "Fields of Greens", "Teh Tarik Halia");
+  if (symptom.includes("joint") || symptom.includes("arthritis") || symptom.includes("bone")) match.push("Forever Calcium", "Aloe Vera Gel");
+  if (symptom.includes("stress") || symptom.includes("sleep") || symptom.includes("relax")) match.push("Royal Jelly", "Bee Pollen");
+  if (symptom.includes("energy") || symptom.includes("active")) match.push("Bee Pollen", "Royal Jelly", "Forever Argi+");
+  if (symptom.includes("diabetes") || symptom.includes("sugar")) match.push("Fields of Greens", "Aloe Vera Gel", "Bee Propolis");
+  if (symptom.includes("hair") || symptom.includes("hairfall") || symptom.includes("dandruff")) match.push("Aloe-Jojoba Shampoo", "Aloe-Jojoba Conditioner");
+  if (symptom.includes("acne") || symptom.includes("pimples") || symptom.includes("blemish")) match.push("Aloe First", "Aloe Propolis Creme", "Avocado Face & Body Soap");
+  if (symptom.includes("oral") || symptom.includes("teeth") || symptom.includes("gums")) match.push("Bright Toothgel");
+  if (symptom.includes("sunscreen") || symptom.includes("uv") || symptom.includes("sun")) match.push("Aloe Sunscreen");
+  if (symptom.includes("smell") || symptom.includes("deodorant") || symptom.includes("body odour")) match.push("Forever Deodorant Stick");
+  if (symptom.includes("dry skin") || symptom.includes("moisture") || symptom.includes("hydration")) match.push("Aloe Moisturizing Lotion", "Aloe Propolis Creme");
+  if (symptom.includes("children") || symptom.includes("kids")) match.push("Aloe Vera Gel", "Bee Honey");
 
   const result = match.length > 0
     ? "Recommended Products: " + [...new Set(match)].join(", ")
     : "No specific suggestion found. Try a different keyword.";
 
-  document.getElementById("suggestion-result").textContent = result;
+  const resultBox = document.getElementById("suggestion-result");
+  resultBox.textContent = result;
+  resultBox.style.color = "#0b5f5c";
+  resultBox.style.backgroundColor = "#e6f7f6";
+  resultBox.style.padding = "10px";
+  resultBox.style.borderRadius = "6px";
 }
-},
-    ms: {
-      title: '🔥 Produk Paling Laris',
-      cds: '💪 Rich Academy Global: Cabaran Detox Sihat (CDS)',
-      cdsDesc: 'Sertai cabaran transformasi kesihatan bersama Rich Academy Global dan Forever Living!',
-      recruit: '🤝 Sertai Rich Academy Global',
-      recruitDesc: 'Ingin mulakan perniagaan anda bersama Forever Living? Rich Academy Global sedang merekrut ejen baharu seluruh Malaysia.',
-      joinBtn: 'Sertai melalui WhatsApp',
-      cartTitle: '🛒 Troli Anda',
-      checkout: 'Pembayaran melalui WhatsApp'
-    },
-    zh: {
-      title: '🔥 热卖产品',
-      cds: '💪 Rich Academy Global: 健康排毒挑战 (CDS)',
-      cdsDesc: '加入 Rich Academy Global 和 Forever Living 的健康转型挑战！',
-      recruit: '🤝 加入 Rich Academy Global',
-      recruitDesc: '想通过 Forever Living 开展自己的事业？我们正在全马招募新代理！',
-      joinBtn: '通过 WhatsApp 加入',
-      cartTitle: '🛒 您的购物车',
-      checkout: '通过 WhatsApp 结账'
-    }
-  };
-  const t = dict[lang];
-  document.querySelector('#products h2').textContent = t.title;
-  document.querySelector('#cds h2').textContent = t.cds;
-  document.querySelector('#cds p').textContent = t.cdsDesc;
-  document.querySelector('#recruit h2').textContent = t.recruit;
-  document.querySelector('#recruit p').textContent = t.recruitDesc;
-  document.querySelector('#recruit a').textContent = t.joinBtn;
-  document.querySelector('#cart-panel h3').textContent = t.cartTitle;
-  document.querySelector('#cart-panel button').textContent = t.checkout;
-}
-$1
+
 
 
 </body>
