@@ -118,13 +118,10 @@
   </style>
 </head>
 <body>
-  $1
+  <header>
+    <h1>Forever Living by Mohd Arvind Isa</h1>
     <div style="margin-top: 1rem;">
-      <select id="language-selector" disabled style="padding: 5px; font-size: 14px;">
-        <option value="en">English</option>
-        <option value="ms">Bahasa Melayu</option>
-        <option value="zh">中文</option>
-      </select>
+      
     </div>
     <p>Bringing health and wealth together</p>
   </header>
@@ -406,6 +403,7 @@ function suggestProducts() {
     : "No specific suggestion found. Try a different keyword.";
 
   document.getElementById("suggestion-result").textContent = result;
+}
 },
     ms: {
       title: '🔥 Produk Paling Laris',
