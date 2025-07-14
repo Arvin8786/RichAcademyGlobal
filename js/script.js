@@ -2,24 +2,17 @@
 
 // Load components on DOM ready
 document.addEventListener("DOMContentLoaded", () => {
-  loadHeader();
-  loadCDS();
+  loadSection("sections/header.html", "header-container");
+  loadSection("sections/cds.html", "cds-container");
+  loadSection("sections/footer.html", "footer-container");
   loadProducts();
 });
 
-function loadHeader() {
-  fetch("sections/header.html")
-    .then((res) => res.text())
-    .then((data) => {
-      document.getElementById("site-header").innerHTML = data;
-    });
-}
-
-function loadCDS() {
-  fetch("sections/cds.html")
-    .then((res) => res.text())
-    .then((data) => {
-      document.getElementById("cds-section").innerHTML = data;
+function loadSection(file, containerId) {
+  fetch(file)
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById(containerId).innerHTML = data;
     });
 }
 
@@ -42,4 +35,30 @@ function loadProducts() {
         container.appendChild(div);
       });
     });
+}
+
+function toggleCart() {
+  const panel = document.getElementById("cart-panel");
+  panel.style.display = panel.style.display === "block" ? "none" : "block";
+}
+
+function closeModal() {
+  document.getElementById("product-modal").style.display = "none";
+}
+
+function showTab(tabId) {
+  document.querySelectorAll(".tab-content").forEach((tab) => {
+    tab.classList.remove("active");
+  });
+  document.getElementById(tabId).classList.add("active");
+}
+
+function checkout() {
+  const cartItems = document.getElementById("cart-items");
+  if (!cartItems || cartItems.innerHTML.trim() === "") {
+    alert("Your cart is empty!");
+    return;
+  }
+  const message = encodeURIComponent("Hi, I’d like to place an order from Rich Academy Global website.");
+  window.open(`https://wa.me/601111033154?text=${message}`, "_blank");
 }
