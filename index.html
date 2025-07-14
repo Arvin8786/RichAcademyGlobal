@@ -3,241 +3,225 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rich Academy Global - Forever Living</title>
+  <title>Forever Living by Mohd Arvind Isa</title>
   <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+    header {
+      background-color: #fff;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+    .cart-icon {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    nav {
+      background-color: #2c8a58;
+    }
+    nav ul {
+      display: flex;
+      list-style: none;
+      padding: 10px;
+      margin: 0;
+      justify-content: center;
+    }
+    nav li {
+      margin: 0 15px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    .tab-content {
+      display: none;
+      padding: 20px;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .product-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .product {
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .product img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+    .product h3 {
+      margin: 10px 0 5px;
+    }
+    .product .price {
+      color: #2c8a58;
+      font-weight: bold;
+    }
+    .product .whatsapp-btn {
+      display: inline-block;
+      margin-top: 10px;
+      background: #25D366;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+    footer {
+      background: #f1f1f1;
+      padding: 20px;
+      text-align: center;
+      font-size: 14px;
+    }
+    .disclaimer {
+      margin-top: 10px;
+      background-color: #fff3cd;
+      color: #856404;
+      padding: 15px;
+      border-top: 1px solid #ffeeba;
+    }
+  </style>
 </head>
 <body>
-  <!-- HEADER SECTION -->
-  <header class="navbar">
-    <div class="container">
-      <a href="#" class="logo">Forever <span>Living</span></a>
-      <div class="header-right">
-        <div class="cart-icon" onclick="toggleCart()">
-          <i class="fas fa-shopping-cart"></i>
-          <span id="cart-count">0</span>
-        </div>
-        <div class="header-contact">
-          <a href="https://wa.me/601111033154" target="_blank">
-            <i class="fab fa-whatsapp"></i> +60 11-1103 3154
-          </a>
-        </div>
-      </div>
+  <header>
+    <h1 style="font-size: 28px; color: #2c8a58;">
+      FOREVER LIVING by Mohd Arvind Isa
+    </h1>
+    <div class="cart-icon" onclick="toggleCart()">
+      🛒 <span id="cart-count">0</span>
     </div>
   </header>
 
-  <!-- NAVIGATION -->
-  <nav class="main-nav">
-    <div class="container">
-      <ul>
-        <li><a href="#" class="active" onclick="showTab('products')"><i class="fas fa-store"></i> Products</a></li>
-        <li><a href="#" onclick="showTab('cds')"><i class="fas fa-heartbeat"></i> Cabaran Detox Sihat</a></li>
-        <li><a href="#" onclick="showTab('business')"><i class="fas fa-briefcase"></i> Business Opportunity</a></li>
-      </ul>
-    </div>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="showTab('products')">Products</a></li>
+      <li><a href="#" onclick="showTab('cds')">Cabaran Detox Sihat</a></li>
+      <li><a href="#" onclick="showTab('business')">Business Opportunity</a></li>
+    </ul>
   </nav>
 
-  <!-- MAIN CONTENT -->
-  <main class="container">
-    <!-- SEARCH AND FILTER -->
-    <div class="search-filter">
-      <input type="text" class="search-box" placeholder="Search products..." id="product-search">
-      <div class="category-filter">
-        <button class="category-btn active" data-category="all">All</button>
-        <button class="category-btn" data-category="drinks">Drinks</button>
-        <button class="category-btn" data-category="nutrition">Nutrition</button>
-        <button class="category-btn" data-category="personal_care">Personal Care</button>
-        <button class="category-btn" data-category="skincare">Skincare</button>
-        <button class="category-btn" data-category="combos">Combos</button>
-      </div>
-    </div>
-
-    <!-- PRODUCTS TAB -->
+  <main>
     <div id="products" class="tab-content active">
-      <div id="product-list" class="products-grid"></div>
+      <h2>Our Products</h2>
+      <div id="product-list" class="product-list"></div>
     </div>
 
-    <!-- CDS TAB -->
     <div id="cds" class="tab-content">
-      <section class="program-section">
-        <div class="program-card">
-          <h2><i class="fas fa-heartbeat"></i> Cabaran Detox Sihat (CDS)</h2>
-          <p class="program-description">A 7-day health transformation program by Rich Academy Global designed to help you detox and reset your body naturally using premium Forever Living products.</p>
-          
-          <div class="program-highlights">
-            <div class="highlight-item">
-              <i class="fas fa-calendar-check"></i>
-              <span>7-day guided detox</span>
-            </div>
-            <div class="highlight-item">
-              <i class="fas fa-box-open"></i>
-              <span>Personalized supplement plan</span>
-            </div>
-            <div class="highlight-item">
-              <i class="fas fa-utensils"></i>
-              <span>Customized meal plan</span>
-            </div>
-            <div class="highlight-item">
-              <i class="fas fa-hands-helping"></i>
-              <span>Daily coaching support</span>
-            </div>
-            <div class="highlight-item">
-              <i class="fab fa-whatsapp"></i>
-              <span>WhatsApp check-ins</span>
-            </div>
-          </div>
-
-          <div class="delivery-notice">
-            <i class="fas fa-truck"></i>
-            <span>Delivered in 5–10 working days</span>
-          </div>
-
-          <button class="whatsapp-btn" onclick="location.href='https://wa.me/601111033154?text=I%20am%20interested%20in%20CDS%20Program'">
-            <i class="fab fa-whatsapp"></i> Join Now on WhatsApp
-          </button>
-        </div>
+      <section class="cds-section">
+        <h2>Cabaran Detox Sihat (CDS)</h2>
+        <p>CDS is a health program by Rich Academy Global designed to help you detox and reset your body naturally.</p>
+        <ul>
+          <li>✅ 7-day detox with Forever products</li>
+          <li>📦 Personalized supplement plan</li>
+          <li>📋 Guided meal plan</li>
+          <li>📱 Daily coaching & community support</li>
+          <li>💬 WhatsApp check-ins with a coach</li>
+        </ul>
+        <p><strong>Delivered in 5–10 working days.</strong></p>
+        <button onclick="location.href='https://wa.me/601111033154?text=I%20am%20interested%20in%20CDS%20Program'">Join Now on WhatsApp</button>
       </section>
     </div>
 
-    <!-- BUSINESS TAB -->
     <div id="business" class="tab-content">
-      <section class="program-section">
-        <div class="program-card business-card">
-          <h2><i class="fas fa-briefcase"></i> Business Opportunity</h2>
-          <p class="program-description">Build your own health and wellness business with Rich Academy Global's Forever Living partnership program.</p>
-          
-          <div class="program-highlights">
-            <div class="highlight-item">
-              <i class="fas fa-money-bill-wave"></i>
-              <span>30–50% product commission</span>
-            </div>
-            <div class="highlight-item">
-              <i class="fas fa-user-clock"></i>
-              <span>Flexible working hours</span>
-            </div>
-            <div class="highlight-item">
-              <i class="fas fa-globe"></i>
-              <span>Global business potential</span>
-            </div>
-            <div class="highlight-item">
-              <i class="fas fa-graduation-cap"></i>
-              <span>Free training & support</span>
-            </div>
-            <div class="highlight-item">
-              <i class="fas fa-medal"></i>
-              <span>Bonus & incentive programs</span>
-            </div>
-          </div>
-
-          <button class="whatsapp-btn" onclick="location.href='https://wa.me/601111033154'">
-            <i class="fab fa-whatsapp"></i> Contact Us on WhatsApp
-          </button>
-
-          <div class="business-testimonials">
-            <h3><i class="fas fa-quote-left"></i> Success Stories</h3>
-            <div class="testimonial">
-              <p>"Joining Rich Academy Global changed my life. I now earn full-time income working part-time hours!"</p>
-              <span>- Aina, FBO since 2022</span>
-            </div>
-          </div>
-        </div>
+      <section>
+        <h2>Join Our Business</h2>
+        <p>Be part of Rich Academy Global and build your Forever Living career.</p>
+        <ul>
+          <li>💸 30–50% product commission</li>
+          <li>🕐 Flexible hours</li>
+          <li>🌍 Global business potential</li>
+          <li>🎓 Free training and support</li>
+        </ul>
+        <button onclick="location.href='https://wa.me/601111033154'">Contact Us on WhatsApp</button>
       </section>
     </div>
   </main>
 
-  <!-- CART PANEL -->
-  <div id="cart-panel">
-    <div class="cart-header">
-      <h2><i class="fas fa-shopping-cart"></i> Your Cart</h2>
-      <span class="close-cart" onclick="toggleCart()">&times;</span>
-    </div>
-    <div id="cart-items" class="cart-items-container"></div>
-    <div class="cart-footer">
-      <div id="cart-total" class="cart-total">Total: RM 0.00</div>
-      <button id="checkout-btn" class="whatsapp-btn" onclick="checkout()">
-        <i class="fab fa-whatsapp"></i> Checkout via WhatsApp
-      </button>
-    </div>
-  </div>
-
-  <!-- PRODUCT MODAL -->
-  <div id="product-modal" class="modal-overlay">
-    <div class="product-modal">
-      <button class="close-modal" onclick="closeModal()">&times;</button>
-      <div class="modal-content">
-        <div class="modal-image-container">
-          <img id="modal-product-img" class="modal-image" alt="Product Image" />
-        </div>
-        <div class="modal-details">
-          <h2 id="modal-product-name"></h2>
-          <span class="modal-category" id="modal-product-category"></span>
-          <div class="modal-price" id="modal-product-price"></div>
-          
-          <div class="modal-section">
-            <h3>Description</h3>
-            <p id="modal-product-desc"></p>
-          </div>
-          
-          <div class="modal-section">
-            <h3>Key Benefits</h3>
-            <ul class="modal-benefits" id="modal-product-benefits"></ul>
-          </div>
-          
-          <div class="modal-section">
-            <h3>Usage</h3>
-            <div class="modal-usage" id="modal-product-usage"></div>
-          </div>
-          
-          <div class="qty-controls">
-            <button id="decrease-qty">-</button>
-            <span id="product-qty">1</span>
-            <button id="increase-qty">+</button>
-          </div>
-          
-          <button id="modal-add-to-cart" class="add-to-cart-large">
-            <i class="fas fa-cart-plus"></i> Add to Cart
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- FOOTER SECTION -->
   <footer>
-    <div class="footer-content container">
-      <div class="footer-column">
-        <h3>Quick Links</h3>
-        <ul class="footer-links">
-          <li><a href="#" onclick="showTab('products')">Products</a></li>
-          <li><a href="#" onclick="showTab('cds')">Detox Program</a></li>
-          <li><a href="#" onclick="showTab('business')">Business</a></li>
-        </ul>
-      </div>
-      <div class="footer-column">
-        <h3>Contact Us</h3>
-        <ul class="footer-links">
-          <li><a href="https://wa.me/601111033154"><i class="fab fa-whatsapp"></i> +60 11-1103 3154</a></li>
-          <li><a href="mailto:info@richacademy.com"><i class="fas fa-envelope"></i> info@richacademy.com</a></li>
-        </ul>
-      </div>
-      <div class="footer-column">
-        <h3>Follow Us</h3>
-        <ul class="footer-links">
-          <li><a href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
-          <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
-        </ul>
-      </div>
-    </div>
-    
-    <div class="copyright container">
-      <p>&copy; 2025 Rich Academy Global. Independent Forever Business Owner.</p>
-      <div class="disclaimer">
-        <p><strong>Disclaimer:</strong> This is an independent Forever Business Owner website and not the official Forever Living site. Product names are trademarks of Forever Living Products International, Inc.</p>
-      </div>
-    </div>
+    <p>&copy; 2025 Forever Living. Powered by Rich Academy Global. All rights reserved.</p>
+    <section class="disclaimer">
+      <strong>Disclaimer:</strong> This website is operated by an independent Forever Business Owner (FBO) under Rich Academy Global and is not the official site of Forever Living Products. Product names, trademarks, and registered trademarks are property of Forever Living Products International, Inc.
+    </section>
   </footer>
 
-  <!-- JS -->
-  <script src="js/script.js"></script>
+  <script>
+    const products = [
+      { name: "Aloe Vera Gel", price: 116.79, image: "aloe-vera-gel.jpg" },
+      { name: "Aloe Berry Nectar", price: 116.79, image: "images/aloe-berry.jpg" },
+      { name: "Aloe Peaches", price: 116.79, image: "images/aloe-peaches.jpg" },
+      { name: "Bee Honey", price: 69.47, image: "images/bee-honey.jpg" },
+      { name: "Royal Jelly", price: 157.38, image: "images/royal-jelly.jpg" },
+      { name: "Bee Pollen", price: 96.23, image: "images/bee-pollen.jpg" },
+      { name: "Bee Propolis", price: 134.34, image: "images/bee-propolis.jpg" },
+      { name: "Arctic Sea", price: 133.02, image: "images/arctic-sea.jpg" },
+      { name: "Fields of Greens", price: 115.94, image: "images/fields-of-greens.jpg" },
+      { name: "Absorbent-C", price: 95.00, image: "images/absorbent_c.jpg" },
+      { name: "Calcium Plus", price: 95.85, image: "images/calcium-plus.jpg" },
+      { name: "Aloe First", price: 93.40, image: "images/aloe-first.jpg" },
+      { name: "Aloe Liquid Soap", price: 54.72, image: "images/aloe-liquid-soap.jpg" },
+      { name: "Aloe Propolis Creme", price: 92.08, image: "images/aloe-propolis-creme.jpg" },
+      { name: "Aloe Jojoba Shampoo", price: 91.66, image: "images/aloe-jojoba-shampoo.jpg" },
+      { name: "Aloe Jojoba Conditioner", price: 91.66, image: "images/aloe-jojoba-conditioner.jpg" },
+      { name: "Aloe Sunscreen", price: 84.91, image: "images/aloe-sunscreen.jpg" },
+      { name: "Aloe MPD 2X Ultra", price: 114.47, image: "images/aloe-mp-lotion.jpg" },
+      { name: "Avocado Face & Body Soap", price: 23.40, image: "images/avocado-soap.jpg" },
+      { name: "Forever Bright Toothgel", price: 31.62, image: "images/bright-toothgel.jpg" },
+      { name: "Aloe Lips", price: 17.92, image: "images/aloe_lips.jpg" },
+      { name: "Forever Aloe Deodorant", price: 34.91, image: "images/deodorant-stick.jpg" },
+      { name: "Forever Deodorant Stick", price: 34.91, image: "images/forever-deodorant.jpg" },
+      { name: "Teh Tarik Halia", price: 40.00, image: "images/teh-tarik.jpg" },
+      { name: "Aloe Berry Nectar (Alt)", price: 116.79, image: "images/aloe_berry_nectar.jpg" },
+      { name: "Aloe Sunscreen (New)", price: 84.91, image: "images/aloe sunscreen new.jpg" },
+      { name: "Aloe First (JPEG)", price: 93.40, image: "images/aloe first.jpeg" },
+      { name: "Aloe Soap (Spaced)", price: 54.72, image: "images/aloe soap .jpg" },
+      { name: "Aloe Soap (Dashed)", price: 54.72, image: "images/aloe-soap .jpg" },
+      { name: "Royal Jelly (Duplicate)", price: 157.38, image: "images/royal-jelly.jpg.jpg" }
+    ];
+
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    function toggleCart() {
+      alert("Cart feature coming soon.");
+    }
+
+    function loadProducts() {
+      const container = document.getElementById("product-list");
+      products.forEach(p => {
+        const div = document.createElement("div");
+        div.className = "product";
+        div.innerHTML = `
+          <img src="${p.image}" alt="${p.name}" />
+          <h3>${p.name}</h3>
+          <p class="price">RM ${p.price.toFixed(2)}</p>
+          <a class="whatsapp-btn" href="https://wa.me/601111033154?text=Hi%2C%20I%20want%20to%20order%20${encodeURIComponent(p.name)}" target="_blank">Order Now</a>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", loadProducts);
+  </script>
 </body>
 </html>
