@@ -1,5 +1,8 @@
 <!-- HEADER SECTION -->
 <header>
+  <h1 style="font-size: 28px; color: #2c8a58; text-align: center; margin: 20px 0;">
+    FOREVER LIVING by Mohd Arvind Isa - Powered by Rich Academy Global (RAG)
+  </h1>
   <div class="cart-icon" onclick="toggleCart()">
     🛒 <span id="cart-count">0</span>
   </div>
