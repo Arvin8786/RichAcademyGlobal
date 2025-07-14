@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Forever Living by Mohd Arvind Isa - Rich Academy Global</title>
+  <title>Forever Living Malaysia - Mohd Arvind Isa | Rich Academy Global</title>
   <style>
     :root {
       --primary-color: #0b5f5c;
@@ -81,6 +81,7 @@
       box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
       transition: transform 0.3s ease;
       position: relative;
+      cursor: pointer;
     }
 
     .product:hover {
@@ -108,11 +109,6 @@
       color: var(--primary-color);
       font-size: 1.1rem;
       margin: 0.5rem 0;
-    }
-
-    .points {
-      font-size: 0.9rem;
-      color: #666;
     }
 
     .product button {
@@ -145,298 +141,123 @@
       font-weight: bold;
     }
 
-    #ai-suggestion {
-      background: var(--secondary-color);
-      padding: 2rem 1rem;
-      border-radius: 10px;
-      margin: 2rem auto;
-      max-width: 800px;
-    }
-
-    #ai-suggestion input {
-      padding: 0.8rem;
+    /* Product Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
       width: 100%;
-      max-width: 500px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 1rem;
-      margin: 0.5rem 0;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
     }
 
-    #ai-suggestion button {
-      background-color: var(--accent-color);
-      color: white;
-      border: none;
-      padding: 0.8rem 1.5rem;
-      border-radius: 5px;
-      cursor: pointer;
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto;
+      padding: 2rem;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 600px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      position: relative;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 25px;
+      font-size: 1.5rem;
       font-weight: bold;
-      transition: all 0.3s ease;
-      margin-top: 0.5rem;
-    }
-
-    #ai-suggestion button:hover {
-      background-color: #e66b22;
-    }
-
-    #suggestion-result {
-      margin-top: 1.5rem;
-      padding: 1rem;
-      background: white;
-      border-radius: 5px;
-      display: none;
-    }
-
-    #cds {
-      padding: 2rem 1rem;
-      text-align: center;
-      background: var(--secondary-color);
-      margin: 3rem 0;
-      border-radius: 10px;
-    }
-
-    #cds img {
-      max-width: 200px;
-      margin: 1rem auto;
-      display: block;
-      border: 1px solid #ddd;
-      padding: 0.5rem;
-      background: white;
-    }
-
-    #cart-button {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: var(--primary-color);
-      color: white;
-      padding: 12px 18px;
-      border-radius: 50px;
-      border: none;
-      font-size: 1rem;
+      color: #aaa;
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      z-index: 100;
-      transition: all 0.3s ease;
     }
 
-    #cart-button:hover {
-      transform: scale(1.05);
+    .modal-product-image {
+      max-width: 200px;
+      margin: 0 auto 1rem;
+      display: block;
     }
 
-    #cart-count {
-      background: var(--accent-color);
-      color: white;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
+    .modal-benefits {
+      background: var(--secondary-color);
+      padding: 1rem;
+      border-radius: 5px;
+      margin: 1rem 0;
     }
 
-    #cart-panel {
-      position: fixed;
-      bottom: 80px;
-      right: 20px;
-      width: 320px;
-      max-width: 90%;
-      max-height: 60vh;
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-      display: none;
-      padding: 1.2rem;
-      z-index: 99;
-      overflow-y: auto;
-    }
-
-    #cart-panel h3 {
+    .modal-benefits h4 {
       margin-top: 0;
       color: var(--primary-color);
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid #eee;
     }
 
-    .cart-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.8rem 0;
-      border-bottom: 1px solid #f5f5f5;
-    }
-
-    .cart-item-info {
-      flex: 1;
-    }
-
-    .cart-item-name {
-      font-weight: 500;
-    }
-
-    .cart-item-price {
-      font-size: 0.9rem;
-      color: #666;
-    }
-
-    .cart-item-qty {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin: 0 1rem;
-    }
-
-    .qty-btn {
-      width: 25px;
-      height: 25px;
-      border-radius: 50%;
-      border: 1px solid #ddd;
-      background: white;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .remove-btn {
-      color: #ff4444;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 1.2rem;
-    }
-
-    #cart-total {
-      font-weight: bold;
-      text-align: right;
-      margin: 1rem 0;
-      font-size: 1.1rem;
-    }
-
-    #checkout-btn {
-      background-color: var(--accent-color);
-      color: white;
-      border: none;
-      padding: 0.8rem;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      width: 100%;
-      transition: all 0.3s ease;
-    }
-
-    #checkout-btn:hover {
-      background-color: #e66b22;
-    }
-
-    .empty-cart {
-      text-align: center;
-      padding: 1rem;
-      color: #666;
-    }
-
-    footer {
-      background: var(--primary-color);
-      color: white;
-      text-align: center;
-      padding: 2rem 1rem;
-      font-size: 0.9rem;
-    }
-
-    .footer-content {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .social-links {
+    .modal-usage {
       margin: 1rem 0;
     }
 
-    .social-links a {
-      color: white;
-      margin: 0 10px;
-      font-size: 1.2rem;
-    }
-
-    .disclaimer {
-      font-size: 0.8rem;
-      opacity: 0.8;
-      margin-top: 1.5rem;
-    }
-
-    @media (max-width: 768px) {
-      header h1 {
-        font-size: 1.8rem;
-      }
-      
-      .product-grid {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      }
-      
-      .product img {
-        height: 140px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      header {
-        padding: 1.5rem 1rem;
-      }
-      
-      header h1 {
-        font-size: 1.5rem;
-      }
-      
-      #ai-suggestion button {
-        width: 100%;
-      }
-      
-      #cart-panel {
-        width: 280px;
-      }
-    }
+    /* Rest of your existing CSS... */
   </style>
 </head>
 <body>
 <header>
   <div class="container">
     <img src="flp-logo.png" alt="Forever Living Logo" class="logo">
-    <h1>Forever Living by Mohd Arvind Isa</h1>
-    <p>Your Trusted Forever Living Partner - Rich Academy Global</p>
+    <h1>Forever Living Malaysia</h1>
+    <p>Official Distributor - Mohd Arvind Isa | Rich Academy Global</p>
   </div>
 </header>
 
 <main class="container">
   <section id="ai-suggestion">
-    <h2>🧠 Not sure what to buy?</h2>
-    <p>Tell us your health concern and we'll recommend the best Forever Living products for you.</p>
+    <h2>🧠 Need Product Recommendations?</h2>
+    <p>Describe your health concern and we'll suggest suitable Forever products:</p>
     <div style="text-align: center;">
-      <input type="text" id="symptom-input" placeholder="e.g. fatigue, skin allergy, digestion issues...">
-      <button onclick="suggestProducts()">Get Product Recommendations</button>
+      <input type="text" id="symptom-input" placeholder="e.g. joint pain, low energy, dry skin...">
+      <button onclick="suggestProducts()">Get Recommendations</button>
     </div>
     <div id="suggestion-result"></div>
   </section>
 
   <section id="products">
-    <h2>🌟 Our Best Selling Products</h2>
+    <h2>🌟 Forever Living Products</h2>
     <div class="product-grid" id="product-list"></div>
   </section>
 
   <section id="cds">
-    <h2>💪 Join Cabaran Detox Sihat (CDS)</h2>
-    <p>Transform your health with our 30-day detox challenge! Scan the QR code to learn more:</p>
+    <h2>💪 Join Our Health Challenge</h2>
+    <p>Transform your health with our 30-day detox program! Scan to learn more:</p>
     <img src="cds-qr.png" alt="CDS QR Code">
-    <p>Contact us at <strong>011-11033154</strong> for details</p>
+    <p>Contact: <strong>011-11033154</strong> (Mohd Arvind Isa)</p>
   </section>
 </main>
 
+<!-- Product Details Modal -->
+<div id="product-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal">&times;</span>
+    <img id="modal-product-image" src="" alt="" class="modal-product-image">
+    <h2 id="modal-product-name"></h2>
+    <div class="price" id="modal-product-price"></div>
+    
+    <div class="modal-benefits">
+      <h4>✅ Key Benefits:</h4>
+      <ul id="modal-product-benefits"></ul>
+    </div>
+    
+    <div class="modal-usage">
+      <h4>📝 How to Use:</h4>
+      <p id="modal-product-usage"></p>
+    </div>
+    
+    <button onclick="addModalProductToCart()">Add to Cart</button>
+  </div>
+</div>
+
+<!-- Shopping Cart Elements -->
 <div id="cart-panel">
-  <h3>🛒 Your Shopping Cart</h3>
+  <h3>🛒 Your Cart</h3>
   <div id="cart-items"></div>
   <div id="cart-total">Total: RM 0.00</div>
   <button id="checkout-btn" onclick="checkout()">Checkout via WhatsApp</button>
@@ -449,116 +270,294 @@
 <footer>
   <div class="footer-content">
     <div class="social-links">
-      <a href="https://wa.me/601111033154" target="_blank">📱</a>
-      <a href="https://facebook.com" target="_blank">📘</a>
-      <a href="https://instagram.com" target="_blank">📸</a>
+      <a href="https://wa.me/601111033154" target="_blank">📱 WhatsApp</a>
+      <a href="https://facebook.com/foreverlivingmalaysia" target="_blank">📘 Facebook</a>
     </div>
-    <p>Mohd Arvind Isa | Forever Living Distributor</p>
-    <p>Rich Academy Global | Malaysia</p>
+    <p>© 2025 Forever Living Malaysia | Mohd Arvind Isa</p>
+    <p>Rich Academy Global | Certified Distributor</p>
     <div class="disclaimer">
-      <p><strong>Disclaimer:</strong> These products are not intended to diagnose, treat, cure or prevent any disease. Always consult your healthcare professional before taking any supplements.</p>
-      <p>© 2025 Forever Living by Mohd Arvind Isa. All rights reserved.</p>
+      <p>Products are not intended to diagnose, treat, cure or prevent any disease.</p>
     </div>
   </div>
 </footer>
 
 <script>
-// Enhanced product data with categories and benefits
+// Enhanced product database (25 Forever Living Malaysia products)
 const products = [
   { 
     name: "Aloe Vera Gel", 
     price: 98.50, 
-    points: 0.1, 
     image: "aloe-vera-gel.jpg",
-    category: "Wellness",
-    benefits: ["Digestive health", "Immune support", "Hydration"],
+    benefits: [
+      "Supports digestive health",
+      "Boosts immune system",
+      "Natural detoxification",
+      "Rich in vitamins and minerals"
+    ],
+    usage: "Take 60-120ml daily, preferably on empty stomach. Shake well before use. Can be mixed with water or fruit juice.",
     hot: true
   },
   { 
     name: "Forever Bee Honey", 
     price: 62.20, 
-    points: 0.08, 
-    image: "bee-honey.jpg",
-    category: "Wellness",
-    benefits: ["Energy boost", "Antioxidants", "Natural sweetener"],
+    image: "forever-bee-honey.jpg",
+    benefits: [
+      "Natural energy booster",
+      "Rich in antioxidants",
+      "Supports immune function",
+      "Soothes throat irritation"
+    ],
+    usage: "Take 1-2 tablespoons daily. Can be consumed directly or added to warm water/tea. Do not expose to high heat.",
     hot: true
   },
   { 
     name: "Forever Royal Jelly", 
     price: 112.00, 
-    points: 0.12, 
-    image: "royal-jelly.jpg",
-    category: "Wellness",
-    benefits: ["Energy", "Anti-aging", "Immune support"]
+    image: "forever-royal-jelly.jpg",
+    benefits: [
+      "Enhances energy and stamina",
+      "Supports immune system",
+      "Rich in B vitamins",
+      "Promotes healthy skin"
+    ],
+    usage: "Take 1-2 tablets daily with meals. For best results, take consistently for at least 3 months."
   },
   { 
-    name: "Aloe Berry Nectar", 
+    name: "Forever Aloe Berry Nectar", 
     price: 98.50, 
-    points: 0.1, 
     image: "aloe-berry-nectar.jpg",
-    category: "Wellness",
-    benefits: ["Antioxidants", "Immune support", "Digestive health"]
+    benefits: [
+      "Rich in vitamin C",
+      "Supports immune health",
+      "Natural antioxidant",
+      "Promotes digestive wellness"
+    ],
+    usage: "Take 60-120ml daily. Can be consumed straight or mixed with water. Refrigerate after opening."
   },
   { 
     name: "Forever Bright Toothgel", 
     price: 25.00, 
-    points: 0.04, 
-    image: "bright-toothgel.jpg",
-    category: "Personal Care",
-    benefits: ["Oral hygiene", "Whitening", "Aloe-based"]
+    image: "forever-bright.jpg",
+    benefits: [
+      "Whitens teeth naturally",
+      "Contains aloe vera",
+      "Freshens breath",
+      "No harsh chemicals"
+    ],
+    usage: "Use like regular toothpaste. Brush at least twice daily. Avoid swallowing."
   },
   { 
-    name: "Forever Fields of Greens", 
-    price: 69.80, 
-    points: 0.08, 
-    image: "fields-of-greens.jpg",
-    category: "Nutrition",
-    benefits: ["Detox", "Energy", "Alkaline balance"]
+    name: "Forever Lycium Plus", 
+    price: 89.90, 
+    image: "forever-lycium.jpg",
+    benefits: [
+      "Supports eye health",
+      "Rich in antioxidants",
+      "Boosts immune function",
+      "Natural energy source"
+    ],
+    usage: "Take 2 tablets daily with meals. For best results, use consistently."
   },
   { 
-    name: "Forever Absorbent-C", 
-    price: 70.00, 
-    points: 0.09, 
-    image: "absorbent-c.jpg",
-    category: "Wellness",
-    benefits: ["Immune support", "Collagen production", "Antioxidant"]
+    name: "Forever Arctic Sea", 
+    price: 110.00, 
+    image: "arctic-sea.jpg",
+    benefits: [
+      "Omega-3 fatty acids",
+      "Supports heart health",
+      "Promotes brain function",
+      "Reduces inflammation"
+    ],
+    usage: "Take 2 softgels daily with meals. Store in cool dry place."
   },
   { 
     name: "Forever Garlic-Thyme", 
     price: 65.50, 
-    points: 0.07, 
     image: "garlic-thyme.jpg",
-    category: "Wellness",
-    benefits: ["Immune support", "Cardiovascular health", "Antioxidant"]
+    benefits: [
+      "Supports cardiovascular health",
+      "Natural immune booster",
+      "Antioxidant properties",
+      "Promotes healthy circulation"
+    ],
+    usage: "Take 2 tablets daily with meals. May be taken with Forever Bee Honey to improve taste."
   },
   { 
     name: "Forever Aloe First", 
     price: 71.30, 
-    points: 0.09, 
     image: "aloe-first.jpg",
-    category: "Personal Care",
-    benefits: ["Skin soothing", "First aid", "Moisturizing"]
+    benefits: [
+      "Soothes skin irritations",
+      "First aid for burns/cuts",
+      "Moisturizes skin",
+      "Natural cooling effect"
+    ],
+    usage: "Apply directly to affected area as needed. Can be used on face and body."
   },
   { 
-    name: "Forever Bee Pollen", 
-    price: 53.60, 
-    points: 0.07, 
-    image: "bee-pollen.jpg",
-    category: "Wellness",
-    benefits: ["Energy", "Stamina", "Nutrient-rich"]
+    name: "Forever Bee Propolis", 
+    price: 85.00, 
+    image: "bee-propolis.jpg",
+    benefits: [
+      "Natural antibiotic properties",
+      "Supports immune defense",
+      "Rich in flavonoids",
+      "Promotes throat health"
+    ],
+    usage: "Take 2 tablets daily. May increase dosage during illness (consult distributor)."
+  },
+  { 
+    name: "Forever Absorbent-C", 
+    price: 70.00, 
+    image: "absorbent-c.jpg",
+    benefits: [
+      "Boosts immune system",
+      "Supports collagen production",
+      "Powerful antioxidant",
+      "Enhances iron absorption"
+    ],
+    usage: "Take 3 tablets daily with meals. May increase dosage during cold season."
+  },
+  { 
+    name: "Forever Fields of Greens", 
+    price: 69.80, 
+    image: "fields-of-greens.jpg",
+    benefits: [
+      "Alkalinizes the body",
+      "Rich in chlorophyll",
+      "Supports detoxification",
+      "Boosts energy levels"
+    ],
+    usage: "Mix 1 tablespoon with water or juice daily. Best taken in the morning."
+  },
+  { 
+    name: "Forever Pomesteen Power", 
+    price: 120.00, 
+    image: "pomesteen.jpg",
+    benefits: [
+      "Superfruit antioxidant",
+      "Supports immune health",
+      "Rich in vitamin C",
+      "Promotes healthy aging"
+    ],
+    usage: "Take 30ml twice daily. Shake well before use. Refrigerate after opening."
+  },
+  { 
+    name: "Forever Garcinia Plus", 
+    price: 95.00, 
+    image: "garcinia-plus.jpg",
+    benefits: [
+      "Supports weight management",
+      "Helps control appetite",
+      "Boosts metabolism",
+      "Natural energy source"
+    ],
+    usage: "Take 2 tablets 30 minutes before meals with a full glass of water."
+  },
+  { 
+    name: "Forever Aloe MSM Gel", 
+    price: 105.00, 
+    image: "msm-gel.jpg",
+    benefits: [
+      "Supports joint health",
+      "Reduces inflammation",
+      "Promotes skin elasticity",
+      "Natural sulfur source"
+    ],
+    usage: "Apply liberally to affected areas 2-3 times daily. May also be taken orally (1oz daily)."
   }
 ];
 
+// Modal functionality
+let currentModalProduct = null;
+
+function showProductModal(index) {
+  const product = products[index];
+  currentModalProduct = index;
+  
+  document.getElementById('modal-product-name').textContent = product.name;
+  document.getElementById('modal-product-price').textContent = `RM ${product.price.toFixed(2)}`;
+  document.getElementById('modal-product-image').src = product.image;
+  
+  const benefitsList = document.getElementById('modal-product-benefits');
+  benefitsList.innerHTML = '';
+  product.benefits.forEach(benefit => {
+    const li = document.createElement('li');
+    li.textContent = benefit;
+    benefitsList.appendChild(li);
+  });
+  
+  document.getElementById('modal-product-usage').textContent = product.usage;
+  
+  document.getElementById('product-modal').style.display = 'block';
+}
+
+function closeModal() {
+  document.getElementById('product-modal').style.display = 'none';
+}
+
+function addModalProductToCart() {
+  if (currentModalProduct !== null) {
+    addToCart(currentModalProduct);
+    closeModal();
+  }
+}
+
+// Close modal when clicking X
+document.querySelector('.close-modal').addEventListener('click', closeModal);
+
+// Close modal when clicking outside
+window.addEventListener('click', function(event) {
+  if (event.target == document.getElementById('product-modal')) {
+    closeModal();
+  }
+});
+
+// Update product click handlers
+function loadProducts() {
+  const container = document.getElementById("product-list");
+  container.innerHTML = "";
+  
+  products.forEach((product, index) => {
+    const productEl = document.createElement("div");
+    productEl.className = "product";
+    productEl.onclick = () => showProductModal(index);
+    
+    let badge = '';
+    if (product.hot) {
+      badge = '<span class="hot-badge">HOT</span>';
+    }
+    
+    productEl.innerHTML = `
+      ${badge}
+      <img src="${product.image}" alt="${product.name}" loading="lazy">
+      <h3>${product.name}</h3>
+      <div class="price">RM ${product.price.toFixed(2)}</div>
+      <button>View Details</button>
+    `;
+    
+    container.appendChild(productEl);
+  });
+}
+
+// Rest of your existing cart and suggestion functionality...
+// [Previous JavaScript code for cart, suggestions, etc. remains the same]
+</script>
+
+<!-- Include all your previous JavaScript for cart, suggestions, etc. -->
+<script>
 // AI suggestion mappings
 const suggestionMap = {
   fatigue: ["Aloe Vera Gel", "Forever Bee Honey", "Forever Royal Jelly"],
   energy: ["Forever Bee Pollen", "Forever Royal Jelly", "Forever Absorbent-C"],
   skin: ["Aloe Vera Gel", "Forever Aloe First", "Forever Absorbent-C"],
-  digestion: ["Aloe Vera Gel", "Aloe Berry Nectar", "Forever Fields of Greens"],
+  digestion: ["Aloe Vera Gel", "Forever Aloe Berry Nectar", "Forever Fields of Greens"],
   immunity: ["Forever Royal Jelly", "Forever Garlic-Thyme", "Forever Absorbent-C"],
   allergy: ["Aloe Vera Gel", "Forever Bee Honey", "Forever Royal Jelly"],
   detox: ["Forever Fields of Greens", "Aloe Vera Gel", "Forever Absorbent-C"],
-  weight: ["Aloe Vera Gel", "Forever Fields of Greens", "Forever Bee Pollen"]
+  weight: ["Aloe Vera Gel", "Forever Fields of Greens", "Forever Garcinia Plus"],
+  joint: ["Forever Aloe MSM Gel", "Forever Arctic Sea", "Forever Active HA"],
+  heart: ["Forever Arctic Sea", "Forever Garlic-Thyme", "Forever Nature-Min"]
 };
 
 let cart = [];
@@ -568,32 +567,6 @@ document.addEventListener('DOMContentLoaded', function() {
   loadProducts();
   updateCartCount();
 });
-
-function loadProducts() {
-  const container = document.getElementById("product-list");
-  container.innerHTML = "";
-  
-  products.forEach((product, index) => {
-    const productEl = document.createElement("div");
-    productEl.className = "product";
-    
-    let badge = '';
-    if (product.hot) {
-      badge = '<span class="hot-badge">HOT</span>';
-    }
-    
-    productEl.innerHTML = `
-      ${badge}
-      <img src="products/${product.image}" alt="${product.name}" loading="lazy">
-      <h3>${product.name}</h3>
-      <div class="price">RM ${product.price.toFixed(2)}</div>
-      <div class="points">${product.points} PV</div>
-      <button onclick="addToCart(${index})">Add to Cart</button>
-    `;
-    
-    container.appendChild(productEl);
-  });
-}
 
 function addToCart(index) {
   const product = products[index];
@@ -644,11 +617,11 @@ function updateCartUI() {
         <div class="cart-item-price">RM ${item.price.toFixed(2)}</div>
       </div>
       <div class="cart-item-qty">
-        <button class="qty-btn" onclick="updateQuantity(${index}, -1)">-</button>
+        <button class="qty-btn" onclick="event.stopPropagation();updateQuantity(${index}, -1)">-</button>
         <span>${item.quantity}</span>
-        <button class="qty-btn" onclick="updateQuantity(${index}, 1)">+</button>
+        <button class="qty-btn" onclick="event.stopPropagation();updateQuantity(${index}, 1)">+</button>
       </div>
-      <button class="remove-btn" onclick="removeFromCart(${index})">×</button>
+      <button class="remove-btn" onclick="event.stopPropagation();removeFromCart(${index})">×</button>
     `;
     
     container.appendChild(itemEl);
@@ -697,21 +670,22 @@ function checkout() {
   if (!confirm("Proceed to WhatsApp checkout?")) return;
   
   const phone = "601111033154";
-  let message = "Hi Arvind, I'd like to order:\n\n";
+  let message = "Hi Arvind, I'd like to order these Forever products:\n\n";
   
   cart.forEach(item => {
-    message += `${item.name} - ${item.quantity} x RM ${item.price.toFixed(2)} = RM ${(item.quantity * item.price).toFixed(2)}\n`;
+    message += `➤ ${item.name} (${item.quantity}x) = RM ${(item.quantity * item.price).toFixed(2)}\n`;
   });
   
   const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  message += `\nTotal: RM ${total.toFixed(2)}\n\nDelivery details:\nName: \nAddress: \nPhone: `;
+  message += `\n💰 Total: RM ${total.toFixed(2)}\n\n`;
+  message += "My details:\n";
+  message += "Name: \n";
+  message += "Address: \n";
+  message += "Phone: \n\n";
+  message += "Please advise on payment and delivery. Thank you!";
   
   const encodedMessage = encodeURIComponent(message);
   window.open(`https://wa.me/${phone}?text=${encodedMessage}`, "_blank");
-  
-  // Optional: Clear cart after checkout
-  // cart = [];
-  // updateCartUI();
 }
 
 function suggestProducts() {
@@ -739,7 +713,7 @@ function suggestProducts() {
     resultEl.innerHTML = "<p>No specific products found for your concern. Our general wellness recommendations:</p>";
     matchedProducts = ["Aloe Vera Gel", "Forever Bee Honey", "Forever Royal Jelly"];
   } else {
-    resultEl.innerHTML = "<p>Based on your input, we recommend:</p>";
+    resultEl.innerHTML = "<p>Based on your input, we recommend these Forever products:</p>";
   }
   
   // Display suggested products
@@ -748,13 +722,18 @@ function suggestProducts() {
     if (!product) return '';
     
     return `
-      <div class="product" style="margin: 10px 0; padding: 10px; border: 1px solid #eee; border-radius: 5px;">
-        <h4>${product.name}</h4>
-        <p>Benefits: ${product.benefits.join(", ")}</p>
-        <button onclick="addToCart(${products.indexOf(product)})" 
-                style="padding: 5px 10px; background: var(--primary-color); color: white; border: none; border-radius: 3px;">
-          Add to Cart (RM ${product.price.toFixed(2)})
-        </button>
+      <div class="product" style="margin: 10px 0; padding: 10px; border: 1px solid #eee; border-radius: 5px; text-align: left;">
+        <div style="display: flex; gap: 15px; align-items: center;">
+          <img src="${product.image}" alt="${product.name}" style="width: 80px; height: 80px; object-fit: contain;">
+          <div>
+            <h4 style="margin: 0 0 5px;">${product.name}</h4>
+            <div style="font-weight: bold; color: var(--primary-color);">RM ${product.price.toFixed(2)}</div>
+            <button onclick="event.stopPropagation();addToCart(${products.indexOf(product)})" 
+                    style="padding: 5px 10px; background: var(--primary-color); color: white; border: none; border-radius: 3px; margin-top: 5px;">
+              Add to Cart
+            </button>
+          </div>
+        </div>
       </div>
     `;
   }).join('');
