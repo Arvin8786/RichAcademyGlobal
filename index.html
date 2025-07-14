@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health & Wellness Products</title>
+    <title>Forever Living Products</title>
     <style>
         * {
             box-sizing: border-box;
@@ -41,6 +41,34 @@
             padding: 2px 6px;
             font-size: 12px;
         }
+        nav {
+            background-color: #24734a;
+            padding: 10px;
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            justify-content: center;
+        }
+        nav li {
+            margin: 0 15px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
         main {
             padding: 20px;
             max-width: 1200px;
@@ -48,6 +76,9 @@
         }
         h1 {
             color: #2c8a58;
+        }
+        .product-category {
+            margin-bottom: 30px;
         }
         #product-list {
             display: grid;
@@ -78,6 +109,17 @@
             font-size: 12px;
             font-weight: bold;
         }
+        .discount-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #3498db;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+        }
         .product img {
             width: 100%;
             height: 200px;
@@ -93,6 +135,11 @@
             font-weight: bold;
             color: #2c8a58;
             font-size: 18px;
+        }
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 14px;
         }
         .product button {
             display: block;
@@ -287,6 +334,42 @@
         #checkout-btn:hover {
             background-color: #24734a;
         }
+        /* Business Opportunity Section */
+        .business-opportunity {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .business-opportunity h2 {
+            color: #2c8a58;
+            margin-top: 0;
+        }
+        /* CDS Section */
+        .cds-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .cds-section h2 {
+            color: #2c8a58;
+            margin-top: 0;
+        }
+        /* Discount Section */
+        .discount-section {
+            background-color: #fff8e1;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            border: 1px solid #ffd54f;
+        }
+        .discount-section h2 {
+            color: #e74c3c;
+            margin-top: 0;
+        }
         /* AI Suggestion Section */
         .ai-suggestion {
             background-color: white;
@@ -349,100 +432,220 @@
             #cart-panel {
                 width: 100%;
             }
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            nav li {
+                margin: 5px 0;
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="logo">Health & Wellness</div>
+        <div class="logo">Forever Living Products</div>
         <div class="cart-icon" onclick="toggleCart()">
             🛒
             <span id="cart-count">0</span>
         </div>
     </header>
 
+    <nav>
+        <ul>
+            <li><a href="#" onclick="showTab('products')">Products</a></li>
+            <li><a href="#" onclick="showTab('cds')">CDS</a></li>
+            <li><a href="#" onclick="showTab('business')">Business Opportunity</a></li>
+            <li><a href="#" onclick="showTab('discounts')">Special Discounts</a></li>
+        </ul>
+    </nav>
+
     <main>
-        <h1>Our Products</h1>
-        
-        <div id="product-list">
-            <!-- Products will be loaded here by JavaScript -->
+        <!-- Products Tab -->
+        <div id="products" class="tab-content active">
+            <h1>Our Products</h1>
+            
+            <div class="product-category">
+                <h2>Aloe Vera Products</h2>
+                <div id="aloe-products" class="product-list">
+                    <!-- Aloe products will be loaded here -->
+                </div>
+            </div>
+            
+            <div class="product-category">
+                <h2>Bee Products</h2>
+                <div id="bee-products" class="product-list">
+                    <!-- Bee products will be loaded here -->
+                </div>
+            </div>
+            
+            <div class="product-category">
+                <h2>Nutritional Supplements</h2>
+                <div id="nutrition-products" class="product-list">
+                    <!-- Nutrition products will be loaded here -->
+                </div>
+            </div>
+            
+            <div class="ai-suggestion">
+                <h2>Need Help Choosing?</h2>
+                <p>Tell us about your health concerns and we'll suggest suitable products:</p>
+                <input type="text" id="symptom-input" placeholder="e.g. joint pain, skin problems, low energy...">
+                <button id="suggest-btn" onclick="suggestProducts()">Get Suggestions</button>
+                <div id="suggestion-result"></div>
+            </div>
         </div>
-        
-        <div class="ai-suggestion">
-            <h2>Need Help Choosing?</h2>
-            <p>Tell us about your health concerns and we'll suggest suitable products:</p>
-            <input type="text" id="symptom-input" placeholder="e.g. joint pain, skin problems, low energy...">
-            <button id="suggest-btn" onclick="suggestProducts()">Get Suggestions</button>
-            <div id="suggestion-result"></div>
+
+        <!-- CDS Tab -->
+        <div id="cds" class="tab-content">
+            <div class="cds-section">
+                <h2>Customer Discount Shopping (CDS)</h2>
+                <p>Become a preferred customer and enjoy 15% discount on all products!</p>
+                <p>Benefits of CDS membership:</p>
+                <ul>
+                    <li>15% discount on all products</li>
+                    <li>Free product catalog</li>
+                    <li>Exclusive member-only offers</li>
+                    <li>Priority customer service</li>
+                </ul>
+                <button onclick="alert('Please contact us to register as CDS member')">Join CDS Now</button>
+            </div>
+        </div>
+
+        <!-- Business Opportunity Tab -->
+        <div id="business" class="tab-content">
+            <div class="business-opportunity">
+                <h2>Business Opportunity</h2>
+                <p>Join our team and build your own Forever Living business!</p>
+                <p>Benefits of becoming a distributor:</p>
+                <ul>
+                    <li>Earn 30-50% commission on sales</li>
+                    <li>Discounts up to 42% on products</li>
+                    <li>Flexible working hours</li>
+                    <li>International business opportunities</li>
+                    <li>Free training and support</li>
+                </ul>
+                <button onclick="alert('Please contact us for business opportunity details')">Learn More</button>
+            </div>
+        </div>
+
+        <!-- Discounts Tab -->
+        <div id="discounts" class="tab-content">
+            <div class="discount-section">
+                <h2>Special Discounts</h2>
+                <p>Limited time offers on selected products:</p>
+                <div id="discount-products" class="product-list">
+                    <!-- Discount products will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Modal -->
+        <div id="product-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <img id="modal-product-img" src="" alt="Product Image" class="modal-product-img">
+                <h2 id="modal-product-name"></h2>
+                <p id="modal-product-desc"></p>
+                <p id="modal-product-price"></p>
+                
+                <div class="qty-controls">
+                    <button id="decrease-qty">-</button>
+                    <span id="product-qty">1</span>
+                    <button id="increase-qty">+</button>
+                </div>
+                
+                <button id="modal-add-to-cart">Add to Cart</button>
+            </div>
+        </div>
+
+        <!-- Cart Panel -->
+        <div id="cart-panel">
+            <div class="cart-header">
+                <h2>Your Cart</h2>
+                <span class="close-cart" onclick="toggleCart()">&times;</span>
+            </div>
+            
+            <div id="cart-items">
+                <!-- Cart items will be loaded here -->
+            </div>
+            
+            <div id="cart-total">Total: RM 0.00</div>
+            <button id="checkout-btn" onclick="checkout()">Checkout via WhatsApp</button>
         </div>
     </main>
 
-    <!-- Product Modal -->
-    <div id="product-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <img id="modal-product-img" src="" alt="Product Image" class="modal-product-img">
-            <h2 id="modal-product-name"></h2>
-            <p id="modal-product-desc"></p>
-            <p id="modal-product-price"></p>
-            
-            <div class="qty-controls">
-                <button id="decrease-qty">-</button>
-                <span id="product-qty">1</span>
-                <button id="increase-qty">+</button>
-            </div>
-            
-            <button id="modal-add-to-cart">Add to Cart</button>
-        </div>
-    </div>
-
-    <!-- Cart Panel -->
-    <div id="cart-panel">
-        <div class="cart-header">
-            <h2>Your Cart</h2>
-            <span class="close-cart" onclick="toggleCart()">&times;</span>
-        </div>
-        
-        <div id="cart-items">
-            <!-- Cart items will be loaded here -->
-        </div>
-        
-        <div id="cart-total">Total: RM 0.00</div>
-        <button id="checkout-btn" onclick="checkout()">Checkout via WhatsApp</button>
-    </div>
-
     <script>
-        // Complete Product Data (30 products with hot selling badges)
+        // Complete Product Data with your image names
         const products = [
-            { id: 1, name: "Aloe Vera Gel", price: 89.90, image: "https://via.placeholder.com/300x300?text=Aloe+Vera+Gel", description: "Pure aloe vera gel for skin hydration and soothing", hot: true },
-            { id: 2, name: "Bee Propolis", price: 120.50, image: "https://via.placeholder.com/300x300?text=Bee+Propolis", description: "Natural immune system support", hot: false },
-            { id: 3, name: "Royal Jelly", price: 150.00, image: "https://via.placeholder.com/300x300?text=Royal+Jelly", description: "Energy booster and skin rejuvenation", hot: true },
-            { id: 4, name: "Freedom Joint Health", price: 135.75, image: "https://via.placeholder.com/300x300?text=Freedom+Joint", description: "Supports joint mobility and comfort", hot: false },
-            { id: 5, name: "MSM Powder", price: 95.20, image: "https://via.placeholder.com/300x300?text=MSM+Powder", description: "Supports joint health and recovery", hot: false },
-            { id: 6, name: "Immublend", price: 110.00, image: "https://via.placeholder.com/300x300?text=Immublend", description: "Immune system support formula", hot: true },
-            { id: 7, name: "Argi+", price: 180.00, image: "https://via.placeholder.com/300x300?text=Argi%2B", description: "Cardiovascular and energy support", hot: true },
-            { id: 8, name: "Aloe First", price: 75.50, image: "https://via.placeholder.com/300x300?text=Aloe+First", description: "First aid in a bottle", hot: false },
-            { id: 9, name: "Bee Honey", price: 65.00, image: "https://via.placeholder.com/300x300?text=Bee+Honey", description: "Pure natural honey", hot: false },
-            { id: 10, name: "Therm Trim", price: 140.00, image: "https://via.placeholder.com/300x300?text=Therm+Trim", description: "Metabolism support formula", hot: true },
-            { id: 11, name: "Probiotic", price: 125.00, image: "https://via.placeholder.com/300x300?text=Probiotic", description: "Digestive health support", hot: false },
-            { id: 12, name: "Lean Shake", price: 160.00, image: "https://via.placeholder.com/300x300?text=Lean+Shake", description: "Meal replacement shake", hot: true },
-            { id: 13, name: "Forever Daily", price: 195.00, image: "https://via.placeholder.com/300x300?text=Forever+Daily", description: "Daily vitamin and mineral complex", hot: false },
-            { id: 14, name: "Fields of Greens", price: 145.00, image: "https://via.placeholder.com/300x300?text=Fields+of+Greens", description: "Greens powder supplement", hot: false },
-            { id: 15, name: "Arctic Sea", price: 130.00, image: "https://via.placeholder.com/300x300?text=Arctic+Sea", description: "Omega-3 fish oil supplement", hot: true },
-            { id: 16, name: "Absorbent-C", price: 85.00, image: "https://via.placeholder.com/300x300?text=Absorbent-C", description: "Vitamin C with oat bran", hot: false },
-            { id: 17, name: "Garlic-Thyme", price: 75.00, image: "https://via.placeholder.com/300x300?text=Garlic-Thyme", description: "Cardiovascular and immune support", hot: false },
-            { id: 18, name: "Gingko Plus", price: 110.00, image: "https://via.placeholder.com/300x300?text=Gingko+Plus", description: "Memory and circulation support", hot: false },
-            { id: 19, name: "Nature-Min", price: 95.00, image: "https://via.placeholder.com/300x300?text=Nature-Min", description: "Plant-derived mineral complex", hot: false },
-            { id: 20, name: "Forever Lite", price: 175.00, image: "https://via.placeholder.com/300x300?text=Forever+Lite", description: "Protein powder with vitamins", hot: true }
+            // Aloe Vera Products
+            { id: 1, name: "Aloe Vera Gel", price: 89.90, image: "aloe-vera-gel.jpg", 
+              description: "Pure aloe vera gel for skin hydration and soothing", category: "aloe", hot: true },
+            { id: 2, name: "Aloe First", price: 75.50, image: "aloe-first.jpg", 
+              description: "First aid in a bottle", category: "aloe", hot: false },
+            { id: 3, name: "Aloe Liquid Soap", price: 45.00, image: "aloe-liquid-soap.jpg", 
+              description: "Gentle aloe-based liquid soap", category: "aloe", hot: false },
+            { id: 4, name: "Aloe Sunscreen", price: 65.00, image: "aloe-sunscreen.jpg", 
+              description: "Natural sunscreen with aloe vera", category: "aloe", hot: true },
+            { id: 5, name: "Aloe Propolis Creme", price: 55.00, image: "aloe-propolis-creme.jpg", 
+              description: "Skin cream with aloe and propolis", category: "aloe", hot: false },
+            { id: 6, name: "Aloe Jojoba Shampoo", price: 50.00, image: "aloe-jojoba-shampoo.jpg", 
+              description: "Nourishing shampoo with aloe and jojoba", category: "aloe", hot: false },
+            { id: 7, name: "Aloe Jojoba Conditioner", price: 50.00, image: "aloe-jojoba-conditioner.jpg", 
+              description: "Moisturizing conditioner with aloe and jojoba", category: "aloe", hot: false },
+            { id: 8, name: "Aloe Lips", price: 25.00, image: "aloe_lips.jpg", 
+              description: "Aloe vera lip balm", category: "aloe", hot: false },
+            
+            // Bee Products
+            { id: 9, name: "Bee Propolis", price: 120.50, image: "bee-propolis.jpg", 
+              description: "Natural immune system support", category: "bee", hot: true },
+            { id: 10, name: "Royal Jelly", price: 150.00, image: "royal-jelly.jpg", 
+              description: "Energy booster and skin rejuvenation", category: "bee", hot: true },
+            { id: 11, name: "Bee Honey", price: 65.00, image: "bee-honey.jpg", 
+              description: "Pure natural honey", category: "bee", hot: false },
+            { id: 12, name: "Bee Pollen", price: 95.00, image: "bee-pollen.jpg", 
+              description: "Natural energy and nutrient supplement", category: "bee", hot: false },
+            
+            // Nutritional Supplements
+            { id: 13, name: "Arctic Sea", price: 130.00, image: "arctic-sea.jpg", 
+              description: "Omega-3 fish oil supplement", category: "nutrition", hot: true },
+            { id: 14, name: "Fields of Greens", price: 145.00, image: "fields-of-greens.jpg", 
+              description: "Greens powder supplement", category: "nutrition", hot: false },
+            { id: 15, name: "Absorbent-C", price: 85.00, image: "absorbent_c.jpg", 
+              description: "Vitamin C with oat bran", category: "nutrition", hot: false },
+            { id: 16, name: "Calcium Plus", price: 95.00, image: "calcium-plus.jpg", 
+              description: "Calcium and mineral supplement", category: "nutrition", hot: false },
+            
+            // Discount Products (same products but with discount flag)
+            { id: 17, name: "Aloe Vera Gel (Special Pack)", price: 75.00, originalPrice: 89.90, image: "aloe-vera-gel.jpg", 
+              description: "Pure aloe vera gel - special discount pack", category: "discount", hot: false, discount: true },
+            { id: 18, name: "Royal Jelly (Combo Offer)", price: 120.00, originalPrice: 150.00, image: "royal-jelly.jpg", 
+              description: "Royal jelly - buy 2 get 1 free", category: "discount", hot: false, discount: true },
+            { id: 19, name: "Aloe Sunscreen (Summer Special)", price: 55.00, originalPrice: 65.00, image: "aloe-sunscreen.jpg", 
+              description: "Natural sunscreen - summer special price", category: "discount", hot: false, discount: true }
         ];
 
         const cart = [];
         let currentProduct = null;
 
-        // Load products on page load
+        // Tab Navigation
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // Load products by category
         function loadProducts() {
-            const container = document.getElementById("product-list");
-            container.innerHTML = "";
+            const aloeContainer = document.getElementById("aloe-products");
+            const beeContainer = document.getElementById("bee-products");
+            const nutritionContainer = document.getElementById("nutrition-products");
+            const discountContainer = document.getElementById("discount-products");
+            
+            aloeContainer.innerHTML = "";
+            beeContainer.innerHTML = "";
+            nutritionContainer.innerHTML = "";
+            discountContainer.innerHTML = "";
 
             products.forEach((product) => {
                 const div = document.createElement("div");
@@ -453,15 +656,38 @@
                 if (product.hot) {
                     badge = `<div class="hot-badge">HOT</div>`;
                 }
+                if (product.discount) {
+                    badge += `<div class="discount-badge">SALE</div>`;
+                }
+
+                let priceHTML = `<p class="price">RM ${product.price.toFixed(2)}</p>`;
+                if (product.originalPrice) {
+                    priceHTML = `
+                        <p class="price">
+                            RM ${product.price.toFixed(2)} 
+                            <span class="original-price">RM ${product.originalPrice.toFixed(2)}</span>
+                        </p>
+                    `;
+                }
 
                 div.innerHTML = `
                     ${badge}
                     <img src="${product.image}" alt="${product.name}">
                     <h3>${product.name}</h3>
-                    <p class="price">RM ${product.price.toFixed(2)}</p>
+                    ${priceHTML}
                     <button onclick="event.stopPropagation(); addToCart(${product.id})">Add to Cart</button>
                 `;
-                container.appendChild(div);
+
+                // Add to appropriate container
+                if (product.category === "aloe") {
+                    aloeContainer.appendChild(div);
+                } else if (product.category === "bee") {
+                    beeContainer.appendChild(div);
+                } else if (product.category === "nutrition") {
+                    nutritionContainer.appendChild(div);
+                } else if (product.category === "discount") {
+                    discountContainer.appendChild(div);
+                }
             });
         }
 
@@ -472,7 +698,13 @@
             document.getElementById("modal-product-img").src = product.image;
             document.getElementById("modal-product-name").textContent = product.name;
             document.getElementById("modal-product-desc").textContent = product.description;
-            document.getElementById("modal-product-price").textContent = `RM ${product.price.toFixed(2)}`;
+            
+            let priceText = `RM ${product.price.toFixed(2)}`;
+            if (product.originalPrice) {
+                priceText += ` (Save RM ${(product.originalPrice - product.price).toFixed(2)})`;
+            }
+            document.getElementById("modal-product-price").textContent = priceText;
+            
             document.getElementById("product-qty").textContent = "1";
             modal.style.display = "block";
         }
@@ -514,7 +746,7 @@
         function updateCartItemQuantity(productId, newQuantity) {
             const item = cart.find(item => item.id === productId);
             if (item) {
-                item.quantity = newQuantity;
+                item.quantity = newQuantity > 0 ? newQuantity : 1;
                 updateCartUI();
             }
         }
@@ -535,15 +767,18 @@
                 itemDiv.className = "cart-item";
                 itemDiv.innerHTML = `
                     <div class="cart-item-info">
-                        <div class="cart-item-name">${item.name}</div>
-                        <div class="cart-item-price">RM ${item.price.toFixed(2)}</div>
+                        <img src="${item.image}" alt="${item.name}" style="width:50px;height:50px;object-fit:cover;margin-right:10px;">
+                        <div>
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">RM ${item.price.toFixed(2)}</div>
+                        </div>
                     </div>
                     <div class="cart-item-qty">
-                        <button onclick="updateCartItemQuantity(${item.id}, ${item.quantity-1})">-</button>
+                        <button onclick="event.stopPropagation(); updateCartItemQuantity(${item.id}, ${item.quantity-1})">-</button>
                         <span>${item.quantity}</span>
-                        <button onclick="updateCartItemQuantity(${item.id}, ${item.quantity+1})">+</button>
+                        <button onclick="event.stopPropagation(); updateCartItemQuantity(${item.id}, ${item.quantity+1})">+</button>
                     </div>
-                    <div class="cart-item-remove" onclick="removeFromCart(${item.id})">&times;</div>
+                    <div class="cart-item-remove" onclick="event.stopPropagation(); removeFromCart(${item.id})">&times;</div>
                 `;
                 cartItemsContainer.appendChild(itemDiv);
             });
@@ -666,16 +901,19 @@
                     closeModal();
                 }
             });
-            document.getElementById('increase-qty').addEventListener('click', () => {
+            document.getElementById('increase-qty').addEventListener('click', (e) => {
+                e.stopPropagation();
                 const qtyEl = document.getElementById('product-qty');
                 qtyEl.textContent = parseInt(qtyEl.textContent) + 1;
             });
-            document.getElementById('decrease-qty').addEventListener('click', () => {
+            document.getElementById('decrease-qty').addEventListener('click', (e) => {
+                e.stopPropagation();
                 const qtyEl = document.getElementById('product-qty');
                 const newQty = Math.max(1, parseInt(qtyEl.textContent) - 1);
                 qtyEl.textContent = newQty;
             });
-            document.getElementById('modal-add-to-cart').addEventListener('click', () => {
+            document.getElementById('modal-add-to-cart').addEventListener('click', (e) => {
+                e.stopPropagation();
                 if (currentProduct) {
                     const quantity = parseInt(document.getElementById('product-qty').textContent);
                     addToCart(currentProduct.id, quantity);
