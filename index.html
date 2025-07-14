@@ -1,804 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Forever Living by Mohd Arvind Isa - Rich Academy Global</title>
-  <style>
-    :root {
-      --primary-color: #0b5f5c;
-      --secondary-color: #e0f8f6;
-      --accent-color: #ff7e33;
-    }
-    
-    body {
-      font-family: 'Segoe UI', 'Arial', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #fffaf7;
-      color: #333;
-      line-height: 1.6;
-    }
-
-    header {
-      background: var(--primary-color);
-      color: white;
-      text-align: center;
-      padding: 2rem 1rem;
-      position: relative;
-    }
-
-    .logo {
-      max-width: 150px;
-      margin-bottom: 1rem;
-    }
-
-    header h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-
-    header p {
-      font-size: 1.1rem;
-      opacity: 0.9;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 1rem;
-    }
-
-    h2 {
-      text-align: center;
-      color: var(--primary-color);
-      margin: 2rem 0 1rem;
-      position: relative;
-    }
-
-    h2:after {
-      content: "";
-      display: block;
-      width: 80px;
-      height: 3px;
-      background: var(--accent-color);
-      margin: 0.5rem auto;
-    }
-
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1.5rem;
-      padding: 1rem 0;
-    }
-
-    .product {
-      background: white;
-      border: 1px solid #eee;
-      border-radius: 10px;
-      padding: 1.2rem;
-      text-align: center;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-      transition: transform 0.3s ease;
-      position: relative;
-    }
-
-    .product:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .product img {
-      max-width: 100%;
-      height: 180px;
-      object-fit: contain;
-      margin-bottom: 1rem;
-      border-radius: 5px;
-    }
-
-    .product h3 {
-      font-size: 1.1rem;
-      margin: 0.5rem 0;
-      color: var(--primary-color);
-      min-height: 3rem;
-    }
-
-    .price {
-      font-weight: bold;
-      color: var(--primary-color);
-      font-size: 1.1rem;
-      margin: 0.5rem 0;
-    }
-
-    .points {
-      font-size: 0.9rem;
-      color: #666;
-    }
-
-    .product button {
-      background-color: var(--primary-color);
-      color: white;
-      border: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-top: 0.8rem;
-      width: 100%;
-      font-weight: 600;
-    }
-
-    .product button:hover {
-      background-color: #094a47;
-      transform: scale(1.02);
-    }
-
-    .hot-badge {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: var(--accent-color);
-      color: white;
-      padding: 0.3rem 0.6rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: bold;
-    }
-
-    #ai-suggestion {
-      background: var(--secondary-color);
-      padding: 2rem 1rem;
-      border-radius: 10px;
-      margin: 2rem auto;
-      max-width: 800px;
-    }
-
-    #ai-suggestion input {
-      padding: 0.8rem;
-      width: 100%;
-      max-width: 500px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 1rem;
-      margin: 0.5rem 0;
-    }
-
-    #ai-suggestion button {
-      background-color: var(--accent-color);
-      color: white;
-      border: none;
-      padding: 0.8rem 1.5rem;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.3s ease;
-      margin-top: 0.5rem;
-    }
-
-    #ai-suggestion button:hover {
-      background-color: #e66b22;
-    }
-
-    #suggestion-result {
-      margin-top: 1.5rem;
-      padding: 1rem;
-      background: white;
-      border-radius: 5px;
-      display: none;
-    }
-
-    #cds {
-      padding: 2rem 1rem;
-      text-align: center;
-      background: var(--secondary-color);
-      margin: 3rem 0;
-      border-radius: 10px;
-    }
-
-    #cds img {
-      max-width: 200px;
-      margin: 1rem auto;
-      display: block;
-      border: 1px solid #ddd;
-      padding: 0.5rem;
-      background: white;
-    }
-
-    #cart-button {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: var(--primary-color);
-      color: white;
-      padding: 12px 18px;
-      border-radius: 50px;
-      border: none;
-      font-size: 1rem;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      z-index: 100;
-      transition: all 0.3s ease;
-    }
-
-    #cart-button:hover {
-      transform: scale(1.05);
-    }
-
-    #cart-count {
-      background: var(--accent-color);
-      color: white;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-    }
-
-    #cart-panel {
-      position: fixed;
-      bottom: 80px;
-      right: 20px;
-      width: 320px;
-      max-width: 90%;
-      max-height: 60vh;
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-      display: none;
-      padding: 1.2rem;
-      z-index: 99;
-      overflow-y: auto;
-    }
-
-    #cart-panel h3 {
-      margin-top: 0;
-      color: var(--primary-color);
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid #eee;
-    }
-
-    .cart-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.8rem 0;
-      border-bottom: 1px solid #f5f5f5;
-    }
-
-    .cart-item-info {
-      flex: 1;
-    }
-
-    .cart-item-name {
-      font-weight: 500;
-    }
-
-    .cart-item-price {
-      font-size: 0.9rem;
-      color: #666;
-    }
-
-    .cart-item-qty {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin: 0 1rem;
-    }
-
-    .qty-btn {
-      width: 25px;
-      height: 25px;
-      border-radius: 50%;
-      border: 1px solid #ddd;
-      background: white;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .remove-btn {
-      color: #ff4444;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 1.2rem;
-    }
-
-    #cart-total {
-      font-weight: bold;
-      text-align: right;
-      margin: 1rem 0;
-      font-size: 1.1rem;
-    }
-
-    #checkout-btn {
-      background-color: var(--accent-color);
-      color: white;
-      border: none;
-      padding: 0.8rem;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      width: 100%;
-      transition: all 0.3s ease;
-    }
-
-    #checkout-btn:hover {
-      background-color: #e66b22;
-    }
-
-    .empty-cart {
-      text-align: center;
-      padding: 1rem;
-      color: #666;
-    }
-
-    footer {
-      background: var(--primary-color);
-      color: white;
-      text-align: center;
-      padding: 2rem 1rem;
-      font-size: 0.9rem;
-    }
-
-    .footer-content {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .social-links {
-      margin: 1rem 0;
-    }
-
-    .social-links a {
-      color: white;
-      margin: 0 10px;
-      font-size: 1.2rem;
-    }
-
-    .disclaimer {
-      font-size: 0.8rem;
-      opacity: 0.8;
-      margin-top: 1.5rem;
-    }
-
-    @media (max-width: 768px) {
-      header h1 {
-        font-size: 1.8rem;
-      }
-      
-      .product-grid {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      }
-      
-      .product img {
-        height: 140px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      header {
-        padding: 1.5rem 1rem;
-      }
-      
-      header h1 {
-        font-size: 1.5rem;
-      }
-      
-      #ai-suggestion button {
-        width: 100%;
-      }
-      
-      #cart-panel {
-        width: 280px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forever Living Products</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #2c8a58;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 24px;
+        }
+        #cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+        nav {
+            background-color: #24734a;
+            padding: 10px;
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            justify-content: center;
+        }
+        nav li {
+            margin: 0 15px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        main {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #2c8a58;
+        }
+        .product-category {
+            margin-bottom: 30px;
+        }
+        #product-list,
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .product {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            position: relative;
+            cursor: pointer;
+        }
+        .product:hover {
+            transform: translateY(-5px);
+        }
+        .product img {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+        }
+        .product h3 {
+            margin: 10px 15px;
+            font-size: 12px;
+            color: #333;
+        }
+        .price {
+            margin: 0 15px 10px;
+            font-weight: bold;
+            color: #2c8a58;
+            font-size: 13px;
+        }
+        .product button {
+            display: block;
+            width: calc(100% - 30px);
+            margin: 0 auto 15px;
+            padding: 6px;
+            background-color: #2c8a58;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .product button:hover {
+            background-color: #24734a;
+        }
+        #cds .cds-section h2 {
+            color: #2c8a58;
+        }
+        #cds .cds-section p:first-of-type {
+            font-weight: bold;
+        }
+        #cds .cds-section p:first-of-type::after {
+            content: " - a health program by Rich Academy Global";
+            font-weight: normal;
+            display: block;
+            margin-top: 5px;
+            color: #444;
+        }
+        @media (max-width: 768px) {
+            #product-list,
+            .product-list {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
+    </style>
 </head>
 <body>
 <header>
-  <div class="container">
-    <img src="flp-logo.png" alt="Forever Living Logo" class="logo">
-    <h1>Forever Living by Mohd Arvind Isa</h1>
-    <p>Your Trusted Forever Living Partner - Rich Academy Global</p>
-  </div>
+    <div class="logo">Forever Living Products</div>
+    <div class="cart-icon" onclick="toggleCart()">
+        🛒<span id="cart-count">0</span>
+    </div>
 </header>
-
-<main class="container">
-  <section id="ai-suggestion">
-    <h2>🧠 Not sure what to buy?</h2>
-    <p>Tell us your health concern and we'll recommend the best Forever Living products for you.</p>
-    <div style="text-align: center;">
-      <input type="text" id="symptom-input" placeholder="e.g. fatigue, skin allergy, digestion issues...">
-      <button onclick="suggestProducts()">Get Product Recommendations</button>
+<nav>
+    <ul>
+        <li><a href="#" onclick="showTab('products')">Products</a></li>
+        <li><a href="#" onclick="showTab('cds')">CDS</a></li>
+        <li><a href="#" onclick="showTab('business')">Business</a></li>
+        <li><a href="#" onclick="showTab('discounts')">Specials</a></li>
+    </ul>
+</nav>
+<main>
+    <div id="products" class="tab-content active">
+        <h1>Our Products</h1>
+        <div class="product-category">
+            <h2>All Products</h2>
+            <div id="aloe-products" class="product-list"></div>
+        </div>
     </div>
-    <div id="suggestion-result"></div>
-  </section>
-
-  <section id="products">
-    <h2>🌟 Our Best Selling Products</h2>
-    <div class="product-grid" id="product-list"></div>
-  </section>
-
-  <section id="cds">
-    <h2>💪 Join Cabaran Detox Sihat (CDS)</h2>
-    <p>Transform your health with our 30-day detox challenge! Scan the QR code to learn more:</p>
-    <img src="cds-qr.png" alt="CDS QR Code">
-    <p>Contact us at <strong>011-11033154</strong> for details</p>
-  </section>
+    <div id="cds" class="tab-content">
+        <div class="cds-section">
+            <h2>Cabaran Detox Sihat (CDS)</h2>
+            <p>Cabaran Detox Sihat</p>
+            <p>Enjoy a guided detox experience, meal planning, product support and community access to transform your health.</p>
+            <button onclick="alert('Join CDS today! Contact us via WhatsApp')">Join Now</button>
+        </div>
+    </div>
 </main>
-
-<div id="cart-panel">
-  <h3>🛒 Your Shopping Cart</h3>
-  <div id="cart-items"></div>
-  <div id="cart-total">Total: RM 0.00</div>
-  <button id="checkout-btn" onclick="checkout()">Checkout via WhatsApp</button>
-</div>
-<button id="cart-button" onclick="toggleCart()">
-  <span id="cart-icon">🛒</span>
-  <span id="cart-count">0</span>
-</button>
-
-<footer>
-  <div class="footer-content">
-    <div class="social-links">
-      <a href="https://wa.me/601111033154" target="_blank">📱</a>
-      <a href="https://facebook.com" target="_blank">📘</a>
-      <a href="https://instagram.com" target="_blank">📸</a>
-    </div>
-    <p>Mohd Arvind Isa | Forever Living Distributor</p>
-    <p>Rich Academy Global | Malaysia</p>
-    <div class="disclaimer">
-      <p><strong>Disclaimer:</strong> These products are not intended to diagnose, treat, cure or prevent any disease. Always consult your healthcare professional before taking any supplements.</p>
-      <p>© 2025 Forever Living by Mohd Arvind Isa. All rights reserved.</p>
-    </div>
-  </div>
-</footer>
-
 <script>
-// Enhanced product data with categories and benefits
-const products = [
-  { 
-    name: "Aloe Vera Gel", 
-    price: 98.50, 
-    points: 0.1, 
-    image: "aloe-vera-gel.jpg",
-    category: "Wellness",
-    benefits: ["Digestive health", "Immune support", "Hydration"],
-    hot: true
-  },
-  { 
-    name: "Forever Bee Honey", 
-    price: 62.20, 
-    points: 0.08, 
-    image: "bee-honey.jpg",
-    category: "Wellness",
-    benefits: ["Energy boost", "Antioxidants", "Natural sweetener"],
-    hot: true
-  },
-  { 
-    name: "Forever Royal Jelly", 
-    price: 112.00, 
-    points: 0.12, 
-    image: "royal-jelly.jpg",
-    category: "Wellness",
-    benefits: ["Energy", "Anti-aging", "Immune support"]
-  },
-  { 
-    name: "Aloe Berry Nectar", 
-    price: 98.50, 
-    points: 0.1, 
-    image: "aloe-berry-nectar.jpg",
-    category: "Wellness",
-    benefits: ["Antioxidants", "Immune support", "Digestive health"]
-  },
-  { 
-    name: "Forever Bright Toothgel", 
-    price: 25.00, 
-    points: 0.04, 
-    image: "bright-toothgel.jpg",
-    category: "Personal Care",
-    benefits: ["Oral hygiene", "Whitening", "Aloe-based"]
-  },
-  { 
-    name: "Forever Fields of Greens", 
-    price: 69.80, 
-    points: 0.08, 
-    image: "fields-of-greens.jpg",
-    category: "Nutrition",
-    benefits: ["Detox", "Energy", "Alkaline balance"]
-  },
-  { 
-    name: "Forever Absorbent-C", 
-    price: 70.00, 
-    points: 0.09, 
-    image: "absorbent-c.jpg",
-    category: "Wellness",
-    benefits: ["Immune support", "Collagen production", "Antioxidant"]
-  },
-  { 
-    name: "Forever Garlic-Thyme", 
-    price: 65.50, 
-    points: 0.07, 
-    image: "garlic-thyme.jpg",
-    category: "Wellness",
-    benefits: ["Immune support", "Cardiovascular health", "Antioxidant"]
-  },
-  { 
-    name: "Forever Aloe First", 
-    price: 71.30, 
-    points: 0.09, 
-    image: "aloe-first.jpg",
-    category: "Personal Care",
-    benefits: ["Skin soothing", "First aid", "Moisturizing"]
-  },
-  { 
-    name: "Forever Bee Pollen", 
-    price: 53.60, 
-    points: 0.07, 
-    image: "bee-pollen.jpg",
-    category: "Wellness",
-    benefits: ["Energy", "Stamina", "Nutrient-rich"]
-  }
+const productNames = [
+  "absorbent_c.jpg", "aloe first.jpeg", "aloe soap .jpg", "aloe sunscreen new.jpg", "aloe-berry-nectar.jpg", "aloe-berry.jpg",
+  "aloe-first.jpg", "aloe-jojoba-conditioner.jpg", "aloe-jojoba-shampoo.jpg", "aloe-liquid-soap.jpg", "aloe-mp-lotion.jpg",
+  "aloe-peaches.jpg", "aloe-propolis-creme.jpg", "aloe-soap .jpg", "aloe-sunscreen.jpg", "aloe-vera-gel.jpg",
+  "aloe_berry_nectar.jpg", "aloe_lips.jpg", "arctic-sea.jpg", "avocado-soap.jpg", "bee-honey.jpg", "bee-pollen.jpg",
+  "bee-propolis.jpg", "bright-toothgel.jpg", "calcium-plus.jpg", "deodorant-stick.jpg", "fields-of-greens.jpg",
+  "forever-deodorant.jpg", "royal-jelly.jpg", "teh-tarik.jpg"
+];
+const productTitles = [
+  "Absorbent C", "Aloe First", "Aloe Soap", "Aloe Sunscreen New", "Aloe Berry Nectar", "Aloe Berry",
+  "Aloe First (2)", "Aloe Jojoba Conditioner", "Aloe Jojoba Shampoo", "Aloe Liquid Soap", "Aloe MP Lotion",
+  "Aloe Peaches", "Aloe Propolis Creme", "Aloe Soap (2)", "Aloe Sunscreen", "Aloe Vera Gel",
+  "Aloe Berry Nectar (Alt)", "Aloe Lips", "Arctic Sea", "Avocado Soap", "Bee Honey", "Bee Pollen",
+  "Bee Propolis", "Bright Toothgel", "Calcium Plus", "Deodorant Stick", "Fields of Greens",
+  "Forever Deodorant", "Royal Jelly", "Teh Tarik"
+];
+const productPrices = [
+  68.52, 77.78, 36.11, 81.48, 94.44, 94.44,
+  77.78, 69.44, 69.44, 58.33, 62.96,
+  94.44, 83.33, 36.11, 81.48, 94.44,
+  94.44, 18.52, 110.19, 22.22, 81.48, 76.85,
+  86.11, 33.33, 84.26, 39.81, 64.81,
+  39.81, 110.19, 45.00
 ];
 
-// AI suggestion mappings
-const suggestionMap = {
-  fatigue: ["Aloe Vera Gel", "Forever Bee Honey", "Forever Royal Jelly"],
-  energy: ["Forever Bee Pollen", "Forever Royal Jelly", "Forever Absorbent-C"],
-  skin: ["Aloe Vera Gel", "Forever Aloe First", "Forever Absorbent-C"],
-  digestion: ["Aloe Vera Gel", "Aloe Berry Nectar", "Forever Fields of Greens"],
-  immunity: ["Forever Royal Jelly", "Forever Garlic-Thyme", "Forever Absorbent-C"],
-  allergy: ["Aloe Vera Gel", "Forever Bee Honey", "Forever Royal Jelly"],
-  detox: ["Forever Fields of Greens", "Aloe Vera Gel", "Forever Absorbent-C"],
-  weight: ["Aloe Vera Gel", "Forever Fields of Greens", "Forever Bee Pollen"]
-};
+const productContainer = document.getElementById("aloe-products");
+productContainer.innerHTML = productNames.map((filename, i) => `
+  <div class="product">
+    <img src="images/${filename}" alt="${productTitles[i]}">
+    <h3>${productTitles[i]}</h3>
+    <p class="price">RM ${productPrices[i].toFixed(2)}</p>
+    <button onclick="location.href='https://wa.me/60123456789?text=I%20want%20to%20order%20${encodeURIComponent(productTitles[i])}'">Buy via WhatsApp</button>
+  </div>
+`).join("");
 
-let cart = [];
-
-// Initialize the page
-document.addEventListener('DOMContentLoaded', function() {
-  loadProducts();
-  updateCartCount();
-});
-
-function loadProducts() {
-  const container = document.getElementById("product-list");
-  container.innerHTML = "";
-  
-  products.forEach((product, index) => {
-    const productEl = document.createElement("div");
-    productEl.className = "product";
-    
-    let badge = '';
-    if (product.hot) {
-      badge = '<span class="hot-badge">HOT</span>';
-    }
-    
-    productEl.innerHTML = `
-      ${badge}
-      <img src="products/${product.image}" alt="${product.name}" loading="lazy">
-      <h3>${product.name}</h3>
-      <div class="price">RM ${product.price.toFixed(2)}</div>
-      <div class="points">${product.points} PV</div>
-      <button onclick="addToCart(${index})">Add to Cart</button>
-    `;
-    
-    container.appendChild(productEl);
-  });
+function showTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
 }
-
-function addToCart(index) {
-  const product = products[index];
-  const existingItem = cart.find(item => item.name === product.name);
-  
-  if (existingItem) {
-    existingItem.quantity++;
-  } else {
-    cart.push({
-      ...product,
-      quantity: 1
-    });
-  }
-  
-  updateCartUI();
-  showToast(`${product.name} added to cart`);
-}
-
-function removeFromCart(index) {
-  cart.splice(index, 1);
-  updateCartUI();
-  showToast("Item removed from cart");
-}
-
-function updateCartUI() {
-  const container = document.getElementById("cart-items");
-  const totalEl = document.getElementById("cart-total");
-  
-  if (cart.length === 0) {
-    container.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
-    totalEl.textContent = "Total: RM 0.00";
-    updateCartCount();
-    return;
-  }
-  
-  container.innerHTML = "";
-  let total = 0;
-  
-  cart.forEach((item, index) => {
-    const itemTotal = item.price * item.quantity;
-    total += itemTotal;
-    
-    const itemEl = document.createElement("div");
-    itemEl.className = "cart-item";
-    itemEl.innerHTML = `
-      <div class="cart-item-info">
-        <div class="cart-item-name">${item.name}</div>
-        <div class="cart-item-price">RM ${item.price.toFixed(2)}</div>
-      </div>
-      <div class="cart-item-qty">
-        <button class="qty-btn" onclick="updateQuantity(${index}, -1)">-</button>
-        <span>${item.quantity}</span>
-        <button class="qty-btn" onclick="updateQuantity(${index}, 1)">+</button>
-      </div>
-      <button class="remove-btn" onclick="removeFromCart(${index})">×</button>
-    `;
-    
-    container.appendChild(itemEl);
-  });
-  
-  totalEl.textContent = `Total: RM ${total.toFixed(2)}`;
-  updateCartCount();
-}
-
-function updateQuantity(index, change) {
-  const newQty = cart[index].quantity + change;
-  
-  if (newQty < 1) {
-    removeFromCart(index);
-    return;
-  }
-  
-  cart[index].quantity = newQty;
-  updateCartUI();
-}
-
-function updateCartCount() {
-  const countEl = document.getElementById("cart-count");
-  const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-  countEl.textContent = count;
-  
-  // Update cart icon animation
-  const cartIcon = document.getElementById("cart-icon");
-  cartIcon.style.transform = "scale(1.2)";
-  setTimeout(() => {
-    cartIcon.style.transform = "scale(1)";
-  }, 300);
-}
-
-function toggleCart() {
-  const panel = document.getElementById("cart-panel");
-  panel.style.display = panel.style.display === "block" ? "none" : "block";
-}
-
-function checkout() {
-  if (cart.length === 0) {
-    showToast("Your cart is empty");
-    return;
-  }
-  
-  if (!confirm("Proceed to WhatsApp checkout?")) return;
-  
-  const phone = "601111033154";
-  let message = "Hi Arvind, I'd like to order:\n\n";
-  
-  cart.forEach(item => {
-    message += `${item.name} - ${item.quantity} x RM ${item.price.toFixed(2)} = RM ${(item.quantity * item.price).toFixed(2)}\n`;
-  });
-  
-  const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  message += `\nTotal: RM ${total.toFixed(2)}\n\nDelivery details:\nName: \nAddress: \nPhone: `;
-  
-  const encodedMessage = encodeURIComponent(message);
-  window.open(`https://wa.me/${phone}?text=${encodedMessage}`, "_blank");
-  
-  // Optional: Clear cart after checkout
-  // cart = [];
-  // updateCartUI();
-}
-
-function suggestProducts() {
-  const input = document.getElementById("symptom-input").value.trim().toLowerCase();
-  const resultEl = document.getElementById("suggestion-result");
-  
-  if (!input) {
-    showToast("Please enter your health concern");
-    return;
-  }
-  
-  // Find matching suggestions
-  let matchedProducts = [];
-  
-  for (const [keyword, productNames] of Object.entries(suggestionMap)) {
-    if (input.includes(keyword)) {
-      matchedProducts = [...matchedProducts, ...productNames];
-    }
-  }
-  
-  // Remove duplicates
-  matchedProducts = [...new Set(matchedProducts)];
-  
-  if (matchedProducts.length === 0) {
-    resultEl.innerHTML = "<p>No specific products found for your concern. Our general wellness recommendations:</p>";
-    matchedProducts = ["Aloe Vera Gel", "Forever Bee Honey", "Forever Royal Jelly"];
-  } else {
-    resultEl.innerHTML = "<p>Based on your input, we recommend:</p>";
-  }
-  
-  // Display suggested products
-  const suggestionsHTML = matchedProducts.map(productName => {
-    const product = products.find(p => p.name === productName);
-    if (!product) return '';
-    
-    return `
-      <div class="product" style="margin: 10px 0; padding: 10px; border: 1px solid #eee; border-radius: 5px;">
-        <h4>${product.name}</h4>
-        <p>Benefits: ${product.benefits.join(", ")}</p>
-        <button onclick="addToCart(${products.indexOf(product)})" 
-                style="padding: 5px 10px; background: var(--primary-color); color: white; border: none; border-radius: 3px;">
-          Add to Cart (RM ${product.price.toFixed(2)})
-        </button>
-      </div>
-    `;
-  }).join('');
-  
-  resultEl.innerHTML += suggestionsHTML;
-  resultEl.style.display = "block";
-  
-  // Scroll to results
-  resultEl.scrollIntoView({ behavior: 'smooth' });
-}
-
-function showToast(message) {
-  const toast = document.createElement("div");
-  toast.textContent = message;
-  toast.style.position = "fixed";
-  toast.style.bottom = "20px";
-  toast.style.left = "50%";
-  toast.style.transform = "translateX(-50%)";
-  toast.style.backgroundColor = "var(--primary-color)";
-  toast.style.color = "white";
-  toast.style.padding = "10px 20px";
-  toast.style.borderRadius = "5px";
-  toast.style.zIndex = "1000";
-  toast.style.boxShadow = "0 2px 10px rgba(0,0,0,0.2)";
-  toast.style.animation = "fadeInOut 2.5s";
-  
-  document.body.appendChild(toast);
-  
-  setTimeout(() => {
-    toast.remove();
-  }, 2500);
-}
-
-// Add animation for toast
-const style = document.createElement("style");
-style.textContent = `
-  @keyframes fadeInOut {
-    0% { opacity: 0; bottom: 0; }
-    10% { opacity: 1; bottom: 20px; }
-    90% { opacity: 1; bottom: 20px; }
-    100% { opacity: 0; bottom: 0; }
-  }
-`;
-document.head.appendChild(style);
 </script>
 </body>
 </html>
