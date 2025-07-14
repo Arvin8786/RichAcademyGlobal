@@ -91,6 +91,43 @@
       margin-top: 2rem;
     }
 
+    #cart-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #0b5f5c;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 30px;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    #cart-panel {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 300px;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+      display: none;
+      padding: 1rem;
+    }
+
+    #cart-panel h3 {
+      margin-top: 0;
+      color: #0b5f5c;
+    }
+
+    #cart-items {
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
     footer {
       background: #0b5f5c;
       color: white;
@@ -119,4 +156,113 @@
   </style>
 </head>
 <body>
-  <!-- Full body content continues below -->
+<header>
+  <h1>Forever Living by Mohd Arvind Isa</h1>
+  <p>Your Trusted Forever Living Partner - Rich Academy Global</p>
+</header>
+
+<section id="products">
+  <div style="text-align: center; margin-bottom: 2rem;">
+    <h2>🧠 Not sure what to buy?</h2>
+    <p>Tell our AI your problem (e.g. fatigue, skin allergy) and we’ll suggest the best Forever Living products for you.</p>
+    <input type="text" id="symptom-input" placeholder="Enter your health concern..." style="padding: 0.5rem; width: 70%; max-width: 400px;">
+    <button onclick="suggestProducts()" style="margin-left: 1rem; padding: 0.5rem 1rem; background-color: #0b5f5c; color: white; border: none; border-radius: 4px; cursor: pointer;">Suggest Product</button>
+    <div id="suggestion-result" style="margin-top: 1rem; font-weight: bold;"></div>
+  </div>
+</section>
+
+<section class="product-grid" id="product-list">
+</section>
+
+<section id="cds">
+  <h2>💪 Rich Academy Global: Cabaran Detox Sihat (CDS)</h2>
+  <p>Join our health transformation challenge and start your journey with Rich Academy Global and Forever Living!</p>
+  <img src="cds-qr.png" alt="CDS QR Code" style="max-width: 180px; margin-top: 1rem;">
+</section>
+
+<div id="cart-panel">
+  <h3>🛒 Your Cart</h3>
+  <div id="cart-items"></div>
+  <button onclick="checkout()">Checkout via WhatsApp</button>
+</div>
+<button id="cart-button" onclick="toggleCart()">🛒 Cart</button>
+
+<footer>
+  <p><strong>Disclaimer:</strong> Product suggestions are for informational purposes only and do not replace professional medical advice. Please consult your doctor or healthcare provider before consuming any supplements.</p>
+  <p><strong>About Forever Living:</strong> Forever Living Products is a global wellness brand known for its high-quality Aloe Vera-based health and skincare products. Certified Halal and distributed in over 160 countries worldwide.</p>
+  <p>&copy; 2025 Forever Living by Mohd Arvind Isa. Powered by Rich Academy Global.</p>
+</footer>
+
+<script>
+const products = [
+  { name: "Aloe Vera Gel", price: 98.50, points: 0.1, image: "aloe-vera-gel.jpg" },
+  { name: "Teh Tarik Halia", price: 25.90, points: 0.05, image: "teh-tarik-halia.jpg" },
+  { name: "Bee Honey", price: 62.20, points: 0.08, image: "bee-honey.jpg" },
+  { name: "Bright Toothgel", price: 25.00, points: 0.04, image: "bright-toothgel.jpg" },
+  { name: "Royal Jelly", price: 112.00, points: 0.12, image: "royal-jelly.jpg" },
+  { name: "Bee Pollen", price: 53.60, points: 0.07, image: "bee-pollen.jpg" },
+  { name: "Aloe Berry Nectar", price: 98.50, points: 0.1, image: "aloe-berry-nectar.jpg" },
+  { name: "Aloe First", price: 71.30, points: 0.09, image: "aloe-first.jpg" },
+  { name: "Fields of Greens", price: 69.80, points: 0.08, image: "fields-of-greens.jpg" },
+  { name: "Absorbent-C", price: 70.00, points: 0.09, image: "absorbent-c.jpg" }
+];
+
+const cart = [];
+
+function loadProducts() {
+  const container = document.getElementById("product-list");
+  products.forEach((p, i) => {
+    const div = document.createElement("div");
+    div.className = "product";
+    div.innerHTML = `
+      <img src="${p.image}" alt="${p.name}">
+      <h3>${p.name}</h3>
+      <p>RM ${p.price.toFixed(2)} | ${p.points} pts</p>
+      <button onclick="addToCart(${i})">Add to Cart</button>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function addToCart(index) {
+  const item = products[index];
+  const found = cart.find(p => p.name === item.name);
+  if (found) {
+    found.qty++;
+  } else {
+    cart.push({ ...item, qty: 1 });
+  }
+  updateCartUI();
+}
+
+function updateCartUI() {
+  const container = document.getElementById("cart-items");
+  container.innerHTML = "";
+  cart.forEach((p, i) => {
+    const div = document.createElement("div");
+    div.innerHTML = `${p.name} x ${p.qty} (RM ${(p.price * p.qty).toFixed(2)}) <button onclick="removeFromCart(${i})">✖</button>`;
+    container.appendChild(div);
+  });
+}
+
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  updateCartUI();
+}
+
+function toggleCart() {
+  const panel = document.getElementById("cart-panel");
+  panel.style.display = panel.style.display === "block" ? "none" : "block";
+}
+
+function checkout() {
+  if (!confirm("By proceeding, you agree to share your details as per PDPA.")) return;
+  const phone = "01111033154";
+  const msg = encodeURIComponent("Order Summary:\n" + cart.map(p => `${p.name} x ${p.qty} (RM ${(p.qty * p.price).toFixed(2)})`).join("\n"));
+  window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
+}
+
+window.onload = loadProducts;
+</script>
+</body>
+</html>
