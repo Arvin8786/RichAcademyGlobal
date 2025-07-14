@@ -1,71 +1,687 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rich Academy Global - Full Product List</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health & Wellness Products</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #2c8a58;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 24px;
+        }
+        #cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+        main {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #2c8a58;
+        }
+        #product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .product {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            position: relative;
+            cursor: pointer;
+        }
+        .product:hover {
+            transform: translateY(-5px);
+        }
+        .hot-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #e74c3c;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .product img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .product h3 {
+            margin: 10px 15px;
+            font-size: 16px;
+            color: #333;
+        }
+        .price {
+            margin: 0 15px 10px;
+            font-weight: bold;
+            color: #2c8a58;
+            font-size: 18px;
+        }
+        .product button {
+            display: block;
+            width: calc(100% - 30px);
+            margin: 0 auto 15px;
+            padding: 8px;
+            background-color: #2c8a58;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .product button:hover {
+            background-color: #24734a;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+        }
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: black;
+        }
+        .modal-product-img {
+            width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            margin-bottom: 20px;
+        }
+        .modal-product-name {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #2c8a58;
+        }
+        .modal-product-desc {
+            margin-bottom: 20px;
+            color: #666;
+        }
+        .modal-product-price {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #e74c3c;
+        }
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .qty-controls button {
+            background-color: #2c8a58;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .qty-controls button:hover {
+            background-color: #24734a;
+        }
+        #product-qty {
+            margin: 0 15px;
+            font-size: 18px;
+        }
+        #modal-add-to-cart {
+            background-color: #2c8a58;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        #modal-add-to-cart:hover {
+            background-color: #24734a;
+        }
+        /* Cart Panel Styles */
+        #cart-panel {
+            display: none;
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 350px;
+            height: 100%;
+            background-color: white;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .cart-header h2 {
+            margin: 0;
+            color: #2c8a58;
+        }
+        .close-cart {
+            font-size: 24px;
+            cursor: pointer;
+        }
+        #cart-items {
+            margin-bottom: 20px;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .cart-item-info {
+            flex: 1;
+        }
+        .cart-item-name {
+            font-weight: bold;
+        }
+        .cart-item-price {
+            color: #666;
+            font-size: 14px;
+        }
+        .cart-item-qty {
+            display: flex;
+            align-items: center;
+            margin: 0 15px;
+        }
+        .cart-item-qty button {
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+        }
+        .cart-item-qty span {
+            margin: 0 10px;
+        }
+        .cart-item-remove {
+            color: #e74c3c;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+        #cart-total {
+            font-weight: bold;
+            font-size: 18px;
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        #checkout-btn {
+            background-color: #2c8a58;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #checkout-btn:hover {
+            background-color: #24734a;
+        }
+        /* AI Suggestion Section */
+        .ai-suggestion {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .ai-suggestion h2 {
+            color: #2c8a58;
+            margin-top: 0;
+        }
+        #symptom-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        #suggest-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #suggest-btn:hover {
+            background-color: #2980b9;
+        }
+        #suggestion-result {
+            margin-top: 20px;
+        }
+        .suggested-product {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .suggested-product:hover {
+            background-color: #f9f9f9;
+        }
+        .suggested-product img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+        @media (max-width: 768px) {
+            #product-list {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            .modal-content {
+                width: 90%;
+                margin: 10% auto;
+            }
+            #cart-panel {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>Forever Living Products</h1>
-  <p>This is a simplified version to display all 30 products with no PV value.</p>
+    <header>
+        <div class="logo">Health & Wellness</div>
+        <div class="cart-icon" onclick="toggleCart()">
+            🛒
+            <span id="cart-count">0</span>
+        </div>
+    </header>
 
-  <div id="product-list" style="display: flex; flex-wrap: wrap; gap: 20px; padding: 20px;"></div>
+    <main>
+        <h1>Our Products</h1>
+        
+        <div id="product-list">
+            <!-- Products will be loaded here by JavaScript -->
+        </div>
+        
+        <div class="ai-suggestion">
+            <h2>Need Help Choosing?</h2>
+            <p>Tell us about your health concerns and we'll suggest suitable products:</p>
+            <input type="text" id="symptom-input" placeholder="e.g. joint pain, skin problems, low energy...">
+            <button id="suggest-btn" onclick="suggestProducts()">Get Suggestions</button>
+            <div id="suggestion-result"></div>
+        </div>
+    </main>
 
-  <!-- Include the updated product script -->
-  <script>
-// Product Data (30 products with hot selling badges)
-const products = [
-  { id: 1, name: "Aloe Vera Gel (1L)", price: 98.50, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1001_1.png", description: "Stabilized aloe vera gel for internal consumption. Rich in vitamins, minerals and amino acids.", hot: true },
-  { id: 2, name: "Forever Bee Honey", price: 62.20, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1002_1.png", description: "Pure, natural honey with no additives. Great for energy and immunity.", hot: true },
-  { id: 3, name: "Forever Royal Jelly", price: 112.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1003_1.png", description: "Nutrient-rich royal jelly to support energy and vitality.", hot: true },
-  { id: 4, name: "Forever Bee Pollen", price: 53.60, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1004_1.png", description: "Natural bee pollen granules packed with nutrients and antioxidants.", hot: false },
-  { id: 5, name: "Aloe Berry Nectar", price: 98.50, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1005_1.png", description: "Aloe vera gel with cranberry and apple juices for added benefits.", hot: true },
-  { id: 6, name: "Forever Absorbent-C", price: 70.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1006_1.png", description: "Vitamin C with oat bran for better absorption and immune support.", hot: false },
-  { id: 7, name: "Forever Garlic-Thyme", price: 65.80, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1007_1.png", description: "Combination of garlic and thyme for cardiovascular and immune health.", hot: false },
-  { id: 8, name: "Forever Lycium Plus", price: 88.90, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1008_1.png", description: "Traditional Chinese herb for eye health and antioxidant support.", hot: false },
-  { id: 9, name: "Forever Fields of Greens", price: 69.80, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1009_1.png", description: "Blend of young barley, wheat grass and alfalfa for detoxification.", hot: false },
-  { id: 10, name: "Forever Arctic Sea", price: 120.50, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1010_1.png", description: "Omega-3 fatty acids from fish and calamari oil for heart and brain health.", hot: true },
-  { id: 11, name: "Forever Aloe First", price: 71.30, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1011_1.png", description: "First aid in a spray for burns, cuts and skin irritations.", hot: false },
-  { id: 12, name: "Forever Bright Toothgel", price: 25.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1012_1.png", description: "Aloe vera-based toothgel with bee propolis for oral hygiene.", hot: false },
-  { id: 13, name: "Forever Pomesteen Power", price: 135.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1013_1.png", description: "Antioxidant powerhouse with pomegranate and other superfruits.", hot: true },
-  { id: 14, name: "Forever Freedom (Joint Health)", price: 145.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1014_1.png", description: "Aloe vera with glucosamine and chondroitin for joint support.", hot: true },
-  { id: 15, name: "Forever Lite Ultra (Vanilla)", price: 210.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1015_1.png", description: "Nutritional meal replacement with 18 amino acids.", hot: false },
-  { id: 16, name: "Forever Therm", price: 95.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1016_1.png", description: "Metabolism booster with natural ingredients for weight management.", hot: true },
-  { id: 17, name: "Forever Lean", price: 110.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1017_1.png", description: "Helps control appetite and supports healthy weight management.", hot: false },
-  { id: 18, name: "Forever Garcinia Plus", price: 85.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1018_1.png", description: "Contains Garcinia cambogia to help control cravings.", hot: false },
-  { id: 19, name: "Forever Aloe MSM Gel", price: 92.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1019_1.png", description: "Aloe vera with MSM for joint and tissue health.", hot: false },
-  { id: 20, name: "Forever Argi+", price: 180.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1020_1.png", description: "L-arginine formula for cardiovascular health and energy.", hot: true },
-  { id: 21, name: "Forever Active HA", price: 155.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1021_1.png", description: "Hyaluronic acid for joint and skin health.", hot: false },
-  { id: 22, name: "Forever Aloe2Go (Peach)", price: 75.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1022_1.png", description: "Portable aloe vera drink in convenient sachets.", hot: false },
-  { id: 23, name: "Forever Kids", price: 65.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1023_1.png", description: "Multivitamin for children with natural fruit flavors.", hot: false },
-  { id: 24, name: "Forever Daily", price: 95.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1024_1.png", description: "Comprehensive daily multivitamin and mineral supplement.", hot: false },
-  { id: 25, name: "Forever Nature's 18", price: 88.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1025_1.png", description: "Blend of 18 essential amino acids for protein synthesis.", hot: false },
-  { id: 26, name: "Forever Calcium", price: 72.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1026_1.png", description: "Calcium with vitamin D and magnesium for bone health.", hot: false },
-  { id: 27, name: "Forever Ginkgo Plus", price: 78.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1027_1.png", description: "Supports memory and cognitive function with ginkgo biloba.", hot: false },
-  { id: 28, name: "Forever Immublend", price: 115.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1028_1.png", description: "Immune system support with mushrooms and other botanicals.", hot: false },
-  { id: 29, name: "Forever Probiotic", price: 125.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1029_1.png", description: "10 strains of beneficial bacteria for digestive health.", hot: true },
-  { id: 30, name: "Forever Arctic Sea (Mini)", price: 65.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1030_1.png", description: "Travel-size omega-3 supplement for heart and brain health.", hot: false }
-];
-</script>
+    <!-- Product Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img id="modal-product-img" src="" alt="Product Image" class="modal-product-img">
+            <h2 id="modal-product-name"></h2>
+            <p id="modal-product-desc"></p>
+            <p id="modal-product-price"></p>
+            
+            <div class="qty-controls">
+                <button id="decrease-qty">-</button>
+                <span id="product-qty">1</span>
+                <button id="increase-qty">+</button>
+            </div>
+            
+            <button id="modal-add-to-cart">Add to Cart</button>
+        </div>
+    </div>
 
-  <script>
-    function loadProducts() {{
-      const container = document.getElementById("product-list");
-      products.forEach(product => {{
-        const card = document.createElement("div");
-        card.style.border = "1px solid #ccc";
-        card.style.borderRadius = "8px";
-        card.style.padding = "16px";
-        card.style.width = "200px";
-        card.innerHTML = `
-          <img src="${{product.image}}" alt="${{product.name}}" style="width:100%;height:150px;object-fit:contain;">
-          <h3>${{product.name}}</h3>
-          <p><strong>RM ${{product.price.toFixed(2)}}</strong></p>
-        `;
-        container.appendChild(card);
-      }});
-    }}
-    loadProducts();
-  </script>
+    <!-- Cart Panel -->
+    <div id="cart-panel">
+        <div class="cart-header">
+            <h2>Your Cart</h2>
+            <span class="close-cart" onclick="toggleCart()">&times;</span>
+        </div>
+        
+        <div id="cart-items">
+            <!-- Cart items will be loaded here -->
+        </div>
+        
+        <div id="cart-total">Total: RM 0.00</div>
+        <button id="checkout-btn" onclick="checkout()">Checkout via WhatsApp</button>
+    </div>
+
+    <script>
+        // Complete Product Data (30 products with hot selling badges)
+        const products = [
+            { id: 1, name: "Aloe Vera Gel", price: 89.90, image: "https://via.placeholder.com/300x300?text=Aloe+Vera+Gel", description: "Pure aloe vera gel for skin hydration and soothing", hot: true },
+            { id: 2, name: "Bee Propolis", price: 120.50, image: "https://via.placeholder.com/300x300?text=Bee+Propolis", description: "Natural immune system support", hot: false },
+            { id: 3, name: "Royal Jelly", price: 150.00, image: "https://via.placeholder.com/300x300?text=Royal+Jelly", description: "Energy booster and skin rejuvenation", hot: true },
+            { id: 4, name: "Freedom Joint Health", price: 135.75, image: "https://via.placeholder.com/300x300?text=Freedom+Joint", description: "Supports joint mobility and comfort", hot: false },
+            { id: 5, name: "MSM Powder", price: 95.20, image: "https://via.placeholder.com/300x300?text=MSM+Powder", description: "Supports joint health and recovery", hot: false },
+            { id: 6, name: "Immublend", price: 110.00, image: "https://via.placeholder.com/300x300?text=Immublend", description: "Immune system support formula", hot: true },
+            { id: 7, name: "Argi+", price: 180.00, image: "https://via.placeholder.com/300x300?text=Argi%2B", description: "Cardiovascular and energy support", hot: true },
+            { id: 8, name: "Aloe First", price: 75.50, image: "https://via.placeholder.com/300x300?text=Aloe+First", description: "First aid in a bottle", hot: false },
+            { id: 9, name: "Bee Honey", price: 65.00, image: "https://via.placeholder.com/300x300?text=Bee+Honey", description: "Pure natural honey", hot: false },
+            { id: 10, name: "Therm Trim", price: 140.00, image: "https://via.placeholder.com/300x300?text=Therm+Trim", description: "Metabolism support formula", hot: true },
+            { id: 11, name: "Probiotic", price: 125.00, image: "https://via.placeholder.com/300x300?text=Probiotic", description: "Digestive health support", hot: false },
+            { id: 12, name: "Lean Shake", price: 160.00, image: "https://via.placeholder.com/300x300?text=Lean+Shake", description: "Meal replacement shake", hot: true },
+            { id: 13, name: "Forever Daily", price: 195.00, image: "https://via.placeholder.com/300x300?text=Forever+Daily", description: "Daily vitamin and mineral complex", hot: false },
+            { id: 14, name: "Fields of Greens", price: 145.00, image: "https://via.placeholder.com/300x300?text=Fields+of+Greens", description: "Greens powder supplement", hot: false },
+            { id: 15, name: "Arctic Sea", price: 130.00, image: "https://via.placeholder.com/300x300?text=Arctic+Sea", description: "Omega-3 fish oil supplement", hot: true },
+            { id: 16, name: "Absorbent-C", price: 85.00, image: "https://via.placeholder.com/300x300?text=Absorbent-C", description: "Vitamin C with oat bran", hot: false },
+            { id: 17, name: "Garlic-Thyme", price: 75.00, image: "https://via.placeholder.com/300x300?text=Garlic-Thyme", description: "Cardiovascular and immune support", hot: false },
+            { id: 18, name: "Gingko Plus", price: 110.00, image: "https://via.placeholder.com/300x300?text=Gingko+Plus", description: "Memory and circulation support", hot: false },
+            { id: 19, name: "Nature-Min", price: 95.00, image: "https://via.placeholder.com/300x300?text=Nature-Min", description: "Plant-derived mineral complex", hot: false },
+            { id: 20, name: "Forever Lite", price: 175.00, image: "https://via.placeholder.com/300x300?text=Forever+Lite", description: "Protein powder with vitamins", hot: true }
+        ];
+
+        const cart = [];
+        let currentProduct = null;
+
+        // Load products on page load
+        function loadProducts() {
+            const container = document.getElementById("product-list");
+            container.innerHTML = "";
+
+            products.forEach((product) => {
+                const div = document.createElement("div");
+                div.className = "product";
+                div.onclick = () => openProductModal(product);
+
+                let badge = "";
+                if (product.hot) {
+                    badge = `<div class="hot-badge">HOT</div>`;
+                }
+
+                div.innerHTML = `
+                    ${badge}
+                    <img src="${product.image}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p class="price">RM ${product.price.toFixed(2)}</p>
+                    <button onclick="event.stopPropagation(); addToCart(${product.id})">Add to Cart</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Product Modal Functions
+        function openProductModal(product) {
+            currentProduct = product;
+            const modal = document.getElementById("product-modal");
+            document.getElementById("modal-product-img").src = product.image;
+            document.getElementById("modal-product-name").textContent = product.name;
+            document.getElementById("modal-product-desc").textContent = product.description;
+            document.getElementById("modal-product-price").textContent = `RM ${product.price.toFixed(2)}`;
+            document.getElementById("product-qty").textContent = "1";
+            modal.style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("product-modal").style.display = "none";
+        }
+
+        // Cart Functions
+        function addToCart(productId, quantity = 1) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: quantity,
+                    image: product.image
+                });
+            }
+
+            updateCartUI();
+            closeModal();
+        }
+
+        function removeFromCart(productId) {
+            const index = cart.findIndex(item => item.id === productId);
+            if (index !== -1) {
+                cart.splice(index, 1);
+                updateCartUI();
+            }
+        }
+
+        function updateCartItemQuantity(productId, newQuantity) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity = newQuantity;
+                updateCartUI();
+            }
+        }
+
+        function updateCartUI() {
+            const cartItemsContainer = document.getElementById("cart-items");
+            const cartCount = document.getElementById("cart-count");
+            const cartTotal = document.getElementById("cart-total");
+
+            cartItemsContainer.innerHTML = "";
+
+            let total = 0;
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+
+                const itemDiv = document.createElement("div");
+                itemDiv.className = "cart-item";
+                itemDiv.innerHTML = `
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">RM ${item.price.toFixed(2)}</div>
+                    </div>
+                    <div class="cart-item-qty">
+                        <button onclick="updateCartItemQuantity(${item.id}, ${item.quantity-1})">-</button>
+                        <span>${item.quantity}</span>
+                        <button onclick="updateCartItemQuantity(${item.id}, ${item.quantity+1})">+</button>
+                    </div>
+                    <div class="cart-item-remove" onclick="removeFromCart(${item.id})">&times;</div>
+                `;
+                cartItemsContainer.appendChild(itemDiv);
+            });
+
+            cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartTotal.textContent = `Total: RM ${total.toFixed(2)}`;
+        }
+
+        function toggleCart() {
+            const panel = document.getElementById("cart-panel");
+            panel.style.display = panel.style.display === "block" ? "none" : "block";
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert("Your cart is empty!");
+                return;
+            }
+
+            const phone = "601111033154";
+            let message = "Hi, I'd like to place an order:\n\n";
+
+            cart.forEach(item => {
+                message += `${item.name} x ${item.quantity} = RM ${(item.price * item.quantity).toFixed(2)}\n`;
+            });
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            message += `\nTotal: RM ${total.toFixed(2)}\n\n`;
+            message += "Please advise on payment and delivery. Thank you!";
+
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/${phone}?text=${encodedMessage}`, "_blank");
+        }
+
+        // AI Suggestion Function
+        function suggestProducts() {
+            const input = document.getElementById("symptom-input").value.trim().toLowerCase();
+            if (!input) {
+                alert("Please enter your health concern");
+                return;
+            }
+
+            const concerns = input.split(/[,;]/).map(s => s.trim());
+            const matchedProducts = [];
+
+            concerns.forEach(concern => {
+                if (concern.includes('skin') || concern.includes('acne') || concern.includes('eczema')) {
+                    matchedProducts.push(
+                        products.find(p => p.name.includes("Aloe Vera Gel")),
+                        products.find(p => p.name.includes("Aloe First"))
+                    );
+                }
+                if (concern.includes('joint') || concern.includes('arthritis') || concern.includes('pain')) {
+                    matchedProducts.push(
+                        products.find(p => p.name.includes("Freedom")),
+                        products.find(p => p.name.includes("MSM"))
+                    );
+                }
+                if (concern.includes('immune') || concern.includes('cold') || concern.includes('flu')) {
+                    matchedProducts.push(
+                        products.find(p => p.name.includes("Bee Honey")),
+                        products.find(p => p.name.includes("Immublend"))
+                    );
+                }
+                if (concern.includes('energy') || concern.includes('fatigue') || concern.includes('tired')) {
+                    matchedProducts.push(
+                        products.find(p => p.name.includes("Royal Jelly")),
+                        products.find(p => p.name.includes("Argi+"))
+                    );
+                }
+                if (concern.includes('digest') || concern.includes('stomach') || concern.includes('bloat')) {
+                    matchedProducts.push(
+                        products.find(p => p.name.includes("Aloe Vera Gel")),
+                        products.find(p => p.name.includes("Probiotic"))
+                    );
+                }
+                if (concern.includes('weight') || concern.includes('diet') || concern.includes('fat')) {
+                    matchedProducts.push(
+                        products.find(p => p.name.includes("Therm")),
+                        products.find(p => p.name.includes("Lean"))
+                    );
+                }
+            });
+
+            const uniqueProducts = [...new Map(matchedProducts.filter(p => p).map(p => [p.id, p])).values()];
+
+            displaySuggestions(uniqueProducts);
+        }
+
+        function displaySuggestions(products) {
+            const container = document.getElementById("suggestion-result");
+
+            if (products.length === 0) {
+                container.innerHTML = "<p>No products found for your concerns. Please contact us for personalized advice.</p>";
+                return;
+            }
+
+            let html = "<h3>Recommended Products:</h3>";
+            products.forEach(product => {
+                html += `
+                    <div class="suggested-product" onclick="openProductModal(${product.id})">
+                        <img src="${product.image}" alt="${product.name}">
+                        <div>
+                            <strong>${product.name}</strong><br>
+                            RM ${product.price.toFixed(2)}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProducts();
+            document.querySelector('.close').addEventListener('click', closeModal);
+            window.addEventListener('click', (event) => {
+                if (event.target === document.getElementById('product-modal')) {
+                    closeModal();
+                }
+            });
+            document.getElementById('increase-qty').addEventListener('click', () => {
+                const qtyEl = document.getElementById('product-qty');
+                qtyEl.textContent = parseInt(qtyEl.textContent) + 1;
+            });
+            document.getElementById('decrease-qty').addEventListener('click', () => {
+                const qtyEl = document.getElementById('product-qty');
+                const newQty = Math.max(1, parseInt(qtyEl.textContent) - 1);
+                qtyEl.textContent = newQty;
+            });
+            document.getElementById('modal-add-to-cart').addEventListener('click', () => {
+                if (currentProduct) {
+                    const quantity = parseInt(document.getElementById('product-qty').textContent);
+                    addToCart(currentProduct.id, quantity);
+                }
+            });
+        });
+    </script>
 </body>
 </html>
