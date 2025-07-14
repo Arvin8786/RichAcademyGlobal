@@ -1,5 +1,29 @@
+<!-- HEADER SECTION -->
 <header>
   <div class="cart-icon" onclick="toggleCart()">
     🛒 <span id="cart-count">0</span>
   </div>
 </header>
+
+<!-- CDS SECTION -->
+<section class="cds-section">
+  <h2>Cabaran Detox Sihat (CDS)</h2>
+  <p>CDS is a health program by Rich Academy Global designed to help you detox and reset your body naturally.</p>
+  <ul>
+    <li>✅ 7-day detox with Forever products</li>
+    <li>📦 Personalized supplement plan</li>
+    <li>📋 Guided meal plan</li>
+    <li>📱 Daily coaching & community support</li>
+    <li>💬 WhatsApp check-ins with a coach</li>
+  </ul>
+  <p><strong>Delivered in 5–10 working days.</strong></p>
+  <button onclick="location.href='https://wa.me/601111033154?text=I%20am%20interested%20in%20CDS%20Program'">Join Now on WhatsApp</button>
+</section>
+
+<!-- FOOTER SECTION -->
+<footer>
+  <p>&copy; 2025 Forever Living. Powered by Rich Academy Global. All rights reserved.</p>
+  <section class="disclaimer" style="padding: 20px; background-color: #fff3cd; color: #856404; font-size: 14px; border-top: 1px solid #ffeeba;">
+    <strong>Disclaimer:</strong> This website is operated by an independent Forever Business Owner (FBO) under Rich Academy Global and is not the official site of Forever Living Products. Product names, trademarks, and registered trademarks are property of Forever Living Products International, Inc.
+  </section>
+</footer>
