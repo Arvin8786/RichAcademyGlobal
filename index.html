@@ -1,253 +1,71 @@
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rich Academy Global - Full Product List</title>
+</head>
+<body>
+  <h1>Forever Living Products</h1>
+  <p>This is a simplified version to display all 30 products with no PV value.</p>
+
+  <div id="product-list" style="display: flex; flex-wrap: wrap; gap: 20px; padding: 20px;"></div>
+
+  <!-- Include the updated product script -->
+  <script>
 // Product Data (30 products with hot selling badges)
 const products = [
-  // ... (same as before, all 30 items unchanged)
+  { id: 1, name: "Aloe Vera Gel (1L)", price: 98.50, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1001_1.png", description: "Stabilized aloe vera gel for internal consumption. Rich in vitamins, minerals and amino acids.", hot: true },
+  { id: 2, name: "Forever Bee Honey", price: 62.20, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1002_1.png", description: "Pure, natural honey with no additives. Great for energy and immunity.", hot: true },
+  { id: 3, name: "Forever Royal Jelly", price: 112.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1003_1.png", description: "Nutrient-rich royal jelly to support energy and vitality.", hot: true },
+  { id: 4, name: "Forever Bee Pollen", price: 53.60, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1004_1.png", description: "Natural bee pollen granules packed with nutrients and antioxidants.", hot: false },
+  { id: 5, name: "Aloe Berry Nectar", price: 98.50, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1005_1.png", description: "Aloe vera gel with cranberry and apple juices for added benefits.", hot: true },
+  { id: 6, name: "Forever Absorbent-C", price: 70.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1006_1.png", description: "Vitamin C with oat bran for better absorption and immune support.", hot: false },
+  { id: 7, name: "Forever Garlic-Thyme", price: 65.80, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1007_1.png", description: "Combination of garlic and thyme for cardiovascular and immune health.", hot: false },
+  { id: 8, name: "Forever Lycium Plus", price: 88.90, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1008_1.png", description: "Traditional Chinese herb for eye health and antioxidant support.", hot: false },
+  { id: 9, name: "Forever Fields of Greens", price: 69.80, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1009_1.png", description: "Blend of young barley, wheat grass and alfalfa for detoxification.", hot: false },
+  { id: 10, name: "Forever Arctic Sea", price: 120.50, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1010_1.png", description: "Omega-3 fatty acids from fish and calamari oil for heart and brain health.", hot: true },
+  { id: 11, name: "Forever Aloe First", price: 71.30, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1011_1.png", description: "First aid in a spray for burns, cuts and skin irritations.", hot: false },
+  { id: 12, name: "Forever Bright Toothgel", price: 25.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1012_1.png", description: "Aloe vera-based toothgel with bee propolis for oral hygiene.", hot: false },
+  { id: 13, name: "Forever Pomesteen Power", price: 135.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1013_1.png", description: "Antioxidant powerhouse with pomegranate and other superfruits.", hot: true },
+  { id: 14, name: "Forever Freedom (Joint Health)", price: 145.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1014_1.png", description: "Aloe vera with glucosamine and chondroitin for joint support.", hot: true },
+  { id: 15, name: "Forever Lite Ultra (Vanilla)", price: 210.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1015_1.png", description: "Nutritional meal replacement with 18 amino acids.", hot: false },
+  { id: 16, name: "Forever Therm", price: 95.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1016_1.png", description: "Metabolism booster with natural ingredients for weight management.", hot: true },
+  { id: 17, name: "Forever Lean", price: 110.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1017_1.png", description: "Helps control appetite and supports healthy weight management.", hot: false },
+  { id: 18, name: "Forever Garcinia Plus", price: 85.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1018_1.png", description: "Contains Garcinia cambogia to help control cravings.", hot: false },
+  { id: 19, name: "Forever Aloe MSM Gel", price: 92.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1019_1.png", description: "Aloe vera with MSM for joint and tissue health.", hot: false },
+  { id: 20, name: "Forever Argi+", price: 180.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1020_1.png", description: "L-arginine formula for cardiovascular health and energy.", hot: true },
+  { id: 21, name: "Forever Active HA", price: 155.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1021_1.png", description: "Hyaluronic acid for joint and skin health.", hot: false },
+  { id: 22, name: "Forever Aloe2Go (Peach)", price: 75.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1022_1.png", description: "Portable aloe vera drink in convenient sachets.", hot: false },
+  { id: 23, name: "Forever Kids", price: 65.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1023_1.png", description: "Multivitamin for children with natural fruit flavors.", hot: false },
+  { id: 24, name: "Forever Daily", price: 95.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1024_1.png", description: "Comprehensive daily multivitamin and mineral supplement.", hot: false },
+  { id: 25, name: "Forever Nature's 18", price: 88.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1025_1.png", description: "Blend of 18 essential amino acids for protein synthesis.", hot: false },
+  { id: 26, name: "Forever Calcium", price: 72.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1026_1.png", description: "Calcium with vitamin D and magnesium for bone health.", hot: false },
+  { id: 27, name: "Forever Ginkgo Plus", price: 78.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1027_1.png", description: "Supports memory and cognitive function with ginkgo biloba.", hot: false },
+  { id: 28, name: "Forever Immublend", price: 115.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1028_1.png", description: "Immune system support with mushrooms and other botanicals.", hot: false },
+  { id: 29, name: "Forever Probiotic", price: 125.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1029_1.png", description: "10 strains of beneficial bacteria for digestive health.", hot: true },
+  { id: 30, name: "Forever Arctic Sea (Mini)", price: 65.00, image: "https://foreverliving.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/0/1030_1.png", description: "Travel-size omega-3 supplement for heart and brain health.", hot: false }
 ];
-
-const cart = [];
-let currentProduct = null;
-
-// Load products on page load
-function loadProducts() {
-  const container = document.getElementById("product-list");
-  container.innerHTML = "";
-
-  products.forEach((product) => {
-    const div = document.createElement("div");
-    div.className = "product";
-    div.onclick = () => openProductModal(product);
-
-    let badge = "";
-    if (product.hot) {
-      badge = `<div class="hot-badge">HOT</div>`;
-    }
-
-    div.innerHTML = `
-      ${badge}
-      <img src="${product.image}" alt="${product.name}">
-      <h3>${product.name}</h3>
-      <p class="price">RM ${product.price.toFixed(2)}</p>
-      <button onclick="event.stopPropagation(); addToCart(${product.id})">Add to Cart</button>
-    `;
-    container.appendChild(div);
-  });
-}
-
-// Product Modal Functions
-function openProductModal(product) {
-  currentProduct = product;
-  const modal = document.getElementById("product-modal");
-  document.getElementById("modal-product-img").src = product.image;
-  document.getElementById("modal-product-name").textContent = product.name;
-  document.getElementById("modal-product-desc").textContent = product.description;
-  document.getElementById("modal-product-price").textContent = `RM ${product.price.toFixed(2)}`;
-  document.getElementById("product-qty").textContent = "1";
-  modal.style.display = "block";
-}
-
-function closeModal() {
-  document.getElementById("product-modal").style.display = "none";
-}
-
-// Cart Functions
-function addToCart(productId, quantity = 1) {
-  const product = products.find(p => p.id === productId);
-  if (!product) return;
-
-  const existingItem = cart.find(item => item.id === productId);
-  if (existingItem) {
-    existingItem.quantity += quantity;
-  } else {
-    cart.push({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      quantity: quantity,
-      image: product.image
-    });
-  }
-
-  updateCartUI();
-  closeModal();
-}
-
-function removeFromCart(productId) {
-  const index = cart.findIndex(item => item.id === productId);
-  if (index !== -1) {
-    cart.splice(index, 1);
-    updateCartUI();
-  }
-}
-
-function updateCartItemQuantity(productId, newQuantity) {
-  const item = cart.find(item => item.id === productId);
-  if (item) {
-    item.quantity = newQuantity;
-    updateCartUI();
-  }
-}
-
-function updateCartUI() {
-  const cartItemsContainer = document.getElementById("cart-items");
-  const cartCount = document.getElementById("cart-count");
-  const cartTotal = document.getElementById("cart-total");
-
-  cartItemsContainer.innerHTML = "";
-
-  let total = 0;
-  cart.forEach(item => {
-    const itemTotal = item.price * item.quantity;
-    total += itemTotal;
-
-    const itemDiv = document.createElement("div");
-    itemDiv.className = "cart-item";
-    itemDiv.innerHTML = `
-      <div class="cart-item-info">
-        <div class="cart-item-name">${item.name}</div>
-        <div class="cart-item-price">RM ${item.price.toFixed(2)}</div>
-      </div>
-      <div class="cart-item-qty">
-        <button onclick="updateCartItemQuantity(${item.id}, ${item.quantity-1})">-</button>
-        <span>${item.quantity}</span>
-        <button onclick="updateCartItemQuantity(${item.id}, ${item.quantity+1})">+</button>
-      </div>
-      <div class="cart-item-remove" onclick="removeFromCart(${item.id})">&times;</div>
-    `;
-    cartItemsContainer.appendChild(itemDiv);
-  });
-
-  cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-  cartTotal.textContent = `Total: RM ${total.toFixed(2)}`;
-}
-
-function toggleCart() {
-  const panel = document.getElementById("cart-panel");
-  panel.style.display = panel.style.display === "block" ? "none" : "block";
-}
-
-function checkout() {
-  if (cart.length === 0) {
-    alert("Your cart is empty!");
-    return;
-  }
-
-  const phone = "601111033154";
-  let message = "Hi, I'd like to place an order:\n\n";
-
-  cart.forEach(item => {
-    message += `${item.name} x ${item.quantity} = RM ${(item.price * item.quantity).toFixed(2)}\n`;
-  });
-
-  const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  message += `\nTotal: RM ${total.toFixed(2)}\n\n`;
-  message += "Please advise on payment and delivery. Thank you!";
-
-  const encodedMessage = encodeURIComponent(message);
-  window.open(`https://wa.me/${phone}?text=${encodedMessage}`, "_blank");
-}
-
-// AI Suggestion Function
-function suggestProducts() {
-  const input = document.getElementById("symptom-input").value.trim().toLowerCase();
-  if (!input) {
-    alert("Please enter your health concern");
-    return;
-  }
-
-  const concerns = input.split(/[,;]/).map(s => s.trim());
-  const matchedProducts = [];
-
-  concerns.forEach(concern => {
-    if (concern.includes('skin') || concern.includes('acne') || concern.includes('eczema')) {
-      matchedProducts.push(
-        products.find(p => p.name.includes("Aloe Vera Gel")),
-        products.find(p => p.name.includes("Aloe First"))
-      );
-    }
-    if (concern.includes('joint') || concern.includes('arthritis') || concern.includes('pain')) {
-      matchedProducts.push(
-        products.find(p => p.name.includes("Freedom")),
-        products.find(p => p.name.includes("MSM"))
-      );
-    }
-    if (concern.includes('immune') || concern.includes('cold') || concern.includes('flu')) {
-      matchedProducts.push(
-        products.find(p => p.name.includes("Bee Honey")),
-        products.find(p => p.name.includes("Immublend"))
-      );
-    }
-    if (concern.includes('energy') || concern.includes('fatigue') || concern.includes('tired')) {
-      matchedProducts.push(
-        products.find(p => p.name.includes("Royal Jelly")),
-        products.find(p => p.name.includes("Argi+"))
-      );
-    }
-    if (concern.includes('digest') || concern.includes('stomach') || concern.includes('bloat')) {
-      matchedProducts.push(
-        products.find(p => p.name.includes("Aloe Vera Gel")),
-        products.find(p => p.name.includes("Probiotic"))
-      );
-    }
-    if (concern.includes('weight') || concern.includes('diet') || concern.includes('fat')) {
-      matchedProducts.push(
-        products.find(p => p.name.includes("Therm")),
-        products.find(p => p.name.includes("Lean"))
-      );
-    }
-  });
-
-  const uniqueProducts = [...new Map(matchedProducts.filter(p => p).map(p => [p.id, p])).values()];
-
-  displaySuggestions(uniqueProducts);
-}
-
-function displaySuggestions(products) {
-  const container = document.getElementById("suggestion-result");
-
-  if (products.length === 0) {
-    container.innerHTML = "<p>No products found for your concerns. Please contact us for personalized advice.</p>";
-    return;
-  }
-
-  let html = "<h3>Recommended Products:</h3>";
-  products.forEach(product => {
-    html += `
-      <div class="suggested-product" onclick="openProductModal(${product.id})">
-        <img src="${product.image}" alt="${product.name}">
-        <div>
-          <strong>${product.name}</strong><br>
-          RM ${product.price.toFixed(2)}
-        </div>
-      </div>
-    `;
-  });
-
-  container.innerHTML = html;
-}
-
-// Event Listeners
-document.addEventListener('DOMContentLoaded', () => {
-  loadProducts();
-  document.querySelector('.close').addEventListener('click', closeModal);
-  window.addEventListener('click', (event) => {
-    if (event.target === document.getElementById('product-modal')) {
-      closeModal();
-    }
-  });
-  document.getElementById('increase-qty').addEventListener('click', () => {
-    const qtyEl = document.getElementById('product-qty');
-    qtyEl.textContent = parseInt(qtyEl.textContent) + 1;
-  });
-  document.getElementById('decrease-qty').addEventListener('click', () => {
-    const qtyEl = document.getElementById('product-qty');
-    const newQty = Math.max(1, parseInt(qtyEl.textContent) - 1);
-    qtyEl.textContent = newQty;
-  });
-  document.getElementById('modal-add-to-cart').addEventListener('click', () => {
-    if (currentProduct) {
-      const quantity = parseInt(document.getElementById('product-qty').textContent);
-      addToCart(currentProduct.id, quantity);
-    }
-  });
-});
 </script>
+
+  <script>
+    function loadProducts() {{
+      const container = document.getElementById("product-list");
+      products.forEach(product => {{
+        const card = document.createElement("div");
+        card.style.border = "1px solid #ccc";
+        card.style.borderRadius = "8px";
+        card.style.padding = "16px";
+        card.style.width = "200px";
+        card.innerHTML = `
+          <img src="${{product.image}}" alt="${{product.name}}" style="width:100%;height:150px;object-fit:contain;">
+          <h3>${{product.name}}</h3>
+          <p><strong>RM ${{product.price.toFixed(2)}}</strong></p>
+        `;
+        container.appendChild(card);
+      }});
+    }}
+    loadProducts();
+  </script>
+</body>
+</html>
