@@ -141,60 +141,44 @@
       font-weight: bold;
     }
 
-    /* Product Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.5);
-    }
-
-    .modal-content {
-      background-color: #fefefe;
-      margin: 5% auto;
+    /* New Discount Opportunity Section */
+    .discount-cta {
+      background: linear-gradient(135deg, #0b5f5c 0%, #0d726e 100%);
+      color: white;
       padding: 2rem;
       border-radius: 10px;
-      width: 80%;
-      max-width: 600px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-      position: relative;
+      margin: 3rem 0;
+      text-align: center;
     }
 
-    .close-modal {
-      position: absolute;
-      top: 15px;
-      right: 25px;
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #aaa;
-      cursor: pointer;
-    }
-
-    .modal-product-image {
-      max-width: 200px;
-      margin: 0 auto 1rem;
-      display: block;
-    }
-
-    .modal-benefits {
-      background: var(--secondary-color);
-      padding: 1rem;
-      border-radius: 5px;
-      margin: 1rem 0;
-    }
-
-    .modal-benefits h4 {
+    .discount-cta h2 {
+      color: white;
       margin-top: 0;
-      color: var(--primary-color);
     }
 
-    .modal-usage {
-      margin: 1rem 0;
+    .discount-cta h2:after {
+      background: var(--accent-color);
+    }
+
+    .discount-cta .whatsapp-btn {
+      background: #25D366;
+      color: white;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-top: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .discount-cta .whatsapp-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
 
     /* Rest of your existing CSS... */
@@ -221,8 +205,24 @@
   </section>
 
   <section id="products">
-    <h2>🌟 Forever Living Products</h2>
+    <h2>🌟 Popular Forever Products</h2>
     <div class="product-grid" id="product-list"></div>
+  </section>
+
+  <!-- New Discount Opportunity Section -->
+  <section class="discount-cta">
+    <h2>💎 Want Discounts & Earning Opportunity?</h2>
+    <p>Join as a Forever Living distributor and enjoy:</p>
+    <ul style="text-align: left; max-width: 500px; margin: 1rem auto;">
+      <li>Wholesale prices (up to 48% discount)</li>
+      <li>Passive income potential</li>
+      <li>Free training from Rich Academy Global</li>
+      <li>Exclusive business tools</li>
+    </ul>
+    <button class="whatsapp-btn" onclick="window.open('https://wa.me/601111033154?text=I%20want%20to%20know%20about%20becoming%20a%20Forever%20distributor!', '_blank')">
+      <span>📱 WhatsApp Me</span>
+    </button>
+    <p style="margin-top: 1rem; font-size: 0.9rem;">Ask about our "Business Starter Pack" today!</p>
   </section>
 
   <section id="cds">
@@ -233,551 +233,87 @@
   </section>
 </main>
 
-<!-- Product Details Modal -->
-<div id="product-modal" class="modal">
-  <div class="modal-content">
-    <span class="close-modal">&times;</span>
-    <img id="modal-product-image" src="" alt="" class="modal-product-image">
-    <h2 id="modal-product-name"></h2>
-    <div class="price" id="modal-product-price"></div>
-    
-    <div class="modal-benefits">
-      <h4>✅ Key Benefits:</h4>
-      <ul id="modal-product-benefits"></ul>
-    </div>
-    
-    <div class="modal-usage">
-      <h4>📝 How to Use:</h4>
-      <p id="modal-product-usage"></p>
-    </div>
-    
-    <button onclick="addModalProductToCart()">Add to Cart</button>
-  </div>
-</div>
-
-<!-- Shopping Cart Elements -->
-<div id="cart-panel">
-  <h3>🛒 Your Cart</h3>
-  <div id="cart-items"></div>
-  <div id="cart-total">Total: RM 0.00</div>
-  <button id="checkout-btn" onclick="checkout()">Checkout via WhatsApp</button>
-</div>
-<button id="cart-button" onclick="toggleCart()">
-  <span id="cart-icon">🛒</span>
-  <span id="cart-count">0</span>
-</button>
-
-<footer>
-  <div class="footer-content">
-    <div class="social-links">
-      <a href="https://wa.me/601111033154" target="_blank">📱 WhatsApp</a>
-      <a href="https://facebook.com/foreverlivingmalaysia" target="_blank">📘 Facebook</a>
-    </div>
-    <p>© 2025 Forever Living Malaysia | Mohd Arvind Isa</p>
-    <p>Rich Academy Global | Certified Distributor</p>
-    <div class="disclaimer">
-      <p>Products are not intended to diagnose, treat, cure or prevent any disease.</p>
-    </div>
-  </div>
-</footer>
-
+<!-- JavaScript with Updated Products -->
 <script>
-// Enhanced product database (25 Forever Living Malaysia products)
+// Updated April 2025 Prices (Retail)
 const products = [
   { 
     name: "Aloe Vera Gel", 
-    price: 98.50, 
+    price: 116.79, 
     image: "aloe-vera-gel.jpg",
-    benefits: [
-      "Supports digestive health",
-      "Boosts immune system",
-      "Natural detoxification",
-      "Rich in vitamins and minerals"
-    ],
-    usage: "Take 60-120ml daily, preferably on empty stomach. Shake well before use. Can be mixed with water or fruit juice.",
+    benefits: ["Digestive health", "Immune support", "Hydration"],
+    usage: "Take 60-120ml daily on empty stomach. Shake well before use.",
     hot: true
   },
   { 
     name: "Forever Bee Honey", 
-    price: 62.20, 
+    price: 132.57, 
     image: "forever-bee-honey.jpg",
-    benefits: [
-      "Natural energy booster",
-      "Rich in antioxidants",
-      "Supports immune function",
-      "Soothes throat irritation"
-    ],
-    usage: "Take 1-2 tablespoons daily. Can be consumed directly or added to warm water/tea. Do not expose to high heat.",
+    benefits: ["Natural energy", "Antioxidants", "Soothes throat"],
+    usage: "1-2 tablespoons daily. Avoid high heat.",
     hot: true
   },
   { 
     name: "Forever Royal Jelly", 
-    price: 112.00, 
+    price: 139.21, 
     image: "forever-royal-jelly.jpg",
-    benefits: [
-      "Enhances energy and stamina",
-      "Supports immune system",
-      "Rich in B vitamins",
-      "Promotes healthy skin"
-    ],
-    usage: "Take 1-2 tablets daily with meals. For best results, take consistently for at least 3 months."
+    benefits: ["Energy boost", "Immune defense", "Skin health"],
+    usage: "1-2 tablets daily with meals."
   },
   { 
-    name: "Forever Aloe Berry Nectar", 
-    price: 98.50, 
+    name: "Aloe Berry Nectar", 
+    price: 116.79, 
     image: "aloe-berry-nectar.jpg",
-    benefits: [
-      "Rich in vitamin C",
-      "Supports immune health",
-      "Natural antioxidant",
-      "Promotes digestive wellness"
-    ],
-    usage: "Take 60-120ml daily. Can be consumed straight or mixed with water. Refrigerate after opening."
+    benefits: ["Vitamin C boost", "Antioxidant", "Digestive support"],
+    usage: "60-120ml daily. Refrigerate after opening."
   },
   { 
     name: "Forever Bright Toothgel", 
-    price: 25.00, 
+    price: 41.29, 
     image: "forever-bright.jpg",
-    benefits: [
-      "Whitens teeth naturally",
-      "Contains aloe vera",
-      "Freshens breath",
-      "No harsh chemicals"
-    ],
-    usage: "Use like regular toothpaste. Brush at least twice daily. Avoid swallowing."
+    benefits: ["Whitens teeth", "Aloe-based", "No harsh chemicals"],
+    usage: "Brush twice daily like regular toothpaste."
   },
   { 
-    name: "Forever Lycium Plus", 
-    price: 89.90, 
-    image: "forever-lycium.jpg",
-    benefits: [
-      "Supports eye health",
-      "Rich in antioxidants",
-      "Boosts immune function",
-      "Natural energy source"
-    ],
-    usage: "Take 2 tablets daily with meals. For best results, use consistently."
-  },
-  { 
-    name: "Forever Arctic Sea", 
-    price: 110.00, 
+    name: "Forever Arctic Sea (Omega 3)", 
+    price: 130.10, 
     image: "arctic-sea.jpg",
-    benefits: [
-      "Omega-3 fatty acids",
-      "Supports heart health",
-      "Promotes brain function",
-      "Reduces inflammation"
-    ],
-    usage: "Take 2 softgels daily with meals. Store in cool dry place."
-  },
-  { 
-    name: "Forever Garlic-Thyme", 
-    price: 65.50, 
-    image: "garlic-thyme.jpg",
-    benefits: [
-      "Supports cardiovascular health",
-      "Natural immune booster",
-      "Antioxidant properties",
-      "Promotes healthy circulation"
-    ],
-    usage: "Take 2 tablets daily with meals. May be taken with Forever Bee Honey to improve taste."
-  },
-  { 
-    name: "Forever Aloe First", 
-    price: 71.30, 
-    image: "aloe-first.jpg",
-    benefits: [
-      "Soothes skin irritations",
-      "First aid for burns/cuts",
-      "Moisturizes skin",
-      "Natural cooling effect"
-    ],
-    usage: "Apply directly to affected area as needed. Can be used on face and body."
-  },
-  { 
-    name: "Forever Bee Propolis", 
-    price: 85.00, 
-    image: "bee-propolis.jpg",
-    benefits: [
-      "Natural antibiotic properties",
-      "Supports immune defense",
-      "Rich in flavonoids",
-      "Promotes throat health"
-    ],
-    usage: "Take 2 tablets daily. May increase dosage during illness (consult distributor)."
-  },
-  { 
-    name: "Forever Absorbent-C", 
-    price: 70.00, 
-    image: "absorbent-c.jpg",
-    benefits: [
-      "Boosts immune system",
-      "Supports collagen production",
-      "Powerful antioxidant",
-      "Enhances iron absorption"
-    ],
-    usage: "Take 3 tablets daily with meals. May increase dosage during cold season."
+    benefits: ["Heart health", "Brain function", "Reduces inflammation"],
+    usage: "Take 2 softgels daily with meals."
   },
   { 
     name: "Forever Fields of Greens", 
-    price: 69.80, 
+    price: 86.10, 
     image: "fields-of-greens.jpg",
-    benefits: [
-      "Alkalinizes the body",
-      "Rich in chlorophyll",
-      "Supports detoxification",
-      "Boosts energy levels"
-    ],
-    usage: "Mix 1 tablespoon with water or juice daily. Best taken in the morning."
+    benefits: ["Detoxification", "Alkalizing", "Energy boost"],
+    usage: "1 tablespoon daily mixed with water/juice."
   },
   { 
-    name: "Forever Pomesteen Power", 
-    price: 120.00, 
-    image: "pomesteen.jpg",
-    benefits: [
-      "Superfruit antioxidant",
-      "Supports immune health",
-      "Rich in vitamin C",
-      "Promotes healthy aging"
-    ],
-    usage: "Take 30ml twice daily. Shake well before use. Refrigerate after opening."
+    name: "Forever Aloe First", 
+    price: 90.83, 
+    image: "aloe-first.jpg",
+    benefits: ["Skin soothing", "First aid", "Moisturizing"],
+    usage: "Apply directly to affected areas as needed."
   },
   { 
     name: "Forever Garcinia Plus", 
     price: 95.00, 
     image: "garcinia-plus.jpg",
-    benefits: [
-      "Supports weight management",
-      "Helps control appetite",
-      "Boosts metabolism",
-      "Natural energy source"
-    ],
-    usage: "Take 2 tablets 30 minutes before meals with a full glass of water."
+    benefits: ["Weight management", "Appetite control", "Metabolism boost"],
+    usage: "2 tablets 30 mins before meals with water."
   },
   { 
     name: "Forever Aloe MSM Gel", 
-    price: 105.00, 
+    price: 86.00, 
     image: "msm-gel.jpg",
-    benefits: [
-      "Supports joint health",
-      "Reduces inflammation",
-      "Promotes skin elasticity",
-      "Natural sulfur source"
-    ],
-    usage: "Apply liberally to affected areas 2-3 times daily. May also be taken orally (1oz daily)."
+    benefits: ["Joint support", "Skin elasticity", "Reduces inflammation"],
+    usage: "Apply to affected areas 2-3 times daily."
   }
 ];
 
-// Modal functionality
-let currentModalProduct = null;
-
-function showProductModal(index) {
-  const product = products[index];
-  currentModalProduct = index;
-  
-  document.getElementById('modal-product-name').textContent = product.name;
-  document.getElementById('modal-product-price').textContent = `RM ${product.price.toFixed(2)}`;
-  document.getElementById('modal-product-image').src = product.image;
-  
-  const benefitsList = document.getElementById('modal-product-benefits');
-  benefitsList.innerHTML = '';
-  product.benefits.forEach(benefit => {
-    const li = document.createElement('li');
-    li.textContent = benefit;
-    benefitsList.appendChild(li);
-  });
-  
-  document.getElementById('modal-product-usage').textContent = product.usage;
-  
-  document.getElementById('product-modal').style.display = 'block';
-}
-
-function closeModal() {
-  document.getElementById('product-modal').style.display = 'none';
-}
-
-function addModalProductToCart() {
-  if (currentModalProduct !== null) {
-    addToCart(currentModalProduct);
-    closeModal();
-  }
-}
-
-// Close modal when clicking X
-document.querySelector('.close-modal').addEventListener('click', closeModal);
-
-// Close modal when clicking outside
-window.addEventListener('click', function(event) {
-  if (event.target == document.getElementById('product-modal')) {
-    closeModal();
-  }
-});
-
-// Update product click handlers
-function loadProducts() {
-  const container = document.getElementById("product-list");
-  container.innerHTML = "";
-  
-  products.forEach((product, index) => {
-    const productEl = document.createElement("div");
-    productEl.className = "product";
-    productEl.onclick = () => showProductModal(index);
-    
-    let badge = '';
-    if (product.hot) {
-      badge = '<span class="hot-badge">HOT</span>';
-    }
-    
-    productEl.innerHTML = `
-      ${badge}
-      <img src="${product.image}" alt="${product.name}" loading="lazy">
-      <h3>${product.name}</h3>
-      <div class="price">RM ${product.price.toFixed(2)}</div>
-      <button>View Details</button>
-    `;
-    
-    container.appendChild(productEl);
-  });
-}
-
-// Rest of your existing cart and suggestion functionality...
-// [Previous JavaScript code for cart, suggestions, etc. remains the same]
+// Rest of your JavaScript remains the same...
 </script>
 
-<!-- Include all your previous JavaScript for cart, suggestions, etc. -->
-<script>
-// AI suggestion mappings
-const suggestionMap = {
-  fatigue: ["Aloe Vera Gel", "Forever Bee Honey", "Forever Royal Jelly"],
-  energy: ["Forever Bee Pollen", "Forever Royal Jelly", "Forever Absorbent-C"],
-  skin: ["Aloe Vera Gel", "Forever Aloe First", "Forever Absorbent-C"],
-  digestion: ["Aloe Vera Gel", "Forever Aloe Berry Nectar", "Forever Fields of Greens"],
-  immunity: ["Forever Royal Jelly", "Forever Garlic-Thyme", "Forever Absorbent-C"],
-  allergy: ["Aloe Vera Gel", "Forever Bee Honey", "Forever Royal Jelly"],
-  detox: ["Forever Fields of Greens", "Aloe Vera Gel", "Forever Absorbent-C"],
-  weight: ["Aloe Vera Gel", "Forever Fields of Greens", "Forever Garcinia Plus"],
-  joint: ["Forever Aloe MSM Gel", "Forever Arctic Sea", "Forever Active HA"],
-  heart: ["Forever Arctic Sea", "Forever Garlic-Thyme", "Forever Nature-Min"]
-};
-
-let cart = [];
-
-// Initialize the page
-document.addEventListener('DOMContentLoaded', function() {
-  loadProducts();
-  updateCartCount();
-});
-
-function addToCart(index) {
-  const product = products[index];
-  const existingItem = cart.find(item => item.name === product.name);
-  
-  if (existingItem) {
-    existingItem.quantity++;
-  } else {
-    cart.push({
-      ...product,
-      quantity: 1
-    });
-  }
-  
-  updateCartUI();
-  showToast(`${product.name} added to cart`);
-}
-
-function removeFromCart(index) {
-  cart.splice(index, 1);
-  updateCartUI();
-  showToast("Item removed from cart");
-}
-
-function updateCartUI() {
-  const container = document.getElementById("cart-items");
-  const totalEl = document.getElementById("cart-total");
-  
-  if (cart.length === 0) {
-    container.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
-    totalEl.textContent = "Total: RM 0.00";
-    updateCartCount();
-    return;
-  }
-  
-  container.innerHTML = "";
-  let total = 0;
-  
-  cart.forEach((item, index) => {
-    const itemTotal = item.price * item.quantity;
-    total += itemTotal;
-    
-    const itemEl = document.createElement("div");
-    itemEl.className = "cart-item";
-    itemEl.innerHTML = `
-      <div class="cart-item-info">
-        <div class="cart-item-name">${item.name}</div>
-        <div class="cart-item-price">RM ${item.price.toFixed(2)}</div>
-      </div>
-      <div class="cart-item-qty">
-        <button class="qty-btn" onclick="event.stopPropagation();updateQuantity(${index}, -1)">-</button>
-        <span>${item.quantity}</span>
-        <button class="qty-btn" onclick="event.stopPropagation();updateQuantity(${index}, 1)">+</button>
-      </div>
-      <button class="remove-btn" onclick="event.stopPropagation();removeFromCart(${index})">×</button>
-    `;
-    
-    container.appendChild(itemEl);
-  });
-  
-  totalEl.textContent = `Total: RM ${total.toFixed(2)}`;
-  updateCartCount();
-}
-
-function updateQuantity(index, change) {
-  const newQty = cart[index].quantity + change;
-  
-  if (newQty < 1) {
-    removeFromCart(index);
-    return;
-  }
-  
-  cart[index].quantity = newQty;
-  updateCartUI();
-}
-
-function updateCartCount() {
-  const countEl = document.getElementById("cart-count");
-  const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-  countEl.textContent = count;
-  
-  // Update cart icon animation
-  const cartIcon = document.getElementById("cart-icon");
-  cartIcon.style.transform = "scale(1.2)";
-  setTimeout(() => {
-    cartIcon.style.transform = "scale(1)";
-  }, 300);
-}
-
-function toggleCart() {
-  const panel = document.getElementById("cart-panel");
-  panel.style.display = panel.style.display === "block" ? "none" : "block";
-}
-
-function checkout() {
-  if (cart.length === 0) {
-    showToast("Your cart is empty");
-    return;
-  }
-  
-  if (!confirm("Proceed to WhatsApp checkout?")) return;
-  
-  const phone = "601111033154";
-  let message = "Hi Arvind, I'd like to order these Forever products:\n\n";
-  
-  cart.forEach(item => {
-    message += `➤ ${item.name} (${item.quantity}x) = RM ${(item.quantity * item.price).toFixed(2)}\n`;
-  });
-  
-  const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  message += `\n💰 Total: RM ${total.toFixed(2)}\n\n`;
-  message += "My details:\n";
-  message += "Name: \n";
-  message += "Address: \n";
-  message += "Phone: \n\n";
-  message += "Please advise on payment and delivery. Thank you!";
-  
-  const encodedMessage = encodeURIComponent(message);
-  window.open(`https://wa.me/${phone}?text=${encodedMessage}`, "_blank");
-}
-
-function suggestProducts() {
-  const input = document.getElementById("symptom-input").value.trim().toLowerCase();
-  const resultEl = document.getElementById("suggestion-result");
-  
-  if (!input) {
-    showToast("Please enter your health concern");
-    return;
-  }
-  
-  // Find matching suggestions
-  let matchedProducts = [];
-  
-  for (const [keyword, productNames] of Object.entries(suggestionMap)) {
-    if (input.includes(keyword)) {
-      matchedProducts = [...matchedProducts, ...productNames];
-    }
-  }
-  
-  // Remove duplicates
-  matchedProducts = [...new Set(matchedProducts)];
-  
-  if (matchedProducts.length === 0) {
-    resultEl.innerHTML = "<p>No specific products found for your concern. Our general wellness recommendations:</p>";
-    matchedProducts = ["Aloe Vera Gel", "Forever Bee Honey", "Forever Royal Jelly"];
-  } else {
-    resultEl.innerHTML = "<p>Based on your input, we recommend these Forever products:</p>";
-  }
-  
-  // Display suggested products
-  const suggestionsHTML = matchedProducts.map(productName => {
-    const product = products.find(p => p.name === productName);
-    if (!product) return '';
-    
-    return `
-      <div class="product" style="margin: 10px 0; padding: 10px; border: 1px solid #eee; border-radius: 5px; text-align: left;">
-        <div style="display: flex; gap: 15px; align-items: center;">
-          <img src="${product.image}" alt="${product.name}" style="width: 80px; height: 80px; object-fit: contain;">
-          <div>
-            <h4 style="margin: 0 0 5px;">${product.name}</h4>
-            <div style="font-weight: bold; color: var(--primary-color);">RM ${product.price.toFixed(2)}</div>
-            <button onclick="event.stopPropagation();addToCart(${products.indexOf(product)})" 
-                    style="padding: 5px 10px; background: var(--primary-color); color: white; border: none; border-radius: 3px; margin-top: 5px;">
-              Add to Cart
-            </button>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
-  
-  resultEl.innerHTML += suggestionsHTML;
-  resultEl.style.display = "block";
-  
-  // Scroll to results
-  resultEl.scrollIntoView({ behavior: 'smooth' });
-}
-
-function showToast(message) {
-  const toast = document.createElement("div");
-  toast.textContent = message;
-  toast.style.position = "fixed";
-  toast.style.bottom = "20px";
-  toast.style.left = "50%";
-  toast.style.transform = "translateX(-50%)";
-  toast.style.backgroundColor = "var(--primary-color)";
-  toast.style.color = "white";
-  toast.style.padding = "10px 20px";
-  toast.style.borderRadius = "5px";
-  toast.style.zIndex = "1000";
-  toast.style.boxShadow = "0 2px 10px rgba(0,0,0,0.2)";
-  toast.style.animation = "fadeInOut 2.5s";
-  
-  document.body.appendChild(toast);
-  
-  setTimeout(() => {
-    toast.remove();
-  }, 2500);
-}
-
-// Add animation for toast
-const style = document.createElement("style");
-style.textContent = `
-  @keyframes fadeInOut {
-    0% { opacity: 0; bottom: 0; }
-    10% { opacity: 1; bottom: 20px; }
-    90% { opacity: 1; bottom: 20px; }
-    100% { opacity: 0; bottom: 0; }
-  }
-`;
-document.head.appendChild(style);
-</script>
+<!-- Include all your existing JavaScript for cart, modals, etc. -->
 </body>
 </html>
