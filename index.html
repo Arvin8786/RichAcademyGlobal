@@ -17,6 +17,7 @@
       padding: 20px;
       text-align: center;
       border-bottom: 1px solid #ddd;
+      position: relative;
     }
     .cart-icon {
       position: absolute;
@@ -24,6 +25,9 @@
       top: 20px;
       font-size: 20px;
       cursor: pointer;
+      background: #f5f5f5;
+      padding: 8px 12px;
+      border-radius: 20px;
     }
     nav {
       background-color: #2c8a58;
@@ -34,6 +38,7 @@
       padding: 10px;
       margin: 0;
       justify-content: center;
+      flex-wrap: wrap;
     }
     nav li {
       margin: 0 15px;
@@ -42,6 +47,8 @@
       color: white;
       text-decoration: none;
       font-weight: bold;
+      padding: 5px 0;
+      display: block;
     }
     nav a:hover {
       text-decoration: underline;
@@ -49,55 +56,119 @@
     .tab-content {
       display: none;
       padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
     .tab-content.active {
       display: block;
     }
     .product-list {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 20px;
     }
     .product {
       background: white;
-      padding: 10px;
+      padding: 15px;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       text-align: center;
+      transition: transform 0.3s ease;
+    }
+    .product:hover {
+      transform: translateY(-5px);
     }
     .product img {
       width: 100%;
-      height: 150px;
-      object-fit: cover;
+      height: 180px;
+      object-fit: contain;
+      margin-bottom: 10px;
+      background: #f9f9f9;
+      border-radius: 4px;
     }
     .product h3 {
       margin: 10px 0 5px;
+      font-size: 16px;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .product .price {
       color: #2c8a58;
       font-weight: bold;
+      font-size: 18px;
+      margin: 10px 0;
     }
     .product .whatsapp-btn {
       display: inline-block;
       margin-top: 10px;
       background: #25D366;
       color: white;
-      padding: 6px 12px;
+      padding: 8px 15px;
       border-radius: 4px;
       text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .product .whatsapp-btn:hover {
+      background: #128C7E;
     }
     footer {
       background: #f1f1f1;
       padding: 20px;
       text-align: center;
       font-size: 14px;
+      margin-top: 30px;
     }
     .disclaimer {
-      margin-top: 10px;
+      margin-top: 15px;
       background-color: #fff3cd;
       color: #856404;
       padding: 15px;
-      border-top: 1px solid #ffeeba;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+    button {
+      background: #2c8a58;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #1f6a43;
+    }
+    .cds-section, #business section {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .cds-section ul, #business ul {
+      text-align: left;
+      margin: 20px 0;
+      padding-left: 20px;
+    }
+    .cds-section li, #business li {
+      margin-bottom: 10px;
+    }
+    @media (max-width: 600px) {
+      nav li {
+        margin: 0 10px;
+      }
+      .product-list {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+      header h1 {
+        font-size: 22px;
+        padding-right: 40px;
+      }
     }
   </style>
 </head>
@@ -165,37 +236,33 @@
 
   <script>
     const products = [
-      { name: "Aloe Vera Gel", price: 116.79, image: "aloe-vera-gel.jpg" },
-      { name: "Aloe Berry Nectar", price: 116.79, image: "images/aloe-berry.jpg" },
-      { name: "Aloe Peaches", price: 116.79, image: "images/aloe-peaches.jpg" },
-      { name: "Bee Honey", price: 69.47, image: "images/bee-honey.jpg" },
-      { name: "Royal Jelly", price: 157.38, image: "images/royal-jelly.jpg" },
-      { name: "Bee Pollen", price: 96.23, image: "images/bee-pollen.jpg" },
-      { name: "Bee Propolis", price: 134.34, image: "images/bee-propolis.jpg" },
-      { name: "Arctic Sea", price: 133.02, image: "images/arctic-sea.jpg" },
-      { name: "Fields of Greens", price: 115.94, image: "images/fields-of-greens.jpg" },
-      { name: "Absorbent-C", price: 95.00, image: "images/absorbent_c.jpg" },
-      { name: "Calcium Plus", price: 95.85, image: "images/calcium-plus.jpg" },
-      { name: "Aloe First", price: 93.40, image: "images/aloe-first.jpg" },
-      { name: "Aloe Liquid Soap", price: 54.72, image: "images/aloe-liquid-soap.jpg" },
-      { name: "Aloe Propolis Creme", price: 92.08, image: "images/aloe-propolis-creme.jpg" },
-      { name: "Aloe Jojoba Shampoo", price: 91.66, image: "images/aloe-jojoba-shampoo.jpg" },
-      { name: "Aloe Jojoba Conditioner", price: 91.66, image: "images/aloe-jojoba-conditioner.jpg" },
-      { name: "Aloe Sunscreen", price: 84.91, image: "images/aloe-sunscreen.jpg" },
-      { name: "Aloe MPD 2X Ultra", price: 114.47, image: "images/aloe-mp-lotion.jpg" },
-      { name: "Avocado Face & Body Soap", price: 23.40, image: "images/avocado-soap.jpg" },
-      { name: "Forever Bright Toothgel", price: 31.62, image: "images/bright-toothgel.jpg" },
-      { name: "Aloe Lips", price: 17.92, image: "images/aloe_lips.jpg" },
-      { name: "Forever Aloe Deodorant", price: 34.91, image: "images/deodorant-stick.jpg" },
-      { name: "Forever Deodorant Stick", price: 34.91, image: "images/forever-deodorant.jpg" },
-      { name: "Teh Tarik Halia", price: 40.00, image: "images/teh-tarik.jpg" },
-      { name: "Aloe Berry Nectar (Alt)", price: 116.79, image: "images/aloe_berry_nectar.jpg" },
-      { name: "Aloe Sunscreen (New)", price: 84.91, image: "images/aloe sunscreen new.jpg" },
-      { name: "Aloe First (JPEG)", price: 93.40, image: "images/aloe first.jpeg" },
-      { name: "Aloe Soap (Spaced)", price: 54.72, image: "images/aloe soap .jpg" },
-      { name: "Aloe Soap (Dashed)", price: 54.72, image: "images/aloe-soap .jpg" },
-      { name: "Royal Jelly (Duplicate)", price: 157.38, image: "images/royal-jelly.jpg.jpg" }
+      { name: "Aloe Vera Gel", price: 116.79, image: "https://via.placeholder.com/300x300?text=Aloe+Vera+Gel" },
+      { name: "Aloe Berry Nectar", price: 116.79, image: "https://via.placeholder.com/300x300?text=Aloe+Berry+Nectar" },
+      { name: "Aloe Peaches", price: 116.79, image: "https://via.placeholder.com/300x300?text=Aloe+Peaches" },
+      { name: "Bee Honey", price: 69.47, image: "https://via.placeholder.com/300x300?text=Bee+Honey" },
+      { name: "Royal Jelly", price: 157.38, image: "https://via.placeholder.com/300x300?text=Royal+Jelly" },
+      { name: "Bee Pollen", price: 96.23, image: "https://via.placeholder.com/300x300?text=Bee+Pollen" },
+      { name: "Bee Propolis", price: 134.34, image: "https://via.placeholder.com/300x300?text=Bee+Propolis" },
+      { name: "Arctic Sea", price: 133.02, image: "https://via.placeholder.com/300x300?text=Arctic+Sea" },
+      { name: "Fields of Greens", price: 115.94, image: "https://via.placeholder.com/300x300?text=Fields+of+Greens" },
+      { name: "Absorbent-C", price: 95.00, image: "https://via.placeholder.com/300x300?text=Absorbent-C" },
+      { name: "Calcium Plus", price: 95.85, image: "https://via.placeholder.com/300x300?text=Calcium+Plus" },
+      { name: "Aloe First", price: 93.40, image: "https://via.placeholder.com/300x300?text=Aloe+First" },
+      { name: "Aloe Liquid Soap", price: 54.72, image: "https://via.placeholder.com/300x300?text=Aloe+Liquid+Soap" },
+      { name: "Aloe Propolis Creme", price: 92.08, image: "https://via.placeholder.com/300x300?text=Aloe+Propolis+Creme" },
+      { name: "Aloe Jojoba Shampoo", price: 91.66, image: "https://via.placeholder.com/300x300?text=Aloe+Jojoba+Shampoo" },
+      { name: "Aloe Jojoba Conditioner", price: 91.66, image: "https://via.placeholder.com/300x300?text=Aloe+Jojoba+Conditioner" },
+      { name: "Aloe Sunscreen", price: 84.91, image: "https://via.placeholder.com/300x300?text=Aloe+Sunscreen" },
+      { name: "Aloe MPD 2X Ultra", price: 114.47, image: "https://via.placeholder.com/300x300?text=Aloe+MPD+2X+Ultra" },
+      { name: "Avocado Face & Body Soap", price: 23.40, image: "https://via.placeholder.com/300x300?text=Avocado+Soap" },
+      { name: "Forever Bright Toothgel", price: 31.62, image: "https://via.placeholder.com/300x300?text=Bright+Toothgel" },
+      { name: "Aloe Lips", price: 17.92, image: "https://via.placeholder.com/300x300?text=Aloe+Lips" },
+      { name: "Forever Aloe Deodorant", price: 34.91, image: "https://via.placeholder.com/300x300?text=Aloe+Deodorant" },
+      { name: "Forever Deodorant Stick", price: 34.91, image: "https://via.placeholder.com/300x300?text=Deodorant+Stick" },
+      { name: "Teh Tarik Halia", price: 40.00, image: "https://via.placeholder.com/300x300?text=Teh+Tarik+Halia" }
     ];
+
+    let cart = [];
 
     function showTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -203,25 +270,45 @@
     }
 
     function toggleCart() {
-      alert("Cart feature coming soon.");
+      if (cart.length === 0) {
+        alert("Your cart is empty. Please add products first.");
+      } else {
+        alert(`You have ${cart.length} items in your cart.\n\n${cart.map(item => `- ${item.name} (RM ${item.price.toFixed(2)})`).join('\n')}`);
+      }
+    }
+
+    function updateCartCount() {
+      document.getElementById('cart-count').textContent = cart.length;
+    }
+
+    function addToCart(product) {
+      cart.push(product);
+      updateCartCount();
+      alert(`${product.name} has been added to your cart!`);
     }
 
     function loadProducts() {
       const container = document.getElementById("product-list");
+      container.innerHTML = ''; // Clear existing content
+      
       products.forEach(p => {
         const div = document.createElement("div");
         div.className = "product";
         div.innerHTML = `
-          <img src="${p.image}" alt="${p.name}" />
+          <img src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/300x300?text=Product+Image'"/>
           <h3>${p.name}</h3>
           <p class="price">RM ${p.price.toFixed(2)}</p>
           <a class="whatsapp-btn" href="https://wa.me/601111033154?text=Hi%2C%20I%20want%20to%20order%20${encodeURIComponent(p.name)}" target="_blank">Order Now</a>
+          <button onclick="addToCart(${JSON.stringify(p).replace(/"/g, '&quot;')})" style="margin-top: 8px; background: #f0ad4e; width: 100%;">Add to Cart</button>
         `;
         container.appendChild(div);
       });
     }
 
-    document.addEventListener("DOMContentLoaded", loadProducts);
+    document.addEventListener("DOMContentLoaded", function() {
+      loadProducts();
+      updateCartCount();
+    });
   </script>
 </body>
 </html>
