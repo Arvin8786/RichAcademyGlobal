@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Forever Living by Mohd Arvind Isa</title>
   <style>
-    /* Base Styles */
+    /* ===== BASE STYLES ===== */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -68,7 +68,7 @@
       display: block;
     }
     
-    /* Product Styles */
+    /* ===== PRODUCT STYLES ===== */
     .product-list {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -129,7 +129,63 @@
       text-decoration: none;
     }
     
-    /* Cart Modal */
+    /* ===== BUSINESS OPPORTUNITY STYLES ===== */
+    .opportunity-container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      margin: 20px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .compensation-plan {
+      margin: 20px 0;
+    }
+    
+    .plan-level {
+      background: #f9f9f9;
+      padding: 15px;
+      margin: 10px 0;
+      border-left: 4px solid #2c8a58;
+    }
+    
+    /* ===== CDS SECTION STYLES ===== */
+    .cd-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    
+    .cd-item {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    /* ===== REWARDS SECTION STYLES ===== */
+    .rewards-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    
+    .rewards-table th, .rewards-table td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+    
+    .rewards-table th {
+      background-color: #2c8a58;
+      color: white;
+    }
+    
+    .rewards-table tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    
+    /* ===== CART MODAL ===== */
     #cart-modal {
       display: none;
       position: fixed;
@@ -178,7 +234,7 @@
       margin-top: 20px;
     }
     
-    /* AI Suggestion Box */
+    /* ===== AI SUGGESTION BOX ===== */
     .ai-suggestion-box {
       background: white;
       padding: 20px;
@@ -187,43 +243,37 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     
-    /* New Search & Filter Styles */
-    .search-filter-container {
+    #symptoms-input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .suggested-products {
       display: flex;
       flex-wrap: wrap;
       gap: 15px;
-      margin: 20px 0;
-      padding: 15px;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-top: 15px;
     }
     
-    #search-input {
-      flex-grow: 1;
-      padding: 10px 15px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      min-width: 200px;
-    }
-    
-    .filter-dropdown {
+    .suggestion {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f9f9f9;
       padding: 10px;
-      border: 1px solid #ddd;
       border-radius: 4px;
-      background: white;
     }
     
-    .filter-btn {
-      background: #2c8a58;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 4px;
-      cursor: pointer;
+    .suggestion img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
     }
     
-    /* Quick View Modal */
+    /* ===== QUICK VIEW MODAL ===== */
     .quick-view-modal {
       display: none;
       position: fixed;
@@ -267,65 +317,7 @@
       width: 60%;
     }
     
-    /* Wishlist Styles */
-    .wishlist-btn {
-      background: #e67e22;
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 4px;
-      margin-top: 10px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      width: 100%;
-    }
-    
-    .wishlist-btn.active {
-      background: #d35400;
-    }
-    
-    /* Reviews System */
-    .reviews-container {
-      margin-top: 20px;
-      border-top: 1px solid #eee;
-      padding-top: 20px;
-    }
-    
-    .review {
-      margin-bottom: 15px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid #f5f5f5;
-    }
-    
-    .review-author {
-      font-weight: bold;
-      color: #2c8a58;
-    }
-    
-    .review-date {
-      color: #999;
-      font-size: 0.8em;
-    }
-    
-    .review-rating {
-      color: #e67e22;
-      margin: 5px 0;
-    }
-    
-    .add-review-btn {
-      background: #2c8a58;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 4px;
-      margin-top: 15px;
-      cursor: pointer;
-    }
-    
-    /* Version Timestamp */
+    /* ===== VERSION TIMESTAMP ===== */
     .version-timestamp {
       position: fixed;
       bottom: 10px;
@@ -337,8 +329,17 @@
       font-size: 0.8em;
     }
     
-    /* Responsive Improvements */
+    /* ===== RESPONSIVE STYLES ===== */
     @media (max-width: 768px) {
+      nav ul {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      nav li {
+        margin: 5px 0;
+      }
+      
       .quick-view-content {
         flex-direction: column;
         width: 90%;
@@ -347,15 +348,6 @@
       
       .quick-view-image, .quick-view-details {
         width: 100%;
-      }
-      
-      nav ul {
-        flex-direction: column;
-        align-items: center;
-      }
-      
-      nav li {
-        margin: 5px 0;
       }
     }
   </style>
@@ -369,57 +361,131 @@
   <nav>
     <ul>
       <li><a href="#" onclick="showTab('products')">Products</a></li>
-      <li><a href="#" onclick="showTab('about')">About</a></li>
+      <li><a href="#" onclick="showTab('business')">Business Opportunity</a></li>
+      <li><a href="#" onclick="showTab('cds')">Training CDs</a></li>
+      <li><a href="#" onclick="showTab('rewards')">Rewards</a></li>
       <li><a href="#" onclick="showTab('contact')">Contact</a></li>
       <li><a href="#" onclick="showCart()">Cart (<span id="cart-count">0</span>)</a></li>
     </ul>
   </nav>
   
   <main>
+    <!-- PRODUCTS TAB -->
     <div id="products" class="tab-content active">
       <div class="ai-suggestion-box">
         <h2>AI Product Suggestion</h2>
-        <p>Based on your browsing history, we recommend trying our Aloe Vera Gel for digestive health and energy boost!</p>
-      </div>
-      
-      <!-- Search & Filter Section -->
-      <div class="search-filter-container">
-        <input type="text" id="search-input" placeholder="Search products...">
-        <select class="filter-dropdown" id="category-filter">
-          <option value="">All Categories</option>
-          <option value="nutrition">Nutrition</option>
-          <option value="skincare">Skincare</option>
-          <option value="bee">Bee Products</option>
-          <option value="detox">Detox</option>
-        </select>
-        <select class="filter-dropdown" id="price-filter">
-          <option value="">All Prices</option>
-          <option value="0-50">Under RM50</option>
-          <option value="50-100">RM50 - RM100</option>
-          <option value="100-150">RM100 - RM150</option>
-          <option value="150+">Over RM150</option>
-        </select>
-        <button class="filter-btn" onclick="filterProducts()">Filter</button>
+        <input type="text" id="symptoms-input" placeholder="Describe your symptoms (e.g. headache, indigestion, dry skin)">
+        <button class="add-to-cart" onclick="suggestProducts()">Get Recommendations</button>
+        <div id="ai-suggestion-result"></div>
       </div>
       
       <h2>Our Products</h2>
       <div id="product-list" class="product-list"></div>
     </div>
     
-    <div id="about" class="tab-content">
-      <h2>About Forever Living</h2>
-      <p>Forever Living Products is the world's largest grower, manufacturer and distributor of aloe vera products...</p>
+    <!-- BUSINESS OPPORTUNITY TAB -->
+    <div id="business" class="tab-content">
+      <div class="opportunity-container">
+        <h2>Business Opportunity</h2>
+        <p>Join Forever Living and build your own business with our proven compensation plan.</p>
+        
+        <div class="compensation-plan">
+          <h3>Compensation Plan</h3>
+          <div class="plan-level">
+            <h4>Assistant Supervisor</h4>
+            <p>Earn 8-13% commission on your personal sales</p>
+          </div>
+          <div class="plan-level">
+            <h4>Supervisor</h4>
+            <p>Earn 15-18% commission plus bonuses</p>
+          </div>
+          <div class="plan-level">
+            <h4>Manager</h4>
+            <p>Earn 20-25% commission with leadership bonuses</p>
+          </div>
+        </div>
+        
+        <button class="add-to-cart" style="max-width: 300px;">Join Now</button>
+      </div>
     </div>
     
+    <!-- TRAINING CDs TAB -->
+    <div id="cds" class="tab-content">
+      <h2>Training CDs</h2>
+      <p>Enhance your knowledge with our exclusive training materials</p>
+      
+      <div class="cd-list">
+        <div class="cd-item">
+          <h3>Product Knowledge Series</h3>
+          <p>Complete guide to all Forever Living products</p>
+          <div class="price">RM 45.00</div>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+        <div class="cd-item">
+          <h3>Sales Techniques</h3>
+          <p>Proven methods to grow your business</p>
+          <div class="price">RM 45.00</div>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+        <div class="cd-item">
+          <h3>Team Building</h3>
+          <p>Strategies for effective leadership</p>
+          <div class="price">RM 45.00</div>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- REWARDS TAB -->
+    <div id="rewards" class="tab-content">
+      <h2>Rewards Program</h2>
+      <p>Earn points and get exclusive rewards for your loyalty</p>
+      
+      <table class="rewards-table">
+        <thead>
+          <tr>
+            <th>Level</th>
+            <th>Points Required</th>
+            <th>Rewards</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Bronze</td>
+            <td>100 points</td>
+            <td>5% discount on next purchase</td>
+          </tr>
+          <tr>
+            <td>Silver</td>
+            <td>300 points</td>
+            <td>Free product + 10% discount</td>
+          </tr>
+          <tr>
+            <td>Gold</td>
+            <td>600 points</td>
+            <td>VIP gift set + 15% discount</td>
+          </tr>
+          <tr>
+            <td>Platinum</td>
+            <td>1000 points</td>
+            <td>All-expense paid training event</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- CONTACT TAB -->
     <div id="contact" class="tab-content">
       <h2>Contact Me</h2>
       <p>Mohd Arvind Isa</p>
+      <p>Independent Forever Living Distributor</p>
       <p>Phone: +60 11-1103 3154</p>
       <p>Email: arvind@example.com</p>
+      <p>Location: Kuala Lumpur, Malaysia</p>
     </div>
   </main>
   
-  <!-- Cart Modal -->
+  <!-- CART MODAL -->
   <div id="cart-modal" class="modal">
     <div class="cart-content">
       <span class="close" onclick="closeCart()">&times;</span>
@@ -430,7 +496,7 @@
     </div>
   </div>
   
-  <!-- Quick View Modal -->
+  <!-- QUICK VIEW MODAL -->
   <div id="quick-view-modal" class="quick-view-modal">
     <div class="quick-view-content">
       <span class="quick-view-close" onclick="closeQuickView()">&times;</span>
@@ -440,111 +506,84 @@
         <div class="price" id="quick-view-price"></div>
         <div class="benefits" id="quick-view-benefits"></div>
         <div class="consumption" id="quick-view-consumption"></div>
-        
-        <div class="reviews-container" id="quick-view-reviews">
-          <h3>Customer Reviews</h3>
-          <div id="reviews-list"></div>
-          <button class="add-review-btn" onclick="showReviewForm()">Add Review</button>
-        </div>
-        
         <div style="margin-top: 20px; display: flex; gap: 10px;">
           <button class="add-to-cart" id="quick-view-add-to-cart">Add to Cart</button>
-          <button class="wishlist-btn" id="quick-view-wishlist">
-            <span id="wishlist-text">Add to Wishlist</span> ♡
-          </button>
           <a href="#" class="whatsapp-btn" id="quick-view-whatsapp">Order via WhatsApp</a>
         </div>
       </div>
     </div>
   </div>
   
-  <!-- Version Timestamp -->
-  <div class="version-timestamp">Last Updated: 2024-01-15 14:30</div>
+  <!-- VERSION TIMESTAMP -->
+  <div class="version-timestamp">Last Updated: 2024-01-15 16:20</div>
 
   <script>
-    // Product Data
+    // ===== PRODUCT DATA =====
     const products = [
       {
         id: 1,
         name: "Aloe Vera Gel",
         price: 89.90,
-        image: "https://example.com/aloe-gel.jpg",
+        image: "aloe-gel.jpg",
         benefits: "Supports digestive health, boosts energy, and enhances nutrient absorption.",
-        consumption: "Take 60-120ml daily, preferably on an empty stomach."
+        consumption: "Take 60-120ml daily, preferably on an empty stomach.",
+        symptoms: ["indigestion", "bloating", "low energy", "constipation"],
+        category: "nutrition"
       },
       {
         id: 2,
         name: "Bee Propolis",
         price: 120.50,
-        image: "https://example.com/bee-propolis.jpg",
+        image: "bee-propolis.jpg",
         benefits: "Natural antibiotic properties, supports immune system, and helps with throat irritation.",
-        consumption: "Take 1 tablet 3 times daily or as needed."
+        consumption: "Take 1 tablet 3 times daily or as needed.",
+        symptoms: ["sore throat", "cough", "weak immunity", "infection"],
+        category: "bee"
       },
       {
         id: 3,
         name: "Aloe Moisturizing Lotion",
         price: 65.00,
-        image: "https://example.com/moisturizer.jpg",
+        image: "aloe-lotion.jpg",
         benefits: "Hydrates skin, reduces signs of aging, and soothes sunburns.",
-        consumption: "Apply to skin as needed, especially after showering."
+        consumption: "Apply to skin as needed, especially after showering.",
+        symptoms: ["dry skin", "sunburn", "wrinkles", "eczema"],
+        category: "skincare"
       },
       {
         id: 4,
         name: "Forever Arctic Sea",
         price: 145.00,
-        image: "https://example.com/arctic-sea.jpg",
+        image: "arctic-sea.jpg",
         benefits: "Omega-3 supplement for heart and brain health.",
-        consumption: "Take 2 softgels daily with meals."
+        consumption: "Take 2 softgels daily with meals.",
+        symptoms: ["high cholesterol", "poor memory", "joint pain", "heart health"],
+        category: "nutrition"
+      },
+      {
+        id: 5,
+        name: "Forever Royal Jelly",
+        price: 150.00,
+        image: "royal-jelly.jpg",
+        benefits: "Natural energy booster with essential nutrients.",
+        consumption: "Take 1-2 tablets daily.",
+        symptoms: ["fatigue", "low energy", "stress", "weak immunity"],
+        category: "bee"
+      },
+      {
+        id: 6,
+        name: "Forever Aloe Scrub",
+        price: 75.00,
+        image: "aloe-scrub.jpg",
+        benefits: "Exfoliates and rejuvenates skin.",
+        consumption: "Use 2-3 times weekly on damp skin.",
+        symptoms: ["dull skin", "blackheads", "rough skin", "acne"],
+        category: "skincare"
       }
     ];
-    
-    // Add categories and reviews to products
-    products.forEach(product => {
-      // Add categories
-      if (product.name.toLowerCase().includes('aloe')) {
-        product.category = 'nutrition';
-        if (product.name.toLowerCase().includes('gel') || 
-            product.name.toLowerCase().includes('nectar')) {
-          product.category = 'detox';
-        }
-      }
-      if (product.name.toLowerCase().includes('bee')) {
-        product.category = 'bee';
-      }
-      if (product.name.toLowerCase().includes('cream') || 
-          product.name.toLowerCase().includes('lotion') ||
-          product.name.toLowerCase().includes('shampoo') ||
-          product.name.toLowerCase().includes('soap')) {
-        product.category = 'skincare';
-      }
-      
-      // Add sample reviews
-      product.reviews = [
-        {
-          author: "Siti A.",
-          rating: 5,
-          date: "2023-10-15",
-          comment: "This product changed my life! I feel so much more energetic."
-        },
-        {
-          author: "Rajesh K.",
-          rating: 4,
-          date: "2023-09-22",
-          comment: "Good quality, delivery was fast. Will buy again."
-        }
-      ];
-    });
-    
-    // Cart System
+
+    // ===== CART SYSTEM =====
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-    
-    function showTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      document.getElementById(tabId).classList.add('active');
-    }
     
     function addToCart(productId) {
       const product = products.find(p => p.id === productId);
@@ -605,38 +644,47 @@
       closeCart();
     }
     
-    // New Search & Filter Functionality
-    function filterProducts() {
-      const searchTerm = document.getElementById('search-input').value.toLowerCase();
-      const category = document.getElementById('category-filter').value;
-      const priceRange = document.getElementById('price-filter').value;
-      
-      let filtered = products.filter(product => {
-        // Search term filter
-        const matchesSearch = product.name.toLowerCase().includes(searchTerm) || 
-                            product.benefits.toLowerCase().includes(searchTerm);
-        
-        // Category filter
-        const matchesCategory = !category || (product.category === category);
-        
-        // Price filter
-        let matchesPrice = true;
-        if (priceRange) {
-          const [min, max] = priceRange.split('-').map(Number);
-          if (max) {
-            matchesPrice = product.price >= min && product.price <= max;
-          } else {
-            matchesPrice = product.price >= min;
-          }
-        }
-        
-        return matchesSearch && matchesCategory && matchesPrice;
+    // ===== TAB SYSTEM =====
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
       });
-      
-      renderProducts(filtered);
+      document.getElementById(tabId).classList.add('active');
     }
     
-    // Quick View Functions
+    // ===== AI SUGGESTION SYSTEM =====
+    function suggestProducts() {
+      const symptomsInput = document.getElementById('symptoms-input').value.toLowerCase();
+      const resultsDiv = document.getElementById('ai-suggestion-result');
+      
+      if (!symptomsInput) {
+        resultsDiv.innerHTML = "<p>Please describe your symptoms</p>";
+        return;
+      }
+
+      const matchedProducts = products.filter(product => 
+        product.symptoms.some(symptom => 
+          symptomsInput.includes(symptom.toLowerCase())
+      );
+
+      if (matchedProducts.length > 0) {
+        resultsDiv.innerHTML = `
+          <h3>Recommended Products:</h3>
+          <div class="suggested-products">
+            ${matchedProducts.map(product => `
+              <div class="suggestion" onclick="showQuickView(${product.id})">
+                <img src="${product.image}" alt="${product.name}">
+                <span>${product.name}</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } else {
+        resultsDiv.innerHTML = "<p>No products match your symptoms. Try different keywords.</p>";
+      }
+    }
+    
+    // ===== QUICK VIEW SYSTEM =====
     function showQuickView(productId) {
       const product = products.find(p => p.id === productId);
       if (!product) return;
@@ -650,26 +698,8 @@
         addToCart(productId);
         closeQuickView();
       };
-      document.getElementById('quick-view-wishlist').onclick = () => toggleWishlist(productId);
       document.getElementById('quick-view-whatsapp').href = 
         `https://wa.me/601111033154?text=I%20want%20to%20buy%20${encodeURIComponent(product.name)}`;
-      
-      // Update wishlist button state
-      const isInWishlist = wishlist.includes(productId);
-      document.getElementById('wishlist-text').textContent = isInWishlist ? 'In Wishlist' : 'Add to Wishlist';
-      document.getElementById('quick-view-wishlist').innerHTML = 
-        `${isInWishlist ? 'In Wishlist ♥' : 'Add to Wishlist ♡'}`;
-      
-      // Display reviews
-      const reviewsList = document.getElementById('reviews-list');
-      reviewsList.innerHTML = product.reviews.map(review => `
-        <div class="review">
-          <div class="review-author">${review.author}</div>
-          <div class="review-date">${review.date}</div>
-          <div class="review-rating">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</div>
-          <div class="review-comment">${review.comment}</div>
-        </div>
-      `).join('');
       
       document.getElementById('quick-view-modal').style.display = 'block';
     }
@@ -678,57 +708,22 @@
       document.getElementById('quick-view-modal').style.display = 'none';
     }
     
-    // Wishlist Functions
-    function toggleWishlist(productId) {
-      const index = wishlist.indexOf(productId);
-      if (index === -1) {
-        wishlist.push(productId);
-      } else {
-        wishlist.splice(index, 1);
-      }
-      
-      localStorage.setItem('wishlist', JSON.stringify(wishlist));
-      renderProducts();
-      
-      // Update quick view if open
-      if (document.getElementById('quick-view-modal').style.display === 'block') {
-        const quickViewProductId = parseInt(document.querySelector('.quick-view-details h2').getAttribute('data-id'));
-        if (quickViewProductId === productId) {
-          const isInWishlist = wishlist.includes(productId);
-          document.getElementById('wishlist-text').textContent = isInWishlist ? 'In Wishlist' : 'Add to Wishlist';
-          document.getElementById('quick-view-wishlist').innerHTML = 
-            `${isInWishlist ? 'In Wishlist ♥' : 'Add to Wishlist ♡'}`;
-        }
-      }
-    }
-    
-    // Review Functions
-    function showReviewForm() {
-      alert("Review form would appear here. In a full implementation, this would connect to a backend service.");
-    }
-    
-    // Render Products
-    function renderProducts(productsToRender = products) {
+    // ===== INITIALIZE PAGE =====
+    function renderProducts() {
       const productList = document.getElementById('product-list');
-      productList.innerHTML = productsToRender.map(product => `
-        <div class="product" data-id="${product.id}" data-category="${product.category || 'other'}" data-price="${product.price}">
-          <img src="${product.image}" alt="${product.name}" 
-               onclick="showQuickView(${product.id})"
-               onerror="this.onerror=null;this.src='https://via.placeholder.com/200x200?text=Product+Image'">
+      productList.innerHTML = products.map(product => `
+        <div class="product">
+          <img src="${product.image}" alt="${product.name}" onclick="showQuickView(${product.id})">
           <h3 onclick="showQuickView(${product.id})" style="cursor:pointer;">${product.name}</h3>
           <div class="price">RM ${product.price.toFixed(2)}</div>
           <div class="benefits"><strong>Benefits:</strong> ${product.benefits}</div>
           <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
-          <button class="wishlist-btn" onclick="toggleWishlist(${product.id})" data-id="${product.id}">
-            ${wishlist.includes(product.id) ? 'In Wishlist ♥' : 'Add to Wishlist ♡'}
-          </button>
           <a href="https://wa.me/601111033154?text=I%20want%20to%20buy%20${encodeURIComponent(product.name)}" 
              class="whatsapp-btn">Order via WhatsApp</a>
         </div>
       `).join('');
     }
     
-    // Initialize the page
     document.addEventListener('DOMContentLoaded', function() {
       renderProducts();
       updateCartCount();
@@ -736,24 +731,18 @@
       
       // Close modals when clicking outside
       window.onclick = function(event) {
-        const modal = document.getElementById('cart-modal');
-        if (event.target === modal) {
-          modal.style.display = "none";
+        if (event.target === document.getElementById('cart-modal')) {
+          closeCart();
         }
-        
-        const quickView = document.getElementById('quick-view-modal');
-        if (event.target === quickView) {
-          quickView.style.display = "none";
+        if (event.target === document.getElementById('quick-view-modal')) {
+          closeQuickView();
         }
-      }
+      };
       
-      // Search as you type
-      document.getElementById('search-input').addEventListener('input', filterProducts);
-      
-      // Update timestamp with current date/time
+      // Update timestamp
       const now = new Date();
-      const timestamp = document.querySelector('.version-timestamp');
-      timestamp.textContent = `Last Updated: ${now.toISOString().split('T')[0]} ${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+      document.querySelector('.version-timestamp').textContent = 
+        `Last Updated: ${now.toISOString().split('T')[0]} ${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
     });
   </script>
 </body>
