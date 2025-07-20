@@ -6,24 +6,13 @@
   <title>Forever Living by Mohd Arvind Isa - Grand Opening Special</title>
   <style>
     :root {
-      --primary-color: #CC0000;
-      --secondary-color: #FFD700;
-      --accent-color: #006644;
-      --festival-name: "Grand Opening";
-      --festival-image: url('https://via.placeholder.com/600x200/CC0000/FFD700?text=Grand+Opening+Special');
-      --festival-message: "Celebrate our Grand Opening with special offers! Enjoy discounts on our best-selling products.";
-      --festival-offer: "5% OFF on selected items!";
-    }
-    
-    /* Grand Opening Theme */
-    :root.grand-opening-theme {
       --primary-color: #1a5276;
       --secondary-color: #f39c12;
       --accent-color: #27ae60;
       --festival-name: "Grand Opening";
       --festival-image: url('https://via.placeholder.com/600x200/1a5276/f39c12?text=Grand+Opening+Special');
       --festival-message: "Welcome to our online store! Enjoy special opening discounts on selected products.";
-      --festival-offer: "5% OFF Top Products!";
+      --festival-offer: "5% OFF on Top Products!";
     }
     
     @keyframes fadeIn {
@@ -112,6 +101,8 @@
     }
     nav {
       background-color: var(--primary-color);
+      position: relative;
+      z-index: 100;
     }
     nav ul {
       display: flex;
@@ -131,9 +122,23 @@
       font-size: 16px;
       padding: 5px 0;
       display: inline-block;
+      position: relative;
     }
     nav a:hover {
       text-decoration: underline;
+    }
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--secondary-color);
+      transition: width 0.3s;
+    }
+    nav a:hover::after {
+      width: 100%;
     }
     .tab-content {
       display: none;
@@ -225,10 +230,12 @@
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       margin-bottom: 30px;
+      border: 2px solid var(--accent-color);
     }
     .ai-suggestion-box h2 {
       color: var(--primary-color);
       margin-top: 0;
+      text-align: center;
     }
     #symptom-input {
       width: 100%;
@@ -236,6 +243,7 @@
       border: 1px solid #ddd;
       border-radius: 4px;
       margin: 10px 0;
+      border: 2px solid var(--primary-color);
     }
     #suggest-btn {
       background: var(--primary-color);
@@ -246,6 +254,8 @@
       cursor: pointer;
       font-weight: bold;
       transition: all 0.3s;
+      display: block;
+      margin: 0 auto;
     }
     #suggest-btn:hover {
       background: #1a237e;
@@ -255,6 +265,7 @@
       padding: 15px;
       background: #f9f9f9;
       border-radius: 4px;
+      border-left: 4px solid var(--accent-color);
     }
     footer {
       background: #f1f1f1;
@@ -644,7 +655,7 @@
       width: 60px;
       height: 60px;
       background: var(--accent-color);
-      color: var(--primary-color);
+      color: white;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -704,9 +715,73 @@
       color: var(--primary-color);
       font-weight: bold;
     }
+    
+    /* Grand Opening Ribbon */
+    .grand-opening-ribbon {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 150px;
+      height: 150px;
+      overflow: hidden;
+      z-index: 100;
+    }
+    
+    .grand-opening-ribbon::before,
+    .grand-opening-ribbon::after {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      display: block;
+      border: 5px solid #f39c12;
+      border-top-color: transparent;
+      border-right-color: transparent;
+    }
+    
+    .grand-opening-ribbon::before {
+      top: 0;
+      left: 0;
+    }
+    
+    .grand-opening-ribbon::after {
+      bottom: 0;
+      right: 0;
+    }
+    
+    .grand-opening-ribbon span {
+      position: absolute;
+      display: block;
+      width: 225px;
+      padding: 15px 0;
+      background-color: #1a5276;
+      box-shadow: 0 5px 10px rgba(0,0,0,.1);
+      color: #fff;
+      font-size: 13px;
+      text-align: center;
+      right: -25px;
+      top: 30px;
+      transform: rotate(45deg);
+    }
+    
+    /* Special Offer Banner */
+    .special-offer-banner {
+      background: linear-gradient(135deg, #1a5276, #27ae60);
+      color: white;
+      padding: 10px;
+      text-align: center;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      animation: pulse 2s infinite;
+    }
   </style>
 </head>
 <body class="grand-opening-theme">
+  <!-- Grand Opening Ribbon -->
+  <div class="grand-opening-ribbon">
+    <span>GRAND OPENING SALE!</span>
+  </div>
+
   <!-- Grand Opening Decorations -->
   <div id="festival-decorations">
     <div class="festival-decoration opening-balloon" style="top: 100px; animation-duration: 20s; animation-delay: 0s;"></div>
@@ -737,6 +812,11 @@
 
   <main>
     <div id="products" class="tab-content active">
+      <div class="special-offer-banner">
+        <h2>🎉 GRAND OPENING SPECIAL 🎉</h2>
+        <p>Enjoy 5% OFF on our top 10 bestselling products!</p>
+      </div>
+      
       <div class="ai-suggestion-box">
         <h2>AI Product Suggestion</h2>
         <p>Tell our AI your symptoms and we'll recommend the best Forever Living products for you:</p>
@@ -786,7 +866,6 @@
              <li>👨‍🏫 Experienced coach support</li>
              <li>🎯 Results-driven approach</li>
              <li>📊 Progress tracking tools</li>
-
             </ul>
           </div>
         </div>
@@ -968,145 +1047,151 @@
   </footer>
 
   <script>
-const products = [
-  { id: 1, name: "Aloe Vera Gel", price: 116.79, image: "aloe-vera-gel.jpg", 
-   benefits: "Supports digestion, boosts immunity, promotes skin health, enhances nutrient absorption, helps detoxify the body", 
-   consumption: "Take 30-60ml daily, preferably on empty stomach",
-   bestSeller: true },
-  { id: 2, name: "Aloe Berry Nectar", price: 116.79, image: "aloe-berry-nectar.jpg", 
-   benefits: "Antioxidant support, immune system booster, natural energy, supports urinary health, rich in vitamin C", 
-   consumption: "30-60ml daily, can be mixed with water or juice",
-   bestSeller: true },
-  { id: 3, name: "Aloe Peaches", price: 116.79, image: "aloe-peaches.jpg", 
-   benefits: "Digestive health, vitamin C source, natural detoxification, maintains healthy skin, supports kidney function", 
-   consumption: "30-60ml daily, refrigerate after opening" },
-  { id: 4, name: "Bee Honey", price: 132.57, image: "bee-honey.jpg", 
-   benefits: "Natural energy, soothes throat, antioxidant properties, supports digestion, promotes wound healing", 
-   consumption: "1-2 teaspoons daily, can be added to drinks",
-   bestSeller: true },
-  { id: 5, name: "Royal Jelly", price: 139.21, image: "royal-jelly.jpg", 
-   benefits: "Energy booster, supports immune system, anti-aging, hormone balance, supports skin renewal", 
-   consumption: "1 tablet daily, preferably in the morning",
-   bestSeller: true },
-  { id: 6, name: "Bee Pollen", price: 75.50, image: "bee-pollen.jpg", 
-   benefits: "Natural multivitamin, energy enhancement, allergy relief, improves stamina, supports cardiovascular health", 
-   consumption: "1 tablet 3 times daily with meals" },
-  { id: 7, name: "Bee Propolis", price: 139.21, image: "bee-propolis.jpg", 
-   benefits: "Immune support, natural antibiotic, throat health, anti-inflammatory, promotes oral health", 
-   consumption: "1 tablet daily or as needed",
-   bestSeller: true },
-  { id: 8, name: "Arctic Sea", price: 130.10, image: "arctic-sea.jpg", 
-   benefits: "Heart health, joint support, brain function, supports vision, reduces inflammation", 
-   consumption: "2 softgels twice daily with meals" },
-  { id: 9, name: "Fields of Greens", price: 86.10, image: "fields-of-greens.jpg", 
-   benefits: "Detoxification, digestion, alkalizing, supports weight management, rich in chlorophyll", 
-   consumption: "1 tablet 3 times daily with water" },
-  { id: 10, name: "Absorbent-C", price: 75.50, image: "absorbent-c.jpg", 
-   benefits: "Immune support, collagen production, antioxidant, helps iron absorption, supports healthy skin", 
-   consumption: "1-2 tablets daily with meals" },
-  { id: 11, name: "Calcium Plus", price: 132.15, image: "calcium-plus.jpg", 
-   benefits: "Bone support, muscle health, calcium + vitamin D, supports nerve function, helps prevent osteoporosis", 
-   consumption: "2 tablets daily with meals" },
-  { id: 12, name: "Aloe First", price: 93.40, image: "aloe-first.jpg", 
-   benefits: "Skin hydration, cooling relief, wound soothing, relieves sunburn, pre-hair treatment spray", 
-   consumption: "Spray directly on skin as needed" },
-  { id: 13, name: "Aloe Liquid Soap", price: 54.72, image: "aloe-liquid-soap.jpg", 
-   benefits: "Gentle cleansing, moisturizes skin, aloe-based formula, suitable for sensitive skin, pH-balanced", 
-   consumption: "Use daily for face and body cleansing" },
-  { id: 14, name: "Aloe Propolis Creme", price: 92.08, image: "aloe-propolis-creme.jpg", 
-   benefits: "Skin repair, moisturizing, protective barrier, soothes irritated skin, supports healing of minor cuts", 
-   consumption: "Apply generously on dry or irritated areas" },
-  { id: 15, name: "Aloe Jojoba Shampoo", price: 91.66, image: "aloe-jojoba-shampoo.jpg", 
-   benefits: "Hair nourishment, scalp care, sulfate-free, promotes hair strength, natural shine", 
-   consumption: "Massage into wet hair, rinse thoroughly" },
-  { id: 16, name: "Aloe Jojoba Conditioner", price: 91.66, image: "aloe-jojoba-conditioner.jpg", 
-   benefits: "Moisturizing, smooth finish, aloe + jojoba, strengthens hair strands, prevents breakage", 
-   consumption: "Apply after shampoo, leave 1-2 minutes, rinse" },
-  { id: 17, name: "Aloe Sunscreen", price: 84.91, image: "aloe-sunscreen.jpg", 
-   benefits: "UV protection, aloe-based, water-resistant, suitable for sensitive skin, prevents sunburn", 
-   consumption: "Apply 15 minutes before sun exposure" },
-  { id: 18, name: "Aloe MPD 2X Ultra", price: 114.47, image: "aloe-mp-lotion.jpg", 
-   benefits: "Multi-purpose cleaner, concentrated, eco-friendly, gentle on skin, biodegradable formula", 
-   consumption: "Dilute as needed for laundry, dishes or surfaces" },
-  { id: 19, name: "Avocado Face & Body Soap", price: 23.40, image: "avocado-soap.jpg", 
-   benefits: "Softens skin, gentle cleansing, avocado oil-rich, suitable for all skin types, non-drying", 
-   consumption: "Use daily for face and body" },
-  { id: 20, name: "Forever Bright Toothgel", price: 31.62, image: "bright-toothgel.jpg", 
-   benefits: "Fluoride-free, fresh breath, aloe-based care, gentle on gums, whitens teeth naturally", 
-   consumption: "Brush teeth twice daily" },
-  { id: 21, name: "Aloe Lips", price: 17.92, image: "aloe-lips.jpg", 
-   benefits: "Lip protection, moisturizes, healing balm, soothes cracked lips, non-greasy finish", 
-   consumption: "Apply on lips as needed throughout the day" },
-  { id: 22, name: "Forever Deodorant Stick", price: 34.91, image: "forever-deodorant.jpg", 
-   benefits: "Natural fragrance, aloe soothing, easy glide, long-lasting protection, non-staining", 
-   consumption: "Use after shower daily" },
-  { id: 23, name: "Teh Tarik Halia", price: 25.90, image: "teh-tarik.jpg", 
-   benefits: "Warming effect, digestion aid, ginger-infused, improves circulation, relieves bloating", 
-   consumption: "Mix sachet with hot water and stir well" },
-  { id: 24, name: "Choco Malt Drink", price: 27.90, image: "choco-malt.jpg", 
-   benefits: "Rich in B vitamins, iron for red blood cell production, supports metabolism, promotes growth, aids recovery after fatigue", 
-   consumption: "Mix 2-3 tablespoons in 150–200ml hot water or milk" }
-];
+    // Top 10 best-selling products with grand opening special flag
+    const products = [
+      { id: 1, name: "Aloe Vera Gel", price: 116.79, image: "aloe-vera-gel.jpg", 
+       benefits: "Supports digestion, boosts immunity, promotes skin health, enhances nutrient absorption, helps detoxify the body", 
+       consumption: "Take 30-60ml daily, preferably on empty stomach",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 2, name: "Aloe Berry Nectar", price: 116.79, image: "aloe-berry-nectar.jpg", 
+       benefits: "Antioxidant support, immune system booster, natural energy, supports urinary health, rich in vitamin C", 
+       consumption: "30-60ml daily, can be mixed with water or juice",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 3, name: "Bee Honey", price: 132.57, image: "bee-honey.jpg", 
+       benefits: "Natural energy, soothes throat, antioxidant properties, supports digestion, promotes wound healing", 
+       consumption: "1-2 teaspoons daily, can be added to drinks",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 4, name: "Royal Jelly", price: 139.21, image: "royal-jelly.jpg", 
+       benefits: "Energy booster, supports immune system, anti-aging, hormone balance, supports skin renewal", 
+       consumption: "1 tablet daily, preferably in the morning",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 5, name: "Bee Propolis", price: 139.21, image: "bee-propolis.jpg", 
+       benefits: "Immune support, natural antibiotic, throat health, anti-inflammatory, promotes oral health", 
+       consumption: "1 tablet daily or as needed",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 6, name: "Arctic Sea", price: 130.10, image: "arctic-sea.jpg", 
+       benefits: "Heart health, joint support, brain function, supports vision, reduces inflammation", 
+       consumption: "2 softgels twice daily with meals",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 7, name: "Fields of Greens", price: 86.10, image: "fields-of-greens.jpg", 
+       benefits: "Detoxification, digestion, alkalizing, supports weight management, rich in chlorophyll", 
+       consumption: "1 tablet 3 times daily with water",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 8, name: "Aloe First", price: 93.40, image: "aloe-first.jpg", 
+       benefits: "Skin hydration, cooling relief, wound soothing, relieves sunburn, pre-hair treatment spray", 
+       consumption: "Spray directly on skin as needed",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 9, name: "Aloe Propolis Creme", price: 92.08, image: "aloe-propolis-creme.jpg", 
+       benefits: "Skin repair, moisturizing, protective barrier, soothes irritated skin, supports healing of minor cuts", 
+       consumption: "Apply generously on dry or irritated areas",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 10, name: "Forever Bright Toothgel", price: 31.62, image: "bright-toothgel.jpg", 
+       benefits: "Fluoride-free, fresh breath, aloe-based care, gentle on gums, whitens teeth naturally", 
+       consumption: "Brush teeth twice daily",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 11, name: "Aloe Peaches", price: 116.79, image: "aloe-peaches.jpg", 
+       benefits: "Digestive health, vitamin C source, natural detoxification, maintains healthy skin, supports kidney function", 
+       consumption: "30-60ml daily, refrigerate after opening" },
+      { id: 12, name: "Bee Pollen", price: 75.50, image: "bee-pollen.jpg", 
+       benefits: "Natural multivitamin, energy enhancement, allergy relief, improves stamina, supports cardiovascular health", 
+       consumption: "1 tablet 3 times daily with meals" },
+      { id: 13, name: "Absorbent-C", price: 75.50, image: "absorbent-c.jpg", 
+       benefits: "Immune support, collagen production, antioxidant, helps iron absorption, supports healthy skin", 
+       consumption: "1-2 tablets daily with meals" },
+      { id: 14, name: "Calcium Plus", price: 132.15, image: "calcium-plus.jpg", 
+       benefits: "Bone support, muscle health, calcium + vitamin D, supports nerve function, helps prevent osteoporosis", 
+       consumption: "2 tablets daily with meals" },
+      { id: 15, name: "Aloe Liquid Soap", price: 54.72, image: "aloe-liquid-soap.jpg", 
+       benefits: "Gentle cleansing, moisturizes skin, aloe-based formula, suitable for sensitive skin, pH-balanced", 
+       consumption: "Use daily for face and body cleansing" },
+      { id: 16, name: "Aloe Jojoba Shampoo", price: 91.66, image: "aloe-jojoba-shampoo.jpg", 
+       benefits: "Hair nourishment, scalp care, sulfate-free, promotes hair strength, natural shine", 
+       consumption: "Massage into wet hair, rinse thoroughly" },
+      { id: 17, name: "Aloe Jojoba Conditioner", price: 91.66, image: "aloe-jojoba-conditioner.jpg", 
+       benefits: "Moisturizing, smooth finish, aloe + jojoba, strengthens hair strands, prevents breakage", 
+       consumption: "Apply after shampoo, leave 1-2 minutes, rinse" },
+      { id: 18, name: "Aloe Sunscreen", price: 84.91, image: "aloe-sunscreen.jpg", 
+       benefits: "UV protection, aloe-based, water-resistant, suitable for sensitive skin, prevents sunburn", 
+       consumption: "Apply 15 minutes before sun exposure" },
+      { id: 19, name: "Aloe MPD 2X Ultra", price: 114.47, image: "aloe-mp-lotion.jpg", 
+       benefits: "Multi-purpose cleaner, concentrated, eco-friendly, gentle on skin, biodegradable formula", 
+       consumption: "Dilute as needed for laundry, dishes or surfaces" },
+      { id: 20, name: "Avocado Face & Body Soap", price: 23.40, image: "avocado-soap.jpg", 
+       benefits: "Softens skin, gentle cleansing, avocado oil-rich, suitable for all skin types, non-drying", 
+       consumption: "Use daily for face and body" },
+      { id: 21, name: "Aloe Lips", price: 17.92, image: "aloe-lips.jpg", 
+       benefits: "Lip protection, moisturizes, healing balm, soothes cracked lips, non-greasy finish", 
+       consumption: "Apply on lips as needed throughout the day" },
+      { id: 22, name: "Forever Deodorant Stick", price: 34.91, image: "forever-deodorant.jpg", 
+       benefits: "Natural fragrance, aloe soothing, easy glide, long-lasting protection, non-staining", 
+       consumption: "Use after shower daily" },
+      { id: 23, name: "Teh Tarik Halia", price: 25.90, image: "teh-tarik.jpg", 
+       benefits: "Warming effect, digestion aid, ginger-infused, improves circulation, relieves bloating", 
+       consumption: "Mix sachet with hot water and stir well" },
+      { id: 24, name: "Choco Malt Drink", price: 27.90, image: "choco-malt.jpg", 
+       benefits: "Rich in B vitamins, iron for red blood cell production, supports metabolism, promotes growth, aids recovery after fatigue", 
+       consumption: "Mix 2-3 tablespoons in 150–200ml hot water or milk" }
+    ];
 
     // Enhanced product suggestions mapping
     const productSuggestions = {
-      "digestion": { id: 9, name: "Fields of Greens", recommendation: "1 tablet three times daily with meals for digestive support" },
-      "bloating": { id: 9, name: "Fields of Greens", recommendation: "1 tablet three times daily with meals to reduce bloating" },
+      "digestion": { id: 1, name: "Aloe Vera Gel", recommendation: "30-60ml daily on empty stomach for digestive support" },
+      "bloating": { id: 1, name: "Aloe Vera Gel", recommendation: "30-60ml daily to reduce bloating" },
       "constipation": { id: 1, name: "Aloe Vera Gel", recommendation: "30-60ml daily to support regular bowel movements" },
-      "diarrhea": { id: 7, name: "Bee Propolis", recommendation: "1 tablet daily to support gut health during diarrhea" },
+      "diarrhea": { id: 5, name: "Bee Propolis", recommendation: "1 tablet daily to support gut health during diarrhea" },
       "acid reflux": { id: 1, name: "Aloe Vera Gel", recommendation: "30ml before meals to soothe digestive tract" },
       "heartburn": { id: 1, name: "Aloe Vera Gel", recommendation: "30ml before meals to calm heartburn" },
-      "indigestion": { id: 9, name: "Fields of Greens", recommendation: "1 tablet before meals for better digestion" },
-      "nausea": { id: 5, name: "Royal Jelly", recommendation: "1 tablet to help settle stomach" },
+      "indigestion": { id: 7, name: "Fields of Greens", recommendation: "1 tablet before meals for better digestion" },
+      "nausea": { id: 4, name: "Royal Jelly", recommendation: "1 tablet to help settle stomach" },
       "ibs": { id: 1, name: "Aloe Vera Gel", recommendation: "30ml twice daily to soothe IBS symptoms" },
-      "gas": { id: 9, name: "Fields of Greens", recommendation: "1 tablet three times daily to reduce gas" },
+      "gas": { id: 7, name: "Fields of Greens", recommendation: "1 tablet three times daily to reduce gas" },
       "stomachache": { id: 1, name: "Aloe Vera Gel", recommendation: "30ml to soothe stomach discomfort" },
       "upset stomach": { id: 1, name: "Aloe Vera Gel", recommendation: "30ml as needed for stomach relief" },
       "gastritis": { id: 1, name: "Aloe Vera Gel", recommendation: "30ml before meals to help with gastritis" },
       "ulcer": { id: 1, name: "Aloe Vera Gel", recommendation: "30ml before meals to support ulcer healing" },
       "crohn's": { id: 1, name: "Aloe Vera Gel", recommendation: "30ml twice daily for digestive support" },
-      "cold": { id: 7, name: "Bee Propolis", recommendation: "1 tablet daily at first sign of cold" },
-      "flu": { id: 7, name: "Bee Propolis", recommendation: "2 tablets daily during flu" },
-      "fever": { id: 7, name: "Bee Propolis", recommendation: "1 tablet every 4 hours during fever" },
-      "cough": { id: 4, name: "Bee Honey", recommendation: "1 teaspoon as needed to soothe throat" },
-      "sore throat": { id: 4, name: "Bee Honey", recommendation: "1 teaspoon every 2 hours to relieve throat" },
+      "cold": { id: 5, name: "Bee Propolis", recommendation: "1 tablet daily at first sign of cold" },
+      "flu": { id: 5, name: "Bee Propolis", recommendation: "2 tablets daily during flu" },
+      "fever": { id: 5, name: "Bee Propolis", recommendation: "1 tablet every 4 hours during fever" },
+      "cough": { id: 3, name: "Bee Honey", recommendation: "1 teaspoon as needed to soothe throat" },
+      "sore throat": { id: 3, name: "Bee Honey", recommendation: "1 teaspoon every 2 hours to relieve throat" },
       "allergies": { id: 6, name: "Bee Pollen", recommendation: "1 tablet daily to help with seasonal allergies" },
-      "sinus": { id: 7, name: "Bee Propolis", recommendation: "1 tablet twice daily for sinus relief" },
-      "infection": { id: 7, name: "Bee Propolis", recommendation: "1 tablet three times daily to fight infection" },
-      "runny nose": { id: 7, name: "Bee Propolis", recommendation: "1 tablet twice daily for respiratory support" },
-      "congestion": { id: 7, name: "Bee Propolis", recommendation: "1 tablet twice daily to clear congestion" },
+      "sinus": { id: 5, name: "Bee Propolis", recommendation: "1 tablet twice daily for sinus relief" },
+      "infection": { id: 5, name: "Bee Propolis", recommendation: "1 tablet three times daily to fight infection" },
+      "runny nose": { id: 5, name: "Bee Propolis", recommendation: "1 tablet twice daily for respiratory support" },
+      "congestion": { id: 5, name: "Bee Propolis", recommendation: "1 tablet twice daily to clear congestion" },
       "sneezing": { id: 6, name: "Bee Pollen", recommendation: "1 tablet daily for allergy-related sneezing" },
       "itchy eyes": { id: 6, name: "Bee Pollen", recommendation: "1 tablet daily for allergy symptoms" },
-      "weak immunity": { id: 7, name: "Bee Propolis", recommendation: "1 tablet daily for immune support" },
-      "frequent illness": { id: 7, name: "Bee Propolis", recommendation: "1 tablet daily to strengthen immunity" },
-      "fatigue": { id: 5, name: "Royal Jelly", recommendation: "1 tablet each morning for energy" },
-      "low energy": { id: 5, name: "Royal Jelly", recommendation: "1 tablet morning and afternoon" },
-      "tiredness": { id: 5, name: "Royal Jelly", recommendation: "1 tablet upon waking" },
-      "weakness": { id: 5, name: "Royal Jelly", recommendation: "1 tablet twice daily for vitality" },
-      "lethargy": { id: 5, name: "Royal Jelly", recommendation: "1 tablet with breakfast" },
-      "exhaustion": { id: 5, name: "Royal Jelly", recommendation: "1 tablet morning and evening" },
-      "burnout": { id: 5, name: "Royal Jelly", recommendation: "1 tablet twice daily for energy support" },
-      "sluggish": { id: 5, name: "Royal Jelly", recommendation: "1 tablet with breakfast" },
-      "drowsy": { id: 5, name: "Royal Jelly", recommendation: "1 tablet in the morning" },
-      "joint pain": { id: 8, name: "Arctic Sea", recommendation: "2 softgels twice daily for joint support" },
-      "arthritis": { id: 8, name: "Arctic Sea", recommendation: "2 softgels twice daily for inflammation" },
-      "back pain": { id: 8, name: "Arctic Sea", recommendation: "2 softgels twice daily for pain relief" },
-      "muscle pain": { id: 8, name: "Arctic Sea", recommendation: "2 softgels twice daily for muscle recovery" },
-      "headache": { id: 8, name: "Arctic Sea", recommendation: "2 softgels at onset of headache" },
-      "migraine": { id: 8, name: "Arctic Sea", recommendation: "2 softgels at first sign of migraine" },
-      "neck pain": { id: 8, name: "Arctic Sea", recommendation: "2 softgels twice daily" },
-      "knee pain": { id: 8, name: "Arctic Sea", recommendation: "2 softgels twice daily" },
-      "shoulder pain": { id: 8, name: "Arctic Sea", recommendation: "2 softgels twice daily" },
-      "inflammation": { id: 8, name: "Arctic Sea", recommendation: "2 softgels twice daily" },
+      "weak immunity": { id: 5, name: "Bee Propolis", recommendation: "1 tablet daily for immune support" },
+      "frequent illness": { id: 5, name: "Bee Propolis", recommendation: "1 tablet daily to strengthen immunity" },
+      "fatigue": { id: 4, name: "Royal Jelly", recommendation: "1 tablet each morning for energy" },
+      "low energy": { id: 4, name: "Royal Jelly", recommendation: "1 tablet morning and afternoon" },
+      "tiredness": { id: 4, name: "Royal Jelly", recommendation: "1 tablet upon waking" },
+      "weakness": { id: 4, name: "Royal Jelly", recommendation: "1 tablet twice daily for vitality" },
+      "lethargy": { id: 4, name: "Royal Jelly", recommendation: "1 tablet with breakfast" },
+      "exhaustion": { id: 4, name: "Royal Jelly", recommendation: "1 tablet morning and evening" },
+      "burnout": { id: 4, name: "Royal Jelly", recommendation: "1 tablet twice daily for energy support" },
+      "sluggish": { id: 4, name: "Royal Jelly", recommendation: "1 tablet with breakfast" },
+      "drowsy": { id: 4, name: "Royal Jelly", recommendation: "1 tablet in the morning" },
+      "joint pain": { id: 6, name: "Arctic Sea", recommendation: "2 softgels twice daily for joint support" },
+      "arthritis": { id: 6, name: "Arctic Sea", recommendation: "2 softgels twice daily for inflammation" },
+      "back pain": { id: 6, name: "Arctic Sea", recommendation: "2 softgels twice daily for pain relief" },
+      "muscle pain": { id: 6, name: "Arctic Sea", recommendation: "2 softgels twice daily for muscle recovery" },
+      "headache": { id: 6, name: "Arctic Sea", recommendation: "2 softgels at onset of headache" },
+      "migraine": { id: 6, name: "Arctic Sea", recommendation: "2 softgels at first sign of migraine" },
+      "neck pain": { id: 6, name: "Arctic Sea", recommendation: "2 softgels twice daily" },
+      "knee pain": { id: 6, name: "Arctic Sea", recommendation: "2 softgels twice daily" },
+      "shoulder pain": { id: 6, name: "Arctic Sea", recommendation: "2 softgels twice daily" },
+      "inflammation": { id: 6, name: "Arctic Sea", recommendation: "2 softgels twice daily" },
       "acne": { id: 1, name: "Aloe Vera Gel", recommendation: "30ml daily and apply topically" },
-      "eczema": { id: 12, name: "Aloe First", recommendation: "Spray directly on affected areas" },
-      "psoriasis": { id: 12, name: "Aloe First", recommendation: "Apply liberally to affected areas" },
-      "dry skin": { id: 14, name: "Aloe Propolis Creme", recommendation: "Apply twice daily" },
-      "rash": { id: 12, name: "Aloe First", recommendation: "Spray on rash for cooling relief" },
-      "itchy skin": { id: 12, name: "Aloe First", recommendation: "Spray on affected areas" },
-      "sunburn": { id: 12, name: "Aloe First", recommendation: "Spray generously on sunburned skin" },
-      "wrinkles": { id: 14, name: "Aloe Propolis Creme", recommendation: "Apply daily to face and neck" },
-      "age spots": { id: 14, name: "Aloe Propolis Creme", recommendation: "Apply twice daily" }
+      "eczema": { id: 8, name: "Aloe First", recommendation: "Spray directly on affected areas" },
+      "psoriasis": { id: 8, name: "Aloe First", recommendation: "Apply liberally to affected areas" },
+      "dry skin": { id: 9, name: "Aloe Propolis Creme", recommendation: "Apply twice daily" },
+      "rash": { id: 8, name: "Aloe First", recommendation: "Spray on rash for cooling relief" },
+      "itchy skin": { id: 8, name: "Aloe First", recommendation: "Spray on affected areas" },
+      "sunburn": { id: 8, name: "Aloe First", recommendation: "Spray generously on sunburned skin" },
+      "wrinkles": { id: 9, name: "Aloe Propolis Creme", recommendation: "Apply daily to face and neck" },
+      "age spots": { id: 9, name: "Aloe Propolis Creme", recommendation: "Apply twice daily" }
     };
 
     let cart = [];
@@ -1133,6 +1218,13 @@ const products = [
       if (!productList) return;
       
       const discountedProducts = applyGrandOpeningDiscount(products);
+      
+      // Sort products to show discounted ones first
+      discountedProducts.sort((a, b) => {
+        if (a.grandOpeningSpecial && !b.grandOpeningSpecial) return -1;
+        if (!a.grandOpeningSpecial && b.grandOpeningSpecial) return 1;
+        return 0;
+      });
       
       productList.innerHTML = discountedProducts.map(product => {
         const isFeatured = product.grandOpeningSpecial;
