@@ -3,57 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Forever Living by Mohd Arvind Isa - Festival Special</title>
+  <title>Forever Living by Mohd Arvind Isa - Grand Opening Special</title>
   <style>
     :root {
       --primary-color: #CC0000;
       --secondary-color: #FFD700;
       --accent-color: #006644;
-      --festival-name: "Chinese New Year";
-      --festival-image: url('https://via.placeholder.com/600x200/CC0000/FFD700?text=Chinese+New+Year+Special');
-      --festival-message: "Celebrate the Year of the Dragon with our special CNY offers! Enjoy great discounts on our best-selling products.";
-      --festival-offer: "10% OFF on all orders!";
+      --festival-name: "Grand Opening";
+      --festival-image: url('https://via.placeholder.com/600x200/CC0000/FFD700?text=Grand+Opening+Special');
+      --festival-message: "Celebrate our Grand Opening with special offers! Enjoy discounts on our best-selling products.";
+      --festival-offer: "5% OFF on selected items!";
     }
     
-    /* Festival Theme Variables */
-    :root.cny-theme {
-      --primary-color: #CC0000;
-      --secondary-color: #FFD700;
-      --accent-color: #006644;
-      --festival-name: "Chinese New Year";
-      --festival-image: url('https://via.placeholder.com/600x200/CC0000/FFD700?text=Chinese+New+Year+Special');
-      --festival-message: "Celebrate the Year of the Dragon with our special CNY offers! Enjoy great discounts on our best-selling products.";
-      --festival-offer: "10% OFF on all orders!";
-    }
-    
-    :root.hari-raya-theme {
-      --primary-color: #2E8B57;
-      --secondary-color: #E6C200;
-      --accent-color: #8B4513;
-      --festival-name: "Hari Raya";
-      --festival-image: url('https://via.placeholder.com/600x200/2E8B57/E6C200?text=Hari+Raya+Special');
-      --festival-message: "Selamat Hari Rya! Celebrate with our special Raya offers and discounts on selected products.";
-      --festival-offer: "10% OFF Muslimah Products!";
-    }
-    
-    :root.deepavali-theme {
-      --primary-color: #FF8C00;
-      --secondary-color: #FFD700;
-      --accent-color: #800080;
-      --festival-name: "Deepavali";
-      --festival-image: url('https://via.placeholder.com/600x200/FF8C00/FFD700?text=Deepavali+Special');
-      --festival-message: "Happy Deepavali! Enjoy our festival special discounts on wellness products.";
-      --festival-offer: "10% OFF All Products!";
-    }
-    
-    :root.christmas-theme {
-      --primary-color: #B22222;
-      --secondary-color: #228B22;
-      --accent-color: #1E90FF;
-      --festival-name: "Christmas";
-      --festival-image: url('https://via.placeholder.com/600x200/B22222/228B22?text=Christmas+Special');
-      --festival-message: "Merry Christmas! Enjoy special holiday discounts on our best-selling products.";
-      --festival-offer: "20% OFF Selected Items!";
+    /* Grand Opening Theme */
+    :root.grand-opening-theme {
+      --primary-color: #1a5276;
+      --secondary-color: #f39c12;
+      --accent-color: #27ae60;
+      --festival-name: "Grand Opening";
+      --festival-image: url('https://via.placeholder.com/600x200/1a5276/f39c12?text=Grand+Opening+Special');
+      --festival-message: "Welcome to our online store! Enjoy special opening discounts on selected products.";
+      --festival-offer: "5% OFF Top Products!";
     }
     
     @keyframes fadeIn {
@@ -75,7 +45,7 @@
       overflow-x: hidden;
     }
     
-    /* Festival Decorations */
+    /* Grand Opening Decorations */
     .festival-decoration {
       position: fixed;
       z-index: 999;
@@ -83,70 +53,42 @@
       animation-timing-function: linear;
     }
     
-    .cny-dragon {
-      width: 120px;
-      height: 80px;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50"><path fill="%23CC0000" d="M10,25 Q30,5 50,25 Q70,45 90,25 L80,20 Q70,10 50,30 Q30,50 20,40 Z"/><circle cx="15" cy="20" r="3" fill="%23FFD700"/><circle cx="85" cy="20" r="3" fill="%23FFD700"/></svg>');
-      background-size: contain;
-      background-repeat: no-repeat;
-      animation: floatDragon 20s linear infinite;
-    }
-    
-    .hari-raya-ketupat {
-      width: 80px;
-      height: 80px;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%232E8B57" d="M50,10 L90,50 L50,90 L10,50 Z"/><path fill="%23E6C200" d="M50,20 L80,50 L50,80 L20,50 Z"/></svg>');
-      background-size: contain;
-      background-repeat: no-repeat;
-      animation: floatKetupat 25s linear infinite;
-    }
-    
-    .deepavali-diwa {
-      width: 60px;
-      height: 90px;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 60"><path fill="%23FF8C00" d="M20,5 L35,20 L25,20 L30,60 L10,60 L15,20 L5,20 Z"/></svg>');
-      background-size: contain;
-      background-repeat: no-repeat;
-      animation: floatDiwa 30s linear infinite;
-    }
-    
-    .christmas-tree {
+    .opening-balloon {
       width: 80px;
       height: 100px;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 100"><path fill="%23228B22" d="M40,5 L60,40 L45,40 L60,70 L35,70 L50,100 L30,100 L40,70 L20,70 L35,40 L20,40 Z"/><circle cx="40" cy="15" r="5" fill="%23B22222"/><circle cx="50" cy="50" r="5" fill="%23B22222"/><circle cx="30" cy="65" r="5" fill="%23B22222"/></svg>');
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 100"><path fill="%231a5276" d="M40,10 C60,10 70,30 70,50 C70,70 60,90 40,90 C20,90 10,70 10,50 C10,30 20,10 40,10 Z"/><path fill="%23f39c12" d="M30,30 L50,30 L50,50 L30,50 Z"/></svg>');
       background-size: contain;
       background-repeat: no-repeat;
-      animation: floatTree 35s linear infinite;
+      animation: floatBalloon 20s linear infinite;
     }
     
-    .festival-banner {
+    .opening-confetti {
+      width: 60px;
+      height: 60px;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60"><circle cx="30" cy="30" r="20" fill="%2327ae60"/><circle cx="15" cy="15" r="5" fill="%23f39c12"/><circle cx="45" cy="15" r="5" fill="%23f39c12"/><circle cx="15" cy="45" r="5" fill="%23f39c12"/><circle cx="45" cy="45" r="5" fill="%23f39c12"/></svg>');
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: floatConfetti 25s linear infinite;
+    }
+    
+    .opening-banner {
       width: 150px;
       height: 80px;
-      background-image: var(--festival-banner);
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 80"><rect width="150" height="80" fill="%231a5276"/><text x="75" y="45" font-family="Arial" font-size="20" fill="%23f39c12" text-anchor="middle">Grand Opening</text></svg>');
       background-size: contain;
       background-repeat: no-repeat;
-      animation: floatBanner 40s linear infinite;
+      animation: floatBanner 30s linear infinite;
     }
     
-    @keyframes floatDragon {
-      0% { transform: translateX(-120px) translateY(100px); }
-      100% { transform: translateX(calc(100vw + 120px)) translateY(300px); }
-    }
-    
-    @keyframes floatKetupat {
-      0% { transform: translateX(-80px) translateY(150px); }
-      50% { transform: translateX(50vw) translateY(50px); }
-      100% { transform: translateX(calc(100vw + 80px)) translateY(200px); }
-    }
-    
-    @keyframes floatDiwa {
-      0% { transform: translateX(-60px) translateY(50px) rotate(-5deg); }
-      100% { transform: translateX(calc(100vw + 60px)) translateY(150px) rotate(5deg); }
-    }
-    
-    @keyframes floatTree {
+    @keyframes floatBalloon {
       0% { transform: translateX(-80px) translateY(100px); }
-      100% { transform: translateX(calc(100vw + 80px)) translateY(250px); }
+      100% { transform: translateX(calc(100vw + 80px)) translateY(300px); }
+    }
+    
+    @keyframes floatConfetti {
+      0% { transform: translateX(-60px) translateY(150px); }
+      50% { transform: translateX(50vw) translateY(50px); }
+      100% { transform: translateX(calc(100vw + 60px)) translateY(200px); }
     }
     
     @keyframes floatBanner {
@@ -231,11 +173,6 @@
       margin: 10px 0 5px;
       color: var(--primary-color);
     }
-    .product .price {
-      color: var(--secondary-color);
-      font-weight: bold;
-      margin: 8px 0;
-    }
     .product .benefits {
       font-size: 13px;
       color: #555;
@@ -280,7 +217,7 @@
       transition: all 0.3s;
     }
     .product .add-to-cart:hover {
-      background: #b30000;
+      background: #1a237e;
     }
     .ai-suggestion-box {
       background: white;
@@ -311,7 +248,7 @@
       transition: all 0.3s;
     }
     #suggest-btn:hover {
-      background: #b30000;
+      background: #1a237e;
     }
     #suggestion-result {
       margin-top: 20px;
@@ -380,6 +317,11 @@
       font-weight: bold;
       color: var(--secondary-color);
     }
+    .remove-item {
+      color: #ff0000;
+      cursor: pointer;
+      margin-left: 10px;
+    }
     .cart-total {
       font-weight: bold;
       font-size: 18px;
@@ -407,10 +349,8 @@
       margin-top: 10px;
       width: 100%;
     }
-    .remove-item {
-      color: #ff0000;
-      cursor: pointer;
-      margin-left: 10px;
+    .checkout-btn:hover {
+      background: #1a237e;
     }
     /* Rewards Animation */
     .rewards-container {
@@ -533,7 +473,7 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
     .cta-button:hover {
-      background: #e6c200;
+      background: #e67e22;
       transform: translateY(-2px);
       box-shadow: 0 6px 12px rgba(0,0,0,0.3);
     }
@@ -582,7 +522,7 @@
       cursor: pointer;
     }
     .suggestion-product button:hover {
-      background: #b30000;
+      background: #1a237e;
     }
     
     /* Festival Popup Modal - Enhanced */
@@ -754,16 +694,32 @@
       0% { opacity: 0.7; transform: scale(1); }
       100% { opacity: 1; transform: scale(1.2); }
     }
+    
+    .coming-soon {
+      text-align: center;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f8f9fa;
+      border-radius: 5px;
+      color: var(--primary-color);
+      font-weight: bold;
+    }
   </style>
 </head>
-<body class="festival-active">
-  <!-- Festival Decorations will be added dynamically -->
-  <div id="festival-decorations"></div>
+<body class="grand-opening-theme">
+  <!-- Grand Opening Decorations -->
+  <div id="festival-decorations">
+    <div class="festival-decoration opening-balloon" style="top: 100px; animation-duration: 20s; animation-delay: 0s;"></div>
+    <div class="festival-decoration opening-balloon" style="top: 300px; animation-duration: 25s; animation-delay: 5s;"></div>
+    <div class="festival-decoration opening-confetti" style="top: 200px; animation-duration: 30s; animation-delay: 2s;"></div>
+    <div class="festival-decoration opening-confetti" style="top: 400px; animation-duration: 35s; animation-delay: 7s;"></div>
+    <div class="festival-decoration opening-banner" style="top: 150px; animation-duration: 40s; animation-delay: 3s;"></div>
+  </div>
 
   <header>
     <h1 style="font-size: 28px; color: var(--primary-color);">
       FOREVER LIVING by Mohd Arvind Isa
-      <span id="festival-subtitle" style="font-size: 18px; color: var(--secondary-color); display: block;"></span>
+      <span style="font-size: 18px; color: var(--secondary-color); display: block;">Quality Wellness Products</span>
     </h1>
     <div class="cart-icon" onclick="toggleCart()">
       🛒 <span id="cart-count">0</span>
@@ -789,8 +745,9 @@
         <div id="suggestion-result"></div>
       </div>
       
-      <h2>Our Products - <span id="festival-special-text"></span></h2>
+      <h2>Our Products - Grand Opening Special!</h2>
       <div id="product-list" class="product-list"></div>
+      <div class="coming-soon">More products coming soon! Stay tuned for updates.</div>
     </div>
 
     <div id="cds" class="tab-content">
@@ -990,14 +947,14 @@
   </div>
 
   <!-- Festival Popup Modal -->
-  <div id="festival-modal" class="festival-modal">
+  <div id="festival-modal" class="festival-modal" style="display: flex;">
     <div class="festival-content">
       <span class="festival-close" onclick="closeFestivalModal()">&times;</span>
-      <h2 class="festival-title" id="festival-popup-title"></h2>
-      <img src="" alt="Festival Banner" class="festival-image" id="festival-popup-image">
-      <p class="festival-message" id="festival-popup-message"></p>
-      <div class="festival-offer" id="festival-popup-offer"></div>
-      <button class="add-to-cart" onclick="closeFestivalModal()" style="width: auto; margin: 0 auto;">Continue Shopping</button>
+      <h2 class="festival-title">Online Store Opening Sale!</h2>
+      <img src="https://via.placeholder.com/600x200/1a5276/f39c12?text=Welcome+to+Our+Store" alt="Grand Opening Banner" class="festival-image">
+      <p class="festival-message">Welcome to our online store! Enjoy special opening discounts on selected products.</p>
+      <div class="festival-offer">5% OFF on Top Products!</div>
+      <button class="add-to-cart" onclick="closeFestivalModal()" style="width: auto; margin: 0 auto;">Start Shopping</button>
     </div>
   </div>
 
@@ -1010,85 +967,85 @@
   </footer>
 
   <script>
-    const products = [
-      { id: 1, name: "Aloe Vera Gel", price: 116.79, image: "aloe-vera-gel.jpg", 
-       benefits: "Supports digestion, boosts immunity, promotes skin health", 
-       consumption: "Take 30-60ml daily, preferably on empty stomach",
-       bestSeller: true },
-      { id: 2, name: "Aloe Berry Nectar", price: 116.79, image: "aloe-berry-nectar.jpg", 
-       benefits: "Antioxidant support, immune system booster, natural energy", 
-       consumption: "30-60ml daily, can be mixed with water or juice",
-       bestSeller: true },
-      { id: 3, name: "Aloe Peaches", price: 116.79, image: "aloe-peaches.jpg", 
-       benefits: "Digestive health, vitamin C source, natural detoxification", 
-       consumption: "30-60ml daily, refrigerate after opening" },
-      { id: 4, name: "Bee Honey", price: 132.57, image: "bee-honey.jpg", 
-       benefits: "Natural energy, soothes throat, antioxidant properties", 
-       consumption: "1-2 teaspoons daily, can be added to drinks",
-       bestSeller: true },
-      { id: 5, name: "Royal Jelly", price: 139.21, image: "royal-jelly.jpg", 
-       benefits: "Energy booster, supports immune system, anti-aging", 
-       consumption: "1 tablet daily, preferably in the morning",
-       bestSeller: true },
-      { id: 6, name: "Bee Pollen", price: 75.50, image: "bee-pollen.jpg", 
-       benefits: "Natural multivitamin, energy enhancement, allergy relief", 
-       consumption: "1 tablet 3 times daily with meals" },
-      { id: 7, name: "Bee Propolis", price: 139.21, image: "bee-propolis.jpg", 
-       benefits: "Immune support, natural antibiotic, throat health", 
-       consumption: "1 tablet daily or as needed",
-       bestSeller: true },
-      { id: 8, name: "Arctic Sea", price: 130.10, image: "arctic-sea.jpg", 
-       benefits: "Heart health, joint support, brain function", 
-       consumption: "2 softgels twice daily with meals" },
-      { id: 9, name: "Fields of Greens", price: 86.10, image: "fields-of-greens.jpg", 
-       benefits: "Detoxification, digestion, alkalizing", 
-       consumption: "1 tablet 3 times daily with water" },
-      { id: 10, name: "Absorbent-C", price: 75.50, image: "absorbent-c.jpg", 
-       benefits: "Immune support, collagen production, antioxidant", 
-       consumption: "1-2 tablets daily with meals" },
-      { id: 11, name: "Calcium Plus", price: 132.15, image: "calcium-plus.jpg", 
-       benefits: "Bone support, muscle health, calcium + vitamin D", 
-       consumption: "2 tablets daily with meals" },
-      { id: 12, name: "Aloe First", price: 93.40, image: "aloe-first.jpg", 
-       benefits: "Skin hydration, cooling relief, wound soothing", 
-       consumption: "Spray directly on skin as needed" },
-      { id: 13, name: "Aloe Liquid Soap", price: 54.72, image: "aloe-liquid-soap.jpg", 
-       benefits: "Gentle cleansing, moisturizes skin, aloe-based formula", 
-       consumption: "Use daily for face and body cleansing" },
-      { id: 14, name: "Aloe Propolis Creme", price: 92.08, image: "aloe-propolis-creme.jpg", 
-       benefits: "Skin repair, moisturizing, protective barrier", 
-       consumption: "Apply generously on dry or irritated areas" },
-      { id: 15, name: "Aloe Jojoba Shampoo", price: 91.66, image: "aloe-jojoba-shampoo.jpg", 
-       benefits: "Hair nourishment, scalp care, sulfate-free", 
-       consumption: "Massage into wet hair, rinse thoroughly" },
-      { id: 16, name: "Aloe Jojoba Conditioner", price: 91.66, image: "aloe-jojoba-conditioner.jpg", 
-       benefits: "Moisturizing, smooth finish, aloe + jojoba", 
-       consumption: "Apply after shampoo, leave 1-2 minutes, rinse" },
-      { id: 17, name: "Aloe Sunscreen", price: 84.91, image: "aloe-sunscreen.jpg", 
-       benefits: "UV protection, aloe-based, water-resistant", 
-       consumption: "Apply 15 minutes before sun exposure" },
-      { id: 18, name: "Aloe MPD 2X Ultra", price: 114.47, image: "aloe-mp-lotion.jpg", 
-       benefits: "Multi-purpose cleaner, concentrated, eco-friendly", 
-       consumption: "Dilute as needed for laundry, dishes or surfaces" },
-      { id: 19, name: "Avocado Face & Body Soap", price: 23.40, image: "avocado-soap.jpg", 
-       benefits: "Softens skin, gentle cleansing, avocado oil-rich", 
-       consumption: "Use daily for face and body" },
-      { id: 20, name: "Forever Bright Toothgel", price: 31.62, image: "bright-toothgel.jpg", 
-       benefits: "Fluoride-free, fresh breath, aloe-based care", 
-       consumption: "Brush teeth twice daily" },
-      { id: 21, name: "Aloe Lips", price: 17.92, image: "aloe-lips.jpg", 
-       benefits: "Lip protection, moisturizes, healing balm", 
-       consumption: "Apply on lips as needed throughout the day" },
-      { id: 22, name: "Forever Deodorant Stick", price: 34.91, image: "forever-deodorant.jpg", 
-       benefits: "Natural fragrance, aloe soothing, easy glide", 
-       consumption: "Use after shower daily" },
-      { id: 23, name: "Teh Tarik Halia", price: 25.90, image: "teh-tarik.jpg", 
-       benefits: "Warming effect, digestion aid, ginger-infused", 
-       consumption: "Mix sachet with hot water and stir well" },
-      { id: 24, name: "Choco Malt Drink", price: 27.90, image: "choco-malt.jpg", 
-       benefits: "Rich in B vitamins and iron to support metabolism and red blood cell production, Supports growth and recovery", 
-       consumption: "Mix 2-3 tablespoons in 150–200ml hot water or milk" }
-    ];
+const products = [
+  { id: 1, name: "Aloe Vera Gel", price: 116.79, image: "aloe-vera-gel.jpg", 
+   benefits: "Supports digestion, boosts immunity, promotes skin health, enhances nutrient absorption, helps detoxify the body", 
+   consumption: "Take 30-60ml daily, preferably on empty stomach",
+   bestSeller: true },
+  { id: 2, name: "Aloe Berry Nectar", price: 116.79, image: "aloe-berry-nectar.jpg", 
+   benefits: "Antioxidant support, immune system booster, natural energy, supports urinary health, rich in vitamin C", 
+   consumption: "30-60ml daily, can be mixed with water or juice",
+   bestSeller: true },
+  { id: 3, name: "Aloe Peaches", price: 116.79, image: "aloe-peaches.jpg", 
+   benefits: "Digestive health, vitamin C source, natural detoxification, maintains healthy skin, supports kidney function", 
+   consumption: "30-60ml daily, refrigerate after opening" },
+  { id: 4, name: "Bee Honey", price: 132.57, image: "bee-honey.jpg", 
+   benefits: "Natural energy, soothes throat, antioxidant properties, supports digestion, promotes wound healing", 
+   consumption: "1-2 teaspoons daily, can be added to drinks",
+   bestSeller: true },
+  { id: 5, name: "Royal Jelly", price: 139.21, image: "royal-jelly.jpg", 
+   benefits: "Energy booster, supports immune system, anti-aging, hormone balance, supports skin renewal", 
+   consumption: "1 tablet daily, preferably in the morning",
+   bestSeller: true },
+  { id: 6, name: "Bee Pollen", price: 75.50, image: "bee-pollen.jpg", 
+   benefits: "Natural multivitamin, energy enhancement, allergy relief, improves stamina, supports cardiovascular health", 
+   consumption: "1 tablet 3 times daily with meals" },
+  { id: 7, name: "Bee Propolis", price: 139.21, image: "bee-propolis.jpg", 
+   benefits: "Immune support, natural antibiotic, throat health, anti-inflammatory, promotes oral health", 
+   consumption: "1 tablet daily or as needed",
+   bestSeller: true },
+  { id: 8, name: "Arctic Sea", price: 130.10, image: "arctic-sea.jpg", 
+   benefits: "Heart health, joint support, brain function, supports vision, reduces inflammation", 
+   consumption: "2 softgels twice daily with meals" },
+  { id: 9, name: "Fields of Greens", price: 86.10, image: "fields-of-greens.jpg", 
+   benefits: "Detoxification, digestion, alkalizing, supports weight management, rich in chlorophyll", 
+   consumption: "1 tablet 3 times daily with water" },
+  { id: 10, name: "Absorbent-C", price: 75.50, image: "absorbent-c.jpg", 
+   benefits: "Immune support, collagen production, antioxidant, helps iron absorption, supports healthy skin", 
+   consumption: "1-2 tablets daily with meals" },
+  { id: 11, name: "Calcium Plus", price: 132.15, image: "calcium-plus.jpg", 
+   benefits: "Bone support, muscle health, calcium + vitamin D, supports nerve function, helps prevent osteoporosis", 
+   consumption: "2 tablets daily with meals" },
+  { id: 12, name: "Aloe First", price: 93.40, image: "aloe-first.jpg", 
+   benefits: "Skin hydration, cooling relief, wound soothing, relieves sunburn, pre-hair treatment spray", 
+   consumption: "Spray directly on skin as needed" },
+  { id: 13, name: "Aloe Liquid Soap", price: 54.72, image: "aloe-liquid-soap.jpg", 
+   benefits: "Gentle cleansing, moisturizes skin, aloe-based formula, suitable for sensitive skin, pH-balanced", 
+   consumption: "Use daily for face and body cleansing" },
+  { id: 14, name: "Aloe Propolis Creme", price: 92.08, image: "aloe-propolis-creme.jpg", 
+   benefits: "Skin repair, moisturizing, protective barrier, soothes irritated skin, supports healing of minor cuts", 
+   consumption: "Apply generously on dry or irritated areas" },
+  { id: 15, name: "Aloe Jojoba Shampoo", price: 91.66, image: "aloe-jojoba-shampoo.jpg", 
+   benefits: "Hair nourishment, scalp care, sulfate-free, promotes hair strength, natural shine", 
+   consumption: "Massage into wet hair, rinse thoroughly" },
+  { id: 16, name: "Aloe Jojoba Conditioner", price: 91.66, image: "aloe-jojoba-conditioner.jpg", 
+   benefits: "Moisturizing, smooth finish, aloe + jojoba, strengthens hair strands, prevents breakage", 
+   consumption: "Apply after shampoo, leave 1-2 minutes, rinse" },
+  { id: 17, name: "Aloe Sunscreen", price: 84.91, image: "aloe-sunscreen.jpg", 
+   benefits: "UV protection, aloe-based, water-resistant, suitable for sensitive skin, prevents sunburn", 
+   consumption: "Apply 15 minutes before sun exposure" },
+  { id: 18, name: "Aloe MPD 2X Ultra", price: 114.47, image: "aloe-mp-lotion.jpg", 
+   benefits: "Multi-purpose cleaner, concentrated, eco-friendly, gentle on skin, biodegradable formula", 
+   consumption: "Dilute as needed for laundry, dishes or surfaces" },
+  { id: 19, name: "Avocado Face & Body Soap", price: 23.40, image: "avocado-soap.jpg", 
+   benefits: "Softens skin, gentle cleansing, avocado oil-rich, suitable for all skin types, non-drying", 
+   consumption: "Use daily for face and body" },
+  { id: 20, name: "Forever Bright Toothgel", price: 31.62, image: "bright-toothgel.jpg", 
+   benefits: "Fluoride-free, fresh breath, aloe-based care, gentle on gums, whitens teeth naturally", 
+   consumption: "Brush teeth twice daily" },
+  { id: 21, name: "Aloe Lips", price: 17.92, image: "aloe-lips.jpg", 
+   benefits: "Lip protection, moisturizes, healing balm, soothes cracked lips, non-greasy finish", 
+   consumption: "Apply on lips as needed throughout the day" },
+  { id: 22, name: "Forever Deodorant Stick", price: 34.91, image: "forever-deodorant.jpg", 
+   benefits: "Natural fragrance, aloe soothing, easy glide, long-lasting protection, non-staining", 
+   consumption: "Use after shower daily" },
+  { id: 23, name: "Teh Tarik Halia", price: 25.90, image: "teh-tarik.jpg", 
+   benefits: "Warming effect, digestion aid, ginger-infused, improves circulation, relieves bloating", 
+   consumption: "Mix sachet with hot water and stir well" },
+  { id: 24, name: "Choco Malt Drink", price: 27.90, image: "choco-malt.jpg", 
+   benefits: "Rich in B vitamins, iron for red blood cell production, supports metabolism, promotes growth, aids recovery after fatigue", 
+   consumption: "Mix 2-3 tablespoons in 150–200ml hot water or milk" }
+];
 
     // Enhanced product suggestions mapping
     const productSuggestions = {
@@ -1153,144 +1110,31 @@
 
     let cart = [];
 
-    // Festival data with dates
-    const festivals = [
-      {
-        name: "Chinese New Year",
-        theme: "cny-theme",
-        startDate: new Date(new Date().getFullYear(), 0, 22), // January 22
-        endDate: new Date(new Date().getFullYear(), 1, 5),   // February 5
-        decorations: [
-          { type: "cny-dragon", count: 3 },
-          { type: "tanglung", count: 3 },
-          { type: "cny-banner", count: 2 }
-        ],
-        discount: 0.10 // 10% discount
-      },
-      {
-        name: "Hari Raya",
-        theme: "hari-raya-theme",
-        startDate: new Date(new Date().getFullYear(), 3, 21), // April 21
-        endDate: new Date(new Date().getFullYear(), 4, 21),   // May 21
-        decorations: [
-          { type: "hari-raya-ketupat", count: 5 },
-          { type: "hari-raya-banner", count: 2 }
-        ],
-        discount: 0.10 // 10% discount
-      },
-      {
-        name: "Deepavali",
-        theme: "deepavali-theme",
-        startDate: new Date(new Date().getFullYear(), 9, 24), // October 24
-        endDate: new Date(new Date().getFullYear(), 10, 7),   // November 7
-        decorations: [
-          { type: "deepavali-diwa", count: 3 },
-          { type: "deepavali-banner", count: 1 }
-        ],
-        discount: 0.10 // 10% discount
-      },
-      {
-        name: "Christmas",
-        theme: "christmas-theme",
-        startDate: new Date(new Date().getFullYear(), 11, 15), // December 15
-        endDate: new Date(new Date().getFullYear(), 11, 31),   // December 31
-        decorations: [
-          { type: "christmas-tree", count: 3 },
-          { type: "christmas-banner", count: 1 }
-        ],
-        discount: 0.10 // 10% discount
-      }
-    ];
-
-    // Apply festival discount to products
-    function applyFestivalDiscount(products, discountRate) {
+    // Apply Grand Opening discount to selected products
+    function applyGrandOpeningDiscount(products) {
+      const discountRate = 0.05; // 5% discount
       return products.map(product => {
-        if (product.bestSeller) {
+        if (product.grandOpeningSpecial) {
           return {
             ...product,
             originalPrice: product.price,
             price: product.price * (1 - discountRate),
-            festivalTag: "Festival Special"
+            festivalTag: "Grand Opening Special"
           };
         }
         return product;
       });
     }
 
-    // Check current festival
-    function getCurrentFestival() {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      
-      for (const festival of festivals) {
-        if (today >= festival.startDate && today <= festival.endDate) {
-          return festival;
-        }
-      }
-      return null; // No current festival
-    }
-
-    // Set festival theme
-    function setFestivalTheme(festival) {
-      if (festival) {
-        document.documentElement.className = festival.theme;
-        document.getElementById('festival-subtitle').textContent = `${festival.name} Special!`;
-        document.getElementById('festival-special-text').textContent = `${festival.name} Special`;
-        
-        // Set popup content
-        document.getElementById('festival-popup-title').textContent = `Happy ${festival.name}!`;
-        document.getElementById('festival-popup-image').src = `https://via.placeholder.com/600x200/${festival.theme === 'cny-theme' ? 'CC0000/FFD700' : 
-                                                          festival.theme === 'hari-raya-theme' ? '2E8B57/E6C200' :
-                                                          festival.theme === 'deepavali-theme' ? 'FF8C00/FFD700' : 'B22222/228B22'}?text=${encodeURIComponent(festival.name)}+Special`;
-        document.getElementById('festival-popup-message').textContent = `Celebrate ${festival.name} with our special offers! Enjoy great discounts on our best-selling products.`;
-        document.getElementById('festival-popup-offer').textContent = `${Math.round(festival.discount * 100)}% OFF on selected items!`;
-        
-        return festival;
-      } else {
-        // Default theme (no festival)
-        document.documentElement.className = '';
-        document.getElementById('festival-subtitle').textContent = 'Quality Wellness Products';
-        document.getElementById('festival-special-text').textContent = 'Featured Products';
-        return null;
-      }
-    }
-
-    // Add festival decorations
-    function addFestivalDecorations(festival) {
-      const decorationsContainer = document.getElementById('festival-decorations');
-      decorationsContainer.innerHTML = '';
-      
-      if (festival && festival.decorations) {
-        festival.decorations.forEach(decoration => {
-          for (let i = 0; i < decoration.count; i++) {
-            const decoElement = document.createElement('div');
-            decoElement.className = `festival-decoration ${decoration.type}`;
-            
-            // Random positioning and animation
-            const top = Math.random() * 80 + 10;
-            const duration = Math.random() * 20 + 20;
-            const delay = Math.random() * 10;
-            
-            decoElement.style.top = `${top}px`;
-            decoElement.style.animationDuration = `${duration}s`;
-            decoElement.style.animationDelay = `${delay}s`;
-            
-            decorationsContainer.appendChild(decoElement);
-          }
-        });
-      }
-    }
-
-    // Render products with festival decorations
-    function renderProducts(festival) {
+    // Render products with Grand Opening decorations
+    function renderProducts() {
       const productList = document.getElementById('product-list');
       if (!productList) return;
       
-      const discountRate = festival ? festival.discount : 0;
-      const discountedProducts = applyFestivalDiscount(products, discountRate);
+      const discountedProducts = applyGrandOpeningDiscount(products);
       
       productList.innerHTML = discountedProducts.map(product => {
-        const isFeatured = product.bestSeller;
+        const isFeatured = product.grandOpeningSpecial;
         const hasDiscount = product.originalPrice !== undefined;
         
         return `
@@ -1362,9 +1206,8 @@
     }
 
     function getDiscountedPrice(product) {
-      const currentFestival = getCurrentFestival();
-      if (currentFestival && product.bestSeller) {
-        return product.price * (1 - currentFestival.discount);
+      if (product.grandOpeningSpecial) {
+        return product.price * 0.95; // 5% discount
       }
       return product.price;
     }
@@ -1457,7 +1300,7 @@
         const discountApplied = item.price < item.originalPrice;
         message += `- ${item.name} (Qty: ${item.quantity}) - RM ${(item.price * item.quantity).toFixed(2)}`;
         if (discountApplied) {
-          message += ` (Festival Discount Applied)`;
+          message += ` (Grand Opening Discount Applied)`;
         }
         message += `\n`;
       });
@@ -1530,16 +1373,13 @@
         year: 'numeric', month: 'long', day: 'numeric' 
       });
       
-      // Check current festival and apply theme
-      const currentFestival = getCurrentFestival();
-      setFestivalTheme(currentFestival);
-      addFestivalDecorations(currentFestival);
-      renderProducts(currentFestival);
-      
+      // Apply Grand Opening theme
+      document.documentElement.className = 'grand-opening-theme';
+      renderProducts();
       showTab('products');
       
-      // Only show popup if not already closed and during a festival
-      if (currentFestival && localStorage.getItem('festivalPopupClosed') !== 'true') {
+      // Only show popup if not already closed
+      if (localStorage.getItem('festivalPopupClosed') !== 'true') {
         document.getElementById('festival-modal').style.display = 'flex';
       }
       
