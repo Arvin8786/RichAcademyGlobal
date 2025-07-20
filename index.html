@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Forever Living by Mohd Arvind Isa</title>
+  <title>Forever Living by Mohd Arvind Isa - Chinese New Year Special</title>
   <style>
     :root {
-      --primary-color: #2c8a58;
-      --secondary-color: #e67e22;
-      --accent-color: #25D366;
+      --primary-color: #CC0000;
+      --secondary-color: #FFD700;
+      --accent-color: #006644;
     }
     
     @keyframes fadeIn {
@@ -30,7 +30,7 @@
       overflow-x: hidden;
     }
     
-    /* Festival Decorations */
+    /* CNY Decorations */
     .festival-decoration {
       position: fixed;
       z-index: 999;
@@ -38,18 +38,10 @@
       animation-timing-function: linear;
     }
     
-    .flag {
-      width: 100px;
-      height: 60px;
-      background-size: contain;
-      background-repeat: no-repeat;
-      animation: floatFlag 15s linear infinite;
-    }
-    
-    .dragon {
+    .cny-dragon {
       width: 120px;
       height: 80px;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50"><path fill="%23FF0000" d="M10,25 Q30,5 50,25 Q70,45 90,25 L80,20 Q70,10 50,30 Q30,50 20,40 Z"/><circle cx="15" cy="20" r="3" fill="%23FFFF00"/><circle cx="85" cy="20" r="3" fill="%23FFFF00"/></svg>');
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50"><path fill="%23CC0000" d="M10,25 Q30,5 50,25 Q70,45 90,25 L80,20 Q70,10 50,30 Q30,50 20,40 Z"/><circle cx="15" cy="20" r="3" fill="%23FFD700"/><circle cx="85" cy="20" r="3" fill="%23FFD700"/></svg>');
       background-size: contain;
       background-repeat: no-repeat;
       animation: floatDragon 20s linear infinite;
@@ -58,15 +50,19 @@
     .tanglung {
       width: 60px;
       height: 80px;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 40"><rect x="12" y="5" width="6" height="10" fill="%23FFD700"/><path fill="%23FF0000" d="M5,15 Q15,5 25,15 Q15,35 5,15 Z"/><path fill="%23FF0000" d="M5,25 Q15,15 25,25 Q15,45 5,25 Z"/></svg>');
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 40"><rect x="12" y="5" width="6" height="10" fill="%23FFD700"/><path fill="%23CC0000" d="M5,15 Q15,5 25,15 Q15,35 5,15 Z"/><path fill="%23CC0000" d="M5,25 Q15,15 25,25 Q15,45 5,25 Z"/></svg>');
       background-size: contain;
       background-repeat: no-repeat;
       animation: floatTanglung 25s linear infinite;
     }
     
-    @keyframes floatFlag {
-      0% { transform: translateX(-100px) translateY(50px) rotate(-10deg); }
-      100% { transform: translateX(calc(100vw + 100px)) translateY(200px) rotate(10deg); }
+    .cny-banner {
+      width: 150px;
+      height: 80px;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 80"><rect width="150" height="80" fill="%23CC0000"/><text x="75" y="45" font-family="Arial" font-size="20" fill="%23FFD700" text-anchor="middle">恭喜发财</text></svg>');
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: floatBanner 30s linear infinite;
     }
     
     @keyframes floatDragon {
@@ -78,6 +74,11 @@
       0% { transform: translateX(-60px) translateY(150px); }
       50% { transform: translateX(50vw) translateY(50px); }
       100% { transform: translateX(calc(100vw + 60px)) translateY(200px); }
+    }
+    
+    @keyframes floatBanner {
+      0% { transform: translateX(-150px) translateY(50px) rotate(-5deg); }
+      100% { transform: translateX(calc(100vw + 150px)) translateY(150px) rotate(5deg); }
     }
 
     header {
@@ -95,7 +96,7 @@
       cursor: pointer;
     }
     nav {
-      background-color: #2c8a58;
+      background-color: var(--primary-color);
     }
     nav ul {
       display: flex;
@@ -155,10 +156,10 @@
     }
     .product h3 {
       margin: 10px 0 5px;
-      color: #2c8a58;
+      color: var(--primary-color);
     }
     .product .price {
-      color: #e67e22;
+      color: var(--secondary-color);
       font-weight: bold;
       margin: 8px 0;
     }
@@ -172,7 +173,7 @@
     }
     .product .consumption {
       font-size: 13px;
-      color: #2c8a58;
+      color: var(--primary-color);
       font-style: italic;
       text-align: left;
       margin: 8px 0 12px;
@@ -195,7 +196,7 @@
     .product .add-to-cart {
       display: inline-block;
       margin-top: 10px;
-      background: #2c8a58;
+      background: var(--primary-color);
       color: white;
       padding: 8px 15px;
       border-radius: 4px;
@@ -206,7 +207,7 @@
       transition: all 0.3s;
     }
     .product .add-to-cart:hover {
-      background: #237a48;
+      background: #b30000;
     }
     .ai-suggestion-box {
       background: white;
@@ -216,7 +217,7 @@
       margin-bottom: 30px;
     }
     .ai-suggestion-box h2 {
-      color: #2c8a58;
+      color: var(--primary-color);
       margin-top: 0;
     }
     #symptom-input {
@@ -227,7 +228,7 @@
       margin: 10px 0;
     }
     #suggest-btn {
-      background: #2c8a58;
+      background: var(--primary-color);
       color: white;
       border: none;
       padding: 12px 20px;
@@ -237,7 +238,7 @@
       transition: all 0.3s;
     }
     #suggest-btn:hover {
-      background: #237a48;
+      background: #b30000;
     }
     #suggestion-result {
       margin-top: 20px;
@@ -304,7 +305,7 @@
     }
     .cart-item-price {
       font-weight: bold;
-      color: #e67e22;
+      color: var(--secondary-color);
     }
     .cart-total {
       font-weight: bold;
@@ -323,7 +324,7 @@
       border-radius: 4px;
     }
     .checkout-btn {
-      background: #2c8a58;
+      background: var(--primary-color);
       color: white;
       border: none;
       padding: 12px 20px;
@@ -342,7 +343,7 @@
     .rewards-container {
       text-align: center;
       padding: 50px 20px;
-      background: linear-gradient(135deg, #2c8a58, #25D366);
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
       color: white;
       border-radius: 10px;
       margin: 30px 0;
@@ -402,7 +403,7 @@
       margin-bottom: 30px;
     }
     .program-section h2 {
-      color: #2c8a58;
+      color: var(--primary-color);
       font-size: 2rem;
       margin-top: 0;
       text-align: center;
@@ -427,27 +428,27 @@
       transform: translateY(-5px);
     }
     .highlight-card h3 {
-      color: #2c8a58;
-      border-bottom: 2px solid #2c8a58;
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--primary-color);
       padding-bottom: 10px;
     }
     .testimonial {
       background: #f0f8f0;
       padding: 20px;
-      border-left: 4px solid #2c8a58;
+      border-left: 4px solid var(--primary-color);
       margin: 20px 0;
       font-style: italic;
     }
     .testimonial-author {
       text-align: right;
       font-weight: bold;
-      color: #2c8a58;
+      color: var(--primary-color);
     }
     .cta-button {
       display: block;
       width: 300px;
       margin: 30px auto;
-      background: #e67e22;
+      background: var(--secondary-color);
       color: white;
       text-align: center;
       padding: 15px;
@@ -459,7 +460,7 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
     .cta-button:hover {
-      background: #d35400;
+      background: #e6c200;
       transform: translateY(-2px);
       box-shadow: 0 6px 12px rgba(0,0,0,0.3);
     }
@@ -480,7 +481,7 @@
       top: 0;
       width: 60px;
       height: 60px;
-      background: #2c8a58;
+      background: var(--primary-color);
       color: white;
       border-radius: 50%;
       display: flex;
@@ -491,7 +492,7 @@
     }
     /* AI suggestion add to cart buttons */
     .suggestion-product {
-      background: #e8f5e9;
+      background: #f8e8e8;
       padding: 10px;
       border-radius: 5px;
       margin: 10px 0;
@@ -500,7 +501,7 @@
       align-items: center;
     }
     .suggestion-product button {
-      background: #2c8a58;
+      background: var(--primary-color);
       color: white;
       border: none;
       padding: 5px 10px;
@@ -508,7 +509,7 @@
       cursor: pointer;
     }
     .suggestion-product button:hover {
-      background: #237a48;
+      background: #b30000;
     }
     
     /* Festival Popup Modal - Enhanced */
@@ -583,7 +584,7 @@
     }
     
     .festival-offer {
-      background: linear-gradient(135deg, var(--accent-color), #FFD700);
+      background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
       padding: 15px;
       border-radius: 5px;
       font-weight: bold;
@@ -680,70 +681,22 @@
       0% { opacity: 0.7; transform: scale(1); }
       100% { opacity: 1; transform: scale(1.2); }
     }
-    
-    /* Festival Theme Classes */
-    .national-day-theme {
-      --primary-color: #006644;
-      --secondary-color: #CC0000;
-      --accent-color: #FFD700;
-    }
-    
-    .hari-raya-theme {
-      --primary-color: #2E8B57;
-      --secondary-color: #F8F8F8;
-      --accent-color: #E6C229;
-    }
-    
-    .deepavali-theme {
-      --primary-color: #FF9933;
-      --secondary-color: #138808;
-      --accent-color: #FFD700;
-    }
-    
-    .christmas-theme {
-      --primary-color: #CC0000;
-      --secondary-color: #01796F;
-      --accent-color: #FFFFFF;
-    }
-    
-    .cny-theme {
-      --primary-color: #CC0000;
-      --secondary-color: #FFD700;
-      --accent-color: #006644;
-    }
-    
-    /* Theme Application */
-    .festival-active nav {
-      background-color: var(--primary-color);
-    }
-    
-    .festival-active .add-to-cart,
-    .festival-active .cta-button,
-    .festival-active #suggest-btn {
-      background-color: var(--primary-color);
-    }
-    
-    .festival-active .add-to-cart:hover,
-    .festival-active .cta-button:hover,
-    .festival-active #suggest-btn:hover {
-      background-color: var(--secondary-color);
-    }
-    
-    .festival-active .product h3 {
-      color: var(--primary-color);
-    }
-    
-    .festival-active .price {
-      color: var(--secondary-color);
-    }
   </style>
 </head>
-<body>
+<body class="festival-active cny-theme">
+  <!-- Chinese New Year Decorations -->
+  <div class="festival-decoration cny-dragon" style="top: 100px; animation-duration: 20s; animation-delay: 0s;"></div>
+  <div class="festival-decoration cny-dragon" style="top: 300px; animation-duration: 25s; animation-delay: 5s;"></div>
+  <div class="festival-decoration tanglung" style="top: 200px; animation-duration: 30s; animation-delay: 2s;"></div>
+  <div class="festival-decoration tanglung" style="top: 400px; animation-duration: 35s; animation-delay: 7s;"></div>
+  <div class="festival-decoration cny-banner" style="top: 150px; animation-duration: 40s; animation-delay: 3s;"></div>
+
   <header>
-    <h1 style="font-size: 28px; color: #2c8a58;">
+    <h1 style="font-size: 28px; color: var(--primary-color);">
       FOREVER LIVING by Mohd Arvind Isa
+      <span style="font-size: 18px; color: var(--secondary-color); display: block;">Chinese New Year Special!</span>
     </h1>
-    <div class="cart-icon" onclick="toggleCart()">
+    <div class="cart-icon">
       🛒 <span id="cart-count">0</span>
     </div>
   </header>
@@ -767,7 +720,7 @@
         <div id="suggestion-result"></div>
       </div>
       
-      <h2>Our Products</h2>
+      <h2>Our Products - Chinese New Year Special!</h2>
       <div id="product-list" class="product-list"></div>
     </div>
 
@@ -934,7 +887,7 @@
         <div style="margin-top: 30px;">
           <button onclick="notifyMe()" style="
             background: white;
-            color: #2c8a58;
+            color: var(--primary-color);
             border: none;
             padding: 12px 25px;
             border-radius: 50px;
@@ -968,20 +921,20 @@
   </div>
 
   <!-- Festival Popup Modal -->
-  <div id="festival-modal" class="festival-modal">
+  <div id="festival-modal" class="festival-modal" style="display: flex;">
     <div class="festival-content">
       <span class="festival-close" onclick="closeFestivalModal()">&times;</span>
-      <h2 class="festival-title" id="festival-title">Happy National Day!</h2>
-      <img src="https://via.placeholder.com/600x200/006644/FFFFFF?text=National+Day+Special" alt="Festival Banner" class="festival-image" id="festival-image">
-      <p class="festival-message" id="festival-message">Celebrate this special occasion with exclusive discounts on our best-selling products!</p>
-      <div class="festival-offer" id="festival-offer">10% OFF on selected products!</div>
+      <h2 class="festival-title">Happy Chinese New Year!</h2>
+      <img src="https://via.placeholder.com/600x200/CC0000/FFD700?text=Chinese+New+Year+Special" alt="Chinese New Year Banner" class="festival-image">
+      <p class="festival-message">Celebrate the Year of the Dragon with our special CNY offers! Enjoy great discounts on our best-selling products.</p>
+      <div class="festival-offer">15% OFF on all orders!</div>
       <button class="add-to-cart" onclick="closeFestivalModal()" style="width: auto; margin: 0 auto;">Continue Shopping</button>
     </div>
   </div>
 
   <footer>
     <p>&copy; 2025 Forever Living by Mohd Arvind Isa. Powered by Rich Academy Global. All rights reserved.</p>
-    <div class="timestamp">Last updated: July 20, 2025</div>
+    <div class="timestamp">Last updated: February 10, 2025</div>
     <section class="disclaimer">
       <strong>Disclaimer:</strong> This website is operated by an independent Forever Business Owner (FBO) under Rich Academy Global and is not the official site of Forever Living Products. Product names, trademarks, and registered trademarks are property of Forever Living Products International, Inc.
     </section>
@@ -1129,242 +1082,29 @@
       "age spots": { id: 14, name: "Aloe Propolis Creme", recommendation: "Apply twice daily" }
     };
 
-    // Festival Configuration - Auto-updating
-    const festivalConfig = {
-      festivals: [
-        {
-          id: "national-day",
-          name: "National Day",
-          startDate: new Date(new Date().getFullYear(), 7, 1), // August 1
-          endDate: new Date(new Date().getFullYear(), 7, 31), // August 31
-          title: "Happy National Day!",
-          message: "Celebrate Malaysia's independence with special discounts!",
-          offer: "10% OFF on selected products",
-          image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Flag_of_Malaysia.svg/1200px-Flag_of_Malaysia.svg.png",
-          theme: "national-day-theme",
-          productTag: "Merdeka Deal",
-          colors: {
-            primary: "#006644",
-            secondary: "#CC0000",
-            accent: "#FFD700"
-          },
-          decorations: [
-            { type: "flag", count: 3, image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'><rect width='3' height='1' fill='%23CC0000'/><rect y='1' width='3' height='1' fill='%23FFFFFF'/><rect y='1' width='1.5' height='1' fill='%23006644'/><path d='M0,0 L0,1 L1.5,0.5 Z' fill='%23FFD700'/><circle cx='0.75' cy='0.5' r='0.2' fill='%23FFD700'/></svg>" }
-          ]
-        },
-        {
-          id: "hari-raya",
-          name: "Hari Raya",
-          startDate: new Date(new Date().getFullYear(), 3, 10), // April 10
-          endDate: new Date(new Date().getFullYear(), 3, 20), // April 20
-          title: "Selamat Hari Raya!",
-          message: "Celebrate this festive season with our special offers!",
-          offer: "10% OFF on selected items",
-          image: "https://via.placeholder.com/600x200/2E8B57/FFFFFF?text=Hari+Raya+Special",
-          theme: "hari-raya-theme",
-          productTag: "Raya Special",
-          colors: {
-            primary: "#2E8B57",
-            secondary: "#F8F8F8",
-            accent: "#E6C229"
-          },
-          decorations: [
-            { type: "flag", count: 2, image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'><rect width='3' height='2' fill='%232E8B57'/><path d='M1,0.5 L1.5,0.2 L2,0.5 L1.5,0.8 Z' fill='%23E6C229'/></svg>" }
-          ]
-        },
-        {
-          id: "deepavali",
-          name: "Deepavali",
-          startDate: new Date(new Date().getFullYear(), 9, 31), // October 31
-          endDate: new Date(new Date().getFullYear(), 10, 5), // November 5
-          title: "Happy Deepavali!",
-          message: "Light up your life with our festive offers!",
-          offer: "10% OFF on wellness products",
-          image: "https://via.placeholder.com/600x200/FF9933/FFFFFF?text=Deepavali+Special",
-          theme: "deepavali-theme",
-          productTag: "Festive Deal",
-          colors: {
-            primary: "#FF9933",
-            secondary: "#138808",
-            accent: "#FFD700"
-          },
-          decorations: [
-            { type: "flag", count: 2, image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'><rect width='3' height='2' fill='%23FF9933'/><circle cx='1.5' cy='1' r='0.5' fill='%23138808'/></svg>" }
-          ]
-        },
-        {
-          id: "christmas",
-          name: "Christmas",
-          startDate: new Date(new Date().getFullYear(), 11, 15), // December 15
-          endDate: new Date(new Date().getFullYear(), 11, 31), // December 31
-          title: "Merry Christmas!",
-          message: "Season's greetings and special holiday offers!",
-          offer: "10% OFF on all orders",
-          image: "https://via.placeholder.com/600x200/CC0000/FFFFFF?text=Christmas+Special",
-          theme: "christmas-theme",
-          productTag: "Holiday Special",
-          colors: {
-            primary: "#CC0000",
-            secondary: "#01796F",
-            accent: "#FFFFFF"
-          },
-          decorations: [
-            { type: "flag", count: 2, image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'><rect width='3' height='2' fill='%23CC0000'/><path d='M1.5,0 L2,1 L1,1 Z' fill='%2301796F'/></svg>" }
-          ]
-        },
-        {
-          id: "cny",
-          name: "Chinese New Year",
-          startDate: new Date(new Date().getFullYear(), 7, 1), // July 1
-          endDate: new Date(new Date().getFullYear(), 7, 31), // July 31
-          title: "Happy Chinese New Year!",
-          message: "Celebrate the Year of the Dragon with special offers!",
-          offer: "10% OFF on all orders!",
-          image: "https://via.placeholder.com/600x200/CC0000/FFD700?text=Chinese+New+Year+Special",
-          theme: "cny-theme",
-          productTag: "CNY Special",
-          colors: {
-            primary: "#CC0000",
-            secondary: "#FFD700",
-            accent: "#006644"
-          },
-          decorations: [
-            { type: "dragon", count: 3 },
-            { type: "tanglung", count: 5 }
-          ]
-        }
-      ]
-    };
-
     let cart = [];
 
-    // Get current festival based on date
-    function getCurrentFestival() {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      
-      for (const festival of festivalConfig.festivals) {
-        const startDate = new Date(festival.startDate);
-        startDate.setHours(0, 0, 0, 0);
-        
-        const endDate = new Date(festival.endDate);
-        endDate.setHours(23, 59, 59, 999);
-        
-        if (today >= startDate && today <= endDate) {
-          return festival;
-        }
-      }
-      return null;
-    }
-
-    // Apply discount to best-selling products
-    function applyFestivalDiscount(products, festival) {
-      if (!festival) return products;
-      
+    // Apply discount to best-selling products for CNY
+    function applyCNYDiscount(products) {
       return products.map(product => {
         if (product.bestSeller) {
           return {
             ...product,
             originalPrice: product.price,
-            price: product.price * (festival.id === "cny" ? 0.85 : 0.9), // 15% off for CNY, 10% for others
-            festivalTag: festival.productTag
+            price: product.price * 0.85, // 15% discount
+            festivalTag: "CNY Special"
           };
         }
         return product;
       });
     }
 
-    // Apply festival theme to the page
-    function applyFestivalTheme(festival) {
-      if (!festival) return;
-      
-      document.body.classList.add('festival-active', festival.theme);
-      
-      // Update CSS variables
-      const root = document.documentElement;
-      root.style.setProperty('--primary-color', festival.colors.primary);
-      root.style.setProperty('--secondary-color', festival.colors.secondary);
-      root.style.setProperty('--accent-color', festival.colors.accent);
-    }
-
-    // Create festival decorations
-    function createFestivalDecorations(festival) {
-      if (!festival || !festival.decorations) return;
-      
-      // Remove any existing decorations
-      document.querySelectorAll('.festival-decoration').forEach(el => el.remove());
-      
-      festival.decorations.forEach(decoration => {
-        for (let i = 0; i < decoration.count; i++) {
-          const deco = document.createElement('div');
-          deco.className = `festival-decoration ${decoration.type}`;
-          
-          if (decoration.image) {
-            deco.style.backgroundImage = `url("${decoration.image}")`;
-          }
-          
-          // Random positioning
-          const startY = Math.random() * window.innerHeight;
-          const duration = 15 + Math.random() * 15;
-          const delay = Math.random() * 10;
-          
-          deco.style.top = `${startY}px`;
-          deco.style.animationDuration = `${duration}s`;
-          deco.style.animationDelay = `${delay}s`;
-          
-          document.body.appendChild(deco);
-        }
-      });
-    }
-
-    // Highlight featured products
-    function highlightFeaturedProducts(festival) {
-      const featuredProducts = document.querySelectorAll('.featured-product');
-      featuredProducts.forEach(product => {
-        // Clear existing badges
-        const existingBadge = product.querySelector('.featured-badge');
-        if (existingBadge) existingBadge.remove();
-        
-        const badge = document.createElement('div');
-        badge.className = 'featured-badge';
-        badge.textContent = festival ? festival.productTag : 'HOT';
-        product.appendChild(badge);
-      });
-    }
-
-    // Show festival popup
-    function showFestivalPopup(festival) {
-      if (!festival) return;
-      
-      // Check if user has already closed the popup for this festival
-      if (localStorage.getItem('festivalPopupClosed') === festival.id) {
-        return;
-      }
-      
-      document.getElementById('festival-title').textContent = festival.title;
-      document.getElementById('festival-message').textContent = festival.message;
-      document.getElementById('festival-offer').textContent = festival.offer;
-      document.getElementById('festival-image').src = festival.image;
-      document.getElementById('festival-image').alt = festival.name + ' Banner';
-      
-      document.getElementById('festival-modal').style.display = 'flex';
-    }
-
-    // Close festival popup
-    function closeFestivalModal() {
-      const currentFestival = getCurrentFestival();
-      if (currentFestival) {
-        localStorage.setItem('festivalPopupClosed', currentFestival.id);
-      }
-      document.getElementById('festival-modal').style.display = 'none';
-    }
-
-    // Render products with festival decorations
-    function renderProducts(festival) {
+    // Render products with CNY decorations
+    function renderProducts() {
       const productList = document.getElementById('product-list');
       if (!productList) return;
       
-      const discountedProducts = applyFestivalDiscount(products, festival);
+      const discountedProducts = applyCNYDiscount(products);
       
       productList.innerHTML = discountedProducts.map(product => {
         const isFeatured = product.bestSeller;
@@ -1378,7 +1118,7 @@
               <div class="discount-price">
                 <span class="original-price">RM ${product.originalPrice.toFixed(2)}</span>
                 <span class="new-price">RM ${product.price.toFixed(2)} <span class="fire-icon">🔥</span></span>
-                ${product.festivalTag ? `<div style="color: var(--accent-color); font-weight: bold; margin-top: 5px;">${product.festivalTag}</div>` : ''}
+                <div style="color: var(--accent-color); font-weight: bold; margin-top: 5px;">${product.festivalTag}</div>
               </div>
             ` : `<div class="price">RM ${product.price.toFixed(2)}</div>`}
             <div class="benefits"><strong>Benefits:</strong> ${product.benefits}</div>
@@ -1389,7 +1129,17 @@
         `;
       }).join('');
       
-      highlightFeaturedProducts(festival);
+      highlightFeaturedProducts();
+    }
+
+    function highlightFeaturedProducts() {
+      const featuredProducts = document.querySelectorAll('.featured-product');
+      featuredProducts.forEach(product => {
+        const badge = document.createElement('div');
+        badge.className = 'featured-badge';
+        badge.textContent = 'CNY Special';
+        product.appendChild(badge);
+      });
     }
 
     function showTab(tabId) {
@@ -1478,7 +1228,7 @@
       notification.style.position = 'fixed';
       notification.style.bottom = '20px';
       notification.style.right = '20px';
-      notification.style.backgroundColor = '#2c8a58';
+      notification.style.backgroundColor = 'var(--primary-color)';
       notification.style.color = 'white';
       notification.style.padding = '15px';
       notification.style.borderRadius = '5px';
@@ -1541,9 +1291,9 @@
 
       if (matchedProducts.length === 0) {
         result.innerHTML = `<p>We recommend consulting with our health advisor for personalized recommendations. 
-        <a href="https://wa.me/601111033154" style="color:#2c8a58;font-weight:bold;">Chat with us on WhatsApp</a></p>`;
+        <a href="https://wa.me/601111033154" style="color:var(--primary-color);font-weight:bold;">Chat with us on WhatsApp</a></p>`;
       } else {
-        result.innerHTML = `<h3 style="color:#2c8a58;">Recommended Products:</h3>` + 
+        result.innerHTML = `<h3 style="color:var(--primary-color);">Recommended Products:</h3>` + 
           matchedProducts.map(p => `
             <div class="suggestion-product">
               <div>
@@ -1573,14 +1323,20 @@
       alert("We'll notify you when our rewards program launches! Thank you for your interest.");
     }
 
+    function closeFestivalModal() {
+      localStorage.setItem('festivalPopupClosed', 'cny');
+      document.getElementById('festival-modal').style.display = 'none';
+    }
+
     // Initialize the page
     document.addEventListener('DOMContentLoaded', function() {
-      const currentFestival = getCurrentFestival();
-      applyFestivalTheme(currentFestival);
-      renderProducts(currentFestival);
-      createFestivalDecorations(currentFestival);
+      renderProducts();
       showTab('products');
-      showFestivalPopup(currentFestival);
+      
+      // Only show popup if not already closed
+      if (localStorage.getItem('festivalPopupClosed') !== 'cny') {
+        document.getElementById('festival-modal').style.display = 'flex';
+      }
       
       window.onclick = function(event) {
         const modal = document.getElementById('cart-modal');
