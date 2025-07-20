@@ -3,12 +3,57 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Forever Living by Mohd Arvind Isa - Chinese New Year Special</title>
+  <title>Forever Living by Mohd Arvind Isa - Festival Special</title>
   <style>
     :root {
       --primary-color: #CC0000;
       --secondary-color: #FFD700;
       --accent-color: #006644;
+      --festival-name: "Chinese New Year";
+      --festival-image: url('https://via.placeholder.com/600x200/CC0000/FFD700?text=Chinese+New+Year+Special');
+      --festival-message: "Celebrate the Year of the Dragon with our special CNY offers! Enjoy great discounts on our best-selling products.";
+      --festival-offer: "15% OFF on all orders!";
+    }
+    
+    /* Festival Theme Variables */
+    :root.cny-theme {
+      --primary-color: #CC0000;
+      --secondary-color: #FFD700;
+      --accent-color: #006644;
+      --festival-name: "Chinese New Year";
+      --festival-image: url('https://via.placeholder.com/600x200/CC0000/FFD700?text=Chinese+New+Year+Special');
+      --festival-message: "Celebrate the Year of the Dragon with our special CNY offers! Enjoy great discounts on our best-selling products.";
+      --festival-offer: "15% OFF on all orders!";
+    }
+    
+    :root.hari-raya-theme {
+      --primary-color: #2E8B57;
+      --secondary-color: #E6C200;
+      --accent-color: #8B4513;
+      --festival-name: "Hari Raya";
+      --festival-image: url('https://via.placeholder.com/600x200/2E8B57/E6C200?text=Hari+Raya+Special');
+      --festival-message: "Selamat Hari Rya! Celebrate with our special Raya offers and discounts on selected products.";
+      --festival-offer: "10% OFF Muslimah Products!";
+    }
+    
+    :root.deepavali-theme {
+      --primary-color: #FF8C00;
+      --secondary-color: #FFD700;
+      --accent-color: #800080;
+      --festival-name: "Deepavali";
+      --festival-image: url('https://via.placeholder.com/600x200/FF8C00/FFD700?text=Deepavali+Special');
+      --festival-message: "Happy Deepavali! Enjoy our festival special discounts on wellness products.";
+      --festival-offer: "12% OFF All Products!";
+    }
+    
+    :root.christmas-theme {
+      --primary-color: #B22222;
+      --secondary-color: #228B22;
+      --accent-color: #1E90FF;
+      --festival-name: "Christmas";
+      --festival-image: url('https://via.placeholder.com/600x200/B22222/228B22?text=Christmas+Special');
+      --festival-message: "Merry Christmas! Enjoy special holiday discounts on our best-selling products.";
+      --festival-offer: "20% OFF Selected Items!";
     }
     
     @keyframes fadeIn {
@@ -30,7 +75,7 @@
       overflow-x: hidden;
     }
     
-    /* CNY Decorations */
+    /* Festival Decorations */
     .festival-decoration {
       position: fixed;
       z-index: 999;
@@ -47,22 +92,40 @@
       animation: floatDragon 20s linear infinite;
     }
     
-    .tanglung {
-      width: 60px;
+    .hari-raya-ketupat {
+      width: 80px;
       height: 80px;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 40"><rect x="12" y="5" width="6" height="10" fill="%23FFD700"/><path fill="%23CC0000" d="M5,15 Q15,5 25,15 Q15,35 5,15 Z"/><path fill="%23CC0000" d="M5,25 Q15,15 25,25 Q15,45 5,25 Z"/></svg>');
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%232E8B57" d="M50,10 L90,50 L50,90 L10,50 Z"/><path fill="%23E6C200" d="M50,20 L80,50 L50,80 L20,50 Z"/></svg>');
       background-size: contain;
       background-repeat: no-repeat;
-      animation: floatTanglung 25s linear infinite;
+      animation: floatKetupat 25s linear infinite;
     }
     
-    .cny-banner {
-      width: 150px;
-      height: 80px;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 80"><rect width="150" height="80" fill="%23CC0000"/><text x="75" y="45" font-family="Arial" font-size="20" fill="%23FFD700" text-anchor="middle">恭喜发财</text></svg>');
+    .deepavali-diwa {
+      width: 60px;
+      height: 90px;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 60"><path fill="%23FF8C00" d="M20,5 L35,20 L25,20 L30,60 L10,60 L15,20 L5,20 Z"/></svg>');
       background-size: contain;
       background-repeat: no-repeat;
-      animation: floatBanner 30s linear infinite;
+      animation: floatDiwa 30s linear infinite;
+    }
+    
+    .christmas-tree {
+      width: 80px;
+      height: 100px;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 100"><path fill="%23228B22" d="M40,5 L60,40 L45,40 L60,70 L35,70 L50,100 L30,100 L40,70 L20,70 L35,40 L20,40 Z"/><circle cx="40" cy="15" r="5" fill="%23B22222"/><circle cx="50" cy="50" r="5" fill="%23B22222"/><circle cx="30" cy="65" r="5" fill="%23B22222"/></svg>');
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: floatTree 35s linear infinite;
+    }
+    
+    .festival-banner {
+      width: 150px;
+      height: 80px;
+      background-image: var(--festival-banner);
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: floatBanner 40s linear infinite;
     }
     
     @keyframes floatDragon {
@@ -70,10 +133,20 @@
       100% { transform: translateX(calc(100vw + 120px)) translateY(300px); }
     }
     
-    @keyframes floatTanglung {
-      0% { transform: translateX(-60px) translateY(150px); }
+    @keyframes floatKetupat {
+      0% { transform: translateX(-80px) translateY(150px); }
       50% { transform: translateX(50vw) translateY(50px); }
-      100% { transform: translateX(calc(100vw + 60px)) translateY(200px); }
+      100% { transform: translateX(calc(100vw + 80px)) translateY(200px); }
+    }
+    
+    @keyframes floatDiwa {
+      0% { transform: translateX(-60px) translateY(50px) rotate(-5deg); }
+      100% { transform: translateX(calc(100vw + 60px)) translateY(150px) rotate(5deg); }
+    }
+    
+    @keyframes floatTree {
+      0% { transform: translateX(-80px) translateY(100px); }
+      100% { transform: translateX(calc(100vw + 80px)) translateY(250px); }
     }
     
     @keyframes floatBanner {
@@ -683,20 +756,16 @@
     }
   </style>
 </head>
-<body class="festival-active cny-theme">
-  <!-- Chinese New Year Decorations -->
-  <div class="festival-decoration cny-dragon" style="top: 100px; animation-duration: 20s; animation-delay: 0s;"></div>
-  <div class="festival-decoration cny-dragon" style="top: 300px; animation-duration: 25s; animation-delay: 5s;"></div>
-  <div class="festival-decoration tanglung" style="top: 200px; animation-duration: 30s; animation-delay: 2s;"></div>
-  <div class="festival-decoration tanglung" style="top: 400px; animation-duration: 35s; animation-delay: 7s;"></div>
-  <div class="festival-decoration cny-banner" style="top: 150px; animation-duration: 40s; animation-delay: 3s;"></div>
+<body class="festival-active">
+  <!-- Festival Decorations will be added dynamically -->
+  <div id="festival-decorations"></div>
 
   <header>
     <h1 style="font-size: 28px; color: var(--primary-color);">
       FOREVER LIVING by Mohd Arvind Isa
-      <span style="font-size: 18px; color: var(--secondary-color); display: block;">Chinese New Year Special!</span>
+      <span id="festival-subtitle" style="font-size: 18px; color: var(--secondary-color); display: block;"></span>
     </h1>
-    <div class="cart-icon">
+    <div class="cart-icon" onclick="toggleCart()">
       🛒 <span id="cart-count">0</span>
     </div>
   </header>
@@ -720,7 +789,7 @@
         <div id="suggestion-result"></div>
       </div>
       
-      <h2>Our Products - Chinese New Year Special!</h2>
+      <h2>Our Products - <span id="festival-special-text"></span></h2>
       <div id="product-list" class="product-list"></div>
     </div>
 
@@ -921,20 +990,20 @@
   </div>
 
   <!-- Festival Popup Modal -->
-  <div id="festival-modal" class="festival-modal" style="display: flex;">
+  <div id="festival-modal" class="festival-modal">
     <div class="festival-content">
       <span class="festival-close" onclick="closeFestivalModal()">&times;</span>
-      <h2 class="festival-title">Happy Chinese New Year!</h2>
-      <img src="https://via.placeholder.com/600x200/CC0000/FFD700?text=Chinese+New+Year+Special" alt="Chinese New Year Banner" class="festival-image">
-      <p class="festival-message">Celebrate the Year of the Dragon with our special CNY offers! Enjoy great discounts on our best-selling products.</p>
-      <div class="festival-offer">15% OFF on all orders!</div>
+      <h2 class="festival-title" id="festival-popup-title"></h2>
+      <img src="" alt="Festival Banner" class="festival-image" id="festival-popup-image">
+      <p class="festival-message" id="festival-popup-message"></p>
+      <div class="festival-offer" id="festival-popup-offer"></div>
       <button class="add-to-cart" onclick="closeFestivalModal()" style="width: auto; margin: 0 auto;">Continue Shopping</button>
     </div>
   </div>
 
   <footer>
     <p>&copy; 2025 Forever Living by Mohd Arvind Isa. Powered by Rich Academy Global. All rights reserved.</p>
-    <div class="timestamp">Last updated: February 10, 2025</div>
+    <div class="timestamp">Last updated: <span id="current-date"></span></div>
     <section class="disclaimer">
       <strong>Disclaimer:</strong> This website is operated by an independent Forever Business Owner (FBO) under Rich Academy Global and is not the official site of Forever Living Products. Product names, trademarks, and registered trademarks are property of Forever Living Products International, Inc.
     </section>
@@ -1084,27 +1153,141 @@
 
     let cart = [];
 
-    // Apply discount to best-selling products for CNY
-    function applyCNYDiscount(products) {
+    // Festival data with dates
+    const festivals = [
+      {
+        name: "Chinese New Year",
+        theme: "cny-theme",
+        startDate: new Date(new Date().getFullYear(), 0, 22), // January 22
+        endDate: new Date(new Date().getFullYear(), 1, 5),   // February 5
+        decorations: [
+          { type: "cny-dragon", count: 2 },
+          { type: "tanglung", count: 2 },
+          { type: "cny-banner", count: 1 }
+        ],
+        discount: 0.15 // 15% discount
+      },
+      {
+        name: "Hari Raya",
+        theme: "hari-raya-theme",
+        startDate: new Date(new Date().getFullYear(), 3, 21), // April 21
+        endDate: new Date(new Date().getFullYear(), 4, 21),   // May 21
+        decorations: [
+          { type: "hari-raya-ketupat", count: 3 },
+          { type: "hari-raya-banner", count: 1 }
+        ],
+        discount: 0.10 // 10% discount
+      },
+      {
+        name: "Deepavali",
+        theme: "deepavali-theme",
+        startDate: new Date(new Date().getFullYear(), 9, 24), // October 24
+        endDate: new Date(new Date().getFullYear(), 10, 7),   // November 7
+        decorations: [
+          { type: "deepavali-diwa", count: 3 },
+          { type: "deepavali-banner", count: 1 }
+        ],
+        discount: 0.12 // 12% discount
+      },
+      {
+        name: "Christmas",
+        theme: "christmas-theme",
+        startDate: new Date(new Date().getFullYear(), 11, 15), // December 15
+        endDate: new Date(new Date().getFullYear(), 11, 31),   // December 31
+        decorations: [
+          { type: "christmas-tree", count: 3 },
+          { type: "christmas-banner", count: 1 }
+        ],
+        discount: 0.20 // 20% discount
+      }
+    ];
+
+    // Apply festival discount to products
+    function applyFestivalDiscount(products, discountRate) {
       return products.map(product => {
         if (product.bestSeller) {
           return {
             ...product,
             originalPrice: product.price,
-            price: product.price * 0.85, // 15% discount
-            festivalTag: "CNY Special"
+            price: product.price * (1 - discountRate),
+            festivalTag: "Festival Special"
           };
         }
         return product;
       });
     }
 
-    // Render products with CNY decorations
-    function renderProducts() {
+    // Check current festival
+    function getCurrentFestival() {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      for (const festival of festivals) {
+        if (today >= festival.startDate && today <= festival.endDate) {
+          return festival;
+        }
+      }
+      return null; // No current festival
+    }
+
+    // Set festival theme
+    function setFestivalTheme(festival) {
+      if (festival) {
+        document.documentElement.className = festival.theme;
+        document.getElementById('festival-subtitle').textContent = `${festival.name} Special!`;
+        document.getElementById('festival-special-text').textContent = `${festival.name} Special`;
+        
+        // Set popup content
+        document.getElementById('festival-popup-title').textContent = `Happy ${festival.name}!`;
+        document.getElementById('festival-popup-image').src = `https://via.placeholder.com/600x200/${festival.theme === 'cny-theme' ? 'CC0000/FFD700' : 
+                                                          festival.theme === 'hari-raya-theme' ? '2E8B57/E6C200' :
+                                                          festival.theme === 'deepavali-theme' ? 'FF8C00/FFD700' : 'B22222/228B22'}?text=${encodeURIComponent(festival.name)}+Special`;
+        document.getElementById('festival-popup-message').textContent = `Celebrate ${festival.name} with our special offers! Enjoy great discounts on our best-selling products.`;
+        document.getElementById('festival-popup-offer').textContent = `${Math.round(festival.discount * 100)}% OFF on selected items!`;
+        
+        return festival;
+      } else {
+        // Default theme (no festival)
+        document.documentElement.className = '';
+        document.getElementById('festival-subtitle').textContent = 'Quality Wellness Products';
+        document.getElementById('festival-special-text').textContent = 'Featured Products';
+        return null;
+      }
+    }
+
+    // Add festival decorations
+    function addFestivalDecorations(festival) {
+      const decorationsContainer = document.getElementById('festival-decorations');
+      decorationsContainer.innerHTML = '';
+      
+      if (festival && festival.decorations) {
+        festival.decorations.forEach(decoration => {
+          for (let i = 0; i < decoration.count; i++) {
+            const decoElement = document.createElement('div');
+            decoElement.className = `festival-decoration ${decoration.type}`;
+            
+            // Random positioning and animation
+            const top = Math.random() * 80 + 10;
+            const duration = Math.random() * 20 + 20;
+            const delay = Math.random() * 10;
+            
+            decoElement.style.top = `${top}px`;
+            decoElement.style.animationDuration = `${duration}s`;
+            decoElement.style.animationDelay = `${delay}s`;
+            
+            decorationsContainer.appendChild(decoElement);
+          }
+        });
+      }
+    }
+
+    // Render products with festival decorations
+    function renderProducts(festival) {
       const productList = document.getElementById('product-list');
       if (!productList) return;
       
-      const discountedProducts = applyCNYDiscount(products);
+      const discountRate = festival ? festival.discount : 0;
+      const discountedProducts = applyFestivalDiscount(products, discountRate);
       
       productList.innerHTML = discountedProducts.map(product => {
         const isFeatured = product.bestSeller;
@@ -1137,7 +1320,7 @@
       featuredProducts.forEach(product => {
         const badge = document.createElement('div');
         badge.className = 'featured-badge';
-        badge.textContent = 'CNY Special';
+        badge.textContent = 'Special Offer';
         product.appendChild(badge);
       });
     }
@@ -1153,16 +1336,13 @@
 
     function toggleCart() {
       const modal = document.getElementById('cart-modal');
-      if (modal.style.display === 'block') {
-        modal.style.display = 'none';
-      } else {
-        modal.style.display = 'block';
-        updateCartDisplay();
-      }
+      modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+      updateCartDisplay();
     }
 
     function addToCart(productId) {
       const product = products.find(p => p.id === productId);
+      const discountedPrice = getDiscountedPrice(product);
       const existingItem = cart.find(item => item.id === productId);
       
       if (existingItem) {
@@ -1171,13 +1351,22 @@
         cart.push({
           id: product.id,
           name: product.name,
-          price: product.price,
+          price: discountedPrice,
+          originalPrice: product.price,
           quantity: 1
         });
       }
       
       updateCartCount();
       showAddedToCartMessage(product.name);
+    }
+
+    function getDiscountedPrice(product) {
+      const currentFestival = getCurrentFestival();
+      if (currentFestival && product.bestSeller) {
+        return product.price * (1 - currentFestival.discount);
+      }
+      return product.price;
     }
 
     function removeFromCart(productId) {
@@ -1265,7 +1454,12 @@
       message += `Order Details:\n`;
       
       cart.forEach(item => {
-        message += `- ${item.name} (Qty: ${item.quantity}) - RM ${(item.price * item.quantity).toFixed(2)}\n`;
+        const discountApplied = item.price < item.originalPrice;
+        message += `- ${item.name} (Qty: ${item.quantity}) - RM ${(item.price * item.quantity).toFixed(2)}`;
+        if (discountApplied) {
+          message += ` (Festival Discount Applied)`;
+        }
+        message += `\n`;
       });
       
       message += `\nTotal: RM ${cart.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2)}\n\n`;
@@ -1324,20 +1518,32 @@
     }
 
     function closeFestivalModal() {
-      localStorage.setItem('festivalPopupClosed', 'cny');
+      localStorage.setItem('festivalPopupClosed', 'true');
       document.getElementById('festival-modal').style.display = 'none';
     }
 
     // Initialize the page
     document.addEventListener('DOMContentLoaded', function() {
-      renderProducts();
+      // Set current date in footer
+      const now = new Date();
+      document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', { 
+        year: 'numeric', month: 'long', day: 'numeric' 
+      });
+      
+      // Check current festival and apply theme
+      const currentFestival = getCurrentFestival();
+      setFestivalTheme(currentFestival);
+      addFestivalDecorations(currentFestival);
+      renderProducts(currentFestival);
+      
       showTab('products');
       
-      // Only show popup if not already closed
-      if (localStorage.getItem('festivalPopupClosed') !== 'cny') {
+      // Only show popup if not already closed and during a festival
+      if (currentFestival && localStorage.getItem('festivalPopupClosed') !== 'true') {
         document.getElementById('festival-modal').style.display = 'flex';
       }
       
+      // Close modals when clicking outside
       window.onclick = function(event) {
         const modal = document.getElementById('cart-modal');
         if (event.target === modal) {
