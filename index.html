@@ -71,7 +71,11 @@
       display: flex;
       flex-direction: column;
       position: relative;
-      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .product:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     }
     .product img {
       width: 100%;
@@ -114,6 +118,10 @@
       border-radius: 4px;
       text-decoration: none;
       font-weight: bold;
+      transition: all 0.3s;
+    }
+    .product .whatsapp-btn:hover {
+      background: #128C7E;
     }
     .product .add-to-cart {
       display: inline-block;
@@ -126,6 +134,10 @@
       font-weight: bold;
       border: none;
       cursor: pointer;
+      transition: all 0.3s;
+    }
+    .product .add-to-cart:hover {
+      background: #237a48;
     }
     .ai-suggestion-box {
       background: white;
@@ -153,6 +165,7 @@
       border-radius: 4px;
       cursor: pointer;
       font-weight: bold;
+      transition: all 0.3s;
     }
     #suggest-btn:hover {
       background: #237a48;
@@ -429,7 +442,7 @@
       background: #237a48;
     }
     
-    /* Festival Popup Modal */
+    /* Festival Popup Modal - Enhanced */
     .festival-modal {
       display: none;
       position: fixed;
@@ -437,20 +450,23 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.8);
+      background-color: rgba(0,0,0,0.9);
       z-index: 1000;
       align-items: center;
       justify-content: center;
+      animation: fadeIn 0.5s;
     }
     
     .festival-content {
-      background-color: white;
+      background: white;
       border-radius: 15px;
       padding: 30px;
       max-width: 600px;
       text-align: center;
       position: relative;
-      animation: fadeIn 0.5s;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border: 3px solid var(--accent-color);
     }
     
     .festival-close {
@@ -459,31 +475,141 @@
       right: 15px;
       font-size: 24px;
       cursor: pointer;
+      color: #666;
+      transition: all 0.3s;
+    }
+    
+    .festival-close:hover {
+      color: #000;
+      transform: rotate(90deg);
     }
     
     .festival-title {
       font-size: 2.5rem;
       margin-bottom: 20px;
+      color: var(--primary-color);
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+      animation: textGlow 2s infinite alternate;
+    }
+    
+    @keyframes textGlow {
+      0% { text-shadow: 0 0 10px rgba(0,0,0,0.1); }
+      100% { text-shadow: 0 0 20px var(--accent-color); }
     }
     
     .festival-message {
       font-size: 1.2rem;
       margin-bottom: 25px;
+      color: #555;
     }
     
     .festival-image {
       max-width: 100%;
-      height: auto;
+      height: 200px;
+      object-fit: contain;
       border-radius: 10px;
       margin-bottom: 20px;
+      border: 2px solid var(--accent-color);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
     
     .festival-offer {
-      background-color: #FFD700;
-      padding: 10px;
+      background: linear-gradient(135deg, var(--accent-color), #FFD700);
+      padding: 15px;
       border-radius: 5px;
       font-weight: bold;
+      font-size: 1.3rem;
       margin-bottom: 20px;
+      color: var(--primary-color);
+      animation: pulse 1.5s infinite;
+    }
+    
+    /* Featured Product Animations */
+    .featured-product {
+      position: relative;
+      animation: float 3s ease-in-out infinite;
+      z-index: 1;
+      border: 2px solid var(--accent-color);
+    }
+    
+    .featured-product::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      background: linear-gradient(45deg, 
+        var(--primary-color), 
+        var(--secondary-color), 
+        var(--accent-color));
+      z-index: -1;
+      border-radius: 10px;
+      opacity: 0.3;
+      animation: gradientRotate 8s linear infinite;
+    }
+    
+    @keyframes gradientRotate {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+    
+    .featured-badge {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      width: 60px;
+      height: 60px;
+      background: var(--accent-color);
+      color: var(--primary-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+      transform: rotate(15deg);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      animation: badgePulse 2s infinite;
+    }
+    
+    @keyframes badgePulse {
+      0% { transform: rotate(15deg) scale(1); }
+      50% { transform: rotate(15deg) scale(1.1); }
+      100% { transform: rotate(15deg) scale(1); }
+    }
+    
+    .discount-price {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    
+    .original-price {
+      text-decoration: line-through;
+      color: #999;
+      font-size: 0.9em;
+    }
+    
+    .new-price {
+      color: var(--secondary-color);
+      font-weight: bold;
+      font-size: 1.2em;
+      display: flex;
+      align-items: center;
+    }
+    
+    .fire-icon {
+      margin-left: 5px;
+      color: #FF5722;
+      animation: fireBlink 1s infinite alternate;
+    }
+    
+    @keyframes fireBlink {
+      0% { opacity: 0.7; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.2); }
     }
     
     /* Festival Theme Classes */
@@ -509,30 +635,6 @@
       --primary-color: #CC0000;
       --secondary-color: #01796F;
       --accent-color: #FFFFFF;
-    }
-    
-    /* Product Festival Decorations */
-    .festival-product::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 5px;
-      background: var(--accent-color);
-    }
-    
-    .festival-tag {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: var(--accent-color);
-      color: var(--primary-color);
-      padding: 3px 8px;
-      border-radius: 3px;
-      font-size: 12px;
-      font-weight: bold;
-      z-index: 1;
     }
     
     /* Theme Application */
@@ -800,9 +902,9 @@
     <div class="festival-content">
       <span class="festival-close" onclick="closeFestivalModal()">&times;</span>
       <h2 class="festival-title" id="festival-title">Happy National Day!</h2>
-      <img src="national-day-banner.jpg" alt="Festival Banner" class="festival-image" id="festival-image">
-      <p class="festival-message" id="festival-message">Celebrate Malaysia's independence with special discounts on our best products!</p>
-      <div class="festival-offer" id="festival-offer">10% OFF on all products until August 31st</div>
+      <img src="https://via.placeholder.com/600x200/006644/FFFFFF?text=National+Day+Special" alt="Festival Banner" class="festival-image" id="festival-image">
+      <p class="festival-message" id="festival-message">Celebrate this special occasion with exclusive discounts on our best-selling products!</p>
+      <div class="festival-offer" id="festival-offer">10% OFF on selected products!</div>
       <button class="add-to-cart" onclick="closeFestivalModal()" style="width: auto; margin: 0 auto;">Continue Shopping</button>
     </div>
   </div>
@@ -819,25 +921,30 @@
     const products = [
       { id: 1, name: "Aloe Vera Gel", price: 116.79, image: "aloe-vera-gel.jpg", 
        benefits: "Supports digestion, boosts immunity, promotes skin health", 
-       consumption: "Take 30-60ml daily, preferably on empty stomach" },
+       consumption: "Take 30-60ml daily, preferably on empty stomach",
+       bestSeller: true },
       { id: 2, name: "Aloe Berry Nectar", price: 116.79, image: "aloe-berry-nectar.jpg", 
        benefits: "Antioxidant support, immune system booster, natural energy", 
-       consumption: "30-60ml daily, can be mixed with water or juice" },
+       consumption: "30-60ml daily, can be mixed with water or juice",
+       bestSeller: true },
       { id: 3, name: "Aloe Peaches", price: 116.79, image: "aloe-peaches.jpg", 
        benefits: "Digestive health, vitamin C source, natural detoxification", 
        consumption: "30-60ml daily, refrigerate after opening" },
       { id: 4, name: "Bee Honey", price: 132.57, image: "bee-honey.jpg", 
        benefits: "Natural energy, soothes throat, antioxidant properties", 
-       consumption: "1-2 teaspoons daily, can be added to drinks" },
+       consumption: "1-2 teaspoons daily, can be added to drinks",
+       bestSeller: true },
       { id: 5, name: "Royal Jelly", price: 139.21, image: "royal-jelly.jpg", 
        benefits: "Energy booster, supports immune system, anti-aging", 
-       consumption: "1 tablet daily, preferably in the morning" },
+       consumption: "1 tablet daily, preferably in the morning",
+       bestSeller: true },
       { id: 6, name: "Bee Pollen", price: 75.50, image: "bee-pollen.jpg", 
        benefits: "Natural multivitamin, energy enhancement, allergy relief", 
        consumption: "1 tablet 3 times daily with meals" },
       { id: 7, name: "Bee Propolis", price: 139.21, image: "bee-propolis.jpg", 
        benefits: "Immune support, natural antibiotic, throat health", 
-       consumption: "1 tablet daily or as needed" },
+       consumption: "1 tablet daily or as needed",
+       bestSeller: true },
       { id: 8, name: "Arctic Sea", price: 130.10, image: "arctic-sea.jpg", 
        benefits: "Heart health, joint support, brain function", 
        consumption: "2 softgels twice daily with meals" },
@@ -891,9 +998,8 @@
        consumption: "Mix 2-3 tablespoons in 150–200ml hot water or milk" }
     ];
 
-    // Enhanced product suggestions mapping (1000+ symptoms)
+    // Enhanced product suggestions mapping
     const productSuggestions = {
-      // Digestive Issues (150 symptoms)
       "digestion": { id: 9, name: "Fields of Greens", recommendation: "1 tablet three times daily with meals for digestive support" },
       "bloating": { id: 9, name: "Fields of Greens", recommendation: "1 tablet three times daily with meals to reduce bloating" },
       "constipation": { id: 1, name: "Aloe Vera Gel", recommendation: "30-60ml daily to support regular bowel movements" },
@@ -909,8 +1015,6 @@
       "gastritis": { id: 1, name: "Aloe Vera Gel", recommendation: "30ml before meals to help with gastritis" },
       "ulcer": { id: 1, name: "Aloe Vera Gel", recommendation: "30ml before meals to support ulcer healing" },
       "crohn's": { id: 1, name: "Aloe Vera Gel", recommendation: "30ml twice daily for digestive support" },
-      
-      // Immune System (200 symptoms)
       "cold": { id: 7, name: "Bee Propolis", recommendation: "1 tablet daily at first sign of cold" },
       "flu": { id: 7, name: "Bee Propolis", recommendation: "2 tablets daily during flu" },
       "fever": { id: 7, name: "Bee Propolis", recommendation: "1 tablet every 4 hours during fever" },
@@ -925,8 +1029,6 @@
       "itchy eyes": { id: 6, name: "Bee Pollen", recommendation: "1 tablet daily for allergy symptoms" },
       "weak immunity": { id: 7, name: "Bee Propolis", recommendation: "1 tablet daily for immune support" },
       "frequent illness": { id: 7, name: "Bee Propolis", recommendation: "1 tablet daily to strengthen immunity" },
-      
-      // Energy & Fatigue (100 symptoms)
       "fatigue": { id: 5, name: "Royal Jelly", recommendation: "1 tablet each morning for energy" },
       "low energy": { id: 5, name: "Royal Jelly", recommendation: "1 tablet morning and afternoon" },
       "tiredness": { id: 5, name: "Royal Jelly", recommendation: "1 tablet upon waking" },
@@ -936,8 +1038,6 @@
       "burnout": { id: 5, name: "Royal Jelly", recommendation: "1 tablet twice daily for energy support" },
       "sluggish": { id: 5, name: "Royal Jelly", recommendation: "1 tablet with breakfast" },
       "drowsy": { id: 5, name: "Royal Jelly", recommendation: "1 tablet in the morning" },
-      
-      // Pain & Inflammation (200 symptoms)
       "joint pain": { id: 8, name: "Arctic Sea", recommendation: "2 softgels twice daily for joint support" },
       "arthritis": { id: 8, name: "Arctic Sea", recommendation: "2 softgels twice daily for inflammation" },
       "back pain": { id: 8, name: "Arctic Sea", recommendation: "2 softgels twice daily for pain relief" },
@@ -948,8 +1048,6 @@
       "knee pain": { id: 8, name: "Arctic Sea", recommendation: "2 softgels twice daily" },
       "shoulder pain": { id: 8, name: "Arctic Sea", recommendation: "2 softgels twice daily" },
       "inflammation": { id: 8, name: "Arctic Sea", recommendation: "2 softgels twice daily" },
-      
-      // Skin Conditions (150 symptoms)
       "acne": { id: 1, name: "Aloe Vera Gel", recommendation: "30ml daily and apply topically" },
       "eczema": { id: 12, name: "Aloe First", recommendation: "Spray directly on affected areas" },
       "psoriasis": { id: 12, name: "Aloe First", recommendation: "Apply liberally to affected areas" },
@@ -961,35 +1059,35 @@
       "age spots": { id: 14, name: "Aloe Propolis Creme", recommendation: "Apply twice daily" }
     };
 
-    // Festival Configuration - Will auto-update based on current date
+    // Festival Configuration - Auto-updating
     const festivalConfig = {
       festivals: [
         {
           id: "national-day",
-      name: "National Day",
-      startDate: new Date(2025, 6, 1), // July 1 2025 (month is 0-indexed)
+          name: "National Day",
+          startDate: new Date(2025, 6, 1), // July 1 2025 (month is 0-indexed)
       endDate: new Date(2025, 6, 31), // July 31 2025
-      title: "Happy National Day! (TEST MODE)",
-      message: "Special discounts for our patriotic customers!",
-      offer: "15% OFF all products this month",
-      image: "https://example.com/national-day-banner.jpg",
-      theme: "national-day-theme",
-      productTag: "Merdeka Deal",
-      colors: {
-        primary: "#006644", // Dark green
-        secondary: "#CC0000", // Red
-        accent: "#FFD700" // Gold
+      title: "Happy National Day!"
+          message: "Celebrate Malaysia's independence with special discounts!",
+          offer: "10% OFF on selected products",
+          image: "https://via.placeholder.com/600x200/006644/FFFFFF?text=National+Day+Special",
+          theme: "national-day-theme",
+          productTag: "Merdeka Deal",
+          colors: {
+            primary: "#006644",
+            secondary: "#CC0000",
+            accent: "#FFD700"
           }
         },
         {
           id: "hari-raya",
           name: "Hari Raya",
-          startDate: new Date(new Date().getFullYear(), 3, 10), // April 10th
-          endDate: new Date(new Date().getFullYear(), 3, 20), // April 20th
+          startDate: new Date(new Date().getFullYear(), 3, 10), // April 10
+          endDate: new Date(new Date().getFullYear(), 3, 20), // April 20
           title: "Selamat Hari Raya!",
           message: "Celebrate this festive season with our special offers!",
-          offer: "Buy 2 Get 1 Free on selected items",
-          image: "https://example.com/hari-raya-banner.jpg",
+          offer: "10% OFF on selected items",
+          image: "https://via.placeholder.com/600x200/2E8B57/FFFFFF?text=Hari+Raya+Special",
           theme: "hari-raya-theme",
           productTag: "Raya Special",
           colors: {
@@ -1001,12 +1099,12 @@
         {
           id: "deepavali",
           name: "Deepavali",
-          startDate: new Date(new Date().getFullYear(), 9, 31), // October 31st
-          endDate: new Date(new Date().getFullYear(), 10, 5), // November 5th
+          startDate: new Date(new Date().getFullYear(), 9, 31), // October 31
+          endDate: new Date(new Date().getFullYear(), 10, 5), // November 5
           title: "Happy Deepavali!",
           message: "Light up your life with our festive offers!",
-          offer: "20% OFF on wellness products",
-          image: "https://example.com/deepavali-banner.jpg",
+          offer: "10% OFF on wellness products",
+          image: "https://via.placeholder.com/600x200/FF9933/FFFFFF?text=Deepavali+Special",
           theme: "deepavali-theme",
           productTag: "Festive Deal",
           colors: {
@@ -1018,12 +1116,12 @@
         {
           id: "christmas",
           name: "Christmas",
-          startDate: new Date(new Date().getFullYear(), 11, 15), // December 15th
-          endDate: new Date(new Date().getFullYear(), 11, 31), // December 31st
+          startDate: new Date(new Date().getFullYear(), 11, 15), // December 15
+          endDate: new Date(new Date().getFullYear(), 11, 31), // December 31
           title: "Merry Christmas!",
           message: "Season's greetings and special holiday offers!",
-          offer: "Free gift wrapping on all orders",
-          image: "https://example.com/christmas-banner.jpg",
+          offer: "10% OFF on all orders",
+          image: "https://via.placeholder.com/600x200/CC0000/FFFFFF?text=Christmas+Special",
           theme: "christmas-theme",
           productTag: "Holiday Special",
           colors: {
@@ -1037,10 +1135,10 @@
 
     let cart = [];
 
-    // Check if today falls within any festival period
+    // Get current festival based on date
     function getCurrentFestival() {
       const today = new Date();
-      today.setHours(0, 0, 0, 0); // Normalize time for comparison
+      today.setHours(0, 0, 0, 0);
       
       for (const festival of festivalConfig.festivals) {
         const startDate = new Date(festival.startDate);
@@ -1056,6 +1154,22 @@
       return null;
     }
 
+    // Apply discount to best-selling products
+    function applyFestivalDiscount(products, festival) {
+      if (!festival) return products;
+      
+      return products.map(product => {
+        if (product.bestSeller) {
+          return {
+            ...product,
+            originalPrice: product.price,
+            price: product.price * 0.9 // 10% discount
+          };
+        }
+        return product;
+      });
+    }
+
     // Apply festival theme to the page
     function applyFestivalTheme(festival) {
       if (!festival) return;
@@ -1067,15 +1181,16 @@
       root.style.setProperty('--primary-color', festival.colors.primary);
       root.style.setProperty('--secondary-color', festival.colors.secondary);
       root.style.setProperty('--accent-color', festival.colors.accent);
-      
-      // Decorate products
-      const products = document.querySelectorAll('.product');
-      products.forEach(product => {
-        product.classList.add('festival-product');
-        const tag = document.createElement('div');
-        tag.className = 'festival-tag';
-        tag.textContent = festival.productTag;
-        product.appendChild(tag);
+    }
+
+    // Highlight featured products
+    function highlightFeaturedProducts() {
+      const featuredProducts = document.querySelectorAll('.featured-product');
+      featuredProducts.forEach(product => {
+        const badge = document.createElement('div');
+        badge.className = 'featured-badge';
+        badge.textContent = 'HOT';
+        product.appendChild(badge);
       });
     }
 
@@ -1106,12 +1221,37 @@
       document.getElementById('festival-modal').style.display = 'none';
     }
 
-    // Initialize festival features
-    function initFestival() {
-      const currentFestival = getCurrentFestival();
-      if (currentFestival) {
-        applyFestivalTheme(currentFestival);
-        showFestivalPopup(currentFestival);
+    // Render products with festival decorations
+    function renderProducts(festival) {
+      const productList = document.getElementById('product-list');
+      if (!productList) return;
+      
+      const discountedProducts = applyFestivalDiscount(products, festival);
+      
+      productList.innerHTML = discountedProducts.map(product => {
+        const isFeatured = product.bestSeller;
+        const hasDiscount = product.originalPrice !== undefined;
+        
+        return `
+          <div class="product ${isFeatured ? 'featured-product' : ''}" id="product-${product.id}">
+            <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/200x200?text=Product+Image'">
+            <h3>${product.name}</h3>
+            ${hasDiscount ? `
+              <div class="discount-price">
+                <span class="original-price">RM ${product.originalPrice.toFixed(2)}</span>
+                <span class="new-price">RM ${product.price.toFixed(2)} <span class="fire-icon">🔥</span></span>
+              </div>
+            ` : `<div class="price">RM ${product.price.toFixed(2)}</div>`}
+            <div class="benefits"><strong>Benefits:</strong> ${product.benefits}</div>
+            <div class="consumption"><strong>How to use:</strong> ${product.consumption}</div>
+            <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
+            <a href="https://wa.me/601111033154?text=I%20want%20to%20buy%20${encodeURIComponent(product.name)}" class="whatsapp-btn">Order via WhatsApp</a>
+          </div>
+        `;
+      }).join('');
+      
+      if (festival) {
+        highlightFeaturedProducts();
       }
     }
 
@@ -1248,23 +1388,6 @@
       window.location.href = `https://wa.me/601111033154?text=${encodedMessage}`;
     }
 
-    function renderProducts() {
-      const productList = document.getElementById('product-list');
-      if (productList) {
-        productList.innerHTML = products.map(product => `
-          <div class="product">
-            <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/200x200?text=Product+Image'">
-            <h3>${product.name}</h3>
-            <div class="price">RM ${product.price.toFixed(2)}</div>
-            <div class="benefits"><strong>Benefits:</strong> ${product.benefits}</div>
-            <div class="consumption"><strong>How to use:</strong> ${product.consumption}</div>
-            <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
-            <a href="https://wa.me/601111033154?text=I%20want%20to%20buy%20${encodeURIComponent(product.name)}" class="whatsapp-btn">Order via WhatsApp</a>
-          </div>
-        `).join('');
-      }
-    }
-
     function suggestProduct() {
       const input = document.getElementById("symptom-input").value.toLowerCase();
       const result = document.getElementById("suggestion-result");
@@ -1315,9 +1438,11 @@
 
     // Initialize the page
     document.addEventListener('DOMContentLoaded', function() {
-      renderProducts();
+      const currentFestival = getCurrentFestival();
+      applyFestivalTheme(currentFestival);
+      renderProducts(currentFestival);
       showTab('products');
-      initFestival();
+      showFestivalPopup(currentFestival);
       
       window.onclick = function(event) {
         const modal = document.getElementById('cart-modal');
