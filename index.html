@@ -26,7 +26,60 @@
       margin: 0;
       padding: 0;
       background-color: #f5f5f5;
+      position: relative;
+      overflow-x: hidden;
     }
+    
+    /* Festival Decorations */
+    .festival-decoration {
+      position: fixed;
+      z-index: 999;
+      pointer-events: none;
+      animation-timing-function: linear;
+    }
+    
+    .flag {
+      width: 100px;
+      height: 60px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: floatFlag 15s linear infinite;
+    }
+    
+    .dragon {
+      width: 120px;
+      height: 80px;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50"><path fill="%23FF0000" d="M10,25 Q30,5 50,25 Q70,45 90,25 L80,20 Q70,10 50,30 Q30,50 20,40 Z"/><circle cx="15" cy="20" r="3" fill="%23FFFF00"/><circle cx="85" cy="20" r="3" fill="%23FFFF00"/></svg>');
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: floatDragon 20s linear infinite;
+    }
+    
+    .tanglung {
+      width: 60px;
+      height: 80px;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 40"><rect x="12" y="5" width="6" height="10" fill="%23FFD700"/><path fill="%23FF0000" d="M5,15 Q15,5 25,15 Q15,35 5,15 Z"/><path fill="%23FF0000" d="M5,25 Q15,15 25,25 Q15,45 5,25 Z"/></svg>');
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: floatTanglung 25s linear infinite;
+    }
+    
+    @keyframes floatFlag {
+      0% { transform: translateX(-100px) translateY(50px) rotate(-10deg); }
+      100% { transform: translateX(calc(100vw + 100px)) translateY(200px) rotate(10deg); }
+    }
+    
+    @keyframes floatDragon {
+      0% { transform: translateX(-120px) translateY(100px); }
+      100% { transform: translateX(calc(100vw + 120px)) translateY(300px); }
+    }
+    
+    @keyframes floatTanglung {
+      0% { transform: translateX(-60px) translateY(150px); }
+      50% { transform: translateX(50vw) translateY(50px); }
+      100% { transform: translateX(calc(100vw + 60px)) translateY(200px); }
+    }
+
     header {
       background-color: #fff;
       padding: 20px;
@@ -653,6 +706,12 @@
       --accent-color: #FFFFFF;
     }
     
+    .cny-theme {
+      --primary-color: #CC0000;
+      --secondary-color: #FFD700;
+      --accent-color: #006644;
+    }
+    
     /* Theme Application */
     .festival-active nav {
       background-color: var(--primary-color);
@@ -1081,14 +1140,17 @@
           title: "Happy National Day!",
           message: "Celebrate Malaysia's independence with special discounts!",
           offer: "10% OFF on selected products",
-          image: "https://via.placeholder.com/600x200/006644/FFFFFF?text=National+Day+Special",
+          image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Flag_of_Malaysia.svg/1200px-Flag_of_Malaysia.svg.png",
           theme: "national-day-theme",
           productTag: "Merdeka Deal",
           colors: {
             primary: "#006644",
             secondary: "#CC0000",
             accent: "#FFD700"
-          }
+          },
+          decorations: [
+            { type: "flag", count: 3, image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'><rect width='3' height='1' fill='%23CC0000'/><rect y='1' width='3' height='1' fill='%23FFFFFF'/><rect y='1' width='1.5' height='1' fill='%23006644'/><path d='M0,0 L0,1 L1.5,0.5 Z' fill='%23FFD700'/><circle cx='0.75' cy='0.5' r='0.2' fill='%23FFD700'/></svg>" }
+          ]
         },
         {
           id: "hari-raya",
@@ -1105,7 +1167,10 @@
             primary: "#2E8B57",
             secondary: "#F8F8F8",
             accent: "#E6C229"
-          }
+          },
+          decorations: [
+            { type: "flag", count: 2, image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'><rect width='3' height='2' fill='%232E8B57'/><path d='M1,0.5 L1.5,0.2 L2,0.5 L1.5,0.8 Z' fill='%23E6C229'/></svg>" }
+          ]
         },
         {
           id: "deepavali",
@@ -1122,7 +1187,10 @@
             primary: "#FF9933",
             secondary: "#138808",
             accent: "#FFD700"
-          }
+          },
+          decorations: [
+            { type: "flag", count: 2, image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'><rect width='3' height='2' fill='%23FF9933'/><circle cx='1.5' cy='1' r='0.5' fill='%23138808'/></svg>" }
+          ]
         },
         {
           id: "christmas",
@@ -1139,7 +1207,31 @@
             primary: "#CC0000",
             secondary: "#01796F",
             accent: "#FFFFFF"
-          }
+          },
+          decorations: [
+            { type: "flag", count: 2, image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'><rect width='3' height='2' fill='%23CC0000'/><path d='M1.5,0 L2,1 L1,1 Z' fill='%2301796F'/></svg>" }
+          ]
+        },
+        {
+          id: "cny",
+          name: "Chinese New Year",
+          startDate: new Date(new Date().getFullYear(), 0, 21), // January 21
+          endDate: new Date(new Date().getFullYear(), 1, 10), // February 10
+          title: "Happy Chinese New Year!",
+          message: "Celebrate the Year of the Dragon with special offers!",
+          offer: "15% OFF on all orders!",
+          image: "https://via.placeholder.com/600x200/CC0000/FFD700?text=Chinese+New+Year+Special",
+          theme: "cny-theme",
+          productTag: "CNY Special",
+          colors: {
+            primary: "#CC0000",
+            secondary: "#FFD700",
+            accent: "#006644"
+          },
+          decorations: [
+            { type: "dragon", count: 3 },
+            { type: "tanglung", count: 5 }
+          ]
         }
       ]
     };
@@ -1174,7 +1266,8 @@
           return {
             ...product,
             originalPrice: product.price,
-            price: product.price * 0.9 // 10% discount
+            price: product.price * (festival.id === "cny" ? 0.85 : 0.9), // 15% off for CNY, 10% for others
+            festivalTag: festival.productTag
           };
         }
         return product;
@@ -1194,13 +1287,47 @@
       root.style.setProperty('--accent-color', festival.colors.accent);
     }
 
+    // Create festival decorations
+    function createFestivalDecorations(festival) {
+      if (!festival || !festival.decorations) return;
+      
+      // Remove any existing decorations
+      document.querySelectorAll('.festival-decoration').forEach(el => el.remove());
+      
+      festival.decorations.forEach(decoration => {
+        for (let i = 0; i < decoration.count; i++) {
+          const deco = document.createElement('div');
+          deco.className = `festival-decoration ${decoration.type}`;
+          
+          if (decoration.image) {
+            deco.style.backgroundImage = `url("${decoration.image}")`;
+          }
+          
+          // Random positioning
+          const startY = Math.random() * window.innerHeight;
+          const duration = 15 + Math.random() * 15;
+          const delay = Math.random() * 10;
+          
+          deco.style.top = `${startY}px`;
+          deco.style.animationDuration = `${duration}s`;
+          deco.style.animationDelay = `${delay}s`;
+          
+          document.body.appendChild(deco);
+        }
+      });
+    }
+
     // Highlight featured products
-    function highlightFeaturedProducts() {
+    function highlightFeaturedProducts(festival) {
       const featuredProducts = document.querySelectorAll('.featured-product');
       featuredProducts.forEach(product => {
+        // Clear existing badges
+        const existingBadge = product.querySelector('.featured-badge');
+        if (existingBadge) existingBadge.remove();
+        
         const badge = document.createElement('div');
         badge.className = 'featured-badge';
-        badge.textContent = 'HOT';
+        badge.textContent = festival ? festival.productTag : 'HOT';
         product.appendChild(badge);
       });
     }
@@ -1251,6 +1378,7 @@
               <div class="discount-price">
                 <span class="original-price">RM ${product.originalPrice.toFixed(2)}</span>
                 <span class="new-price">RM ${product.price.toFixed(2)} <span class="fire-icon">🔥</span></span>
+                ${product.festivalTag ? `<div style="color: var(--accent-color); font-weight: bold; margin-top: 5px;">${product.festivalTag}</div>` : ''}
               </div>
             ` : `<div class="price">RM ${product.price.toFixed(2)}</div>`}
             <div class="benefits"><strong>Benefits:</strong> ${product.benefits}</div>
@@ -1261,9 +1389,7 @@
         `;
       }).join('');
       
-      if (festival) {
-        highlightFeaturedProducts();
-      }
+      highlightFeaturedProducts(festival);
     }
 
     function showTab(tabId) {
@@ -1452,6 +1578,7 @@
       const currentFestival = getCurrentFestival();
       applyFestivalTheme(currentFestival);
       renderProducts(currentFestival);
+      createFestivalDecorations(currentFestival);
       showTab('products');
       showFestivalPopup(currentFestival);
       
