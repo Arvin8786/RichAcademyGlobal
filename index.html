@@ -12,7 +12,7 @@
       --festival-name: "Chinese New Year";
       --festival-image: url('https://via.placeholder.com/600x200/CC0000/FFD700?text=Chinese+New+Year+Special');
       --festival-message: "Celebrate the Year of the Dragon with our special CNY offers! Enjoy great discounts on our best-selling products.";
-      --festival-offer: "15% OFF on all orders!";
+      --festival-offer: "10% OFF on all orders!";
     }
     
     /* Festival Theme Variables */
@@ -23,7 +23,7 @@
       --festival-name: "Chinese New Year";
       --festival-image: url('https://via.placeholder.com/600x200/CC0000/FFD700?text=Chinese+New+Year+Special');
       --festival-message: "Celebrate the Year of the Dragon with our special CNY offers! Enjoy great discounts on our best-selling products.";
-      --festival-offer: "15% OFF on all orders!";
+      --festival-offer: "10% OFF on all orders!";
     }
     
     :root.hari-raya-theme {
@@ -43,7 +43,7 @@
       --festival-name: "Deepavali";
       --festival-image: url('https://via.placeholder.com/600x200/FF8C00/FFD700?text=Deepavali+Special');
       --festival-message: "Happy Deepavali! Enjoy our festival special discounts on wellness products.";
-      --festival-offer: "12% OFF All Products!";
+      --festival-offer: "10% OFF All Products!";
     }
     
     :root.christmas-theme {
@@ -1161,11 +1161,11 @@
         startDate: new Date(new Date().getFullYear(), 0, 22), // January 22
         endDate: new Date(new Date().getFullYear(), 1, 5),   // February 5
         decorations: [
-          { type: "cny-dragon", count: 2 },
-          { type: "tanglung", count: 2 },
-          { type: "cny-banner", count: 1 }
+          { type: "cny-dragon", count: 3 },
+          { type: "tanglung", count: 3 },
+          { type: "cny-banner", count: 2 }
         ],
-        discount: 0.15 // 15% discount
+        discount: 0.10 // 10% discount
       },
       {
         name: "Hari Raya",
@@ -1173,8 +1173,8 @@
         startDate: new Date(new Date().getFullYear(), 3, 21), // April 21
         endDate: new Date(new Date().getFullYear(), 4, 21),   // May 21
         decorations: [
-          { type: "hari-raya-ketupat", count: 3 },
-          { type: "hari-raya-banner", count: 1 }
+          { type: "hari-raya-ketupat", count: 5 },
+          { type: "hari-raya-banner", count: 2 }
         ],
         discount: 0.10 // 10% discount
       },
@@ -1187,7 +1187,7 @@
           { type: "deepavali-diwa", count: 3 },
           { type: "deepavali-banner", count: 1 }
         ],
-        discount: 0.12 // 12% discount
+        discount: 0.10 // 10% discount
       },
       {
         name: "Christmas",
@@ -1198,7 +1198,7 @@
           { type: "christmas-tree", count: 3 },
           { type: "christmas-banner", count: 1 }
         ],
-        discount: 0.20 // 20% discount
+        discount: 0.10 // 10% discount
       }
     ];
 
