@@ -802,7 +802,7 @@
       <h2 class="festival-title" id="festival-title">Happy National Day!</h2>
       <img src="national-day-banner.jpg" alt="Festival Banner" class="festival-image" id="festival-image">
       <p class="festival-message" id="festival-message">Celebrate Malaysia's independence with special discounts on our best products!</p>
-      <div class="festival-offer" id="festival-offer">15% OFF on all products until August 31st</div>
+      <div class="festival-offer" id="festival-offer">10% OFF on all products until August 31st</div>
       <button class="add-to-cart" onclick="closeFestivalModal()" style="width: auto; margin: 0 auto;">Continue Shopping</button>
     </div>
   </div>
@@ -966,19 +966,19 @@
       festivals: [
         {
           id: "national-day",
-          name: "National Day",
-          startDate: new Date(new Date().getFullYear(), 7, 1), // July 1st
-          endDate: new Date(new Date().getFullYear(), 7, 31), // August 31st
-          title: "Happy National Day!",
-          message: "Celebrate Malaysia's independence with special discounts on our best products!",
-          offer: "15% OFF on all products until August 31st",
-          image: "https://example.com/national-day-banner.jpg",
-          theme: "national-day-theme",
-          productTag: "Patriotic Deal",
-          colors: {
-            primary: "#006644",
-            secondary: "#CC0000",
-            accent: "#FFD700"
+      name: "National Day",
+      startDate: new Date(2025, 6, 1), // July 1 2025 (month is 0-indexed)
+      endDate: new Date(2025, 6, 31), // July 31 2025
+      title: "Happy National Day! (TEST MODE)",
+      message: "Special discounts for our patriotic customers!",
+      offer: "15% OFF all products this month",
+      image: "https://example.com/national-day-banner.jpg",
+      theme: "national-day-theme",
+      productTag: "Merdeka Deal",
+      colors: {
+        primary: "#006644", // Dark green
+        secondary: "#CC0000", // Red
+        accent: "#FFD700" // Gold
           }
         },
         {
