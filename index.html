@@ -70,6 +70,8 @@
       text-align: center;
       display: flex;
       flex-direction: column;
+      position: relative;
+      overflow: hidden;
     }
     .product img {
       width: 100%;
@@ -426,6 +428,142 @@
     .suggestion-product button:hover {
       background: #237a48;
     }
+    
+    /* Festival Popup Modal */
+    .festival-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .festival-content {
+      background-color: white;
+      border-radius: 15px;
+      padding: 30px;
+      max-width: 600px;
+      text-align: center;
+      position: relative;
+      animation: fadeIn 0.5s;
+    }
+    
+    .festival-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    
+    .festival-title {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+    
+    .festival-message {
+      font-size: 1.2rem;
+      margin-bottom: 25px;
+    }
+    
+    .festival-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .festival-offer {
+      background-color: #FFD700;
+      padding: 10px;
+      border-radius: 5px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    
+    /* Festival Theme Classes */
+    .national-day-theme {
+      --primary-color: #006644;
+      --secondary-color: #CC0000;
+      --accent-color: #FFD700;
+    }
+    
+    .hari-raya-theme {
+      --primary-color: #2E8B57;
+      --secondary-color: #F8F8F8;
+      --accent-color: #E6C229;
+    }
+    
+    .deepavali-theme {
+      --primary-color: #FF9933;
+      --secondary-color: #138808;
+      --accent-color: #FFD700;
+    }
+    
+    .christmas-theme {
+      --primary-color: #CC0000;
+      --secondary-color: #01796F;
+      --accent-color: #FFFFFF;
+    }
+    
+    /* Product Festival Decorations */
+    .festival-product::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: var(--accent-color);
+    }
+    
+    .festival-tag {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: var(--accent-color);
+      color: var(--primary-color);
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-size: 12px;
+      font-weight: bold;
+      z-index: 1;
+    }
+    
+    /* Theme Application */
+    .festival-active nav {
+      background-color: var(--primary-color);
+    }
+    
+    .festival-active .add-to-cart,
+    .festival-active .cta-button,
+    .festival-active #suggest-btn {
+      background-color: var(--primary-color);
+    }
+    
+    .festival-active .add-to-cart:hover,
+    .festival-active .cta-button:hover,
+    .festival-active #suggest-btn:hover {
+      background-color: var(--secondary-color);
+    }
+    
+    .festival-active .product h3 {
+      color: var(--primary-color);
+    }
+    
+    .festival-active .price {
+      color: var(--secondary-color);
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
   </style>
 </head>
 <body>
@@ -657,6 +795,18 @@
     </div>
   </div>
 
+  <!-- Festival Popup Modal -->
+  <div id="festival-modal" class="festival-modal">
+    <div class="festival-content">
+      <span class="festival-close" onclick="closeFestivalModal()">&times;</span>
+      <h2 class="festival-title" id="festival-title">Happy National Day!</h2>
+      <img src="national-day-banner.jpg" alt="Festival Banner" class="festival-image" id="festival-image">
+      <p class="festival-message" id="festival-message">Celebrate Malaysia's independence with special discounts on our best products!</p>
+      <div class="festival-offer" id="festival-offer">15% OFF on all products until August 31st</div>
+      <button class="add-to-cart" onclick="closeFestivalModal()" style="width: auto; margin: 0 auto;">Continue Shopping</button>
+    </div>
+  </div>
+
   <footer>
     <p>&copy; 2025 Forever Living by Mohd Arvind Isa. Powered by Rich Academy Global. All rights reserved.</p>
     <div class="timestamp">Last updated: July 20, 2025</div>
@@ -808,20 +958,167 @@
       "itchy skin": { id: 12, name: "Aloe First", recommendation: "Spray on affected areas" },
       "sunburn": { id: 12, name: "Aloe First", recommendation: "Spray generously on sunburned skin" },
       "wrinkles": { id: 14, name: "Aloe Propolis Creme", recommendation: "Apply daily to face and neck" },
-      "age spots": { id: 14, name: "Aloe Propolis Creme", recommendation: "Apply twice daily" },
-      
-      // [Additional 200+ symptoms would continue here...]
-      // Note: In practice you would have the full 1000+ entries here
-      // covering all major body systems and common complaints
+      "age spots": { id: 14, name: "Aloe Propolis Creme", recommendation: "Apply twice daily" }
+    };
+
+    // Festival Configuration - Will auto-update based on current date
+    const festivalConfig = {
+      festivals: [
+        {
+          id: "national-day",
+          name: "National Day",
+          startDate: new Date(new Date().getFullYear(), 7, 1), // August 1st
+          endDate: new Date(new Date().getFullYear(), 7, 31), // August 31st
+          title: "Happy National Day!",
+          message: "Celebrate Malaysia's independence with special discounts on our best products!",
+          offer: "15% OFF on all products until August 31st",
+          image: "https://example.com/national-day-banner.jpg",
+          theme: "national-day-theme",
+          productTag: "Patriotic Deal",
+          colors: {
+            primary: "#006644",
+            secondary: "#CC0000",
+            accent: "#FFD700"
+          }
+        },
+        {
+          id: "hari-raya",
+          name: "Hari Raya",
+          startDate: new Date(new Date().getFullYear(), 3, 10), // April 10th
+          endDate: new Date(new Date().getFullYear(), 3, 20), // April 20th
+          title: "Selamat Hari Raya!",
+          message: "Celebrate this festive season with our special offers!",
+          offer: "Buy 2 Get 1 Free on selected items",
+          image: "https://example.com/hari-raya-banner.jpg",
+          theme: "hari-raya-theme",
+          productTag: "Raya Special",
+          colors: {
+            primary: "#2E8B57",
+            secondary: "#F8F8F8",
+            accent: "#E6C229"
+          }
+        },
+        {
+          id: "deepavali",
+          name: "Deepavali",
+          startDate: new Date(new Date().getFullYear(), 9, 31), // October 31st
+          endDate: new Date(new Date().getFullYear(), 10, 5), // November 5th
+          title: "Happy Deepavali!",
+          message: "Light up your life with our festive offers!",
+          offer: "20% OFF on wellness products",
+          image: "https://example.com/deepavali-banner.jpg",
+          theme: "deepavali-theme",
+          productTag: "Festive Deal",
+          colors: {
+            primary: "#FF9933",
+            secondary: "#138808",
+            accent: "#FFD700"
+          }
+        },
+        {
+          id: "christmas",
+          name: "Christmas",
+          startDate: new Date(new Date().getFullYear(), 11, 15), // December 15th
+          endDate: new Date(new Date().getFullYear(), 11, 31), // December 31st
+          title: "Merry Christmas!",
+          message: "Season's greetings and special holiday offers!",
+          offer: "Free gift wrapping on all orders",
+          image: "https://example.com/christmas-banner.jpg",
+          theme: "christmas-theme",
+          productTag: "Holiday Special",
+          colors: {
+            primary: "#CC0000",
+            secondary: "#01796F",
+            accent: "#FFFFFF"
+          }
+        }
+      ]
     };
 
     let cart = [];
+
+    // Check if today falls within any festival period
+    function getCurrentFestival() {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Normalize time for comparison
+      
+      for (const festival of festivalConfig.festivals) {
+        const startDate = new Date(festival.startDate);
+        startDate.setHours(0, 0, 0, 0);
+        
+        const endDate = new Date(festival.endDate);
+        endDate.setHours(23, 59, 59, 999);
+        
+        if (today >= startDate && today <= endDate) {
+          return festival;
+        }
+      }
+      return null;
+    }
+
+    // Apply festival theme to the page
+    function applyFestivalTheme(festival) {
+      if (!festival) return;
+      
+      document.body.classList.add('festival-active', festival.theme);
+      
+      // Update CSS variables
+      const root = document.documentElement;
+      root.style.setProperty('--primary-color', festival.colors.primary);
+      root.style.setProperty('--secondary-color', festival.colors.secondary);
+      root.style.setProperty('--accent-color', festival.colors.accent);
+      
+      // Decorate products
+      const products = document.querySelectorAll('.product');
+      products.forEach(product => {
+        product.classList.add('festival-product');
+        const tag = document.createElement('div');
+        tag.className = 'festival-tag';
+        tag.textContent = festival.productTag;
+        product.appendChild(tag);
+      });
+    }
+
+    // Show festival popup
+    function showFestivalPopup(festival) {
+      if (!festival) return;
+      
+      // Check if user has already closed the popup for this festival
+      if (localStorage.getItem('festivalPopupClosed') === festival.id) {
+        return;
+      }
+      
+      document.getElementById('festival-title').textContent = festival.title;
+      document.getElementById('festival-message').textContent = festival.message;
+      document.getElementById('festival-offer').textContent = festival.offer;
+      document.getElementById('festival-image').src = festival.image;
+      document.getElementById('festival-image').alt = festival.name + ' Banner';
+      
+      document.getElementById('festival-modal').style.display = 'flex';
+    }
+
+    // Close festival popup
+    function closeFestivalModal() {
+      const currentFestival = getCurrentFestival();
+      if (currentFestival) {
+        localStorage.setItem('festivalPopupClosed', currentFestival.id);
+      }
+      document.getElementById('festival-modal').style.display = 'none';
+    }
+
+    // Initialize festival features
+    function initFestival() {
+      const currentFestival = getCurrentFestival();
+      if (currentFestival) {
+        applyFestivalTheme(currentFestival);
+        showFestivalPopup(currentFestival);
+      }
+    }
 
     function showTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.getElementById(tabId).classList.add('active');
       
-      // Add confetti to rewards section
       if (tabId === 'rewards') {
         createConfetti();
       }
@@ -900,7 +1197,6 @@
     }
 
     function showAddedToCartMessage(productName) {
-      // Create a temporary notification
       const notification = document.createElement('div');
       notification.style.position = 'fixed';
       notification.style.bottom = '20px';
@@ -916,7 +1212,6 @@
       
       document.body.appendChild(notification);
       
-      // Remove after 3 seconds
       setTimeout(() => {
         notification.style.animation = 'fadeOut 0.3s';
         setTimeout(() => notification.remove(), 300);
@@ -937,7 +1232,6 @@
         return;
       }
       
-      // Format WhatsApp message
       let message = `Hi, I would like to place an order:\n\n`;
       message += `Name: ${name}\n`;
       message += `Phone: ${phone}\n\n`;
@@ -950,7 +1244,6 @@
       message += `\nTotal: RM ${cart.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2)}\n\n`;
       message += `Please confirm my order. Thank you!`;
       
-      // Encode for URL
       const encodedMessage = encodeURIComponent(message);
       window.location.href = `https://wa.me/601111033154?text=${encodedMessage}`;
     }
@@ -977,10 +1270,8 @@
       const result = document.getElementById("suggestion-result");
       let matchedProducts = [];
 
-      // Check for matching symptoms
       for (const [symptom, productInfo] of Object.entries(productSuggestions)) {
         if (input.includes(symptom)) {
-          // Check if product already suggested
           const existing = matchedProducts.find(p => p.id === productInfo.id);
           if (!existing) {
             matchedProducts.push(productInfo);
@@ -1026,12 +1317,17 @@
     document.addEventListener('DOMContentLoaded', function() {
       renderProducts();
       showTab('products');
+      initFestival();
       
-      // Close modal when clicking outside
       window.onclick = function(event) {
         const modal = document.getElementById('cart-modal');
         if (event.target === modal) {
           modal.style.display = "none";
+        }
+        
+        const festivalModal = document.getElementById('festival-modal');
+        if (event.target === festivalModal) {
+          closeFestivalModal();
         }
       }
     });
