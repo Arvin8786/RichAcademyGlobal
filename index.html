@@ -789,6 +789,17 @@
       color: var(--accent-color);
       font-weight: bold;
     }
+    
+    .delivery-offer {
+      font-size: 14px;
+      color: var(--primary-color);
+      text-align: center;
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f0f8ff;
+      border-radius: 4px;
+      font-weight: bold;
+    }
   </style>
 
   <!-- Grand Opening Decorations -->
@@ -1025,6 +1036,10 @@
       <h2>Your Shopping Cart</h2>
       <div id="cart-items"></div>
       <div class="cart-total">Total: RM <span id="cart-total">0.00</span></div>
+      
+      <div class="delivery-offer">
+        🚚 FREE NATIONWIDE DELIVERY for orders RM 250 and above! Limited time offer.
+      </div>
       
       <div class="customer-info-form">
         <h3>Customer Information</h3>
@@ -1353,23 +1368,27 @@
         `;
       });
       
-      // Calculate postage
+      // Calculate postage with new logic
       let postage = 0;
       let postageMessage = '';
       
-      if (cart.length === 1) {
+      if (subtotal >= 250) {
+        // Free delivery for orders RM250 and above
+        postage = 0;
+        postageMessage = `<div class="cart-postage free-delivery">FREE DELIVERY! (Orders RM250 and above)</div>`;
+      } else if (cart.length === 1) {
         // Single item - RM 14 postage
         postage = 14;
         postageMessage = `<div class="cart-postage">Postage: RM ${postage.toFixed(2)}</div>`;
       } else if (cart.length > 1) {
-        // Multiple items - 10% reduction per additional item
-        const discountRate = 0.10;
+        // Multiple items - 20% reduction per additional item
+        const discountRate = 0.20;
         const basePostage = 14;
         const discountedPostage = basePostage * (1 - (discountRate * (cart.length - 1)));
         postage = Math.max(discountedPostage, 0); // Ensure postage doesn't go negative
         
         if (postage > 0) {
-          postageMessage = `<div class="cart-postage">Discounted Postage: RM ${postage.toFixed(2)} (10% off per additional item)</div>`;
+          postageMessage = `<div class="cart-postage">Discounted Postage: RM ${postage.toFixed(2)} (20% off per additional item)</div>`;
         } else {
           postageMessage = `<div class="cart-postage free-delivery">Bundle purchases qualify for FREE delivery!</div>`;
         }
@@ -1419,10 +1438,14 @@
       
       // Calculate postage same as in updateCartDisplay
       let postage = 0;
-      if (cart.length === 1) {
+      const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+      
+      if (subtotal >= 250) {
+        postage = 0;
+      } else if (cart.length === 1) {
         postage = 14;
       } else if (cart.length > 1) {
-        const discountRate = 0.10;
+        const discountRate = 0.20;
         const basePostage = 14;
         const discountedPostage = basePostage * (1 - (discountRate * (cart.length - 1)));
         postage = Math.max(discountedPostage, 0);
@@ -1442,9 +1465,9 @@
         message += `\n`;
       });
       
-      message += `\nSubtotal: RM ${cart.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2)}\n`;
+      message += `\nSubtotal: RM ${subtotal.toFixed(2)}\n`;
       message += `Postage: RM ${postage.toFixed(2)}\n`;
-      message += `Total: RM ${(cart.reduce((total, item) => total + (item.price * item.quantity), 0) + postage).toFixed(2)}\n\n`;
+      message += `Total: RM ${(subtotal + postage).toFixed(2)}\n\n`;
       message += `Please confirm my order. Thank you!`;
       
       const encodedMessage = encodeURIComponent(message);
