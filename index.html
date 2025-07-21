@@ -774,13 +774,22 @@
       box-shadow: 0 3px 10px rgba(0,0,0,0.2);
       animation: pulse 2s infinite;
     }
+
+    /* New styles for postage information */
+    .cart-postage {
+      font-size: 14px;
+      color: #666;
+      margin: 10px 0;
+      padding: 10px;
+      background-color: #f5f5f5;
+      border-radius: 4px;
+    }
+
+    .free-delivery {
+      color: var(--accent-color);
+      font-weight: bold;
+    }
   </style>
-</head>
-<body class="grand-opening-theme">
-  <!-- Grand Opening Ribbon -->
-  <div class="grand-opening-ribbon">
-    <span>GRAND OPENING SALE!</span>
-  </div>
 
   <!-- Grand Opening Decorations -->
   <div id="festival-decorations">
@@ -1327,11 +1336,11 @@
       }
       
       let itemsHTML = '';
-      let total = 0;
+      let subtotal = 0;
       
       cart.forEach(item => {
         const itemTotal = item.price * item.quantity;
-        total += itemTotal;
+        subtotal += itemTotal;
         
         itemsHTML += `
           <div class="cart-item">
@@ -1344,7 +1353,31 @@
         `;
       });
       
-      cartItemsElement.innerHTML = itemsHTML;
+      // Calculate postage
+      let postage = 0;
+      let postageMessage = '';
+      
+      if (cart.length === 1) {
+        // Single item - RM 14 postage
+        postage = 14;
+        postageMessage = `<div class="cart-postage">Postage: RM ${postage.toFixed(2)}</div>`;
+      } else if (cart.length > 1) {
+        // Multiple items - 10% reduction per additional item
+        const discountRate = 0.10;
+        const basePostage = 14;
+        const discountedPostage = basePostage * (1 - (discountRate * (cart.length - 1)));
+        postage = Math.max(discountedPostage, 0); // Ensure postage doesn't go negative
+        
+        if (postage > 0) {
+          postageMessage = `<div class="cart-postage">Discounted Postage: RM ${postage.toFixed(2)} (10% off per additional item)</div>`;
+        } else {
+          postageMessage = `<div class="cart-postage free-delivery">Bundle purchases qualify for FREE delivery!</div>`;
+        }
+      }
+      
+      const total = subtotal + postage;
+      
+      cartItemsElement.innerHTML = itemsHTML + postageMessage;
       cartTotalElement.textContent = total.toFixed(2);
     }
 
@@ -1384,6 +1417,17 @@
         return;
       }
       
+      // Calculate postage same as in updateCartDisplay
+      let postage = 0;
+      if (cart.length === 1) {
+        postage = 14;
+      } else if (cart.length > 1) {
+        const discountRate = 0.10;
+        const basePostage = 14;
+        const discountedPostage = basePostage * (1 - (discountRate * (cart.length - 1)));
+        postage = Math.max(discountedPostage, 0);
+      }
+      
       let message = `Hi, I would like to place an order:\n\n`;
       message += `Name: ${name}\n`;
       message += `Phone: ${phone}\n\n`;
@@ -1398,7 +1442,9 @@
         message += `\n`;
       });
       
-      message += `\nTotal: RM ${cart.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2)}\n\n`;
+      message += `\nSubtotal: RM ${cart.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2)}\n`;
+      message += `Postage: RM ${postage.toFixed(2)}\n`;
+      message += `Total: RM ${(cart.reduce((total, item) => total + (item.price * item.quantity), 0) + postage).toFixed(2)}\n\n`;
       message += `Please confirm my order. Thank you!`;
       
       const encodedMessage = encodeURIComponent(message);
