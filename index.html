@@ -5,34 +5,899 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Forever Living by Mohd Isa - Grand Opening Special</title>
   <style>
-    /* (All your original CSS here, unchanged - omitted for brevity, but KEEP your full CSS from your code) */
-    /* ... Paste your entire CSS here ... */
-    /* For the demo, we'll add some admin login modal styling */
+    /* All your original CSS here */
+    :root {
+      --primary-color: #1a5276;
+      --secondary-color: #f39c12;
+      --accent-color: #27ae60;
+      --festival-name: "Grand Opening";
+      --festival-image: url('https://via.placeholder.com/600x200/1a5276/f39c12?text=Grand+Opening+Special');
+      --festival-message: "Welcome to our online store! Enjoy special opening discounts on selected products.";
+      --festival-offer: "5% OFF on Top Products!";
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    /* Grand Opening Decorations */
+    .festival-decoration {
+      position: fixed;
+      z-index: 999;
+      pointer-events: none;
+      animation-timing-function: linear;
+    }
+    
+    .opening-balloon {
+      width: 80px;
+      height: 100px;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 100"><path fill="%231a5276" d="M40,10 C60,10 70,30 70,50 C70,70 60,90 40,90 C20,90 10,70 10,50 C10,30 20,10 40,10 Z"/><path fill="%23f39c12" d="M30,30 L50,30 L50,50 L30,50 Z"/></svg>');
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: floatBalloon 20s linear infinite;
+    }
+    
+    .opening-confetti {
+      width: 60px;
+      height: 60px;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60"><circle cx="30" cy="30" r="20" fill="%2327ae60"/><circle cx="15" cy="15" r="5" fill="%23f39c12"/><circle cx="45" cy="15" r="5" fill="%23f39c12"/><circle cx="15" cy="45" r="5" fill="%23f39c12"/><circle cx="45" cy="45" r="5" fill="%23f39c12"/></svg>');
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: floatConfetti 25s linear infinite;
+    }
+    
+    .opening-banner {
+      width: 150px;
+      height: 80px;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 80"><rect width="150" height="80" fill="%231a5276"/><text x="75" y="45" font-family="Arial" font-size="20" fill="%23f39c12" text-anchor="middle">Grand Opening</text></svg>');
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: floatBanner 30s linear infinite;
+    }
+    
+    @keyframes floatBalloon {
+      0% { transform: translateX(-80px) translateY(100px); }
+      100% { transform: translateX(calc(100vw + 80px)) translateY(300px); }
+    }
+    
+    @keyframes floatConfetti {
+      0% { transform: translateX(-60px) translateY(150px); }
+      50% { transform: translateX(50vw) translateY(50px); }
+      100% { transform: translateX(calc(100vw + 60px)) translateY(200px); }
+    }
+    
+    @keyframes floatBanner {
+      0% { transform: translateX(-150px) translateY(50px) rotate(-5deg); }
+      100% { transform: translateX(calc(100vw + 150px)) translateY(150px) rotate(5deg); }
+    }
+
+    header {
+      background-color: #fff;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+      position: relative;
+    }
+    .cart-icon {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    nav {
+      background-color: var(--primary-color);
+      position: relative;
+      z-index: 100;
+    }
+    nav ul {
+      display: flex;
+      list-style: none;
+      padding: 10px;
+      margin: 0;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    nav li {
+      margin: 0 15px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+      padding: 5px 0;
+      display: inline-block;
+      position: relative;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--secondary-color);
+      transition: width 0.3s;
+    }
+    nav a:hover::after {
+      width: 100%;
+    }
+    .tab-content {
+      display: none;
+      padding: 20px;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .product-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .product {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    .product:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .product img {
+      width: 100%;
+      height: 200px;
+      object-fit: contain;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    .product h3 {
+      margin: 10px 0 5px;
+      color: var(--primary-color);
+    }
+    .product .benefits {
+      font-size: 13px;
+      color: #555;
+      text-align: left;
+      margin: 8px 0;
+      padding: 0 5px;
+      flex-grow: 1;
+    }
+    .product .consumption {
+      font-size: 13px;
+      color: var(--primary-color);
+      font-style: italic;
+      text-align: left;
+      margin: 8px 0 12px;
+      padding: 0 5px;
+    }
+    .product .whatsapp-btn {
+      display: inline-block;
+      margin-top: 10px;
+      background: #25D366;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    .product .whatsapp-btn:hover {
+      background: #128C7E;
+    }
+    .product .add-to-cart {
+      display: inline-block;
+      margin-top: 10px;
+      background: var(--primary-color);
+      color: white;
+      padding: 8px 15px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .product .add-to-cart:hover {
+      background: #1a237e;
+    }
+    .ai-suggestion-box {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+      border: 2px solid var(--accent-color);
+    }
+    .ai-suggestion-box h2 {
+      color: var(--primary-color);
+      margin-top: 0;
+      text-align: center;
+    }
+    #symptom-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin: 10px 0;
+      border: 2px solid var(--primary-color);
+    }
+    #suggest-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+      display: block;
+      margin: 0 auto;
+    }
+    #suggest-btn:hover {
+      background: #1a237e;
+    }
+    #suggestion-result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 4px;
+      border-left: 4px solid var(--accent-color);
+    }
+    footer {
+      background: #f1f1f1;
+      padding: 20px;
+      text-align: center;
+      font-size: 14px;
+    }
+    .timestamp {
+      font-size: 12px;
+      color: #666;
+      margin-top: 5px;
+    }
+    .disclaimer {
+      margin-top: 10px;
+      background-color: #fff3cd;
+      color: #856404;
+      padding: 15px;
+      border-top: 1px solid #ffeeba;
+    }
+    /* Cart Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 8px;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close:hover {
+      color: black;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .cart-item-info {
+      flex-grow: 1;
+    }
+    .cart-item-price {
+      font-weight: bold;
+      color: var(--secondary-color);
+    }
+    .remove-item {
+      color: #ff0000;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .cart-total {
+      font-weight: bold;
+      font-size: 18px;
+      text-align: right;
+      margin-top: 20px;
+    }
+    .customer-info-form {
+      margin-top: 20px;
+    }
+    .customer-info-form input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .checkout-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 10px;
+      width: 100%;
+    }
+    .checkout-btn:hover {
+      background: #1a237e;
+    }
+    /* Rewards Animation */
+    .rewards-container {
+      text-align: center;
+      padding: 50px 20px;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      color: white;
+      border-radius: 10px;
+      margin: 30px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .rewards-title {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      animation: pulse 2s infinite;
+    }
+    .rewards-subtitle {
+      font-size: 1.5rem;
+      margin-bottom: 30px;
+    }
+    .reward-icon {
+      font-size: 4rem;
+      margin: 20px;
+      display: inline-block;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+      100% { transform: translateY(0px); }
+    }
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: #f0f;
+      opacity: 0.7;
+      animation: confettiFall 5s linear infinite;
+    }
+    @keyframes confettiFall {
+      0% { 
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 1;
+      }
+      100% { 
+        transform: translateY(1000px) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    /* Enhanced CDS and Business sections */
+    .program-section {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    .program-section h2 {
+      color: var(--primary-color);
+      font-size: 2rem;
+      margin-top: 0;
+      text-align: center;
+    }
+    .program-highlights {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      margin: 30px 0;
+    }
+    .highlight-card {
+      width: 30%;
+      min-width: 250px;
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    .highlight-card:hover {
+      transform: translateY(-5px);
+    }
+    .highlight-card h3 {
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 10px;
+    }
+    .testimonial {
+      background: #f0f8f0;
+      padding: 20px;
+      border-left: 4px solid var(--primary-color);
+      margin: 20px 0;
+      font-style: italic;
+    }
+    .testimonial-author {
+      text-align: right;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+    .cta-button {
+      display: block;
+      width: 300px;
+      margin: 30px auto;
+      background: var(--secondary-color);
+      color: white;
+      text-align: center;
+      padding: 15px;
+      border-radius: 50px;
+      font-weight: bold;
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: all 0.3s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .cta-button:hover {
+      background: #e67e22;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    }
+    .program-steps {
+      counter-reset: step;
+      margin: 30px 0;
+    }
+    .step {
+      position: relative;
+      padding-left: 80px;
+      margin-bottom: 30px;
+    }
+    .step:before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 60px;
+      height: 60px;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    /* AI suggestion add to cart buttons */
+    .suggestion-product {
+      background: #f8e8e8;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .suggestion-product button {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .suggestion-product button:hover {
+      background: #1a237e;
+    }
+    
+    /* Festival Popup Modal - Enhanced */
+    .festival-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.9);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.5s;
+    }
+    
+    .festival-content {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      max-width: 600px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border: 3px solid var(--accent-color);
+    }
+    
+    .festival-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 24px;
+      cursor: pointer;
+      color: #666;
+      transition: all 0.3s;
+    }
+    
+    .festival-close:hover {
+      color: #000;
+      transform: rotate(90deg);
+    }
+    
+    .festival-title {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+      animation: textGlow 2s infinite alternate;
+    }
+    
+    @keyframes textGlow {
+      0% { text-shadow: 0 0 10px rgba(0,0,0,0.1); }
+      100% { text-shadow: 0 0 20px var(--accent-color); }
+    }
+    
+    .festival-message {
+      font-size: 1.2rem;
+      margin-bottom: 25px;
+      color: #555;
+    }
+    
+    .festival-image {
+      max-width: 100%;
+      height: 200px;
+      object-fit: contain;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border: 2px solid var(--accent-color);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .festival-offer {
+      background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+      padding: 15px;
+      border-radius: 5px;
+      font-weight: bold;
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+      animation: pulse 1.5s infinite;
+    }
+    
+    /* Featured Product Animations */
+    .featured-product {
+      position: relative;
+      animation: float 3s ease-in-out infinite;
+      z-index: 1;
+      border: 2px solid var(--accent-color);
+    }
+    
+    .featured-product::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      background: linear-gradient(45deg, 
+        var(--primary-color), 
+        var(--secondary-color), 
+        var(--accent-color));
+      z-index: -1;
+      border-radius: 10px;
+      opacity: 0.3;
+      animation: gradientRotate 8s linear infinite;
+    }
+    
+    @keyframes gradientRotate {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+    
+    .featured-badge {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      width: 60px;
+      height: 60px;
+      background: var(--accent-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+      transform: rotate(15deg);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      animation: badgePulse 2s infinite;
+    }
+    
+    @keyframes badgePulse {
+      0% { transform: rotate(15deg) scale(1); }
+      50% { transform: rotate(15deg) scale(1.1); }
+      100% { transform: rotate(15deg) scale(1); }
+    }
+    
+    .discount-price {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    
+    .original-price {
+      text-decoration: line-through;
+      color: #999;
+      font-size: 0.9em;
+    }
+    
+    .new-price {
+      color: var(--secondary-color);
+      font-weight: bold;
+      font-size: 1.2em;
+      display: flex;
+      align-items: center;
+    }
+    
+    .fire-icon {
+      margin-left: 5px;
+      color: #FF5722;
+      animation: fireBlink 1s infinite alternate;
+    }
+    
+    @keyframes fireBlink {
+      0% { opacity: 0.7; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.2); }
+    }
+    
+    .coming-soon {
+      text-align: center;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f8f9fa;
+      border-radius: 5px;
+      color: var(--primary-color);
+      font-weight: bold;
+    }
+    
+    /* Grand Opening Ribbon */
+    .grand-opening-ribbon {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 150px;
+      height: 150px;
+      overflow: hidden;
+      z-index: 100;
+    }
+    
+    .grand-opening-ribbon::before,
+    .grand-opening-ribbon::after {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      display: block;
+      border: 5px solid #f39c12;
+      border-top-color: transparent;
+      border-right-color: transparent;
+    }
+    
+    .grand-opening-ribbon::before {
+      top: 0;
+      left: 0;
+    }
+    
+    .grand-opening-ribbon::after {
+      bottom: 0;
+      right: 0;
+    }
+    
+    .grand-opening-ribbon span {
+      position: absolute;
+      display: block;
+      width: 225px;
+      padding: 15px 0;
+      background-color: #1a5276;
+      box-shadow: 0 5px 10px rgba(0,0,0,.1);
+      color: #fff;
+      font-size: 13px;
+      text-align: center;
+      right: -25px;
+      top: 30px;
+      transform: rotate(45deg);
+    }
+    
+    /* Special Offer Banner */
+    .special-offer-banner {
+      background: linear-gradient(135deg, #1a5276, #27ae60);
+      color: white;
+      padding: 10px;
+      text-align: center;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      animation: pulse 2s infinite;
+    }
+
+    /* New styles for postage information */
+    .cart-postage {
+      font-size: 14px;
+      color: #666;
+      margin: 10px 0;
+      padding: 10px;
+      background-color: #f5f5f5;
+      border-radius: 4px;
+    }
+
+    .free-delivery {
+      color: var(--accent-color);
+      font-weight: bold;
+    }
+    
+    .delivery-offer {
+      font-size: 14px;
+      color: var(--primary-color);
+      text-align: center;
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f0f8ff;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    /* Admin Panel Styles */
     .admin-modal {
       display: none;
       position: fixed;
-      z background: #fff;
-      padding: 32px 16px 16px 16px;
-      border-radius: 12px;
-      max-width: 350px;
-      margin: auto;
-      box-shadow: 0 2px 25px rgba(0,0,0,0.5);
-      text background: #eee;
-      color: #444;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      padding: 4px 12px;
-      font-size: 0.95em;
-      float: right;
-      margin-right: 10px;
-      margin-top: -10px;
-      margin-bottom: 10px;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .admin-modal-content {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 400px;
+      position: relative;
+    }
+
+    .close-admin-modal {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 24px;
       cursor: pointer;
+    }
+
+    .admin-warning {
+      background-color: #fff3cd;
+      color: #856404;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+
+    .admin-section {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .admin-section.active {
+      display: block;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    .admin-table th, .admin-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    .admin-table th {
+      background-color: #f2f2f2;
+    }
+
+    .admin-form input,
+    .admin-form textarea,
+    .admin-form select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .admin-form button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    .admin-access-label {
+      float: right;
+      background: #eee;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 0.9em;
+      margin-top: -10px;
     }
   </style>
 </head>
 <body>
-  <!-- Decorations, header, nav -->
+  <!-- Grand Opening Decorations -->
   <div id="festival-decorations">
     <div class="festival-decoration opening-balloon" style="top: 100px; animation-duration: 20s; animation-delay: 0s;"></div>
     <div class="festival-decoration opening-balloon" style="top: 300px; animation-duration: 25s; animation-delay: 5s;"></div>
@@ -40,6 +905,7 @@
     <div class="festival-decoration opening-confetti" style="top: 400px; animation-duration: 35s; animation-delay: 7s;"></div>
     <div class="festival-decoration opening-banner" style="top: 150px; animation-duration: 40s; animation-delay: 3s;"></div>
   </div>
+
   <header>
     <h1 style="font-size: 28px; color: var(--primary-color);">
       FOREVER LIVING by Mohd Isa
@@ -56,7 +922,7 @@
       <li><a href="#" onclick="showTab('cds')">Cabaran Detox Sihat @CDS </a></li>
       <li><a href="#" onclick="showTab('business')">Business Opportunity</a></li>
       <li><a href="#" onclick="showTab('rewards')">Rewards</a></li>
-      <li><a href="#" onclick="adminTabClicked()">Admin</a></li>
+      <li><a href="#" onclick="showAdminLogin(); return false;">Admin</a></li>
     </ul>
   </nav>
 
@@ -67,6 +933,7 @@
         <p>Enjoy 5% OFF on our top 10 bestselling products!</p>
         <p style="font-size: 1.1em; margin-top: 5px; font-weight: bold;">Promotion Period: 21/7/2025 - 24/8/2025</p>
       </div>
+
       <div class="ai-suggestion-box">
         <h2>AI Product Suggestion</h2>
         <p>Tell our AI your symptoms and we'll recommend the best Forever Living products for you:</p>
@@ -74,28 +941,197 @@
         <button id="suggest-btn" onclick="suggestProduct()">Get Product Suggestions</button>
         <div id="suggestion-result"></div>
       </div>
+      
       <h2>Our Products - Grand Opening Special!</h2>
       <div id="product-list" class="product-list"></div>
       <div class="coming-soon">More products coming soon! Stay tuned for updates.</div>
     </div>
+
     <div id="cds" class="tab-content">
-      <!-- ... (all your CDS program HTML, unchanged) ... -->
+      <section class="program-section">
+        <h2>Cabaran Detox Sihat (CDS)</h2>
+        <p style="text-align: center; font-size: 1.2rem;">Transform your health in just 7 days with our proven detox program</p>
+        
+        <div class="program-highlights">
+          <div class="highlight-card">
+            <h3>What You Get</h3>
+            <ul>
+              <li>✅ Personalized Forever product package</li>
+              <li>📋 Detailed meal plan & recipes</li>
+              <li>📱 Daily coaching via WhatsApp</li>
+              <li>👥 Private support community</li>
+              <li>📚 Educational materials</li>
+            </ul>
+          </div>
+          
+          <div class="highlight-card">
+            <h3>Benefits</h3>
+            <ul>
+              <li>⚡ Boost energy levels</li>
+              <li>🌿 Natural detoxification</li>
+              <li>⚖️ Healthy weight management</li>
+              <li>🧠 Improved mental clarity</li>
+              <li>😴 Better sleep quality</li>
+            </ul>
+          </div>
+          
+          <div class="highlight-card">
+            <h3>Program Details</h3>
+            <ul>
+             <li>⏳ 7-day intensive program</li>
+             <li>📦 Delivered in 5-10 working days</li>
+             <li>👨‍🏫 Experienced coach support</li>
+             <li>🎯 Results-driven approach</li>
+             <li>📊 Progress tracking tools</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="program-steps">
+          <h3 style="text-align: center;">How It Works</h3>
+          <div class="step">
+            <h4>Registration</h4>
+            <p>Complete your registration and health assessment to receive a personalized program tailored to your needs.</p>
+          </div>
+          <div class="step">
+            <h4>Receive Your Kit</h4>
+            <p>Get your Forever Living product package delivered to your doorstep with detailed instructions.</p>
+          </div>
+          <div class="step">
+            <h4>Daily Guidance</h4>
+            <p>Follow the daily plan with support from your coach and community through WhatsApp.</p>
+          </div>
+          <div class="step">
+            <h4>Transformation</h4>
+            <p>Experience noticeable improvements in your energy, digestion, and overall wellbeing by day 7.</p>
+          </div>
+        </div>
+        
+        <div class="testimonial">
+          <p>"After completing CDS, I lost 3kg and my chronic bloating disappeared. I now have so much more energy throughout the day!"</p>
+          <p class="testimonial-author">- Aina S., 32, Kuala Lumpur</p>
+        </div>
+        
+        <a href="https://wa.me/601111033154?text=I%20want%20to%20join%20CDS%20Program" class="cta-button">Join CDS Now</a>
+      </section>
     </div>
+
     <div id="business" class="tab-content">
-      <!-- ... (all your Business Opportunity HTML, unchanged) ... -->
+      <section class="program-section">
+        <h2>Build Your Forever Business</h2>
+        <p style="text-align: center; font-size: 1.2rem;">Start your journey to financial freedom with our proven system</p>
+        
+        <div class="program-highlights">
+          <div class="highlight-card">
+            <h3>Why Join Us?</h3>
+            <ul>
+              <li>💰 Earn 30-50% commission</li>
+              <li>🌍 Work from anywhere</li>
+              <li>⏱ Flexible hours</li>
+              <li>📈 Unlimited income potential</li>
+              <li>🛍️ Discount on products</li>
+            </ul>
+          </div>
+          
+          <div class="highlight-card">
+            <h3>What We Provide</h3>
+            <ul>
+              <li>🎓 Complete training program</li>
+              <li>📱 Marketing materials</li>
+              <li>🤝 Mentorship</li>
+              <li>👥 Team support</li>
+              <li>🏆 Recognition program</li>
+            </ul>
+          </div>
+          
+          <div class="highlight-card">
+            <h3>Success Path</h3>
+            <ul>
+              <li>1️⃣ Start part-time</li>
+              <li>2️⃣ Build your customer base</li>
+              <li>3️⃣ Recruit your team</li>
+              <li>4️⃣ Earn residual income</li>
+              <li>5️⃣ Achieve financial freedom</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="program-steps">
+          <h3 style="text-align: center;">Your Business Journey</h3>
+          <div class="step">
+            <h4>Step 1: Enroll</h4>
+            <p>Register as a Forever Business Owner (FBO) and receive your starter kit with everything you need to begin.</p>
+          </div>
+          <div class="step">
+            <h4>Step 2: Learn</h4>
+            <p>Complete our comprehensive training program with ongoing support from your upline and team.</p>
+          </div>
+          <div class="step">
+            <h4>Step 3: Implement</h4>
+            <p>Start sharing products and the business opportunity using our proven marketing system.</p>
+          </div>
+          <div class="step">
+            <h4>Step 4: Grow</h4>
+            <p>Build your team and leverage our compensation plan to maximize your earnings.</p>
+          </div>
+        </div>
+        
+        <div class="testimonial">
+          <p>"I joined Forever Living 2 years ago as a side hustle. Today it's my full-time business earning me RM15,000 monthly!"</p>
+          <p class="testimonial-author">- Ahmad F., 28, Penang</p>
+        </div>
+        
+        <div class="testimonial">
+          <p>"The training and support system helped me build confidence. I now have a team of 50 people across Malaysia."</p>
+          <p class="testimonial-author">- Sarah L., 35, Johor Bahru</p>
+        </div>
+        
+        <a href="https://wa.me/601111033154?text=I%20want%20to%20join%20Forever%20Business" class="cta-button">Start Your Business Today</a>
+      </section>
     </div>
+
     <div id="rewards" class="tab-content">
-      <!-- ... (all your Rewards HTML, unchanged) ... -->
+      <div class="rewards-container" id="rewards-animation">
+        <h1 class="rewards-title">EXCITING REWARDS COMING SOON!</h1>
+        <p class="rewards-subtitle">Stay tuned for our amazing loyalty program</p>
+        
+        <div>
+          <span class="reward-icon">🏆</span>
+          <span class="reward-icon">💰</span>
+          <span class="reward-icon">✈️</span>
+          <span class="reward-icon">🎁</span>
+        </div>
+        
+        <p style="font-size: 1.2rem; max-width: 800px; margin: 20px auto;">
+          We're preparing something special for our loyal customers! Our rewards program will offer exclusive benefits, 
+          cash bonuses and amazing gifts based on your purchases and referrals.
+        </p>
+        
+        <div style="margin-top: 30px;">
+          <button onclick="notifyMe()" style="
+            background: white;
+            color: var(--primary-color);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+          ">
+            Notify Me When Launched
+          </button>
+        </div>
+      </div>
     </div>
-    <!-- ========================= -->
-    <!-- ADMIN PANEL STARTS HERE   -->
-    <!-- ========================= -->
-    <div id="admin" class="tab-content" style="display: none;">
+
+    <!-- Admin Panel (hidden by default) -->
+    <div id="admin-panel" class="tab-content" style="display: none;">
       <div style="padding: 20px;">
-        <button style="display:none;" class="admin-logout-btn" onclick="logoutAdmin()" id="admin-logout-btn">Log out</button>
+        <button class="admin-logout-btn" onclick="logoutAdmin()" id="admin-logout-btn" style="display: none;">Log out</button>
         <div class="admin-access-label" id="admin-access-label"></div>
         <h2>Admin Panel</h2>
-        <div id="admin-warning" class="admin-warning" style="display:none;"></div>
+        <div id="admin-warning" class="admin-warning" style="display: none;"></div>
         <div style="margin-bottom: 20px;">
           <button id="btn-retail" onclick="showAdminSection('manage')">Retail Management</button>
           <button id="btn-add" onclick="showAdminSection('add')">Add Product</button>
@@ -103,153 +1139,586 @@
         </div>
 
         <!-- Retail Management -->
-        <div id="admin-manage" style="display:none;">
+        <div id="admin-manage" class="admin-section">
           <h3>Manage Products</h3>
-          <table border="1" cellpadding="6" style="width:100%;">
+          <table class="admin-table">
             <thead>
               <tr>
-                <th>Name</th><th>Price (RM)</th><th>Promotion Price</th><th>Promotion?</th><th>Edit</th>
+                <th>Name</th>
+                <th>Price (RM)</th>
+                <th>Promotion Price</th>
+                <th>Promotion?</th>
+                <th>Edit</th>
               </tr>
             </thead>
             <tbody id="admin-product-list"></tbody>
           </table>
         </div>
+
         <!-- Add Product -->
-        <div id="admin-add" style="display:none;">
+        <div id="admin-add" class="admin-section">
           <h3>Add New Product</h3>
-          <form id="add-product-form" onsubmit="addNewProduct(event)">
-            <input type="text" id="new-name" placeholder="Product Name" required><br><br>
-            <input type="number" step="0.01" id="new-price" placeholder="Price (RM)" required><br><br>
-            <input type="text" id="new-image" placeholder="Image URL" required><br><br>
-            <textarea id="new-benefits" placeholder="Benefits" required></textarea><br><br>
-            <textarea id="new-consumption" placeholder="How to use" required></textarea><br><br>
+          <form id="add-product-form" class="admin-form" onsubmit="addNewProduct(event); return false;">
+            <input type="text" id="new-name" placeholder="Product Name" required><br>
+            <input type="number" step="0.01" id="new-price" placeholder="Price (RM)" required><br>
+            <input type="text" id="new-image" placeholder="Image URL" required><br>
+            <textarea id="new-benefits" placeholder="Benefits" required></textarea><br>
+            <textarea id="new-consumption" placeholder="How to use" required></textarea><br>
             <button type="submit" id="btn-add-product">Add Product</button>
           </form>
         </div>
+
         <!-- Festival Setup -->
-        <div id="admin-festival" style="display:none;">
+        <div id="admin-festival" class="admin-section">
           <h3>Festival/Promotion Setup</h3>
-          <label>Choose Festival Theme: 
-            <select id="festival-theme" onchange="setFestivalTheme()">
-              <option value="Grand Opening">Grand Opening</option>
-              <option value="Ramadan">Ramadan</option>
-              <option value="Hari Raya">Hari Raya</option>
-              <option value="CNY">Chinese New Year</option>
-              <option value="Deepavali">Deepavali</option>
-            </select>
-          </label>
-          <br><br>
-          <label>Promotion Date Start: <input type="date" id="promo-start"></label>
-          <label>Promotion Date End: <input type="date" id="promo-end"></label>
-          <br><br>
-          <button onclick="saveFestivalSetup()" id="btn-save-festival">Save Festival Setup</button>
+          <form class="admin-form">
+            <label>Choose Festival Theme: 
+              <select id="festival-theme">
+                <option value="Grand Opening">Grand Opening</option>
+                <option value="Ramadan">Ramadan</option>
+                <option value="Hari Raya">Hari Raya</option>
+                <option value="CNY">Chinese New Year</option>
+                <option value="Deepavali">Deepavali</option>
+              </select>
+            </label>
+            <br><br>
+            <label>Promotion Date Start: <input type="date" id="promo-start"></label><br>
+            <label>Promotion Date End: <input type="date" id="promo-end"></label>
+            <br><br>
+            <button type="button" onclick="saveFestivalSetup()" id="btn-save-festival">Save Festival Setup</button>
+          </form>
         </div>
       </div>
     </div>
-    <!-- ========================= -->
-    <!-- ADMIN PANEL ENDS HERE     -->
-    <!-- ========================= -->
   </main>
+
   <!-- Cart Modal -->
   <div id="cart-modal" class="modal">
-    <!-- ... unchanged ... -->
+    <div class="modal-content">
+      <span class="close" onclick="toggleCart()">&times;</span>
+      <h2>Your Shopping Cart</h2>
+      <div id="cart-items"></div>
+      <div class="cart-total">Total: RM <span id="cart-total">0.00</span></div>
+      
+      <div class="delivery-offer">
+        🚚 FREE NATIONWIDE DELIVERY for orders RM 250 and above! Limited time offer.
+      </div>
+      
+      <div class="customer-info-form">
+        <h3>Customer Information</h3>
+        <input type="text" id="customer-name" placeholder="Your Full Name" required>
+        <input type="tel" id="customer-phone" placeholder="Your WhatsApp Number" required>
+        <button class="checkout-btn" onclick="checkout()">Complete Order via WhatsApp</button>
+      </div>
+    </div>
   </div>
+
   <!-- Festival Popup Modal -->
-  <div id="festival-modal" class="festival-modal" style="display: flex;">
-    <!-- ... unchanged ... -->
+  <div id="festival-modal" class="festival-modal" style="display: none;">
+    <div class="festival-content">
+      <span class="festival-close" onclick="closeFestivalModal()">&times;</span>
+      <h2 class="festival-title">Online Store Opening Sale!</h2>
+      <img src="https://via.placeholder.com/600x200/1a5276/f39c12?text=Welcome+to+Our+Store" alt="Grand Opening Banner" class="festival-image">
+      <p class="festival-message">Welcome to our online store! Enjoy special opening discounts on selected products.</p>
+      <div class="festival-offer">5% OFF on Top Products!</div>
+      <button class="add-to-cart" onclick="closeFestivalModal()" style="width: auto; margin: 0 auto;">Start Shopping</button>
+    </div>
   </div>
-  <footer>
-    <!-- ... unchanged ... -->
-  </footer>
-  <!-- ADMIN LOGIN MODAL -->
-  <div class="admin-modal" id="admin-login-modal">
+
+  <!-- Admin Login Modal -->
+  <div id="admin-login-modal" class="admin-modal">
     <div class="admin-modal-content">
       <span class="close-admin-modal" onclick="closeAdminLoginModal()">&times;</span>
       <h2>Admin Login</h2>
-      <form onsubmit="return adminLogin(event)">
+      <form onsubmit="adminLogin(event); return false;">
         <input type="text" id="admin-username" placeholder="Username" required><br>
         <input type="password" id="admin-password" placeholder="Password" required><br>
-        <div style="font-size:0.9em;margin:10px 0 0 0; color:#888;">Owner: arvin8786@gmail.com<br>Admin: foreverliving123</div>
-        <button type="submit" style="margin-top:12px;">Login</button>
-        <div style="color:#d00; margin-top:10px;" id="admin-login-error"></div>
+        <div style="font-size: 0.9em; margin: 10px 0 0 0; color: #888;">
+      
+        <button type="submit" style="margin-top: 12px;">Login</button>
+        <div style="color: #d00; margin-top: 10px;" id="admin-login-error"></div>
       </form>
     </div>
   </div>
+
+  <footer>
+    <p>&copy; 2025 Forever Living by Mohd Isa. Powered by Rich Academy Global. All rights reserved.</p>
+    <div class="timestamp">Last updated: <span id="current-date"></span></div>
+    <section class="disclaimer">
+      <strong>Disclaimer:</strong> This website is operated by an independent Registered Forever Business Owner (FBO) under Rich Academy Global and is not the official site of Forever Living Products. Product names, trademarks, and registered trademarks are property of Forever Living Products International, Inc.
+    </section>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     // =============================
     // CREDENTIALS AND ADMIN ACCESS
     // =============================
     const ADMIN_CREDENTIALS = [
       {
-        username: "arvin8786@gmail.com",
-        password.getElementById('admin-username').value.trim();
-      const pass = document.getElementById('admin-password').value;
-      const found = ADMIN_CREDENTIALS.find(cred => cred.username === user && cred.password === pass);
-      if (found) {
-        adminLoggedIn = true;
-        // YOUR ORIGINAL JS
-    // ==============
-    // (Full products, cart, AI, etc. logic unchanged.)
-    // (PASTE your entire <script> code from your original file here)
-    // ... BEGIN PRODUCTS & LOGIC ...
+        username: "Owner",
+        password: "Arvind@87",
+        role: "owner"
+      },
+      {
+        username: "admin",
+        password: "foreverliving123",
+        role: "admin"
+      }
+    ];
+
+    let adminLoggedIn = false;
+    let currentAdmin = null;
+
+    // =============================
+    // PRODUCT DATA AND FUNCTIONS
+    // =============================
     const products = [
       { id: 1, name: "Aloe Vera Gel", price: 116.79, image: "aloe-vera-gel.jpg", 
        benefits: "Supports digestion, boosts immunity, promotes skin health, enhances nutrient absorption, helps detoxify the body", 
-       consumption: "bee-honey.jpg", 
+       consumption: "Take 30-60ml daily, preferably on empty stomach",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 2, name: "Aloe Berry Nectar", price: 116.79, image: "aloe-berry-nectar.jpg", 
+       benefits: "Antioxidant support, immune system booster, natural energy, supports urinary health, rich in vitamin C", 
+       consumption: "30-60ml daily, can be mixed with water or juice",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 3, name: "Bee Honey", price: 132.57, image: "bee-honey.jpg", 
        benefits: "Natural energy, soothes throat, antioxidant properties, supports digestion, promotes wound healing", 
        consumption: "1-2 teaspoons daily, can be added to drinks",
        bestSeller: true, grandOpeningSpecial: true },
       { id: 4, name: "Royal Jelly", price: 139.21, image: "royal-jelly.jpg", 
        benefits: "Energy booster, supports immune system, anti-aging, hormone balance, supports skin renewal", 
        consumption: "1 tablet daily, preferably in the morning",
-      ", price: 92.08, image: "aloe-propolis-creme.jpg", 
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 5, name: "Bee Propolis", price: 139.21, image: "bee-propolis.jpg", 
+       benefits: "Immune support, natural antibiotic, throat health, anti-inflammatory, promotes oral health", 
+       consumption: "1 tablet daily or as needed",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 6, name: "Arctic Sea", price: 130.10, image: "arctic-sea.jpg", 
+       benefits: "Heart health, joint support, brain function, supports vision, reduces inflammation", 
+       consumption: "2 softgels twice daily with meals",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 7, name: "Fields of Greens", price: 86.10, image: "fields-of-greens.jpg", 
+       benefits: "Detoxification, digestion, alkalizing, supports weight management, rich in chlorophyll", 
+       consumption: "1 tablet 3 times daily with water",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 8, name: "Aloe First", price: 93.40, image: "aloe-first.jpg", 
+       benefits: "Skin hydration, cooling relief, wound soothing, relieves sunburn, pre-hair treatment spray", 
+       consumption: "Spray directly on skin as needed",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 9, name: "Aloe Propolis Creme", price: 92.08, image: "aloe-propolis-creme.jpg", 
        benefits: "Skin repair, moisturizing, protective barrier, soothes irritated skin, supports healing of minor cuts", 
        consumption: "Apply generously on dry or irritated areas",
-       bestSeller: true, grand", 
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 10, name: "Forever Bright Toothgel", price: 31.62, image: "bright-toothgel.jpg", 
+       benefits: "Fluoride-free, fresh breath, aloe-based care, gentle on gums, whitens teeth naturally", 
+       consumption: "Brush teeth twice daily",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 11, name: "Aloe Peaches", price: 116.79, image: "aloe-peaches.jpg", 
+       benefits: "Digestive health, vitamin C source, natural detoxification, maintains healthy skin, supports kidney function", 
+       consumption: "30-60ml daily, refrigerate after opening" },
+      { id: 12, name: "Bee Pollen", price: 75.50, image: "bee-pollen.jpg", 
+       benefits: "Natural multivitamin, energy enhancement, allergy relief, improves stamina, supports cardiovascular health", 
+       consumption: "1 tablet 3 times daily with meals" },
+      { id: 13, name: "Absorbent-C", price: 75.50, image: "absorbent-c.jpg", 
+       benefits: "Immune support, collagen production, antioxidant, helps iron absorption, supports healthy skin", 
+       consumption: "1-2 tablets daily with meals" },
+      { id: 14, name: "Calcium Plus", price: 132.15, image: "calcium-plus.jpg", 
+       benefits: "Bone support, muscle health, calcium + vitamin D, supports nerve function, helps prevent osteoporosis", 
+       consumption: "2 tablets daily with meals" },
+      { id: 15, name: "Aloe Liquid Soap", price: 54.72, image: "aloe-liquid-soap.jpg", 
+       benefits: "Gentle cleansing, moisturizes skin, aloe-based formula, suitable for sensitive skin, pH-balanced", 
+       consumption: "Use daily for face and body cleansing" },
+      { id: 16, name: "Aloe Jojoba Shampoo", price: 91.66, image: "aloe-jojoba-shampoo.jpg", 
+       benefits: "Hair nourishment, scalp care, sulfate-free, promotes hair strength, natural shine", 
+       consumption: "Massage into wet hair, rinse thoroughly" },
+      { id: 17, name: "Aloe Jojoba Conditioner", price: 91.66, image: "aloe-jojoba-conditioner.jpg", 
+       benefits: "Moisturizing, smooth finish, aloe + jojoba, strengthens hair strands, prevents breakage", 
+       consumption: "Apply after shampoo, leave 1-2 minutes, rinse" },
+      { id: 18, name: "Aloe Sunscreen", price: 84.91, image: "aloe-sunscreen.jpg", 
+       benefits: "UV protection, aloe-based, water-resistant, suitable for sensitive skin, prevents sunburn", 
+       consumption: "Apply 15 minutes before sun exposure" },
+      { id: 19, name: "Aloe MPD 2X Ultra", price: 114.47, image: "aloe-mp-lotion.jpg", 
+       benefits: "Multi-purpose cleaner, concentrated, eco-friendly, gentle on skin, biodegradable formula", 
+       consumption: "Dilute as needed for laundry, dishes or surfaces" },
+      { id: 20, name: "Avocado Face & Body Soap", price: 23.40, image: "avocado-soap.jpg", 
+       benefits: "Softens skin, gentle cleansing, avocado oil-rich, suitable for all skin types, non-drying", 
+       consumption: "Use daily for face and body" },
+      { id: 21, name: "Aloe Lips", price: 17.92, image: "aloe-lips.jpg", 
+       benefits: "Lip protection, moisturizes, healing balm, soothes cracked lips, non-greasy finish", 
+       consumption: "Apply on lips as needed throughout the day" },
+      { id: 22, name: "Forever Deodorant Stick", price: 34.91, image: "forever-deodorant.jpg", 
+       benefits: "Natural fragrance, aloe soothing, easy glide, long-lasting protection, non-staining", 
+       consumption: "Use after shower daily" },
+      { id: 23, name: "Teh Tarik Halia", price: 25.90, image: "teh-tarik.jpg", 
+       benefits: "Warming effect, digestion aid, ginger-infused, improves circulation, relieves bloating", 
+       consumption: "Mix sachet with hot water and stir well" },
+      { id: 24, name: "Choco Malt Drink", price: 27.90, image: "choco-malt.jpg", 
+       benefits: "Rich in B vitamins, iron for red blood cell production, supports metabolism, promotes growth, aids recovery after fatigue", 
        consumption: "Mix 2-3 tablespoons in 150–200ml hot water or milk" }
     ];
-    // ... (your entire product suggestion mapping, cart, renderProducts, highlightFeatured, showTab, etc. ALL unchanged) ...
-    // ... (copy all your original JS logic here) ...
-    // ... END PRODUCTS & LOGIC ...
 
-    // ===================
-    // ADMIN PANEL FUNCTIONS
-    // ===================
-    function showAdminSection(section) {
-      document.getElementById('admin-manage').style.display = section === 'manage' ? 'block' : 'none';
-      document.getElementById('admin-add').style.display = section === 'add' ? 'block' : 'none';
-      document.getElementById('admin-festival').style.display = section === 'festival' ? 'block' : 'none';
-      if(section === 'manage') renderAdminProductList();
-      applyAdminAccess();
+    let promotions = [];
+    let currentFestival = null;
+    let cart = [];
+
+    // =============================
+    // ADMIN FUNCTIONS
+    // =============================
+    function showAdminLogin() {
+      document.getElementById('admin-login-modal').style.display = 'flex';
     }
- return;
+
+    function closeAdminLoginModal() {
+      document.getElementById('admin-login-modal').style.display = 'none';
+      document.getElementById('admin-login-error').textContent = '';
+    }
+
+    function adminLogin(event) {
+      event.preventDefault();
+      const username = document.getElementById('admin-username').value;
+      const password = document.getElementById('admin-password').value;
+      
+      const admin = ADMIN_CREDENTIALS.find(cred => 
+        cred.username === username && cred.password === password
+      );
+      
+      if (admin) {
+        adminLoggedIn = true;
+        currentAdmin = admin;
+        closeAdminLoginModal();
+        showTab('admin');
+        applyAdminAccess();
+        renderAdminProductList();
+      } else {
+        document.getElementById('admin-login-error').textContent = 'Invalid credentials';
       }
-      const name = document.getElementById('new-name').value;
-      const price = parseFloat(document.getElementById('new-price').value);
-      const image = document.getElementById('new-image').value;
-      const benefits = document.getElementById('new-benefits').value;
-      const!");
+    }
+
+    function logoutAdmin() {
+      adminLoggedIn = false;
+      currentAdmin = null;
+      document.getElementById('admin-panel').style.display = 'none';
+      showTab('products');
+    }
+
+    function showAdminSection(section) {
+      document.querySelectorAll('.admin-section').forEach(div => {
+        div.style.display = 'none';
+      });
+      document.getElementById(`admin-${section}`).style.display = 'block';
+    }
+
+    function renderAdminProductList() {
+      const tableBody = document.getElementById('admin-product-list');
+      tableBody.innerHTML = '';
+      
+      products.forEach(product => {
+        const promotion = promotions.find(p => p.productId === product.id);
+        
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${product.name}</td>
+          <td>${product.price.toFixed(2)}</td>
+          <td>${promotion ? promotion.price.toFixed(2) : '-'}</td>
+          <td>${promotion ? 'Yes' : 'No'}</td>
+          <td>
+            <button onclick="editProduct(${product.id})">Edit</button>
+            ${currentAdmin.role === 'owner' ? `<button onclick="deleteProduct(${product.id})">Delete</button>` : ''}
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    function addNewProduct(event) {
+      event.preventDefault();
+      
+      if (currentAdmin.role !== 'owner') {
+        alert('Only owners can add products');
         return;
       }
+      
+      const newProduct = {
+        id: Date.now(),
+        name: document.getElementById('new-name').value,
+        price: parseFloat(document.getElementById('new-price').value),
+        image: document.getElementById('new-image').value,
+        benefits: document.getElementById('new-benefits').value,
+        consumption: document.getElementById('new-consumption').value,
+        bestSeller: false,
+        grandOpeningSpecial: false
+      };
+      
+      products.push(newProduct);
+      document.getElementById('add-product-form').reset();
+      renderAdminProductList();
+      renderProducts();
+      alert('Product added successfully!');
+    }
+
+    function editProduct(id) {
+      const product = products.find(p => p.id === id);
+      if (!product) return;
+      
+      const newName = prompt('Edit product name:', product.name);
+      if (newName === null) return;
+      
+      const newPrice = prompt('Edit product price:', product.price);
+      if (newPrice === null) return;
+      
+      product.name = newName;
+      product.price = parseFloat(newPrice);
+      
+      renderAdminProductList();
+      renderProducts();
+    }
+
+    function deleteProduct(id) {
+      if (currentAdmin.role !== 'owner') {
+        alert('Only owners can delete products');
+        return;
+      }
+      
+      if (confirm('Are you sure you want to delete this product?')) {
+        const index = products.findIndex(p => p.id === id);
+        if (index !== -1) {
+          products.splice(index, 1);
+          renderAdminProductList();
+          renderProducts();
+        }
+      }
+    }
+
+    function saveFestivalSetup() {
+      if (currentAdmin.role !== 'owner') {
+        alert('Only owners can set up festivals');
+        return;
+      }
+      
       const theme = document.getElementById('festival-theme').value;
-      const start = document.getElementById('promo-start').value;
-      const end = document.getElementById('promo-end').value;
-      alert('Saved! Theme: '+ administrator mode. Some functions are limited." : "";
-      document.getElementById('admin-access-label').innerText = adminRole==="owner"?"Access: Owner (full control)":adminRole==="admin"?"Access: Administrator (limited control)":"";
-      document.getElementById('btn-retail').disabled = false;
-      document.getElementById('btn-add').disabled = (adminRole!=="owner");
-      document.getElementById('btn-festival').disabled = (adminRole!=="owner");
-      document.getElementById('btn-add-product').disabled = (adminRole!=="owner");
-      document.getElementById('btn-save-festival').disabled = (adminRole!=="owner");
-      document.getElementById('admin-logout-btn').style.display = adminLoggedIn ? "inline-block":"none";
-      // Add Product form
-      document.getElementById('admin-add').className = (adminRole!=="owner")?"admin-limited":"";
-      document.getElementById('admin-festival').className = (adminRole!=="owner")?"admin-limited":"";
+      const startDate = document.getElementById('promo-start').value;
+      const endDate = document.getElementById('promo-end').value;
+      
+      if (!startDate || !endDate) {
+        alert('Please select both start and end dates');
+        return;
+      }
+      
+      currentFestival = {
+        theme,
+        startDate,
+        endDate
+      };
+      
+      alert(`Festival theme "${theme}" saved from ${startDate} to ${endDate}`);
+    }
+
+    function applyAdminAccess() {
+      if (!currentAdmin) return;
+      
+      document.getElementById('admin-access-label').textContent = 
+        currentAdmin.role === 'owner' ? 'Owner Access' : 'Admin Access';
+      
+      document.getElementById('admin-logout-btn').style.display = 'inline-block';
+      
+      if (currentAdmin.role === 'admin') {
+        document.getElementById('admin-warning').style.display = 'block';
+        document.getElementById('admin-warning').textContent = 
+          'Note: You have limited administrator access. Some functions are restricted to owners only.';
+      }
+    }
+
+    // =============================
+    // ORIGINAL PAGE FUNCTIONS
+    // =============================
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.style.display = 'none';
+      });
+      document.getElementById(tabId).style.display = 'block';
+      
+      if (tabId === 'rewards') {
+        createConfetti();
+      }
+    }
+
+    function renderProducts() {
+      const productList = document.getElementById('product-list');
+      productList.innerHTML = '';
+      
+      products.forEach(product => {
+        const isFeatured = product.grandOpeningSpecial;
+        const hasDiscount = product.grandOpeningSpecial;
+        
+        const productElement = document.createElement('div');
+        productElement.className = `product ${isFeatured ? 'featured-product' : ''}`;
+        productElement.innerHTML = `
+          <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/200x200?text=Product+Image'">
+          <h3>${product.name}</h3>
+          ${hasDiscount ? `
+            <div class="discount-price">
+              <span class="original-price">RM ${product.price.toFixed(2)}</span>
+              <span class="new-price">RM ${(product.price * 0.95).toFixed(2)} <span class="fire-icon">🔥</span></span>
+              <div style="color: var(--accent-color); font-weight: bold; margin-top: 5px;">Grand Opening Special</div>
+            </div>
+          ` : `<div class="price">RM ${product.price.toFixed(2)}</div>`}
+          <div class="benefits"><strong>Benefits:</strong> ${product.benefits}</div>
+          <div class="consumption"><strong>How to use:</strong> ${product.consumption}</div>
+          <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
+          <a href="https://wa.me/601111033154?text=I%20want%20to%20buy%20${encodeURIComponent(product.name)}" class="whatsapp-btn">Order via WhatsApp</a>
+        `;
+        
+        if (isFeatured) {
+          const badge = document.createElement('div');
+          badge.className = 'featured-badge';
+          badge.textContent = 'Special Offer';
+          productElement.appendChild(badge);
+        }
+        
+        productList.appendChild(productElement);
+      });
+    }
+
+    function addToCart(productId) {
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+      
+      const existingItem = cart.find(item => item.id === productId);
+      
+      if (existingItem) {
+        existingItem.quantity++;
+      } else {
+        cart.push({
+          id: product.id,
+          name: product.name,
+          price: product.grandOpeningSpecial ? product.price * 0.95 : product.price,
+          quantity: 1
+        });
+      }
+      
+      updateCartCount();
+    }
+
+    function updateCartCount() {
+      const count = cart.reduce((total, item) => total + item.quantity, 0);
+      document.getElementById('cart-count').textContent = count;
+    }
+
+    function toggleCart() {
+      const modal = document.getElementById('cart-modal');
+      modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+      updateCartDisplay();
+    }
+
+    function updateCartDisplay() {
+      const cartItems = document.getElementById('cart-items');
+      const cartTotal = document.getElementById('cart-total');
+      
+      cartItems.innerHTML = '';
+      let subtotal = 0;
+      
+      cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        subtotal += itemTotal;
+        
+        const itemElement = document.createElement('div');
+        itemElement.className = 'cart-item';
+        itemElement.innerHTML = `
+          <div class="cart-item-info">
+            ${item.name} (${item.quantity})
+            <span class="remove-item" onclick="removeFromCart(${item.id})">✕</span>
+          </div>
+          <div class="cart-item-price">RM ${itemTotal.toFixed(2)}</div>
+        `;
+        cartItems.appendChild(itemElement);
+      });
+      
+      cartTotal.textContent = subtotal.toFixed(2);
+    }
+
+    function removeFromCart(productId) {
+      const index = cart.findIndex(item => item.id === productId);
+      if (index !== -1) {
+        cart.splice(index, 1);
+        updateCartDisplay();
+        updateCartCount();
+      }
+    }
+
+    function checkout() {
+      const name = document.getElementById('customer-name').value.trim();
+      const phone = document.getElementById('customer-phone').value.trim();
+      
+      if (!name || !phone) {
+        alert('Please enter your name and phone number');
+        return;
+      }
+      
+      if (cart.length === 0) {
+        alert('Your cart is empty');
+        return;
+      }
+      
+      let message = `Hi, I would like to place an order:\n\n`;
+      message += `Name: ${name}\n`;
+      message += `Phone: ${phone}\n\n`;
+      message += `Order Details:\n`;
+      
+      cart.forEach(item => {
+        message += `- ${item.name} (Qty: ${item.quantity}) - RM ${(item.price * item.quantity).toFixed(2)}\n`;
+      });
+      
+      message += `\nTotal: RM ${cart.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2)}\n\n`;
+      message += `Please confirm my order. Thank you!`;
+      
+      const encodedMessage = encodeURIComponent(message);
+      window.location.href = `https://wa.me/601111033154?text=${encodedMessage}`;
+    }
+
+    function createConfetti() {
+      const container = document.getElementById('rewards-animation');
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        confetti.style.animationDelay = Math.random() + 's';
+        container.appendChild(confetti);
+      }
+    }
+
+    function notifyMe() {
+      alert("We'll notify you when our rewards program launches! Thank you for your interest.");
+    }
+
+    function closeFestivalModal() {
+      document.getElementById('festival-modal').style.display = 'none';
+    }
+
+    // Initialize the page
     document.addEventListener('DOMContentLoaded', function() {
-      // ... (your original DOMContentLoaded logic here) ...
       const now = new Date();
       document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', { 
-        year: 'numeric', month: 'long', day: ' }
+        year: 'numeric', month: 'long', day: 'numeric' 
+      });
+      
+      renderProducts();
+      showTab('products');
+      
+      // Close modals when clicking outside
+      window.onclick = function(event) {
+        if (event.target === document.getElementById('cart-modal')) {
+          toggleCart();
+        }
+        if (event.target === document.getElementById('admin-login-modal')) {
+          closeAdminLoginModal();
+        }
+        if (event.target === document.getElementById('festival-modal')) {
+          closeFestivalModal();
+        }
+      };
     });
   </script>
 </body>
