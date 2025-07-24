@@ -1,425 +1,683 @@
-Certainly! Here’s a summary of fixes and enhancements applied to your code:
-
-### 1. **Admin Login Credentials Update**
-- Changed username to `arvin8786@gmail.com`.
-- Password field left blank as you didn’t specify it; if you want to set a password, just update `password: 'Arvind@87'` in the code.
-
-### 2. **Error Fixes & Improvements**
-- Fixed missing Bootstrap icon CDN for `<i class="bi bi-geo-alt"></i>`. It now uses a fallback emoji if Bootstrap icons aren’t loaded.
-- Added client-side validation for date ranges (end should not be before start).
-- Improved code for date parsing to handle cases where `.split("T")` may fail.
-- Enhanced UI/UX:
-    - Added feedback for invalid login.
-    - Disabled save button until required fields are filled and dates are valid.
-    - Improved modal reset logic and ensured forms clear properly.
-- Several bug fixes and minor enhancements for better stability.
-
-### 3. **Security Note**
-- Passwords are stored in plain text in localStorage for demo purposes. Don’t use this approach in production!
-
----
-
-Below is the improved code (with explanations in comments):
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Promotion Manager</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons CDN (for location icon) -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        body <!-- Login Screen -->
-        <div id="login-screen" class="card">
-            <div class="card-body">
-                <h2 class="card-title">Admin Login</h2>
-                <form id="login-form">
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="email" class="form-control" id="username" required autocomplete="username">
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" required autocomplete="current-password">
-                    </div>
-                    <div id="login-feedback" class="text-danger mb-2" style="display:none;"></div>
-                    <button type="submit" class="btn btn-primary">Login</button>
-                </form>
-            </div>
-        </div>
+  <!-- All your existing head content remains exactly the same -->
+  <!-- ... -->
+  
+  <style>
+    /* Add these new styles for the admin panel */
+    .admin-panel {
+      display: none;
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      border: 2px solid var(--primary-color);
+    }
+    
+    .admin-tabs {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .admin-tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      background: #eee;
+      margin-right: 5px;
+      border-radius: 5px 5px 0 0;
+    }
+    
+    .admin-tab.active {
+      background: var(--primary-color);
+      color: white;
+    }
+    
+    .admin-tab-content {
+      display: none;
+    }
+    
+    .admin-tab-content.active {
+      display: block;
+    }
+    
+    .admin-form {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .admin-form label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    
+    .admin-form input,
+    .admin-form textarea,
+    .admin-form select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .admin-form button {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .admin-form button:hover {
+      background: #1a237e;
+    }
+    
+    .product-list-admin {
+      margin-top: 20px;
+    }
+    
+    .product-item-admin {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .product-actions button {
+      margin-left: 10px;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .edit-btn {
+      background: #ffc107;
+      color: black;
+    }
+    
+    .delete-btn {
+      background: #dc3545;
+      color: white;
+    }
+    
+    .admin-login-form {
+      max-width: 400px;
+      margin: 50px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .admin-login-form h2 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+    }
+    
+    .admin-login-form input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .admin-login-form button {
+      width: 100%;
+      padding: 10px;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .admin-login-form button:hover {
+      background: #1a237e;
+    }
+    
+    .error-message {
+      color: #dc3545;
+      text-align: center;
+      margin-top: 10px;
+    }
+    
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .logout-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .logout-btn:hover {
+      background: #c82333;
+    }
+  </style>
+</head>
+<body>
+  <!-- All your existing HTML remains exactly the same -->
+  <!-- ... -->
 
-        <!-- Dashboard (hidden by default) -->
-        <div id="dashboard" class="d-none">
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-                <div class="container-fluid">
-                    <span class="navbar-brand">Promotion Manager</span>
-                    <button id="logout-btn" class="btn btn-outline-light">Logout</button>
-                </div>
-            </nav>
-
-            <ul class="nav nav-tabs" id="managerTabs">
-                <li class="nav-item">
-                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#promotions-tab">Promotions</button>
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#festivals-tab">Festivals</button>
-                </li>
-            </ul>
-
-            <div class="tab-content mt-3">
-                <!-- Promotions Tab -->
-                <div class="tab-pane fade show active" id="promotions-tab">
-                    <button id="add-promotion-btn" class="btn btn-success mb-3">Add Promotion</button>
-                    <div id="promotions-list" class="row"></div>
-                </div>
-                <!-- Festivals Tab -->
-                <div class="tab-pane fade" id="festivals-tab">
-                    <button id="add-festival-btn" class="btn btn-success mb-3">Add Festival</button>
-                    <div id="festivals-list" class="row"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Promotion Modal -->
-        <div class="modal fade" id="promotion-modal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="promotion-modal-title">Add New Promotion</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="promotion-form">
-                            <input type="hidden" id="promotion-id">
-                            <div class="mb-3">
-                                <label for="promotion-name" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="promotion-name" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="promotion-description" class="form-label">Description</label>
-                                <textarea class="form-control" id="promotion-description" rows="3" required></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label for="promotion-image" class="form-label">Image URL</label>
-                                <input type="text" class="form-control" id="promotion-image">
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="promotion-start" class="form-label">Start Date</label>
-                                    <input type="date" class="form-control" id="promotion-start" required>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="promotion-end" class="form-label">End Date</label>
-                                    <input type="date" class="form-control" id="promotion-end" required>
-                                </div>
-                            </div>
-                            <div id="promotion-date-feedback" class="text-danger mb-2" style="display:none;"></div>
-                            <div class="mb-3 form-check">
-                                <input type="checkbox" class="form-check-input" id="promotion-active">
-                                <label class="form-check-label" for="promotion-active">Active</label>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="save-promotion" disabled>Save</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Festival Modal -->
-        <div class="modal fade" id="festival-modal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="festival-modal-title">Add New Festival</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="festival-form">
-                            <input type="hidden" id="festival-id">
-                            <div class="mb-3">
-                                <label for="festival-name" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="festival-name" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="festival-description" class="form-label">Description</label>
-                                <textarea class="form-control" id="festival-description" rows="3" required></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label for="festival-image" class="form-label">Image URL</label>
-                                <input type="text" class="form-control" id="festival-image">
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="festival-start" class="form-label">Start Date</label>
-                                    <input type="date" class="form-control" id="festival-start" required>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="festival-end" class="form-label">End Date</label>
-                                    <input type="date" class="form-control" id="festival-end" required>
-                                </div>
-                            </div>
-                            <div id="festival-date-feedback" class="text-danger mb-2" style="display:none;"></div>
-                            <div class="mb-3">
-                                <label for="festival-location" class="form-label">Location</label>
-                                <input type="text" class="form-control" id="festival-location" required>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="save-festival" disabled>Save</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <!-- Add this new section at the bottom of your body, before the scripts -->
+  <div id="admin-login-container" style="display: none;">
+    <div class="admin-login-form">
+      <h2>Admin Login</h2>
+      <input type="email" id="admin-email" placeholder="Email" required>
+      <input type="password" id="admin-password" placeholder="Password" required>
+      <button onclick="adminLogin()">Login</button>
+      <div id="admin-error" class="error-message"></div>
     </div>
+  </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Promotion Manager Object
-        const PromotionManager = {
-            // Initialize the system
-            init: function() {
-                // Set admin credentials
-                if (!localStorage.getItem('admin')) {
-                    localStorage.setItem('admin', JSON.stringify({
-                        username: 'arvin8786@gmail.com',
-                        password: 'password' // Set your desired password here
-                    }));
-                }
-                // Initialize promotions and festivals if not exists
-                if (!localStorage.getItem('promotions')) localStorage.setItem('promotions', JSON.stringify([]));
-                if (!localStorage.getItem('festivals')) localStorage.setItem('festivals', JSON.stringify([]));
-                // Check if user is already logged in
-                if (sessionStorage.getItem('loggedIn')) this.showDashboard();
-            },
+  <div id="admin-panel" class="admin-panel">
+    <div class="admin-header">
+      <h2>Admin Dashboard</h2>
+      <button class="logout-btn" onclick="adminLogout()">Logout</button>
+    </div>
+    
+    <div class="admin-tabs">
+      <div class="admin-tab active" onclick="showAdminTab('retail')">Retail Management</div>
+      <div class="admin-tab" onclick="showAdminTab('promotions')">Promotions</div>
+      <div class="admin-tab" onclick="showAdminTab('festivals')">Festival Setup</div>
+    </div>
+    
+    <div id="retail-tab" class="admin-tab-content active">
+      <div class="admin-form">
+        <h3>Add/Edit Product</h3>
+        <input type="hidden" id="product-id">
+        <label for="product-name">Product Name</label>
+        <input type="text" id="product-name" required>
+        
+        <label for="product-price">Price (RM)</label>
+        <input type="number" id="product-price" step="0.01" required>
+        
+        <label for="product-image">Image URL</label>
+        <input type="text" id="product-image">
+        
+        <label for="product-benefits">Benefits</label>
+        <textarea id="product-benefits" rows="3" required></textarea>
+        
+        <label for="product-consumption">How to Use</label>
+        <textarea id="product-consumption" rows="2" required></textarea>
+        
+        <label>
+          <input type="checkbox" id="product-bestseller"> Best Seller
+        </label>
+        
+        <button onclick="saveProductAdmin()">Save Product</button>
+        <button onclick="clearProductForm()" style="background: #6c757d;">Cancel</button>
+      </div>
+      
+      <div class="product-list-admin">
+        <h3>Product List</h3>
+        <div id="admin-product-list"></div>
+      </div>
+    </div>
+    
+    <div id="promotions-tab" class="admin-tab-content">
+      <div class="admin-form">
+        <h3>Promotion Settings</h3>
+        <label for="promotion-product">Select Product</label>
+        <select id="promotion-product">
+          <option value="">-- Select Product --</option>
+        </select>
+        
+        <label for="promotion-price">Promotion Price (RM)</label>
+        <input type="number" id="promotion-price" step="0.01">
+        
+        <label for="promotion-start">Start Date</label>
+        <input type="date" id="promotion-start">
+        
+        <label for="promotion-end">End Date</label>
+        <input type="date" id="promotion-end">
+        
+        <button onclick="savePromotion()">Save Promotion</button>
+      </div>
+      
+      <div class="product-list-admin">
+        <h3>Current Promotions</h3>
+        <div id="promotion-list"></div>
+      </div>
+    </div>
+    
+    <div id="festivals-tab" class="admin-tab-content">
+      <div class="admin-form">
+        <h3>Festival Theme Setup</h3>
+        
+        <label for="festival-name">Festival Name</label>
+        <input type="text" id="festival-name" required>
+        
+        <label for="festival-image">Banner Image URL</label>
+        <input type="text" id="festival-image">
+        
+        <label for="festival-message">Festival Message</label>
+        <textarea id="festival-message" rows="2" required></textarea>
+        
+        <label for="festival-offer">Special Offer Text</label>
+        <input type="text" id="festival-offer" required>
+        
+        <label for="festival-start">Start Date</label>
+        <input type="date" id="festival-start" required>
+        
+        <label for="festival-end">End Date</label>
+        <input type="date" id="festival-end" required>
+        
+        <button onclick="saveFestival()">Activate Festival</button>
+      </div>
+      
+      <div class="product-list-admin">
+        <h3>Active Festival</h3>
+        <div id="current-festival"></div>
+      </div>
+    </div>
+  </div>
 
-            // Authentication functions
-            login: function(username, password) {
-                const admin = JSON.parse(localStorage.getItem('admin'));
-                if (admin.username === username && admin.password === password) {
-                    sessionStorage.setItem('loggedIn', 'true');
-                    this.showDashboard();
-                    return true;
-                }
-                document.getElementById('login-screen').classList.remove('d-none');
-                document.getElementById('dashboard').classList.add('d-none');
-                document.getElementById('login-form').reset();
-                document document.getElementById('dashboard').classList.remove('d-none');
-                this.loadPromotions();
-                this.loadFestivals();
-            },
+  <script>
+    // Add these new variables at the top of your script
+    const ADMIN_CREDENTIALS = {
+      email: "arvin8786@gmail.com",
+      password: "Arvind@87"
+    };
+    
+    let currentAdmin = null;
+    let promotions = JSON.parse(localStorage.getItem('promotions')) || [];
+    let currentFestival = JSON.parse(localStorage.getItem('currentFestival')) || null;
 
-            // Promotion CRUD Operations
-            createPromotion: function(promotion) {
-                const promotions = this.getAllPromotions();
-                promotion.id = Date.now().toString();
-                promotions.push(promotion);
-                localStorage.setItem('promotions', JSON.stringify(promotions));
-                promotions = promotions.filter(p => p.id !== id);
-                localStorage.setItem('promotions', JSON.stringify(promotions));
-            },
+    // Add these new functions to your existing script
+    function showAdminLogin() {
+      document.getElementById('admin-login-container').style.display = 'block';
+      document.getElementById('admin-panel').style.display = 'none';
+    }
+    
+    function hideAdminLogin() {
+      document.getElementById('admin-login-container').style.display = 'none';
+    }
+    
+    function showAdminPanel() {
+      document.getElementById('admin-panel').style.display = 'block';
+      loadAdminProducts();
+      loadPromotions();
+      loadCurrentFestival();
+    }
+    
+    function hideAdminPanel() {
+      document.getElementById('admin-panel').style.display = 'none';
+    }
+    
+    function adminLogin() {
+      const email = document.getElementById('admin-email').value;
+      const password = document.getElementById('admin-password').value;
+      
+      if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
+        currentAdmin = { email };
+        localStorage.setItem('currentAdmin', JSON.stringify(currentAdmin));
+        hideAdminLogin();
+        showAdminPanel();
+      } else {
+        document.getElementById('admin-error').textContent = 'Invalid credentials';
+      }
+    }
+    
+    function adminLogout() {
+      currentAdmin = null;
+      localStorage.removeItem('currentAdmin');
+      hideAdminPanel();
+      showAdminLogin();
+    }
+    
+    function checkAdminLogin() {
+      const savedAdmin = localStorage.getItem('currentAdmin');
+      if (savedAdmin) {
+        currentAdmin = JSON.parse(savedAdmin);
+        hideAdminLogin();
+        showAdminPanel();
+      }
+    }
+    
+    function showAdminTab(tabId) {
+      document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.admin-tab-content').forEach(content => content.classList.remove('active'));
+      
+      document.querySelector(`.admin-tab[onclick="showAdminTab('${tabId}')"]`).classList.add('active');
+      document.getElementById(`${tabId}-tab`).classList.add('active');
+    }
+    
+    function loadAdminProducts() {
+      const productSelect = document.getElementById('promotion-product');
+      productSelect.innerHTML = '<option value="">-- Select Product --</option>';
+      
+      const productList = document.getElementById('admin-product-list');
+      productList.innerHTML = '';
+      
+      products.forEach(product => {
+        // Add to product select dropdown
+        const option = document.createElement('option');
+        option.value = product.id;
+        option.textContent = product.name;
+        productSelect.appendChild(option);
+        
+        // Add to product list
+        const productItem = document.createElement('div');
+        productItem.className = 'product-item-admin';
+        productItem.innerHTML = `
+          <div>
+            <strong>${product.name}</strong> - RM ${product.price.toFixed(2)}
+            ${product.bestSeller ? '<span style="color: green;"> (Best Seller)</span>' : ''}
+          </div>
+          <div class="product-actions">
+            <button class="edit-btn" onclick="editProduct(${product.id})">Edit</button>
+            <button class="delete-btn" onclick="deleteProductAdmin(${product.id})">Delete</button>
+          </div>
+        `;
+        productList.appendChild(productItem);
+      });
+    }
+    
+    function editProduct(id) {
+      const product = products.find(p => p.id === id);
+      if (!product) return;
+      
+      document.getElementById('product-id').value = product.id;
+      document.getElementById('product-name').value = product.name;
+      document.getElementById('product-price').value = product.price;
+      document.getElementById('product-image').value = product.image || '';
+      document.getElementById('product-benefits').value = product.benefits;
+      document.getElementById('product-consumption').value = product.consumption;
+      document.getElementById('product-bestseller').checked = product.bestSeller || false;
+    }
+    
+    function clearProductForm() {
+      document.getElementById('product-id').value = '';
+      document.getElementById('product-name').value = '';
+      document.getElementById('product-price').value = '';
+      document.getElementById('product-image').value = '';
+      document.getElementById('product-benefits').value = '';
+      document.getElementById('product-consumption').value = '';
+      document.getElementById('product-bestseller').checked = false;
+    }
+    
+    function saveProductAdmin() {
+      const id = document.getElementById('product-id').value;
+      const name = document.getElementById('product-name').value;
+      const price = parseFloat(document.getElementById('product-price').value);
+      const image = document.getElementById('product-image').value;
+      const benefits = document.getElementById('product-benefits').value;
+      const consumption = document.getElementById('product-consumption').value;
+      const bestSeller = document.getElementById('product-bestseller').checked;
+      
+      if (!name || isNaN(price) || !benefits || !consumption) {
+        alert('Please fill all required fields');
+        return;
+      }
+      
+      const productData = {
+        id: id || Date.now().toString(),
+        name,
+        price,
+        image,
+        benefits,
+        consumption,
+        bestSeller
+      };
+      
+      if (id) {
+        // Update existing product
+        const index = products.findIndex(p => p.id === id);
+        if (index !== -1) {
+          products[index] = productData;
+        }
+      } else {
+        // Add new product
+        products.push(productData);
+      }
+      
+      localStorage.setItem('products', JSON.stringify(products));
+      loadAdminProducts();
+      clearProductForm();
+      renderProducts(); // Update the main product display
+    }
+    
+    function deleteProductAdmin(id) {
+      if (confirm('Are you sure you want to delete this product?')) {
+        products = products.filter(p => p.id !== id);
+        localStorage.setItem('products', JSON.stringify(products));
+        loadAdminProducts();
+        renderProducts(); // Update the main product display
+      }
+    }
+    
+    function loadPromotions() {
+      const promotionList = document.getElementById('promotion-list');
+      promotionList.innerHTML = '';
+      
+      if (promotions.length === 0) {
+        promotionList.innerHTML = '<p>No active promotions</p>';
+        return;
+      }
+      
+      promotions.forEach(promo => {
+        const product = products.find(p => p.id === promo.productId);
+        if (!product) return;
+        
+        const promoItem = document.createElement('div');
+        promoItem.className = 'product-item-admin';
+        promoItem.innerHTML = `
+          <div>
+            <strong>${product.name}</strong><br>
+            Original: RM ${product.price.toFixed(2)} | 
+            Promo: RM ${promo.price.toFixed(2)}<br>
+            ${new Date(promo.startDate).toLocaleDateString()} - ${new Date(promo.endDate).toLocaleDateString()}
+          </div>
+          <div class="product-actions">
+            <button class="delete-btn" onclick="removePromotion('${promo.id}')">Remove</button>
+          </div>
+        `;
+        promotionList.appendChild(promoItem);
+      });
+    }
+    
+    function savePromotion() {
+      const productId = document.getElementById('promotion-product').value;
+      const price = parseFloat(document.getElementById('promotion-price').value);
+      const startDate = document.getElementById('promotion-start').value;
+      const endDate = document.getElementById('promotion-end').value;
+      
+      if (!productId || isNaN(price) || !startDate || !endDate) {
+        alert('Please fill all required fields');
+        return;
+      }
+      
+      const promotion = {
+        id: Date.now().toString(),
+        productId,
+        price,
+        startDate,
+        endDate
+      };
+      
+      // Remove any existing promotion for this product
+      promotions = promotions.filter(p => p.productId !== productId);
+      promotions.push(promotion);
+      
+      localStorage.setItem('promotions', JSON.stringify(promotions));
+      loadPromotions();
+      renderProducts(); // Update the main product display
+    }
+    
+    function removePromotion(id) {
+      if (confirm('Are you sure you want to remove this promotion?')) {
+        promotions = promotions.filter(p => p.id !== id);
+        localStorage.setItem('promotions', JSON.stringify(promotions));
+        loadPromotions();
+        renderProducts(); // Update the main product display
+      }
+    }
+    
+    function loadCurrentFestival() {
+      const currentFestivalDiv = document.getElementById('current-festival');
+      currentFestivalDiv.innerHTML = '';
+      
+      if (!currentFestival) {
+        currentFestivalDiv.innerHTML = '<p>No active festival</p>';
+        return;
+      }
+      
+      const festivalItem = document.createElement('div');
+      festivalItem.className = 'product-item-admin';
+      festivalItem.innerHTML = `
+        <div>
+          <h4>${currentFestival.name}</h4>
+          <p>${currentFestival.message}</p>
+          <p><strong>Special Offer:</strong> ${currentFestival.offer}</p>
+          <p>Active: ${new Date(currentFestival.startDate).toLocaleDateString()} - ${new Date(currentFestival.endDate).toLocaleDateString()}</p>
+        </div>
+        <div class="product-actions">
+          <button class="delete-btn" onclick="endFestival()">End Festival</button>
+        </div>
+      `;
+      currentFestivalDiv.appendChild(festivalItem);
+      
+      // Pre-fill the form with current festival data
+      document.getElementById('festival-name').value = currentFestival.name;
+      document.getElementById('festival-image').value = currentFestival.image || '';
+      document.getElementById('festival-message').value = currentFestival.message;
+      document.getElementById('festival-offer').value = currentFestival.offer;
+      document.getElementById('festival-start').value = currentFestival.startDate;
+      document.getElementById('festival-end').value = currentFestival.endDate;
+    }
+    
+    function saveFestival() {
+      const name = document.getElementById('festival-name').value;
+      const image = document.getElementById('festival-image').value;
+      const message = document.getElementById('festival-message').value;
+      const offer = document.getElementById('festival-offer').value;
+      const startDate = document.getElementById('festival-start').value;
+      const endDate = document.getElementById('festival-end').value;
+      
+      if (!name || !message || !offer || !startDate || !endDate) {
+        alert('Please fill all required fields');
+        return;
+      }
+      
+      currentFestival = {
+        name,
+        image,
+        message,
+        offer,
+        startDate,
+        endDate
+      };
+      
+      localStorage.setItem('currentFestival', JSON.stringify(currentFestival));
+      loadCurrentFestival();
+      applyFestivalTheme(); // Update the festival theme
+    }
+    
+    function endFestival() {
+      if (confirm('Are you sure you want to end this festival?')) {
+        currentFestival = null;
+        localStorage.removeItem('currentFestival');
+        loadCurrentFestival();
+        clearFestivalForm();
+        applyFestivalTheme(); // Remove festival theme
+      }
+    }
+    
+    function clearFestivalForm() {
+      document.getElementById('festival-name').value = '';
+      document.getElementById('festival-image').value = '';
+      document.getElementById('festival-message').value = '';
+      document.getElementById('festival-offer').value = '';
+      document.getElementById('festival-start').value = '';
+      document.getElementById('festival-end').value = '';
+    }
+    
+    function applyFestivalTheme() {
+      if (!currentFestival) {
+        // Reset to default theme
+        document.documentElement.style.setProperty('--primary-color', '#1a5276');
+        document.documentElement.style.setProperty('--secondary-color', '#f39c12');
+        document.documentElement.style.setProperty('--accent-color', '#27ae60');
+        return;
+      }
+      
+      // Apply festival theme colors (you can customize these)
+      document.documentElement.style.setProperty('--primary-color', '#1a5276');
+      document.documentElement.style.setProperty('--secondary-color', '#f39c12');
+      document.documentElement.style.setProperty('--accent-color', '#27ae60');
+      
+      // You can add more theme customization here based on the festival
+    }
 
-            // Festival CRUD Operations
-            createFestival: function(festival) {
-                const festivals = this.getAllFestivals();
-                festival.id = Date.now().toString();
-                festivals.push(festival);
-                localStorage.setItem('festivals', JSON.stringify(festivals));
-                festivals = festivals.filter(f => f.id !== id);
-                localStorage.setItem('festivals', JSON.stringify(festivals));
-            },
+    // Add this to your existing DOMContentLoaded event listener
+    document.addEventListener('DOMContentLoaded', function() {
+      // ... your existing initialization code ...
+      
+      // Check admin login status
+      checkAdminLogin();
+      
+      // Add admin login button to your existing header
+      const header = document.querySelector('header');
+      const adminBtn = document.createElement('div');
+      adminBtn.className = 'admin-btn';
+      adminBtn.style.position = 'absolute';
+      adminBtn.style.left = '20px';
+      adminBtn.style.top = '20px';
+      adminBtn.style.cursor = 'pointer';
+      adminBtn.innerHTML = '🔒 Admin';
+      adminBtn.onclick = showAdminLogin;
+      header.appendChild(adminBtn);
+      
+      // Apply festival theme on page load
+      applyFestivalTheme();
+    });
 
-            // UI Loading Functions
-            loadPromotions: function() {
-                const promotions = this.getAllPromotions();
-                const container = document.getElementById('promotions-list');
-                container.innerHTML = '';
-                if (promotions.length === 0) {
-                    container.innerHTML = '<p>No promotions found. Add your first promotion!</p>';
-                    return;
-                }
-                promotions.forEach(promotion => {
-                    const isActive = new Date(promotion.end) >= new Date() && promotion.active;
-                    const cardClass = isActive ? 'active-promotion' : 'expired-promotion';
-                    const card = document.createElement('div');
-                    card.className = `col-md-6 promotion-card`;
-                    card.innerHTML = `
-                        </div>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-                // Add event listeners to buttons
-                const container = document.getElementById('festivals-list');
-                container.innerHTML = '';
-                if (festivals.length === 0) {
-                    container.innerHTML = '<p>No festivals found. Add your first festival!</p>';
-                    return;
-                }
-                festivals.forEach(festival => {
-                    const card = document.createElement('div');
-                    card.className = 'col-md-6 festival-card';
-                    card.innerHTML = `
-                        <div class="card">
-                            </p>
-                                <div class="d-flex justify-content-between">
-                                    </div>
-                            </div>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                btn.addEventListener('click', (e) => this.deleteFestivalHandler(e.target.dataset.id));
-                });
-            },
-
-            // Modal Handlers
-            showAddPromotionModal: function() {
-                document.getElementById('promotion-modal-title').textContent = 'Add New Promotion';
-                document.getElementById('promotion-form').reset();
-                document.getElementById('promotion-id').value = '';
-                document.getElementById('promotion-date-feedback').style.display = 'none';
-                document.getElementById('save-promotion').disabled = true;
-                if (!promotion) return;
-                document.getElementById('promotion-modal-title').textContent = 'Edit Promotion';
-                document.getElementById('promotion-id').value = promotion.id;
-                document.getElementById('promotion-name').value = promotion.name;
-                document.getElementById('promotion-description').value = promotion.description;
-                document.getElementById('promotion-image').value = promotion.image || '';
-                document.getElementById('promotion-start').value = PromotionManager.formatDateInput(promotion.start);
-                document.getElementById('promotion-end').value = PromotionManager.formatDateInput(promotion.end);
-                document.getElementById('promotion-active').checked = promotion.active || false;
-                document.getElementById('promotion-date-feedback').style.display = 'none';
-                PromotionManager.validatePromotionForm();
-                promotionModal.show();
-            },
-            showAddFestivalModal: function() {
-                document.getElementById('festival-modal-title').textContent = 'Add New Festival';
-                document.getElementById('festival-form').reset();
-                document.getElementById('festival-id').value = '';
-                document.getElementById('festival-date-feedback').style.display = 'none';
-                document.getElementById('save-festival').disabled = true;
-                if (!festival) return;
-                document.getElementById('festival-modal-title').textContent = 'Edit Festival';
-                document.getElementById('festival-id').value = festival.id;
-                document.getElementById('festival-name').value = festival.name;
-                document.getElementById('festival-description').value = festival.description;
-                document.getElementById('festival-image').value = festival.image || '';
-                document.getElementById('festival-start').value = PromotionManager.formatDateInput(festival.start);
-                document.getElementById('festival-end').value = PromotionManager.formatDateInput(festival.end);
-                document.getElementById('festival-location').value = festival.location || '';
-                document.getElementById('festival-date-feedback').style.display = 'none';
-                PromotionManager.validateFestivalForm();
-                festivalModal.show();
-            },
-
-            // Form Handlers
-            savePromotion: function() {
-                const id = document.getElementById('promotion-id').value;
-                const promotion = {
-                    name: document.getElementById('promotion-name').value,
-                    description: document.getElementById('promotion-description').value,
-                    }
-                promotionModal.hide();
-                this.loadPromotions();
-            },
-            saveFestival: function() {
-                const id = document.getElementById('festival-id').value;
-                const festival = {
-                    name: document.getElementById('festival-name').value,
-                    description: document.getElementById('festival-description').value,
-                    image: document.getElementById('festival-image').value,
-                    start: document.getElementById('festival-start').value,
-                    end: document.getElementById('festival-end').value,
-                    location: document.getElementById('festival-location').value
-                festivalModal.hide();
-                this.loadFestivals();
-            },
-
-            // Delete Handlers
-            deletePromotionHandler: function(id) {
-                if (confirm('Are you sure you want to delete this promotion?')) {
-                    this.deletePromotion(id);
-                    this.loadPromotions();
-                }
-            },
-            deleteFestivalHandler: function(id) {
-                if (confirm('Are you sure you want to delete this festival?')) {
-                    this.deleteFestival(id);
-                    this.loadFestivals();
-                }
-            },
-
-            // Utility functions for date formatting
-            formatDate: function(dateStr) {
-                if (!dateStr) return '';
-                // Accepts both YYYY-MM-DD and ISO formats
-                try {
-                    return new Date(dateStr).toLocaleDateString();
-                if (!dateStr) return '';
-                if (dateStr.length === 10 && dateStr.indexOf('-') === 4) return dateStr;
-                // Otherwise, try to parse and format
-                try {
-                    const d = new Date(dateStr);
-                    const desc = document.getElementById('promotion-description').value.trim();
-                const start = document.getElementById('promotion-start').value;
-                const end = document.getElementById('promotion-end').value;
-                let valid = true;
-                let msg = "";
-                if (!name || !desc || !start || !end) valid = false;
-                if (start && end && start > end) {
-                    msg = "End date cannot be before start date.";
-                    valid = false;
-                }
-                document.getElementById('promotion-date-feedback').style.display = msg ? 'block' : 'none';
-                document.getElementById('promotion-date-feedback').textContent = msg;
-                document.getElementById('save-promotion').disabled = !valid;
-            const desc = document.getElementById('festival-description').value.trim();
-                const start = document.getElementById('festival-start').value;
-                const end = document.getElementById('festival-end').value;
-                const loc = document.getElementById('festival-location').value.trim();
-                let valid = true;
-                let msg = "";
-                if (!name || !desc || !start || !end || !loc) valid = false;
-                if (start && end && start > end) {
-                    msg = "End date cannot be before start date.";
-                    valid = false;
-                }
-                document.getElementById('festival-date-feedback').style.display = msg ? 'block' : 'none';
-                document.getElementById('festival-date-feedback').textContent = msg;
-                document.getElementById('save-festival').disabled = !valid;
-            }
-        };
-
-        // Initialize modals
-        const promotionModal = new bootstrap.Modal(document.getElementById('promotion-modal'));
-        const festivalModal = new bootstrap.Modal(document.getElementById('festival-modal'));
-
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', function() {
-            PromotionManager.init();
-
-            // Login form
-            document.getElementById('login-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const username = document.getElementById('username').value.trim();
-                const password = document.getElementById('password').value;
-                if (!PromotionManager.login(username, password)) {
-                    document.getElementById('login-feedback').style.display = 'block';
-                                   document.getElementById(id).addEventListener('input', PromotionManager.validateFestivalForm);
-            });
-        });
-    </script>
+    // Modify your existing applyGrandOpeningDiscount function to use promotions
+    function applyGrandOpeningDiscount(products) {
+      const now = new Date();
+      
+      return products.map(product => {
+        // Check if there's an active promotion for this product
+        const activePromotion = promotions.find(p => 
+          p.productId == product.id && 
+          new Date(p.startDate) <= now && 
+          new Date(p.endDate) >= now
+        );
+        
+        if (activePromotion) {
+          return {
+            ...product,
+            originalPrice: product.price,
+            price: activePromotion.price,
+            festivalTag: "Special Promotion",
+            grandOpeningSpecial: true
+          };
+        }
+        
+        return product;
+      });
+    }
+  </script>
 </body>
 </html>
-```
-
-**Change the admin password in the code as needed.**  
-This version is stable, user-friendly, and has improved validation and feedback. Let me know if you need further customization!
