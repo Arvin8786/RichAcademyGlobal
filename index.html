@@ -4,587 +4,1906 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Forever Living by Mohd Arvinsd Isa - Grand Opening Special</title>
-  <!-- Add Google Identity Services library -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
-    /* [Previous CSS remains exactly the same until the new additions below] */
+    :root {
+      --primary-color: #1a5276;
+      --secondary-color: #f39c12;
+      --accent-color: #27ae60;
+      --festival-name: "Grand Opening";
+      --festival-image: url('https://via.placeholder.com/600x200/1a5276/f39c12?text=Grand+Opening+Special');
+      --festival-message: "Welcome to our online store! Enjoy special opening discounts on selected products.";
+      --festival-offer: "5% OFF on Top Products!";
+    }
     
-    /* New styles for login system */
-    .auth-container {
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    /* Grand Opening Decorations */
+    .festival-decoration {
+      position: fixed;
+      z-index: 999;
+      pointer-events: none;
+      animation-timing-function: linear;
+    }
+    
+    .opening-balloon {
+      width: 80px;
+      height: 100px;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 100"><path fill="%231a5276" d="M40,10 C60,10 70,30 70,50 C70,70 60,90 40,90 C20,90 10,70 10,50 C10,30 20,10 40,10 Z"/><path fill="%23f39c12" d="M30,30 L50,30 L50,50 L30,50 Z"/></svg>');
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: floatBalloon 20s linear infinite;
+    }
+    
+    .opening-confetti {
+      width: 60px;
+      height: 60px;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60"><circle cx="30" cy="30" r="20" fill="%2327ae60"/><circle cx="15" cy="15" r="5" fill="%23f39c12"/><circle cx="45" cy="15" r="5" fill="%23f39c12"/><circle cx="15" cy="45" r="5" fill="%23f39c12"/><circle cx="45" cy="45" r="5" fill="%23f39c12"/></svg>');
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: floatConfetti 25s linear infinite;
+    }
+    
+    .opening-banner {
+      width: 150px;
+      height: 80px;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 80"><rect width="150" height="80" fill="%231a5276"/><text x="75" y="45" font-family="Arial" font-size="20" fill="%23f39c12" text-anchor="middle">Grand Opening</text></svg>');
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: floatBanner 30s linear infinite;
+    }
+    
+    @keyframes floatBalloon {
+      0% { transform: translateX(-80px) translateY(100px); }
+      100% { transform: translateX(calc(100vw + 80px)) translateY(300px); }
+    }
+    
+    @keyframes floatConfetti {
+      0% { transform: translateX(-60px) translateY(150px); }
+      50% { transform: translateX(50vw) translateY(50px); }
+      100% { transform: translateX(calc(100vw + 60px)) translateY(200px); }
+    }
+    
+    @keyframes floatBanner {
+      0% { transform: translateX(-150px) translateY(50px) rotate(-5deg); }
+      100% { transform: translateX(calc(100vw + 150px)) translateY(150px) rotate(5deg); }
+    }
+
+    header {
+      background-color: #fff;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+      position: relative;
+    }
+    .cart-icon {
       position: absolute;
-      right: 60px;
+      right: 20px;
       top: 20px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    nav {
+      background-color: var(--primary-color);
+      position: relative;
+      z-index: 100;
+    }
+    nav ul {
+      display: flex;
+      list-style: none;
+      padding: 10px;
+      margin: 0;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    nav li {
+      margin: 0 15px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+      padding: 5px 0;
+      display: inline-block;
+      position: relative;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--secondary-color);
+      transition: width 0.3s;
+    }
+    nav a:hover::after {
+      width: 100%;
+    }
+    .tab-content {
+      display: none;
+      padding: 20px;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .product-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .product {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    .product:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .product img {
+      width: 100%;
+      height: 200px;
+      object-fit: contain;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    .product h3 {
+      margin: 10px 0 5px;
+      color: var(--primary-color);
+    }
+    .product .benefits {
+      font-size: 13px;
+      color: #555;
+      text-align: left;
+      margin: 8px 0;
+      padding: 0 5px;
+      flex-grow: 1;
+    }
+    .product .consumption {
+      font-size: 13px;
+      color: var(--primary-color);
+      font-style: italic;
+      text-align: left;
+      margin: 8px 0 12px;
+      padding: 0 5px;
+    }
+    .product .whatsapp-btn {
+      display: inline-block;
+      margin-top: 10px;
+      background: #25D366;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    .product .whatsapp-btn:hover {
+      background: #128C7E;
+    }
+    .product .add-to-cart {
+      display: inline-block;
+      margin-top: 10px;
+      background: var(--primary-color);
+      color: white;
+      padding: 8px 15px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .product .add-to-cart:hover {
+      background: #1a237e;
+    }
+    .ai-suggestion-box {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+      border: 2px solid var(--accent-color);
+    }
+    .ai-suggestion-box h2 {
+      color: var(--primary-color);
+      margin-top: 0;
+      text-align: center;
+    }
+    #symptom-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin: 10px 0;
+      border: 2px solid var(--primary-color);
+    }
+    #suggest-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+      display: block;
+      margin: 0 auto;
+    }
+    #suggest-btn:hover {
+      background: #1a237e;
+    }
+    #suggestion-result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 4px;
+      border-left: 4px solid var(--accent-color);
+    }
+    footer {
+      background: #f1f1f1;
+      padding: 20px;
+      text-align: center;
+      font-size: 14px;
+    }
+    .timestamp {
+      font-size: 12px;
+      color: #666;
+      margin-top: 5px;
+    }
+    .disclaimer {
+      margin-top: 10px;
+      background-color: #fff3cd;
+      color: #856404;
+      padding: 15px;
+      border-top: 1px solid #ffeeba;
+    }
+    /* Cart Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 8px;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close:hover {
+      color: black;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .cart-item-info {
+      flex-grow: 1;
+    }
+    .cart-item-price {
+      font-weight: bold;
+      color: var(--secondary-color);
+    }
+    .remove-item {
+      color: #ff0000;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .cart-total {
+      font-weight: bold;
+      font-size: 18px;
+      text-align: right;
+      margin-top: 20px;
+    }
+    .customer-info-form {
+      margin-top: 20px;
+    }
+    .customer-info-form input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .checkout-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 10px;
+      width: 100%;
+    }
+    .checkout-btn:hover {
+      background: #1a237e;
+    }
+    /* Rewards Animation */
+    .rewards-container {
+      text-align: center;
+      padding: 50px 20px;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      color: white;
+      border-radius: 10px;
+      margin: 30px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .rewards-title {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      animation: pulse 2s infinite;
+    }
+    .rewards-subtitle {
+      font-size: 1.5rem;
+      margin-bottom: 30px;
+    }
+    .reward-icon {
+      font-size: 4rem;
+      margin: 20px;
+      display: inline-block;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+      100% { transform: translateY(0px); }
+    }
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: #f0f;
+      opacity: 0.7;
+      animation: confettiFall 5s linear infinite;
+    }
+    @keyframes confettiFall {
+      0% { 
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 1;
+      }
+      100% { 
+        transform: translateY(1000px) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    /* Enhanced CDS and Business sections */
+    .program-section {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    .program-section h2 {
+      color: var(--primary-color);
+      font-size: 2rem;
+      margin-top: 0;
+      text-align: center;
+    }
+    .program-highlights {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      margin: 30px 0;
+    }
+    .highlight-card {
+      width: 30%;
+      min-width: 250px;
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    .highlight-card:hover {
+      transform: translateY(-5px);
+    }
+    .highlight-card h3 {
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 10px;
+    }
+    .testimonial {
+      background: #f0f8f0;
+      padding: 20px;
+      border-left: 4px solid var(--primary-color);
+      margin: 20px 0;
+      font-style: italic;
+    }
+    .testimonial-author {
+      text-align: right;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+    .cta-button {
+      display: block;
+      width: 300px;
+      margin: 30px auto;
+      background: var(--secondary-color);
+      color: white;
+      text-align: center;
+      padding: 15px;
+      border-radius: 50px;
+      font-weight: bold;
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: all 0.3s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .cta-button:hover {
+      background: #e67e22;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    }
+    .program-steps {
+      counter-reset: step;
+      margin: 30px 0;
+    }
+    .step {
+      position: relative;
+      padding-left: 80px;
+      margin-bottom: 30px;
+    }
+    .step:before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 60px;
+      height: 60px;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    /* AI suggestion add to cart buttons */
+    .suggestion-product {
+      background: #f8e8e8;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .suggestion-product button {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .suggestion-product button:hover {
+      background: #1a237e;
+    }
+    
+    /* Festival Popup Modal - Enhanced */
+    .festival-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.9);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.5s;
+    }
+    
+    .festival-content {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      max-width: 600px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border: 3px solid var(--accent-color);
+    }
+    
+    .festival-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 24px;
+      cursor: pointer;
+      color: #666;
+      transition: all 0.3s;
+    }
+    
+    .festival-close:hover {
+      color: #000;
+      transform: rotate(90deg);
+    }
+    
+    .festival-title {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+      animation: textGlow 2s infinite alternate;
+    }
+    
+    @keyframes textGlow {
+      0% { text-shadow: 0 0 10px rgba(0,0,0,0.1); }
+      100% { text-shadow: 0 0 20px var(--accent-color); }
+    }
+    
+    .festival-message {
+      font-size: 1.2rem;
+      margin-bottom: 25px;
+      color: #555;
+    }
+    
+    .festival-image {
+      max-width: 100%;
+      height: 200px;
+      object-fit: contain;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border: 2px solid var(--accent-color);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .festival-offer {
+      background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+      padding: 15px;
+      border-radius: 5px;
+      font-weight: bold;
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+      animation: pulse 1.5s infinite;
+    }
+    
+    /* Featured Product Animations */
+    .featured-product {
+      position: relative;
+      animation: float 3s ease-in-out infinite;
+      z-index: 1;
+      border: 2px solid var(--accent-color);
+    }
+    
+    .featured-product::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      background: linear-gradient(45deg, 
+        var(--primary-color), 
+        var(--secondary-color), 
+        var(--accent-color));
+      z-index: -1;
+      border-radius: 10px;
+      opacity: 0.3;
+      animation: gradientRotate 8s linear infinite;
+    }
+    
+    @keyframes gradientRotate {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+    
+    .featured-badge {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      width: 60px;
+      height: 60px;
+      background: var(--accent-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+      transform: rotate(15deg);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      animation: badgePulse 2s infinite;
+    }
+    
+    @keyframes badgePulse {
+      0% { transform: rotate(15deg) scale(1); }
+      50% { transform: rotate(15deg) scale(1.1); }
+      100% { transform: rotate(15deg) scale(1); }
+    }
+    
+    .discount-price {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    
+    .original-price {
+      text-decoration: line-through;
+      color: #999;
+      font-size: 0.9em;
+    }
+    
+    .new-price {
+      color: var(--secondary-color);
+      font-weight: bold;
+      font-size: 1.2em;
       display: flex;
       align-items: center;
     }
     
-    .auth-btn {
+    .fire-icon {
+      margin-left: 5px;
+      color: #FF5722;
+      animation: fireBlink 1s infinite alternate;
+    }
+    
+    @keyframes fireBlink {
+      0% { opacity: 0.7; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.2); }
+    }
+    
+    .coming-soon {
+      text-align: center;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f8f9fa;
+      border-radius: 5px;
+      color: var(--primary-color);
+      font-weight: bold;
+    }
+    
+    /* Grand Opening Ribbon */
+    .grand-opening-ribbon {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 150px;
+      height: 150px;
+      overflow: hidden;
+      z-index: 100;
+    }
+    
+    .grand-opening-ribbon::before,
+    .grand-opening-ribbon::after {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      display: block;
+      border: 5px solid #f39c12;
+      border-top-color: transparent;
+      border-right-color: transparent;
+    }
+    
+    .grand-opening-ribbon::before {
+      top: 0;
+      left: 0;
+    }
+    
+    .grand-opening-ribbon::after {
+      bottom: 0;
+      right: 0;
+    }
+    
+    .grand-opening-ribbon span {
+      position: absolute;
+      display: block;
+      width: 225px;
+      padding: 15px 0;
+      background-color: #1a5276;
+      box-shadow: 0 5px 10px rgba(0,0,0,.1);
+      color: #fff;
+      font-size: 13px;
+      text-align: center;
+      right: -25px;
+      top: 30px;
+      transform: rotate(45deg);
+    }
+    
+    /* Special Offer Banner */
+    .special-offer-banner {
+      background: linear-gradient(135deg, #1a5276, #27ae60);
+      color: white;
+      padding: 10px;
+      text-align: center;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      animation: pulse 2s infinite;
+    }
+
+    /* New styles for postage information */
+    .cart-postage {
+      font-size: 14px;
+      color: #666;
+      margin: 10px 0;
+      padding: 10px;
+      background-color: #f5f5f5;
+      border-radius: 4px;
+    }
+
+    .free-delivery {
+      color: var(--accent-color);
+      font-weight: bold;
+    }
+    
+    .delivery-offer {
+      font-size: 14px;
+      color: var(--primary-color);
+      text-align: center;
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f0f8ff;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    /* Search bar styles */
+    .search-container {
+      margin-bottom: 20px;
+      position: relative;
+    }
+    
+    #product-search {
+      width: 100%;
+      padding: 12px 20px;
+      border: 2px solid var(--primary-color);
+      border-radius: 25px;
+      font-size: 16px;
+      outline: none;
+      transition: all 0.3s;
+    }
+    
+    #product-search:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 5px rgba(39, 174, 96, 0.5);
+    }
+    
+    .search-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary-color);
+    }
+    
+    /* Quantity controls in cart */
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      margin-left: 10px;
+    }
+    
+    .quantity-btn {
+      width: 25px;
+      height: 25px;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .quantity-btn:hover {
       background: var(--accent-color);
+    }
+    
+    .quantity-input {
+      width: 30px;
+      text-align: center;
+      margin: 0 5px;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+    }
+    
+    .cart-item-details {
+      display: flex;
+      align-items: center;
+    }
+    
+    .cart-item-actions {
+      display: flex;
+      align-items: center;
+    }
+
+    /* Account Management Styles */
+    .account-section {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    
+    .account-section h2 {
+      color: var(--primary-color);
+      font-size: 2rem;
+      margin-top: 0;
+      text-align: center;
+    }
+    
+    .account-tabs {
+      display: flex;
+      border-bottom: 2px solid var(--primary-color);
+      margin-bottom: 20px;
+    }
+    
+    .account-tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      background: #f5f5f5;
+      margin-right: 5px;
+      border-radius: 5px 5px 0 0;
+      transition: all 0.3s;
+    }
+    
+    .account-tab.active {
+      background: var(--primary-color);
+      color: white;
+    }
+    
+    .account-tab:hover:not(.active) {
+      background: #e0e0e0;
+    }
+    
+    .account-tab-content {
+      display: none;
+      padding: 20px;
+      background: #f9f9f9;
+      border-radius: 0 0 5px 5px;
+    }
+    
+    .account-tab-content.active {
+      display: block;
+    }
+    
+    .account-form {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    .account-form label {
+      display: block;
+      margin: 15px 0 5px;
+      color: var(--primary-color);
+      font-weight: bold;
+    }
+    
+    .account-form input,
+    .account-form select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    
+    .account-form button {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 20px;
+      width: 100%;
+      transition: all 0.3s;
+    }
+    
+    .account-form button:hover {
+      background: #1a237e;
+    }
+    
+    .order-history {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .order-history th,
+    .order-history td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .order-history th {
+      background: var(--primary-color);
+      color: white;
+    }
+    
+    .order-history tr:hover {
+      background: #f0f0f0;
+    }
+    
+    .points-balance {
+      font-size: 2rem;
+      color: var(--accent-color);
+      text-align: center;
+      margin: 20px 0;
+    }
+    
+    .points-history {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .points-history li {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .points-history li .points {
+      font-weight: bold;
+      color: var(--accent-color);
+    }
+    
+    .redeem-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    
+    .redeem-item button {
+      background: var(--secondary-color);
       color: white;
       border: none;
       padding: 8px 15px;
       border-radius: 4px;
       cursor: pointer;
-      font-size: 14px;
-      margin-left: 10px;
     }
     
-    .profile-dropdown {
-      position: relative;
-      display: inline-block;
+    .redeem-item button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
     }
     
-    .profile-btn {
-      background: none;
-      border: none;
-      color: var(--primary-color);
-      font-weight: bold;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-    }
-    
-    .profile-pic {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      margin-right: 5px;
-    }
-    
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      right: 0;
-      background-color: white;
-      min-width: 200px;
-      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-      z-index: 1;
-      border-radius: 5px;
-    }
-    
-    .dropdown-content a {
-      color: var(--primary-color);
-      padding: 12px 16px;
-      text-decoration: none;
-      display: block;
-    }
-    
-    .dropdown-content a:hover {
-      background-color: #f1f1f1;
-    }
-    
-    .profile-dropdown:hover .dropdown-content {
-      display: block;
-    }
-    
-    /* Customer dashboard styles */
-    .dashboard-section {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-    }
-    
-    .dashboard-section h3 {
-      color: var(--primary-color);
-      border-bottom: 2px solid var(--primary-color);
-      padding-bottom: 10px;
-    }
-    
-    .order-history-item {
-      border-bottom: 1px solid #eee;
-      padding: 10px 0;
-    }
-    
-    .form-group {
-      margin-bottom: 15px;
-    }
-    
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-    
-    .form-group input, 
-    .form-group select, 
-    .form-group textarea {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-    }
-    
-    .save-btn {
-      background: var(--accent-color);
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    
-    /* Modal styles */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    .auth-modal {
+    .login-form {
+      max-width: 400px;
+      margin: 0 auto;
       background: white;
       padding: 30px;
       border-radius: 8px;
-      width: 90%;
-      max-width: 400px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     
-    .auth-tabs {
-      display: flex;
-      margin-bottom: 20px;
-    }
-    
-    .auth-tab {
-      flex: 1;
+    .login-form h3 {
       text-align: center;
-      padding: 10px;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
+      color: var(--primary-color);
     }
     
-    .auth-tab.active {
-      border-bottom: 2px solid var(--accent-color);
+    .login-form p {
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    .login-form a {
+      color: var(--primary-color);
       font-weight: bold;
     }
     
-    .auth-form {
-      display: none;
+    .account-status {
+      text-align: center;
+      padding: 20px;
+      background: #f0f8ff;
+      border-radius: 5px;
+      margin-bottom: 20px;
     }
     
-    .auth-form.active {
-      display: block;
-    }
-    
-    /* Google sign-in button styling */
-    .g_id_signin {
-      margin-top: 15px;
+    .account-status h3 {
+      color: var(--primary-color);
+      margin-top: 0;
     }
   </style>
-  <!-- [Rest of the head section remains the same] -->
-</head>
-<body>
-  <!-- [Previous HTML remains exactly the same until the header modification] -->
-  
+
+  <!-- Grand Opening Decorations -->
+  <div id="festival-decorations">
+    <div class="festival-decoration opening-balloon" style="top: 100px; animation-duration: 20s; animation-delay: 0s;"></div>
+    <div class="festival-decoration opening-balloon" style="top: 300px; animation-duration: 25s; animation-delay: 5s;"></div>
+    <div class="festival-decoration opening-confetti" style="top: 200px; animation-duration: 30s; animation-delay: 2s;"></div>
+    <div class="festival-decoration opening-confetti" style="top: 400px; animation-duration: 35s; animation-delay: 7s;"></div>
+    <div class="festival-decoration opening-banner" style="top: 150px; animation-duration: 40s; animation-delay: 3s;"></div>
+  </div>
+
   <header>
     <h1 style="font-size: 28px; color: var(--primary-color);">
       FOREVER LIVING by Mohd Arvind Isa
       <span style="font-size: 18px; color: var(--secondary-color); display: block;">Quality Wellness Products</span>
     </h1>
-    <div class="auth-container" id="auth-container">
-      <!-- Filled by JavaScript -->
-    </div>
     <div class="cart-icon" onclick="toggleCart()">
       🛒 <span id="cart-count">0</span>
     </div>
   </header>
 
-  <!-- [Rest of the HTML remains the same until before the footer] -->
+  <nav>
+    <ul>
+      <li><a href="#" onclick="showTab('products')">Products</a></li>
+      <li><a href="#" onclick="showTab('cds')">Cabaran Detox Sihat @CDS </a></li>
+      <li><a href="#" onclick="showTab('business')">Business Opportunity</a></li>
+      <li><a href="#" onclick="showTab('rewards')">Rewards</a></li>
+      <li><a href="#" onclick="showTab('account')">My Account</a></li>
+    </ul>
+  </nav>
 
-  <!-- Add the new auth modal -->
-  <div class="modal-overlay" id="auth-modal-overlay">
-    <div class="auth-modal">
-      <span class="close" onclick="closeAuthModal()" style="float: right; cursor: pointer;">&times;</span>
-      <div class="auth-tabs">
-        <div class="auth-tab active" onclick="switchAuthTab('login')">Login</div>
-        <div class="auth-tab" onclick="switchAuthTab('register')">Register</div>
+  <main>
+    <div id="products" class="tab-content active">
+      <div class="special-offer-banner">
+        <h2>🎉 GRAND OPENING SPECIAL 🎉</h2>
+        <p>Enjoy 5% OFF on our top 10 bestselling products!</p>
+        <p style="font-size: 1.1em; margin-top: 5px; font-weight: bold;">Promotion Period: 21/7/2025 - 24/8/2025</p>
+      </div>
+
+      <div class="search-container">
+        <input type="text" id="product-search" placeholder="Search products...">
+        <span class="search-icon">🔍</span>
+      </div>
+
+      <div class="ai-suggestion-box">
+        <h2>AI Product Suggestion</h2>
+        <p>Tell our AI your symptoms and we'll recommend the best Forever Living products for you:</p>
+        <input type="text" id="symptom-input" placeholder="e.g. joint pain, low energy, digestion issues...">
+        <button id="suggest-btn" onclick="suggestProduct()">Get Product Suggestions</button>
+        <div id="suggestion-result"></div>
       </div>
       
-      <div id="login-form" class="auth-form active">
-        <div class="form-group">
-          <label for="login-email">Email</label>
-          <input type="email" id="login-email" placeholder="Your email">
+      <h2>Our Products - Grand Opening Special!</h2>
+      <div id="product-list" class="product-list"></div>
+      <div class="coming-soon">More products coming soon! Stay tuned for updates.</div>
+    </div>
+
+    <div id="cds" class="tab-content">
+      <section class="program-section">
+        <h2>Cabaran Detox Sihat (CDS)</h2>
+        <p style="text-align: center; font-size: 1.2rem;">Transform your health in just 7 days with our proven detox program</p>
+        
+        <div class="program-highlights">
+          <div class="highlight-card">
+            <h3>What You Get</h3>
+            <ul>
+              <li>✅ Personalized Forever product package</li>
+              <li>📋 Detailed meal plan & recipes</li>
+              <li>📱 Daily coaching via WhatsApp</li>
+              <li>👥 Private support community</li>
+              <li>📚 Educational materials</li>
+            </ul>
+          </div>
+          
+          <div class="highlight-card">
+            <h3>Benefits</h3>
+            <ul>
+              <li>⚡ Boost energy levels</li>
+              <li>🌿 Natural detoxification</li>
+              <li>⚖️ Healthy weight management</li>
+              <li>🧠 Improved mental clarity</li>
+              <li>😴 Better sleep quality</li>
+            </ul>
+          </div>
+          
+          <div class="highlight-card">
+            <h3>Program Details</h3>
+            <ul>
+             <li>⏳ 7-day intensive program</li>
+             <li>📦 Delivered in 5-10 working days</li>
+             <li>👨‍🏫 Experienced coach support</li>
+             <li>🎯 Results-driven approach</li>
+             <li>📊 Progress tracking tools</li>
+            </ul>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="login-password">Password</label>
-          <input type="password" id="login-password" placeholder="Your password">
+        
+        <div class="program-steps">
+          <h3 style="text-align: center;">How It Works</h3>
+          <div class="step">
+            <h4>Registration</h4>
+            <p>Complete your registration and health assessment to receive a personalized program tailored to your needs.</p>
+          </div>
+          <div class="step">
+            <h4>Receive Your Kit</h4>
+            <p>Get your Forever Living product package delivered to your doorstep with detailed instructions.</p>
+          </div>
+          <div class="step">
+            <h4>Daily Guidance</h4>
+            <p>Follow the daily plan with support from your coach and community through WhatsApp.</p>
+          </div>
+          <div class="step">
+            <h4>Transformation</h4>
+            <p>Experience noticeable improvements in your energy, digestion, and overall wellbeing by day 7.</p>
+          </div>
         </div>
-        <button class="save-btn" onclick="loginWithEmail()">Login</button>
-        <div class="g_id_signin"
-          data-type="standard"
-          data-shape="rectangular"
-          data-theme="outline"
-          data-text="signin_with"
-          data-size="medium"
-          data-logo_alignment="left">
+        
+        <div class="testimonial">
+          <p>"After completing CDS, I lost 3kg and my chronic bloating disappeared. I now have so much more energy throughout the day!"</p>
+          <p class="testimonial-author">- Aina S., 32, Kuala Lumpur</p>
+        </div>
+        
+        <a href="https://wa.me/601111033154?text=I%20want%20to%20join%20CDS%20Program" class="cta-button">Join CDS Now</a>
+      </section>
+    </div>
+
+    <div id="business" class="tab-content">
+      <section class="program-section">
+        <h2>Build Your Forever Business</h2>
+        <p style="text-align: center; font-size: 1.2rem;">Start your journey to financial freedom with our proven system</p>
+        
+        <div class="program-highlights">
+          <div class="highlight-card">
+            <h3>Why Join Us?</h3>
+            <ul>
+              <li>💰 Earn 30-50% commission</li>
+              <li>🌍 Work from anywhere</li>
+              <li>⏱ Flexible hours</li>
+              <li>📈 Unlimited income potential</li>
+              <li>🛍️ Discount on products</li>
+            </ul>
+          </div>
+          
+          <div class="highlight-card">
+            <h3>What We Provide</h3>
+            <ul>
+              <li>🎓 Complete training program</li>
+              <li>📱 Marketing materials</li>
+              <li>🤝 Mentorship</li>
+              <li>👥 Team support</li>
+              <li>🏆 Recognition program</li>
+            </ul>
+          </div>
+          
+          <div class="highlight-card">
+            <h3>Success Path</h3>
+            <ul>
+              <li>1️⃣ Start part-time</li>
+              <li>2️⃣ Build your customer base</li>
+              <li>3️⃣ Recruit your team</li>
+              <li>4️⃣ Earn residual income</li>
+              <li>5️⃣ Achieve financial freedom</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="program-steps">
+          <h3 style="text-align: center;">Your Business Journey</h3>
+          <div class="step">
+            <h4>Step 1: Enroll</h4>
+            <p>Register as a Forever Business Owner (FBO) and receive your starter kit with everything you need to begin.</p>
+          </div>
+          <div class="step">
+            <h4>Step 2: Learn</h4>
+            <p>Complete our comprehensive training program with ongoing support from your upline and team.</p>
+          </div>
+          <div class="step">
+            <h4>Step 3: Implement</h4>
+            <p>Start sharing products and the business opportunity using our proven marketing system.</p>
+          </div>
+          <div class="step">
+            <h4>Step 4: Grow</h4>
+            <p>Build your team and leverage our compensation plan to maximize your earnings.</p>
+          </div>
+        </div>
+        
+        <div class="testimonial">
+          <p>"I joined Forever Living 2 years ago as a side hustle. Today it's my full-time business earning me RM15,000 monthly!"</p>
+          <p class="testimonial-author">- Ahmad F., 28, Penang</p>
+        </div>
+        
+        <div class="testimonial">
+          <p>"The training and support system helped me build confidence. I now have a team of 50 people across Malaysia."</p>
+          <p class="testimonial-author">- Sarah L., 35, Johor Bahru</p>
+        </div>
+        
+        <a href="https://wa.me/601111033154?text=I%20want%20to%20join%20Forever%20Business" class="cta-button">Start Your Business Today</a>
+      </section>
+    </div>
+
+    <div id="rewards" class="tab-content">
+      <div class="rewards-container" id="rewards-animation">
+        <h1 class="rewards-title">EXCITING REWARDS COMING SOON!</h1>
+        <p class="rewards-subtitle">Stay tuned for our amazing loyalty program</p>
+        
+        <div>
+          <span class="reward-icon">🏆</span>
+          <span class="reward-icon">💰</span>
+          <span class="reward-icon">✈️</span>
+          <span class="reward-icon">🎁</span>
+        </div>
+        
+        <p style="font-size: 1.2rem; max-width: 800px; margin: 20px auto;">
+          We're preparing something special for our loyal customers! Our rewards program will offer exclusive benefits, 
+          cash bonuses and amazing gifts based on your purchases and referrals.
+        </p>
+        
+        <div style="margin-top: 30px;">
+          <button onclick="notifyMe()" style="
+            background: white;
+            color: var(--primary-color);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+          ">
+            Notify Me When Launched
+          </button>
         </div>
       </div>
+    </div>
+
+    <div id="account" class="tab-content">
+      <section class="account-section">
+        <h2>My Account</h2>
+        
+        <div class="account-status">
+          <h3>Welcome back, <span id="account-name">Guest</span>!</h3>
+          <p>Member since: <span id="member-since">2025</span> | Points: <span id="account-points">0</span></p>
+        </div>
+        
+        <div class="account-tabs">
+          <div class="account-tab active" onclick="showAccountTab('profile')">Profile</div>
+          <div class="account-tab" onclick="showAccountTab('orders')">Order History</div>
+          <div class="account-tab" onclick="showAccountTab('points')">Points</div>
+          <div class="account-tab" onclick="showAccountTab('redeem')">Redeem Rewards</div>
+        </div>
+        
+        <div id="profile-tab" class="account-tab-content active">
+          <form class="account-form">
+            <label for="full-name">Full Name</label>
+            <input type="text" id="full-name" value="Mohd Arvind Isa">
+            
+            <label for="email">Email</label>
+            <input type="email" id="email" value="arvind@example.com">
+            
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" value="+601111033154">
+            
+            <label for="address">Shipping Address</label>
+            <textarea id="address" rows="4">123 Jalan Merdeka, Kuala Lumpur, Malaysia</textarea>
+            
+            <label for="password">Change Password</label>
+            <input type="password" id="password" placeholder="Enter new password">
+            
+            <label for="confirm-password">Confirm Password</label>
+            <input type="password" id="confirm-password" placeholder="Confirm new password">
+            
+            <button type="button">Update Profile</button>
+          </form>
+        </div>
+        
+        <div id="orders-tab" class="account-tab-content">
+          <table class="order-history">
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>Date</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>FL-10025</td>
+                <td>15/7/2025</td>
+                <td>Aloe Vera Gel, Bee Honey</td>
+                <td>RM 249.58</td>
+                <td>Delivered</td>
+              </tr>
+              <tr>
+                <td>FL-10018</td>
+                <td>5/7/2025</td>
+                <td>Royal Jelly, Fields of Greens</td>
+                <td>RM 225.31</td>
+                <td>Delivered</td>
+              </tr>
+              <tr>
+                <td>FL-10005</td>
+                <td>20/6/2025</td>
+                <td>Aloe Berry Nectar</td>
+                <td>RM 116.79</td>
+                <td>Delivered</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div id="points-tab" class="account-tab-content">
+          <div class="points-balance">
+            Your Points Balance: <span>1,250</span>
+          </div>
+          
+          <h3>Points History</h3>
+          <ul class="points-history">
+            <li>
+              <span>15/7/2025 - Purchase (Order FL-10025)</span>
+              <span class="points">+250 pts</span>
+            </li>
+            <li>
+              <span>5/7/2025 - Purchase (Order FL-10018)</span>
+              <span class="points">+225 pts</span>
+            </li>
+            <li>
+              <span>20/6/2025 - Purchase (Order FL-10005)</span>
+              <span class="points">+115 pts</span>
+            </li>
+            <li>
+              <span>10/6/2025 - Referral Bonus</span>
+              <span class="points">+500 pts</span>
+            </li>
+            <li>
+              <span>1/6/2025 - Birthday Bonus</span>
+              <span class="points">+100 pts</span>
+            </li>
+            <li>
+              <span>25/5/2025 - Product Review</span>
+              <span class="points">+50 pts</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div id="redeem-tab" class="account-tab-content">
+          <h3>Available Rewards</h3>
+          
+          <div class="redeem-item">
+            <div>
+              <h4>RM 50 Voucher</h4>
+              <p>Redeemable on your next purchase</p>
+            </div>
+            <div>
+              <span style="font-weight: bold; color: var(--accent-color);">500 pts</span>
+              <button>Redeem</button>
+            </div>
+          </div>
+          
+          <div class="redeem-item">
+            <div>
+              <h4>Free Aloe Lips</h4>
+              <p>Forever Aloe Lips with your next order</p>
+            </div>
+            <div>
+              <span style="font-weight: bold; color: var(--accent-color);">250 pts</span>
+              <button>Redeem</button>
+            </div>
+          </div>
+          
+          <div class="redeem-item">
+            <div>
+              <h4>Free Delivery</h4>
+              <p>Free nationwide delivery on your next order</p>
+            </div>
+            <div>
+              <span style="font-weight: bold; color: var(--accent-color);">300 pts</span>
+              <button>Redeem</button>
+            </div>
+          </div>
+          
+          <div class="redeem-item">
+            <div>
+              <h4>CDS Program Discount</h4>
+              <p>20% off Cabaran Detox Sihat program</p>
+            </div>
+            <div>
+              <span style="font-weight: bold; color: var(--accent-color);">750 pts</span>
+              <button>Redeem</button>
+            </div>
+          </div>
+          
+          <div class="redeem-item">
+            <div>
+              <h4>Business Starter Kit</h4>
+              <p>Free Forever Business Owner starter kit</p>
+            </div>
+            <div>
+              <span style="font-weight: bold; color: var(--accent-color);">1,500 pts</span>
+              <button disabled>Not enough points</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Cart Modal -->
+  <div id="cart-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="toggleCart()">&times;</span>
+      <h2>Your Shopping Cart</h2>
+      <div id="cart-items"></div>
+      <div class="cart-total">Total: RM <span id="cart-total">0.00</span></div>
       
-      <div id="register-form" class="auth-form">
-        <div class="form-group">
-          <label for="register-name">Full Name</label>
-          <input type="text" id="register-name" placeholder="Your full name">
-        </div>
-        <div class="form-group">
-          <label for="register-email">Email</label>
-          <input type="email" id="register-email" placeholder="Your email">
-        </div>
-        <div class="form-group">
-          <label for="register-phone">Phone Number</label>
-          <input type="tel" id="register-phone" placeholder="Your WhatsApp number">
-        </div>
-        <div class="form-group">
-          <label for="register-password">Password</label>
-          <input type="password" id="register-password" placeholder="Create password">
-        </div>
-        <button class="save-btn" onclick="registerWithEmail()">Register</button>
+      <div class="delivery-offer">
+        🚚 FREE NATIONWIDE DELIVERY for orders RM 250 and above! Limited time offer.
+      </div>
+      
+      <div class="customer-info-form">
+        <h3>Customer Information</h3>
+        <input type="text" id="customer-name" placeholder="Your Full Name" required>
+        <input type="tel" id="customer-phone" placeholder="Your WhatsApp Number" required>
+        <button class="checkout-btn" onclick="checkout()">Complete Order via WhatsApp</button>
       </div>
     </div>
   </div>
 
-  <!-- [Rest of the HTML remains the same] -->
+  <!-- Festival Popup Modal -->
+  <div id="festival-modal" class="festival-modal" style="display: flex;">
+    <div class="festival-content">
+      <span class="festival-close" onclick="closeFestivalModal()">&times;</span>
+      <h2 class="festival-title">Online Store Opening Sale!</h2>
+      <img src="https://via.placeholder.com/600x200/1a5276/f39c12?text=Welcome+to+Our+Store" alt="Grand Opening Banner">
+      <p class="festival-message">Welcome to our online store! Enjoy special opening discounts on selected products.</p>
+      <div class="festival-offer">5% OFF on Top Products!</div>
+      <button class="add-to-cart" onclick="closeFestivalModal()" style="width: auto; margin: 0 auto;">Start Shopping</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Forever Living by Mohd Arvind Isa. Powered by Rich Academy Global. All rights reserved.</p>
+    <div class="timestamp">Last updated: <span id="current-date"></span></div>
+    <section class="disclaimer">
+      <strong>Disclaimer:</strong> This website is operated by an independent Registered Forever Business Owner (FBO) under Rich Academy Global and is not the official site of Forever Living Products. Product names, trademarks, and registered trademarks are property of Forever Living Products International, Inc.
+    </section>
+  </footer>
 
   <script>
-    // ======================
-    // AUTHENTICATION SYSTEM
-    // ======================
-    let currentCustomer = null;
-    let customers = JSON.parse(localStorage.getItem('foreverCustomers')) || [];
+    // Top 10 best-selling products with grand opening special flag
+    const products = [
+      { id: 1, name: "Aloe Vera Gel", price: 116.79, image: "aloe-vera-gel.jpg", 
+       benefits: "Supports digestion, boosts immunity, promotes skin health, enhances nutrient absorption, helps detoxify the body", 
+       consumption: "Take 30-60ml daily, preferably on empty stomach",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 2, name: "Aloe Berry Nectar", price: 116.79, image: "aloe-berry-nectar.jpg", 
+       benefits: "Antioxidant support, immune system booster, natural energy, supports urinary health, rich in vitamin C", 
+       consumption: "30-60ml daily, can be mixed with water or juice",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 3, name: "Bee Honey", price: 132.57, image: "bee-honey.jpg", 
+       benefits: "Natural energy, soothes throat, antioxidant properties, supports digestion, promotes wound healing", 
+       consumption: "1-2 teaspoons daily, can be added to drinks",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 4, name: "Royal Jelly", price: 139.21, image: "royal-jelly.jpg", 
+       benefits: "Energy booster, supports immune system, anti-aging, hormone balance, supports skin renewal", 
+       consumption: "1 tablet daily, preferably in the morning",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 5, name: "Bee Propolis", price: 139.21, image: "bee-propolis.jpg", 
+       benefits: "Immune support, natural antibiotic, throat health, anti-inflammatory, promotes oral health", 
+       consumption: "1 tablet daily or as needed",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 6, name: "Arctic Sea", price: 130.10, image: "arctic-sea.jpg", 
+       benefits: "Heart health, joint support, brain function, supports vision, reduces inflammation", 
+       consumption: "2 softgels twice daily with meals",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 7, name: "Fields of Greens", price: 86.10, image: "fields-of-greens.jpg", 
+       benefits: "Detoxification, digestion, alkalizing, supports weight management, rich in chlorophyll", 
+       consumption: "1 tablet 3 times daily with water",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 8, name: "Aloe First", price: 93.40, image: "aloe-first.jpg", 
+       benefits: "Skin hydration, cooling relief, wound soothing, relieves sunburn, pre-hair treatment spray", 
+       consumption: "Spray directly on skin as needed",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 9, name: "Aloe Propolis Creme", price: 92.08, image: "aloe-propolis-creme.jpg", 
+       benefits: "Skin repair, moisturizing, protective barrier, soothes irritated skin, supports healing of minor cuts", 
+       consumption: "Apply generously on dry or irritated areas",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 10, name: "Forever Bright Toothgel", price: 31.62, image: "bright-toothgel.jpg", 
+       benefits: "Fluoride-free, fresh breath, aloe-based care, gentle on gums, whitens teeth naturally", 
+       consumption: "Brush teeth twice daily",
+       bestSeller: true, grandOpeningSpecial: true },
+      { id: 11, name: "Aloe Peaches", price: 116.79, image: "aloe-peaches.jpg", 
+       benefits: "Digestive health, vitamin C source, natural detoxification, maintains healthy skin, supports kidney function", 
+       consumption: "30-60ml daily, refrigerate after opening" },
+      { id: 12, name: "Bee Pollen", price: 75.50, image: "bee-pollen.jpg", 
+       benefits: "Natural multivitamin, energy enhancement, allergy relief, improves stamina, supports cardiovascular health", 
+       consumption: "1 tablet 3 times daily with meals" },
+      { id: 13, name: "Absorbent-C", price: 75.50, image: "absorbent-c.jpg", 
+       benefits: "Immune support, collagen production, antioxidant, helps iron absorption, supports healthy skin", 
+       consumption: "1-2 tablets daily with meals" },
+      { id: 14, name: "Calcium Plus", price: 132.15, image: "calcium-plus.jpg", 
+       benefits: "Bone support, muscle health, calcium + vitamin D, supports nerve function, helps prevent osteoporosis", 
+       consumption: "2 tablets daily with meals" },
+      { id: 15, name: "Aloe Liquid Soap", price: 54.72, image: "aloe-liquid-soap.jpg", 
+       benefits: "Gentle cleansing, moisturizes skin, aloe-based formula, suitable for sensitive skin, pH-balanced", 
+       consumption: "Use daily for face and body cleansing" },
+      { id: 16, name: "Aloe Jojoba Shampoo", price: 91.66, image: "aloe-jojoba-shampoo.jpg", 
+       benefits: "Hair nourishment, scalp care, sulfate-free, promotes hair strength, natural shine", 
+       consumption: "Massage into wet hair, rinse thoroughly" },
+      { id: 17, name: "Aloe Jojoba Conditioner", price: 91.66, image: "aloe-jojoba-conditioner.jpg", 
+       benefits: "Moisturizing, smooth finish, aloe + jojoba, strengthens hair strands, prevents breakage", 
+       consumption: "Apply after shampoo, leave 1-2 minutes, rinse" },
+      { id: 18, name: "Aloe Sunscreen", price: 84.91, image: "aloe-sunscreen.jpg", 
+       benefits: "UV protection, aloe-based, water-resistant, suitable for sensitive skin, prevents sunburn", 
+       consumption: "Apply 15 minutes before sun exposure" },
+      { id: 19, name: "Aloe MPD 2X Ultra", price: 114.47, image: "aloe-mp-lotion.jpg", 
+       benefits: "Multi-purpose cleaner, concentrated, eco-friendly, gentle on skin, biodegradable formula", 
+       consumption: "Dilute as needed for laundry, dishes or surfaces" },
+      { id: 20, name: "Avocado Face & Body Soap", price: 23.40, image: "avocado-soap.jpg", 
+       benefits: "Softens skin, gentle cleansing, avocado oil-rich, suitable for all skin types, non-drying", 
+       consumption: "Use daily for face and body" },
+      { id: 21, name: "Aloe Lips", price: 17.92, image: "aloe-lips.jpg", 
+       benefits: "Lip protection, moisturizes, healing balm, soothes cracked lips, non-greasy finish", 
+       consumption: "Apply on lips as needed throughout the day" },
+      { id: 22, name: "Forever Deodorant Stick", price: 34.91, image: "forever-deodorant.jpg", 
+       benefits: "Natural fragrance, aloe soothing, easy glide, long-lasting protection, non-staining", 
+       consumption: "Use after shower daily" },
+      { id: 23, name: "Teh Tarik Halia", price: 25.90, image: "teh-tarik.jpg", 
+       benefits: "Warming effect, digestion aid, ginger-infused, improves circulation, relieves bloating", 
+       consumption: "Mix sachet with hot water and stir well" },
+      { id: 24, name: "Choco Malt Drink", price: 27.90, image: "choco-malt.jpg", 
+       benefits: "Rich in B vitamins, iron for red blood cell production, supports metabolism, promotes growth, aids recovery after fatigue", 
+       consumption: "Mix 2-3 tablespoons in 150–200ml hot water or milk" }
+    ];
 
-    // Initialize Google Sign-In
-    function handleGoogleAuth(response) {
-      const profile = response.credential;
-      const payload = decodeJwt(profile);
-      
-      // Check if customer exists
-      let customer = customers.find(c => c.email === payload.email);
-      
-      if (!customer) {
-        // Create new customer with Google account
-        customer = {
-          id: 'cust-' + Date.now(),
-          name: payload.name,
-          email: payload.email,
-          phone: '',
-          address: '',
-          dob: '',
-          points: 0,
-          purchases: [],
-          wishlist: [],
-          profilePic: payload.picture,
-          authMethod: 'google'
-        };
-        customers.push(customer);
-        saveCustomers();
-      }
-      
-      currentCustomer = customer;
-      localStorage.setItem('currentCustomer', currentCustomer.id);
-      updateAuthUI();
-      closeAuthModal();
+    // Enhanced product suggestions mapping
+    const productSuggestions = {
+      "digestion": { id: 1, name: "Aloe Vera Gel", recommendation: "30-60ml daily on empty stomach for digestive support" },
+      "bloating": { id: 1, name: "Aloe Vera Gel", recommendation: "30-60ml daily to reduce bloating" },
+      "constipation": { id: 1, name: "Aloe Vera Gel", recommendation: "30-60ml daily to support regular bowel movements" },
+      "diarrhea": { id: 5, name: "Bee Propolis", recommendation: "1 tablet daily to support gut health during diarrhea" },
+      "acid reflux": { id: 1, name: "Aloe Vera Gel", recommendation: "30ml before meals to soothe digestive tract" },
+      "heartburn": { id: 1, name: "Aloe Vera Gel", recommendation: "30ml before meals to calm heartburn" },
+      "indigestion": { id: 7, name: "Fields of Greens", recommendation: "1 tablet before meals for better digestion" },
+      "nausea": { id: 4, name: "Royal Jelly", recommendation: "1 tablet to help settle stomach" },
+      "ibs": { id: 1, name: "Aloe Vera Gel", recommendation: "30ml twice daily to soothe IBS symptoms" },
+      "gas": { id: 7, name: "Fields of Greens", recommendation: "1 tablet three times daily to reduce gas" },
+      "stomachache": { id: 1, name: "Aloe Vera Gel", recommendation: "30ml to soothe stomach discomfort" },
+      "upset stomach": { id: 1, name: "Aloe Vera Gel", recommendation: "30ml as needed for stomach relief" },
+      "gastritis": { id: 1, name: "Aloe Vera Gel", recommendation: "30ml before meals to help with gastritis" },
+      "ulcer": { id: 1, name: "Aloe Vera Gel", recommendation: "30ml before meals to support ulcer healing" },
+      "crohn's": { id: 1, name: "Aloe Vera Gel", recommendation: "30ml twice daily for digestive support" },
+      "cold": { id: 5, name: "Bee Propolis", recommendation: "1 tablet daily at first sign of cold" },
+      "flu": { id: 5, name: "Bee Propolis", recommendation: "2 tablets daily during flu" },
+      "fever": { id: 5, name: "Bee Propolis", recommendation: "1 tablet every 4 hours during fever" },
+      "cough": { id: 3, name: "Bee Honey", recommendation: "1 teaspoon as needed to soothe throat" },
+      "sore throat": { id: 3, name: "Bee Honey", recommendation: "1 teaspoon every 2 hours to relieve throat" },
+      "allergies": { id: 6, name: "Bee Pollen", recommendation: "1 tablet daily to help with seasonal allergies" },
+      "sinus": { id: 5, name: "Bee Propolis", recommendation: "1 tablet twice daily for sinus relief" },
+      "infection": { id: 5, name: "Bee Propolis", recommendation: "1 tablet three times daily to fight infection" },
+      "runny nose": { id: 5, name: "Bee Propolis", recommendation: "1 tablet twice daily for respiratory support" },
+      "congestion": { id: 5, name: "Bee Propolis", recommendation: "1 tablet twice daily to clear congestion" },
+      "sneezing": { id: 6, name: "Bee Pollen", recommendation: "1 tablet daily for allergy-related sneezing" },
+      "itchy eyes": { id: 6, name: "Bee Pollen", recommendation: "1 tablet daily for allergy symptoms" },
+      "weak immunity": { id: 5, name: "Bee Propolis", recommendation: "1 tablet daily for immune support" },
+      "frequent illness": { id: 5, name: "Bee Propolis", recommendation: "1 tablet daily to strengthen immunity" },
+      "fatigue": { id: 4, name: "Royal Jelly", recommendation: "1 tablet each morning for energy" },
+      "low energy": { id: 4, name: "Royal Jelly", recommendation: "1 tablet morning and afternoon" },
+      "tiredness": { id: 4, name: "Royal Jelly", recommendation: "1 tablet upon waking" },
+      "weakness": { id: 4, name: "Royal Jelly", recommendation: "1 tablet twice daily for vitality" },
+      "lethargy": { id: 4, name: "Royal Jelly", recommendation: "1 tablet with breakfast" },
+      "exhaustion": { id: 4, name: "Royal Jelly", recommendation: "1 tablet morning and evening" },
+      "burnout": { id: 4, name: "Royal Jelly", recommendation: "1 tablet twice daily for energy support" },
+      "sluggish": { id: 4, name: "Royal Jelly", recommendation: "1 tablet with breakfast" },
+      "drowsy": { id: 4, name: "Royal Jelly", recommendation: "1 tablet in the morning" },
+      "joint pain": { id: 6, name: "Arctic Sea", recommendation: "2 softgels twice daily for joint support" },
+      "arthritis": { id: 6, name: "Arctic Sea", recommendation: "2 softgels twice daily for inflammation" },
+      "back pain": { id: 6, name: "Arctic Sea", recommendation: "2 softgels twice daily for pain relief" },
+      "muscle pain": { id: 6, name: "Arctic Sea", recommendation: "2 softgels twice daily for muscle recovery" },
+      "headache": { id: 6, name: "Arctic Sea", recommendation: "2 softgels at onset of headache" },
+      "migraine": { id: 6, name: "Arctic Sea", recommendation: "2 softgels at first sign of migraine" },
+      "neck pain": { id: 6, name: "Arctic Sea", recommendation: "2 softgels twice daily" },
+      "knee pain": { id: 6, name: "Arctic Sea", recommendation: "2 softgels twice daily" },
+      "shoulder pain": { id: 6, name: "Arctic Sea", recommendation: "2 softgels twice daily" },
+      "inflammation": { id: 6, name: "Arctic Sea", recommendation: "2 softgels twice daily" },
+      "acne": { id: 1, name: "Aloe Vera Gel", recommendation: "30ml daily and apply topically" },
+      "eczema": { id: 8, name: "Aloe First", recommendation: "Spray directly on affected areas" },
+      "psoriasis": { id: 8, name: "Aloe First", recommendation: "Apply liberally to affected areas" },
+      "dry skin": { id: 9, name: "Aloe Propolis Creme", recommendation: "Apply twice daily" },
+      "rash": { id: 8, name: "Aloe First", recommendation: "Spray on rash for cooling relief" },
+      "itchy skin": { id: 8, name: "Aloe First", recommendation: "Spray on affected areas" },
+      "sunburn": { id: 8, name: "Aloe First", recommendation: "Spray generously on sunburned skin" },
+      "wrinkles": { id: 9, name: "Aloe Propolis Creme", recommendation: "Apply daily to face and neck" },
+      "age spots": { id: 9, name: "Aloe Propolis Creme", recommendation: "Apply twice daily" }
+    };
+
+    let cart = [];
+
+    // Apply Grand Opening discount to selected products
+    function applyGrandOpeningDiscount(products) {
+      const discountRate = 0.05; // 5% discount
+      return products.map(product => {
+        if (product.grandOpeningSpecial) {
+          return {
+            ...product,
+            originalPrice: product.price,
+            price: product.price * (1 - discountRate),
+            festivalTag: "Grand Opening Special"
+          };
+        }
+        return product;
+      });
     }
 
-    function decodeJwt(token) {
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      return JSON.parse(atob(base64));
-    }
-
-    function loginWithEmail() {
-      const email = document.getElementById('login-email').value.trim();
-      const password = document.getElementById('login-password').value.trim();
+    // Render products with Grand Opening decorations
+    function renderProducts() {
+      const productList = document.getElementById('product-list');
+      if (!productList) return;
       
-      if (!email || !password) {
-        alert('Please enter both email and password');
-        return;
-      }
+      const discountedProducts = applyGrandOpeningDiscount(products);
       
-      const customer = customers.find(c => c.email === email && c.password === password);
+      // Sort products to show discounted ones first
+      discountedProducts.sort((a, b) => {
+        if (a.grandOpeningSpecial && !b.grandOpeningSpecial) return -1;
+        if (!a.grandOpeningSpecial && b.grandOpeningSpecial) return 1;
+        return 0;
+      });
       
-      if (!customer) {
-        alert('Invalid email or password');
-        return;
-      }
-      
-      currentCustomer = customer;
-      localStorage.setItem('currentCustomer', currentCustomer.id);
-      updateAuthUI();
-      closeAuthModal();
-    }
-
-    function registerWithEmail() {
-      const name = document.getElementById('register-name').value.trim();
-      const email = document.getElementById('register-email').value.trim();
-      const phone = document.getElementById('register-phone').value.trim();
-      const password = document.getElementById('register-password').value.trim();
-      
-      if (!name || !email || !phone || !password) {
-        alert('Please fill in all fields');
-        return;
-      }
-      
-      if (customers.some(c => c.email === email)) {
-        alert('Email already registered');
-        return;
-      }
-      
-      const newCustomer = {
-        id: 'cust-' + Date.now(),
-        name,
-        email,
-        phone,
-        password,
-        address: '',
-        dob: '',
-        points: 0,
-        purchases: [],
-        wishlist: [],
-        profilePic: '',
-        authMethod: 'email'
-      };
-      
-      customers.push(newCustomer);
-      saveCustomers();
-      
-      currentCustomer = newCustomer;
-      localStorage.setItem('currentCustomer', currentCustomer.id);
-      updateAuthUI();
-      closeAuthModal();
-      showTab('profile');
-    }
-
-    function logout() {
-      currentCustomer = null;
-      localStorage.removeItem('currentCustomer');
-      updateAuthUI();
-    }
-
-    function updateAuthUI() {
-      const authContainer = document.getElementById('auth-container');
-      
-      if (currentCustomer) {
-        authContainer.innerHTML = `
-          <div class="profile-dropdown">
-            <button class="profile-btn">
-              ${currentCustomer.profilePic ? 
-                `<img src="${currentCustomer.profilePic}" class="profile-pic" alt="Profile">` : 
-                `<div class="profile-pic" style="background: #eee; display: flex; align-items: center; justify-content: center;">
-                  ${currentCustomer.name.charAt(0).toUpperCase()}
-                </div>`}
-              ${currentCustomer.name.split(' ')[0]}
-            </button>
-            <div class="dropdown-content">
-              <a href="#" onclick="showTab('profile'); return false;">My Profile</a>
-              <a href="#" onclick="showTab('wishlist'); return false;">My Wishlist</a>
-              <a href="#" onclick="showTab('orders'); return false;">Order History</a>
-              <a href="#" onclick="logout(); return false;">Logout</a>
-            </div>
+      productList.innerHTML = discountedProducts.map(product => {
+        const isFeatured = product.grandOpeningSpecial;
+        const hasDiscount = product.originalPrice !== undefined;
+        
+        return `
+          <div class="product ${isFeatured ? 'featured-product' : ''}" id="product-${product.id}">
+            <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/200x200?text=Product+Image'">
+            <h3>${product.name}</h3>
+            ${hasDiscount ? `
+              <div class="discount-price">
+                <span class="original-price">RM ${product.originalPrice.toFixed(2)}</span>
+                <span class="new-price">RM ${product.price.toFixed(2)} <span class="fire-icon">🔥</span></span>
+                <div style="color: var(--accent-color); font-weight: bold; margin-top: 5px;">${product.festivalTag}</div>
+              </div>
+            ` : `<div class="price">RM ${product.price.toFixed(2)}</div>`}
+            <div class="benefits"><strong>Benefits:</strong> ${product.benefits}</div>
+            <div class="consumption"><strong>How to use:</strong> ${product.consumption}</div>
+            <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
+            <a href="https://wa.me/601111033154?text=I%20want%20to%20buy%20${encodeURIComponent(product.name)}" class="whatsapp-btn">Order via WhatsApp</a>
           </div>
         `;
+      }).join('');
+      
+      highlightFeaturedProducts();
+    }
+
+    function highlightFeaturedProducts() {
+      const featuredProducts = document.querySelectorAll('.featured-product');
+      featuredProducts.forEach(product => {
+        const badge = document.createElement('div');
+        badge.className = 'featured-badge';
+        badge.textContent = 'Special Offer';
+        product.appendChild(badge);
+      });
+    }
+
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      
+      if (tabId === 'rewards') {
+        createConfetti();
+      }
+    }
+
+    function showAccountTab(tabId) {
+      document.querySelectorAll('.account-tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.account-tab').forEach(el => el.classList.remove('active'));
+      
+      document.getElementById(`${tabId}-tab`).classList.add('active');
+      document.querySelector(`.account-tab[onclick="showAccountTab('${tabId}')"]`).classList.add('active');
+    }
+
+    function toggleCart() {
+      const modal = document.getElementById('cart-modal');
+      modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+      updateCartDisplay();
+    }
+
+    function addToCart(productId) {
+      const product = products.find(p => p.id === productId);
+      const discountedPrice = getDiscountedPrice(product);
+      const existingItem = cart.find(item => item.id === productId);
+      
+      if (existingItem) {
+        existingItem.quantity += 1;
       } else {
-        authContainer.innerHTML = `
-          <button class="auth-btn" onclick="showAuthModal()">Login / Register</button>
-        `;
-      }
-    }
-
-    function showAuthModal() {
-      document.getElementById('auth-modal-overlay').style.display = 'flex';
-    }
-
-    function closeAuthModal() {
-      document.getElementById('auth-modal-overlay').style.display = 'none';
-    }
-
-    function switchAuthTab(tab) {
-      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-      
-      document.querySelector(`.auth-tab[onclick="switchAuthTab('${tab}')"]`).classList.add('active');
-      document.getElementById(`${tab}-form`).classList.add('active');
-    }
-
-    // ======================
-    // CUSTOMER DASHBOARD
-    // ======================
-    function renderProfileTab() {
-      if (!currentCustomer) {
-        showAuthModal();
-        return;
+        cart.push({
+          id: product.id,
+          name: product.name,
+          price: discountedPrice,
+          originalPrice: product.price,
+          quantity: 1
+        });
       }
       
-      const tabContent = document.getElementById('profile');
-      tabContent.innerHTML = `
-        <div class="dashboard-section">
-          <h3>My Profile</h3>
-          <form id="profile-form">
-            <div class="form-group">
-              <label>Full Name</label>
-              <input type="text" id="profile-name" value="${currentCustomer.name || ''}">
-            </div>
-            <div class="form-group">
-              <label>Email</label>
-              <input type="email" id="profile-email" value="${currentCustomer.email || ''}" ${currentCustomer.authMethod === 'google' ? 'readonly' : ''}>
-            </div>
-            <div class="form-group">
-              <label>Phone Number</label>
-              <input type="tel" id="profile-phone" value="${currentCustomer.phone || ''}">
-            </div>
-            <div class="form-group">
-              <label>Date of Birth</label>
-              <input type="date" id="profile-dob" value="${currentCustomer.dob || ''}">
-            </div>
-            <div class="form-group">
-              <label>Address</label>
-              <textarea id="profile-address">${currentCustomer.address || ''}</textarea>
-            </div>
-            ${currentCustomer.authMethod === 'email' ? `
-            <div class="form-group">
-              <label>Change Password</label>
-              <input type="password" id="profile-password" placeholder="Leave blank to keep current">
-            </div>
-            ` : ''}
-            <button type="button" class="save-btn" onclick="saveProfile()">Save Changes</button>
-          </form>
-        </div>
-        
-        <div class="dashboard-section">
-          <h3>Loyalty Points</h3>
-          <p>You have <strong>${currentCustomer.points} points</strong> available.</p>
-          <p>Points can be redeemed during checkout.</p>
-        </div>
-      `;
+      updateCartCount();
+      showAddedToCartMessage(product.name);
     }
 
-    function renderWishlistTab() {
-      if (!currentCustomer) {
-        showAuthModal();
-        return;
+    function getDiscountedPrice(product) {
+      if (product.grandOpeningSpecial) {
+        return product.price * 0.95; // 5% discount
       }
-      
-      const tabContent = document.getElementById('wishlist');
-      if (currentCustomer.wishlist.length === 0) {
-        tabContent.innerHTML = `
-          <div class="dashboard-section">
-            <h3>My Wishlist</h3>
-            <p>Your wishlist is empty. Start adding products!</p>
-          </div>
-        `;
-        return;
-      }
-      
-      let wishlistHTML = `
-        <div class="dashboard-section">
-          <h3>My Wishlist</h3>
-          <div class="product-list">
-      `;
-      
-      currentCustomer.wishlist.forEach(productId => {
-        const product = products.find(p => p.id === productId);
-        if (product) {
-          wishlistHTML += `
-            <div class="product">
-              <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/200x200?text=Product+Image'">
-              <h3>${product.name}</h3>
-              <div class="price">RM ${product.price.toFixed(2)}</div>
-              <div class="product-points">Earn ${product.points} points</div>
-              <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
-              <button class="wishlist-btn" data-id="${product.id}" onclick="toggleWishlist(${product.id})">
-                ❤️ Remove from Wishlist
-              </button>
-            </div>
-          `;
+      return product.price;
+    }
+
+    function removeFromCart(productId) {
+      cart = cart.filter(item => item.id !== productId);
+      updateCartDisplay();
+      updateCartCount();
+    }
+
+    function updateQuantity(productId, newQuantity) {
+      const item = cart.find(item => item.id === productId);
+      if (item) {
+        if (newQuantity < 1) {
+          removeFromCart(productId);
+        } else {
+          item.quantity = newQuantity;
+          updateCartDisplay();
+          updateCartCount();
         }
-      });
-      
-      wishlistHTML += `
-          </div>
-        </div>
-      `;
-      
-      tabContent.innerHTML = wishlistHTML;
+      }
     }
 
-    function renderOrdersTab() {
-      if (!currentCustomer) {
-        showAuthModal();
+    function updateCartCount() {
+      const count = cart.reduce((total, item) => total + item.quantity, 0);
+      document.getElementById('cart-count').textContent = count;
+    }
+
+    function updateCartDisplay() {
+      const cartItemsElement = document.getElementById('cart-items');
+      const cartTotalElement = document.getElementById('cart-total');
+      
+      if (cart.length === 0) {
+        cartItemsElement.innerHTML = '<p>Your cart is empty</p>';
+        cartTotalElement.textContent = '0.00';
         return;
       }
       
-      const tabContent = document.getElementById('orders');
-      if (currentCustomer.purchases.length === 0) {
-        tabContent.innerHTML = `
-          <div class="dashboard-section">
-            <h3>Order History</h3>
-            <p>You haven't made any purchases yet.</p>
-          </div>
-        `;
-        return;
-      }
+      let itemsHTML = '';
+      let subtotal = 0;
       
-      let ordersHTML = `
-        <div class="dashboard-section">
-          <h3>Order History</h3>
-      `;
-      
-      currentCustomer.purchases.forEach((order, index) => {
-        const date = new Date(order.date).toLocaleDateString();
+      cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        subtotal += itemTotal;
         
-        ordersHTML += `
-          <div class="order-history-item">
-            <h4>Order #${index + 1} - ${date}</h4>
-            <p><strong>Status:</strong> Completed</p>
-            <p><strong>Total:</strong> RM ${order.total.toFixed(2)}</p>
-            <p><strong>Points Earned:</strong> ${order.pointsEarned}</p>
-            <button onclick="viewOrderDetails(${index})">View Details</button>
+        itemsHTML += `
+          <div class="cart-item">
+            <div class="cart-item-details">
+              <div class="cart-item-info">${item.name}</div>
+              <div class="cart-item-actions">
+                <div class="quantity-controls">
+                  <button class="quantity-btn" onclick="updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
+                  <input type="number" class="quantity-input" value="${item.quantity}" min="1" 
+                    onchange="updateQuantity(${item.id}, parseInt(this.value))">
+                  <button class="quantity-btn" onclick="updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
+                </div>
+                <span class="remove-item" onclick="removeFromCart(${item.id})">✕</span>
+              </div>
+            </div>
+            <div class="cart-item-price">RM ${itemTotal.toFixed(2)}</div>
           </div>
         `;
       });
       
-      ordersHTML += `</div>`;
-      tabContent.innerHTML = ordersHTML;
-    }
-
-    function saveProfile() {
-      if (!currentCustomer) return;
+      // Calculate postage with new logic
+      let postage = 0;
+      let postageMessage = '';
       
-      currentCustomer.name = document.getElementById('profile-name').value.trim();
-      currentCustomer.phone = document.getElementById('profile-phone').value.trim();
-      currentCustomer.dob = document.getElementById('profile-dob').value.trim();
-      currentCustomer.address = document.getElementById('profile-address').value.trim();
-      
-      if (currentCustomer.authMethod === 'email') {
-        const newPassword = document.getElementById('profile-password').value.trim();
-        if (newPassword) {
-          currentCustomer.password = newPassword;
+      if (subtotal >= 250) {
+        // Free delivery for orders RM250 and above
+        postage = 0;
+        postageMessage = `<div class="cart-postage free-delivery">FREE DELIVERY! (Orders RM250 and above)</div>`;
+      } else if (cart.length === 1) {
+        // Single item - RM 14 postage
+        postage = 14;
+        postageMessage = `<div class="cart-postage">Postage: RM ${postage.toFixed(2)}</div>`;
+      } else if (cart.length > 1) {
+        // Multiple items - 20% reduction per additional item
+        const discountRate = 0.20;
+        const basePostage = 14;
+        const discountedPostage = basePostage * (1 - (discountRate * (cart.length - 1)));
+        postage = Math.max(discountedPostage, 0); // Ensure postage doesn't go negative
+        
+        if (postage > 0) {
+          postageMessage = `<div class="cart-postage">Discounted Postage: RM ${postage.toFixed(2)} (20% off per additional item)</div>`;
+        } else {
+          postageMessage = `<div class="cart-postage free-delivery">Bundle purchases qualify for FREE delivery!</div>`;
         }
       }
       
-      saveCustomers();
-      alert('Profile updated successfully!');
-      updateAuthUI();
+      const total = subtotal + postage;
+      
+      cartItemsElement.innerHTML = itemsHTML + postageMessage;
+      cartTotalElement.textContent = total.toFixed(2);
     }
 
-    // ======================
-    // MODIFIED CART CHECKOUT
-    // ======================
+    function showAddedToCartMessage(productName) {
+      const notification = document.createElement('div');
+      notification.style.position = 'fixed';
+      notification.style.bottom = '20px';
+      notification.style.right = '20px';
+      notification.style.backgroundColor = 'var(--primary-color)';
+      notification.style.color = 'white';
+      notification.style.padding = '15px';
+      notification.style.borderRadius = '5px';
+      notification.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+      notification.style.zIndex = '1000';
+      notification.style.animation = 'fadeIn 0.3s';
+      notification.textContent = `✓ ${productName} added to cart!`;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'fadeOut 0.3s';
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+
     function checkout() {
-      if (!currentCustomer) {
-        showAuthModal();
-        return;
-      }
+      const name = document.getElementById('customer-name').value.trim();
+      const phone = document.getElementById('customer-phone').value.trim();
       
-      // Pre-fill customer info if available
-      if (currentCustomer) {
-        document.getElementById('customer-name').value = currentCustomer.name;
-        document.getElementById('customer-phone').value = currentCustomer.phone;
+      if (!name || !phone) {
+        alert('Please enter your name and phone number');
+        return;
       }
       
       if (cart.length === 0) {
@@ -595,7 +1914,6 @@
       // Calculate postage same as in updateCartDisplay
       let postage = 0;
       const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-      const totalPoints = cart.reduce((sum, item) => sum + (item.points * item.quantity), 0);
       
       if (subtotal >= 250) {
         postage = 0;
@@ -609,8 +1927,8 @@
       }
       
       let message = `Hi, I would like to place an order:\n\n`;
-      message += `Name: ${currentCustomer.name}\n`;
-      message += `Phone: ${currentCustomer.phone}\n\n`;
+      message += `Name: ${name}\n`;
+      message += `Phone: ${phone}\n\n`;
       message += `Order Details:\n`;
       
       cart.forEach(item => {
@@ -625,46 +1943,117 @@
       message += `\nSubtotal: RM ${subtotal.toFixed(2)}\n`;
       message += `Postage: RM ${postage.toFixed(2)}\n`;
       message += `Total: RM ${(subtotal + postage).toFixed(2)}\n\n`;
-      message += `Reward Points Earned: ${totalPoints}\n\n`;
       message += `Please confirm my order. Thank you!`;
-      
-      // Update customer points
-      currentCustomer.points += totalPoints;
-      currentCustomer.purchases.push({
-        date: new Date().toISOString(),
-        items: [...cart],
-        subtotal,
-        postage,
-        total: subtotal + postage,
-        pointsEarned: totalPoints
-      });
-      saveCustomers();
-      updateCustomerStatus();
       
       const encodedMessage = encodeURIComponent(message);
       window.location.href = `https://wa.me/601111033154?text=${encodedMessage}`;
     }
 
-    // ======================
-    // INITIALIZATION
-    // ======================
-    document.addEventListener('DOMContentLoaded', function() {
-      // Initialize Google Auth
-      window.handleGoogleAuth = handleGoogleAuth;
+    function suggestProduct() {
+      const input = document.getElementById("symptom-input").value.toLowerCase();
+      const result = document.getElementById("suggestion-result");
+      let matchedProducts = [];
+
+      for (const [symptom, productInfo] of Object.entries(productSuggestions)) {
+        if (input.includes(symptom)) {
+          const existing = matchedProducts.find(p => p.id === productInfo.id);
+          if (!existing) {
+            matchedProducts.push(productInfo);
+          }
+        }
+      }
+
+      if (matchedProducts.length === 0) {
+        result.innerHTML = `<p>We recommend consulting with our health advisor for personalized recommendations. 
+        <a href="https://wa.me/601111033154" style="color:var(--primary-color);font-weight:bold;">Chat with us on WhatsApp</a></p>`;
+      } else {
+        result.innerHTML = `<h3 style="color:var(--primary-color);">Recommended Products:</h3>` + 
+          matchedProducts.map(p => `
+            <div class="suggestion-product">
+              <div>
+                <strong>${p.name}</strong><br>
+                <small>${p.recommendation}</small>
+              </div>
+              <button onclick="addToCart(${p.id})">Add to Cart</button>
+            </div>
+          `).join("");
+      }
+    }
+
+    function createConfetti() {
+      const container = document.getElementById('rewards-animation');
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        confetti.style.animationDelay = Math.random() + 's';
+        container.appendChild(confetti);
+      }
+    }
+
+    function notifyMe() {
+      alert("We'll notify you when our rewards program launches! Thank you for your interest.");
+    }
+
+    function closeFestivalModal() {
+      localStorage.setItem('festivalPopupClosed', 'true');
+      document.getElementById('festival-modal').style.display = 'none';
+    }
+
+    // Product search functionality
+    function setupProductSearch() {
+      const searchInput = document.getElementById('product-search');
+      if (!searchInput) return;
       
-      // Load customer if logged in
-      const sessionCustomerId = localStorage.getItem('currentCustomer');
-      if (sessionCustomerId) {
-        currentCustomer = customers.find(c => c.id === sessionCustomerId);
+      searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const productElements = document.querySelectorAll('.product');
+        
+        productElements.forEach(product => {
+          const productName = product.querySelector('h3').textContent.toLowerCase();
+          if (productName.includes(searchTerm)) {
+            product.style.display = 'flex';
+          } else {
+            product.style.display = 'none';
+          }
+        });
+      });
+    }
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set current date in footer
+      const now = new Date();
+      document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', { 
+        year: 'numeric', month: 'long', day: 'numeric' 
+      });
+      
+      // Apply Grand Opening theme
+      document.documentElement.className = 'grand-opening-theme';
+      renderProducts();
+      showTab('products');
+      setupProductSearch();
+      
+      // Only show popup if not already closed
+      if (localStorage.getItem('festivalPopupClosed') !== 'true') {
+        document.getElementById('festival-modal').style.display = 'flex';
       }
       
-      // Update UI
-      updateAuthUI();
-      
-      // [Rest of your existing initialization code]
+      // Close modals when clicking outside
+      window.onclick = function(event) {
+        const modal = document.getElementById('cart-modal');
+        if (event.target === modal) {
+          modal.style.display = "none";
+        }
+        
+        const festivalModal = document.getElementById('festival-modal');
+        if (event.target === festivalModal) {
+          closeFestivalModal();
+        }
+      }
     });
-
-    // [Rest of your existing JavaScript remains the same]
   </script>
 </body>
 </html>
