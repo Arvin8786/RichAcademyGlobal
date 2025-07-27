@@ -872,6 +872,42 @@
       display: flex;
       align-items: center;
     }
+
+    /* Loyalty Program Styles */
+    .wishlist-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #666;
+      margin-top: 5px;
+      font-size: 14px;
+      padding: 5px;
+    }
+    .product-points {
+      color: var(--accent-color);
+      font-size: 12px;
+      margin: 5px 0;
+      font-weight: bold;
+    }
+    .points-summary {
+      background: #f8f8f8;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 15px;
+      text-align: right;
+      border-top: 1px solid #eee;
+    }
+    .customer-status {
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      font-size: 14px;
+      color: var(--primary-color);
+    }
+    .customer-points {
+      font-weight: bold;
+      color: var(--accent-color);
+    }
   </style>
 
   <!-- Grand Opening Decorations -->
@@ -888,6 +924,9 @@
       FOREVER LIVING by Mohd Arvind Isa
       <span style="font-size: 18px; color: var(--secondary-color); display: block;">Quality Wellness Products</span>
     </h1>
+    <div class="customer-status" id="customer-status">
+      <!-- Filled by JavaScript -->
+    </div>
     <div class="cart-icon" onclick="toggleCart()">
       🛒 <span id="cart-count">0</span>
     </div>
@@ -1073,8 +1112,8 @@
 
     <div id="rewards" class="tab-content">
       <div class="rewards-container" id="rewards-animation">
-        <h1 class="rewards-title">EXCITING REWARDS COMING SOON!</h1>
-        <p class="rewards-subtitle">Stay tuned for our amazing loyalty program</p>
+        <h1 class="rewards-title">LOYALTY REWARDS PROGRAM</h1>
+        <p class="rewards-subtitle">Earn points with every purchase!</p>
         
         <div>
           <span class="reward-icon">🏆</span>
@@ -1083,13 +1122,12 @@
           <span class="reward-icon">🎁</span>
         </div>
         
-        <p style="font-size: 1.2rem; max-width: 800px; margin: 20px auto;">
-          We're preparing something special for our loyal customers! Our rewards program will offer exclusive benefits, 
-          cash bonuses and amazing gifts based on your purchases and referrals.
-        </p>
+        <div id="loyalty-program-info" style="font-size: 1.2rem; max-width: 800px; margin: 20px auto; background: rgba(255,255,255,0.2); padding: 20px; border-radius: 10px;">
+          <!-- Filled by JavaScript -->
+        </div>
         
         <div style="margin-top: 30px;">
-          <button onclick="notifyMe()" style="
+          <button onclick="showCustomerRegistration()" style="
             background: white;
             color: var(--primary-color);
             border: none;
@@ -1100,7 +1138,7 @@
             cursor: pointer;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
           ">
-            Notify Me When Launched
+            Join Loyalty Program
           </button>
         </div>
       </div>
@@ -1115,6 +1153,10 @@
       <div id="cart-items"></div>
       <div class="cart-total">Total: RM <span id="cart-total">0.00</span></div>
       
+      <div id="points-summary" class="points-summary">
+        <!-- Filled by JavaScript -->
+      </div>
+      
       <div class="delivery-offer">
         🚚 FREE NATIONWIDE DELIVERY for orders RM 250 and above! Limited time offer.
       </div>
@@ -1124,6 +1166,31 @@
         <input type="text" id="customer-name" placeholder="Your Full Name" required>
         <input type="tel" id="customer-phone" placeholder="Your WhatsApp Number" required>
         <button class="checkout-btn" onclick="checkout()">Complete Order via WhatsApp</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Customer Registration Modal -->
+  <div id="customer-modal" class="modal">
+    <div class="modal-content" style="max-width: 400px;">
+      <span class="close" onclick="document.getElementById('customer-modal').style.display='none'">&times;</span>
+      <h2>Join Loyalty Program</h2>
+      <p>Register to earn points with every purchase!</p>
+      <div style="margin-top: 20px;">
+        <input type="text" id="register-name" placeholder="Your Full Name" style="width: 100%; padding: 10px; margin-bottom: 10px;">
+        <input type="tel" id="register-phone" placeholder="Your WhatsApp Number" style="width: 100%; padding: 10px; margin-bottom: 20px;">
+        <button onclick="registerCustomer()" style="
+          background: var(--primary-color);
+          color: white;
+          border: none;
+          padding: 12px 20px;
+          border-radius: 4px;
+          cursor: pointer;
+          font-weight: bold;
+          width: 100%;
+        ">
+          Register Now
+        </button>
       </div>
     </div>
   </div>
@@ -1149,7 +1216,9 @@
   </footer>
 
   <script>
-    // Top 10 best-selling products with grand opening special flag
+    // ======================
+    // EXISTING PRODUCT DATA
+    // ======================
     const products = [
       { id: 1, name: "Aloe Vera Gel", price: 116.79, image: "aloe-vera-gel.jpg", 
        benefits: "Supports digestion, boosts immunity, promotes skin health, enhances nutrient absorption, helps detoxify the body", 
@@ -1296,141 +1365,150 @@
       "age spots": { id: 9, name: "Aloe Propolis Creme", recommendation: "Apply twice daily" }
     };
 
-    let cart = [];
+    // ======================
+    // LOYALTY PROGRAM SYSTEM
+    // ======================
+    let customers = JSON.parse(localStorage.getItem('foreverCustomers')) || [];
+    let currentCustomer = null;
 
-    // Apply Grand Opening discount to selected products
-    function applyGrandOpeningDiscount(products) {
-      const discountRate = 0.05; // 5% discount
-      return products.map(product => {
-        if (product.grandOpeningSpecial) {
-          return {
-            ...product,
-            originalPrice: product.price,
-            price: product.price * (1 - discountRate),
-            festivalTag: "Grand Opening Special"
-          };
-        }
-        return product;
-      });
+    // Product points (RM 1 = 1 point)
+    function calculatePoints(price) {
+      return Math.floor(price); // RM 116.79 = 116 points
     }
 
-    // Render products with Grand Opening decorations
-    function renderProducts() {
-      const productList = document.getElementById('product-list');
-      if (!productList) return;
-      
-      const discountedProducts = applyGrandOpeningDiscount(products);
-      
-      // Sort products to show discounted ones first
-      discountedProducts.sort((a, b) => {
-        if (a.grandOpeningSpecial && !b.grandOpeningSpecial) return -1;
-        if (!a.grandOpeningSpecial && b.grandOpeningSpecial) return 1;
-        return 0;
+    // Initialize loyalty features
+    function initLoyaltyProgram() {
+      // Add points to products
+      products.forEach(product => {
+        product.points = calculatePoints(product.price);
       });
-      
-      productList.innerHTML = discountedProducts.map(product => {
-        const isFeatured = product.grandOpeningSpecial;
-        const hasDiscount = product.originalPrice !== undefined;
-        
-        return `
-          <div class="product ${isFeatured ? 'featured-product' : ''}" id="product-${product.id}">
-            <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/200x200?text=Product+Image'">
-            <h3>${product.name}</h3>
-            ${hasDiscount ? `
-              <div class="discount-price">
-                <span class="original-price">RM ${product.originalPrice.toFixed(2)}</span>
-                <span class="new-price">RM ${product.price.toFixed(2)} <span class="fire-icon">🔥</span></span>
-                <div style="color: var(--accent-color); font-weight: bold; margin-top: 5px;">${product.festivalTag}</div>
-              </div>
-            ` : `<div class="price">RM ${product.price.toFixed(2)}</div>`}
-            <div class="benefits"><strong>Benefits:</strong> ${product.benefits}</div>
-            <div class="consumption"><strong>How to use:</strong> ${product.consumption}</div>
-            <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
-            <a href="https://wa.me/601111033154?text=I%20want%20to%20buy%20${encodeURIComponent(product.name)}" class="whatsapp-btn">Order via WhatsApp</a>
-          </div>
-        `;
-      }).join('');
-      
-      highlightFeaturedProducts();
-    }
 
-    function highlightFeaturedProducts() {
-      const featuredProducts = document.querySelectorAll('.featured-product');
-      featuredProducts.forEach(product => {
-        const badge = document.createElement('div');
-        badge.className = 'featured-badge';
-        badge.textContent = 'Special Offer';
-        product.appendChild(badge);
-      });
-    }
-
-    function showTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      
-      if (tabId === 'rewards') {
-        createConfetti();
+      // Load customer session
+      const sessionCustomerId = localStorage.getItem('currentCustomer');
+      if (sessionCustomerId) {
+        currentCustomer = customers.find(c => c.id === sessionCustomerId);
+        updateCustomerStatus();
       }
+
+      // Update loyalty program info
+      updateLoyaltyProgramInfo();
     }
 
-    function toggleCart() {
-      const modal = document.getElementById('cart-modal');
-      modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
-      updateCartDisplay();
-    }
+    // ==============
+    // WISHLIST SYSTEM
+    // ==============
+    function toggleWishlist(productId) {
+      if (!currentCustomer) {
+        showCustomerRegistration();
+        return;
+      }
 
-    function addToCart(productId) {
-      const product = products.find(p => p.id === productId);
-      const discountedPrice = getDiscountedPrice(product);
-      const existingItem = cart.find(item => item.id === productId);
-      
-      if (existingItem) {
-        existingItem.quantity += 1;
+      const index = currentCustomer.wishlist.indexOf(productId);
+      if (index === -1) {
+        currentCustomer.wishlist.push(productId);
       } else {
-        cart.push({
-          id: product.id,
-          name: product.name,
-          price: discountedPrice,
-          originalPrice: product.price,
-          quantity: 1
-        });
+        currentCustomer.wishlist.splice(index, 1);
       }
+
+      saveCustomers();
+      renderWishlistButton(productId);
+    }
+
+    function renderWishlistButtons() {
+      products.forEach(product => {
+        renderWishlistButton(product.id);
+      });
+    }
+
+    function renderWishlistButton(productId) {
+      const btn = document.querySelector(`.wishlist-btn[data-id="${productId}"]`);
+      if (!btn) return;
+
+      const isInWishlist = currentCustomer?.wishlist.includes(productId);
+      btn.innerHTML = isInWishlist ? '❤️ Remove from Wishlist' : '♡ Add to Wishlist';
+      btn.style.color = isInWishlist ? 'red' : 'inherit';
+    }
+
+    // =================
+    // CUSTOMER FUNCTIONS
+    // =================
+    function showCustomerRegistration() {
+      document.getElementById('customer-modal').style.display = 'block';
+    }
+
+    function registerCustomer() {
+      const name = document.getElementById('register-name').value.trim();
+      const phone = document.getElementById('register-phone').value.trim();
+
+      if (!name || !phone) {
+        alert('Please enter your name and phone number');
+        return;
+      }
+
+      const existing = customers.find(c => c.phone === phone);
       
-      updateCartCount();
-      showAddedToCartMessage(product.name);
-    }
-
-    function getDiscountedPrice(product) {
-      if (product.grandOpeningSpecial) {
-        return product.price * 0.95; // 5% discount
+      if (existing) {
+        currentCustomer = existing;
+      } else {
+        const newCustomer = {
+          id: 'cust-' + Date.now(),
+          name,
+          phone,
+          points: 0,
+          purchases: [],
+          wishlist: []
+        };
+        customers.push(newCustomer);
+        currentCustomer = newCustomer;
       }
-      return product.price;
+
+      localStorage.setItem('currentCustomer', currentCustomer.id);
+      saveCustomers();
+      document.getElementById('customer-modal').style.display = 'none';
+      updateCustomerStatus();
+      renderWishlistButtons();
     }
 
-    function removeFromCart(productId) {
-      cart = cart.filter(item => item.id !== productId);
-      updateCartDisplay();
-      updateCartCount();
+    function saveCustomers() {
+      localStorage.setItem('foreverCustomers', JSON.stringify(customers));
     }
 
-    function updateQuantity(productId, newQuantity) {
-      const item = cart.find(item => item.id === productId);
-      if (item) {
-        if (newQuantity < 1) {
-          removeFromCart(productId);
-        } else {
-          item.quantity = newQuantity;
-          updateCartDisplay();
-          updateCartCount();
-        }
+    function updateCustomerStatus() {
+      const statusElement = document.getElementById('customer-status');
+      if (!statusElement) return;
+
+      if (currentCustomer) {
+        statusElement.innerHTML = `
+          Welcome, ${currentCustomer.name}! 
+          <span class="customer-points">${currentCustomer.points} points</span>
+        `;
+      } else {
+        statusElement.innerHTML = `
+          <a href="#" onclick="showCustomerRegistration(); return false;">Sign in to earn rewards</a>
+        `;
       }
     }
 
-    function updateCartCount() {
-      const count = cart.reduce((total, item) => total + item.quantity, 0);
-      document.getElementById('cart-count').textContent = count;
+    function updateLoyaltyProgramInfo() {
+      const infoElement = document.getElementById('loyalty-program-info');
+      if (!infoElement) return;
+
+      infoElement.innerHTML = `
+        <h3 style="margin-top: 0;">How It Works</h3>
+        <ul style="text-align: left;">
+          <li>💵 <strong>Earn 1 point for every RM1 spent</strong> (excluding shipping)</li>
+          <li>🎁 Redeem points for discounts on future purchases</li>
+          <li>⭐ Special rewards at 500, 1000, and 5000 points</li>
+          ${currentCustomer ? `
+            <li>📱 Your current balance: <strong>${currentCustomer.points} points</strong></li>
+          ` : ''}
+        </ul>
+      `;
     }
 
+    // ====================
+    // MODIFY CART DISPLAY
+    // ====================
     function updateCartDisplay() {
       const cartItemsElement = document.getElementById('cart-items');
       const cartTotalElement = document.getElementById('cart-total');
@@ -1438,15 +1516,19 @@
       if (cart.length === 0) {
         cartItemsElement.innerHTML = '<p>Your cart is empty</p>';
         cartTotalElement.textContent = '0.00';
+        document.getElementById('points-summary').innerHTML = '';
         return;
       }
       
       let itemsHTML = '';
       let subtotal = 0;
+      let totalPoints = 0;
       
       cart.forEach(item => {
         const itemTotal = item.price * item.quantity;
         subtotal += itemTotal;
+        const itemPoints = calculatePoints(item.price) * item.quantity;
+        totalPoints += itemPoints;
         
         itemsHTML += `
           <div class="cart-item">
@@ -1462,7 +1544,10 @@
                 <span class="remove-item" onclick="removeFromCart(${item.id})">✕</span>
               </div>
             </div>
-            <div class="cart-item-price">RM ${itemTotal.toFixed(2)}</div>
+            <div class="cart-item-price">
+              RM ${itemTotal.toFixed(2)}
+              <div style="font-size: 12px; color: var(--accent-color);">${itemPoints} pts</div>
+            </div>
           </div>
         `;
       });
@@ -1497,6 +1582,74 @@
       
       cartItemsElement.innerHTML = itemsHTML + postageMessage;
       cartTotalElement.textContent = total.toFixed(2);
+
+      // Update points summary
+      const pointsSummary = document.getElementById('points-summary');
+      if (pointsSummary) {
+        pointsSummary.innerHTML = `
+          <div>You'll earn: <strong>${totalPoints} reward points</strong></div>
+          <small>1 point per RM1 spent (excludes shipping)</small>
+        `;
+      }
+    }
+
+    // ======================
+    // EXISTING CART FUNCTIONS
+    // ======================
+    let cart = [];
+
+    function addToCart(productId) {
+      const product = products.find(p => p.id === productId);
+      const discountedPrice = getDiscountedPrice(product);
+      const existingItem = cart.find(item => item.id === productId);
+      
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.push({
+          id: product.id,
+          name: product.name,
+          price: discountedPrice,
+          originalPrice: product.price,
+          points: calculatePoints(product.price),
+          quantity: 1
+        });
+      }
+      
+      updateCartCount();
+      showAddedToCartMessage(product.name);
+      updateCartDisplay();
+    }
+
+    function getDiscountedPrice(product) {
+      if (product.grandOpeningSpecial) {
+        return product.price * 0.95; // 5% discount
+      }
+      return product.price;
+    }
+
+    function removeFromCart(productId) {
+      cart = cart.filter(item => item.id !== productId);
+      updateCartDisplay();
+      updateCartCount();
+    }
+
+    function updateQuantity(productId, newQuantity) {
+      const item = cart.find(item => item.id === productId);
+      if (item) {
+        if (newQuantity < 1) {
+          removeFromCart(productId);
+        } else {
+          item.quantity = newQuantity;
+          updateCartDisplay();
+          updateCartCount();
+        }
+      }
+    }
+
+    function updateCartCount() {
+      const count = cart.reduce((total, item) => total + item.quantity, 0);
+      document.getElementById('cart-count').textContent = count;
     }
 
     function showAddedToCartMessage(productName) {
@@ -1535,9 +1688,15 @@
         return;
       }
       
+      // Register customer if not already
+      if (!currentCustomer) {
+        registerCustomer(name, phone);
+      }
+      
       // Calculate postage same as in updateCartDisplay
       let postage = 0;
       const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+      const totalPoints = cart.reduce((sum, item) => sum + (item.points * item.quantity), 0);
       
       if (subtotal >= 250) {
         postage = 0;
@@ -1567,10 +1726,181 @@
       message += `\nSubtotal: RM ${subtotal.toFixed(2)}\n`;
       message += `Postage: RM ${postage.toFixed(2)}\n`;
       message += `Total: RM ${(subtotal + postage).toFixed(2)}\n\n`;
+      
+      if (currentCustomer) {
+        message += `Reward Points Earned: ${totalPoints}\n`;
+      }
+      
       message += `Please confirm my order. Thank you!`;
+      
+      // Update customer points if logged in
+      if (currentCustomer) {
+        currentCustomer.points += totalPoints;
+        currentCustomer.purchases.push({
+          date: new Date().toISOString(),
+          items: [...cart],
+          subtotal,
+          postage,
+          total: subtotal + postage,
+          pointsEarned: totalPoints
+        });
+        saveCustomers();
+        updateCustomerStatus();
+      }
       
       const encodedMessage = encodeURIComponent(message);
       window.location.href = `https://wa.me/601111033154?text=${encodedMessage}`;
+    }
+
+    // ======================
+    // PRODUCT DISPLAY FUNCTIONS
+    // ======================
+    function renderProducts() {
+      const productList = document.getElementById('product-list');
+      if (!productList) return;
+      
+      const discountedProducts = applyGrandOpeningDiscount(products);
+      
+      // Sort products to show discounted ones first
+      discountedProducts.sort((a, b) => {
+        if (a.grandOpeningSpecial && !b.grandOpeningSpecial) return -1;
+        if (!a.grandOpeningSpecial && b.grandOpeningSpecial) return 1;
+        return 0;
+      });
+      
+      productList.innerHTML = discountedProducts.map(product => {
+        const isFeatured = product.grandOpeningSpecial;
+        const hasDiscount = product.originalPrice !== undefined;
+        
+        return `
+          <div class="product ${isFeatured ? 'featured-product' : ''}" id="product-${product.id}">
+            <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/200x200?text=Product+Image'">
+            <h3>${product.name}</h3>
+            ${hasDiscount ? `
+              <div class="discount-price">
+                <span class="original-price">RM ${product.originalPrice.toFixed(2)}</span>
+                <span class="new-price">RM ${product.price.toFixed(2)} <span class="fire-icon">🔥</span></span>
+                <div style="color: var(--accent-color); font-weight: bold; margin-top: 5px;">${product.festivalTag}</div>
+              </div>
+            ` : `<div class="price">RM ${product.price.toFixed(2)}</div>`}
+            <div class="product-points">Earn ${product.points} points</div>
+            <div class="benefits"><strong>Benefits:</strong> ${product.benefits}</div>
+            <div class="consumption"><strong>How to use:</strong> ${product.consumption}</div>
+            <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
+            <button class="wishlist-btn" data-id="${product.id}" onclick="toggleWishlist(${product.id})">
+              ♡ Add to Wishlist
+            </button>
+            <a href="https://wa.me/601111033154?text=I%20want%20to%20buy%20${encodeURIComponent(product.name)}" class="whatsapp-btn">Order via WhatsApp</a>
+          </div>
+        `;
+      }).join('');
+      
+      highlightFeaturedProducts();
+      renderWishlistButtons();
+    }
+
+    function applyGrandOpeningDiscount(products) {
+      const discountRate = 0.05; // 5% discount
+      return products.map(product => {
+        if (product.grandOpeningSpecial) {
+          return {
+            ...product,
+            originalPrice: product.price,
+            price: product.price * (1 - discountRate),
+            festivalTag: "Grand Opening Special"
+          };
+        }
+        return product;
+      });
+    }
+
+    function highlightFeaturedProducts() {
+      const featuredProducts = document.querySelectorAll('.featured-product');
+      featuredProducts.forEach(product => {
+        const badge = document.createElement('div');
+        badge.className = 'featured-badge';
+        badge.textContent = 'Special Offer';
+        product.appendChild(badge);
+      });
+    }
+
+    // ======================
+    // PAGE INITIALIZATION
+    // ======================
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set current date in footer
+      const now = new Date();
+      document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', { 
+        year: 'numeric', month: 'long', day: 'numeric' 
+      });
+      
+      // Initialize loyalty program
+      initLoyaltyProgram();
+      
+      // Render products
+      renderProducts();
+      
+      // Show products tab by default
+      showTab('products');
+      
+      // Setup product search
+      setupProductSearch();
+      
+      // Only show popup if not already closed
+      if (localStorage.getItem('festivalPopupClosed') !== 'true') {
+        document.getElementById('festival-modal').style.display = 'flex';
+      }
+      
+      // Close modals when clicking outside
+      window.onclick = function(event) {
+        const modal = document.getElementById('cart-modal');
+        if (event.target === modal) {
+          modal.style.display = "none";
+        }
+        
+        const festivalModal = document.getElementById('festival-modal');
+        if (event.target === festivalModal) {
+          closeFestivalModal();
+        }
+        
+        const customerModal = document.getElementById('customer-modal');
+        if (event.target === customerModal) {
+          customerModal.style.display = "none";
+        }
+      }
+    });
+
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      
+      if (tabId === 'rewards') {
+        createConfetti();
+      }
+    }
+
+    function toggleCart() {
+      const modal = document.getElementById('cart-modal');
+      modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+      updateCartDisplay();
+    }
+
+    function closeFestivalModal() {
+      localStorage.setItem('festivalPopupClosed', 'true');
+      document.getElementById('festival-modal').style.display = 'none';
+    }
+
+    function createConfetti() {
+      const container = document.getElementById('rewards-animation');
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        confetti.style.animationDelay = Math.random() + 's';
+        container.appendChild(confetti);
+      }
     }
 
     function suggestProduct() {
@@ -1604,29 +1934,6 @@
       }
     }
 
-    function createConfetti() {
-      const container = document.getElementById('rewards-animation');
-      for (let i = 0; i < 50; i++) {
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti';
-        confetti.style.left = Math.random() * 100 + '%';
-        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-        confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        confetti.style.animationDelay = Math.random() + 's';
-        container.appendChild(confetti);
-      }
-    }
-
-    function notifyMe() {
-      alert("We'll notify you when our rewards program launches! Thank you for your interest.");
-    }
-
-    function closeFestivalModal() {
-      localStorage.setItem('festivalPopupClosed', 'true');
-      document.getElementById('festival-modal').style.display = 'none';
-    }
-
-    // Product search functionality
     function setupProductSearch() {
       const searchInput = document.getElementById('product-search');
       if (!searchInput) return;
@@ -1645,39 +1952,6 @@
         });
       });
     }
-
-    // Initialize the page
-    document.addEventListener('DOMContentLoaded', function() {
-      // Set current date in footer
-      const now = new Date();
-      document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', { 
-        year: 'numeric', month: 'long', day: 'numeric' 
-      });
-      
-      // Apply Grand Opening theme
-      document.documentElement.className = 'grand-opening-theme';
-      renderProducts();
-      showTab('products');
-      setupProductSearch();
-      
-      // Only show popup if not already closed
-      if (localStorage.getItem('festivalPopupClosed') !== 'true') {
-        document.getElementById('festival-modal').style.display = 'flex';
-      }
-      
-      // Close modals when clicking outside
-      window.onclick = function(event) {
-        const modal = document.getElementById('cart-modal');
-        if (event.target === modal) {
-          modal.style.display = "none";
-        }
-        
-        const festivalModal = document.getElementById('festival-modal');
-        if (event.target === festivalModal) {
-          closeFestivalModal();
-        }
-      }
-    });
   </script>
 </body>
 </html>
