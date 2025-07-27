@@ -194,20 +194,6 @@
       margin: 8px 0 12px;
       padding: 0 5px;
     }
-    .product .whatsapp-btn {
-      display: inline-block;
-      margin-top: 10px;
-      background: #25D366;
-      color: white;
-      padding: 8px 15px;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: bold;
-      transition: all 0.3s;
-    }
-    .product .whatsapp-btn:hover {
-      background: #128C7E;
-    }
     .product .add-to-cart {
       display: inline-block;
       margin-top: 10px;
@@ -1067,6 +1053,35 @@
       color: var(--primary-color);
       margin-top: 0;
     }
+    
+    /* Points system info */
+    .points-system {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    
+    .points-system h3 {
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 10px;
+    }
+    
+    .points-system ul {
+      padding-left: 20px;
+    }
+    
+    .points-system li {
+      margin-bottom: 10px;
+    }
+    
+    .product-points {
+      color: var(--accent-color);
+      font-weight: bold;
+      margin: 5px 0;
+    }
   </style>
 
   <!-- Grand Opening Decorations -->
@@ -1268,38 +1283,67 @@
     </div>
 
     <div id="rewards" class="tab-content">
-      <div class="rewards-container" id="rewards-animation">
-        <h1 class="rewards-title">EXCITING REWARDS COMING SOON!</h1>
-        <p class="rewards-subtitle">Stay tuned for our amazing loyalty program</p>
+      <section class="program-section">
+        <h2>Loyalty Rewards Program</h2>
+        <p style="text-align: center; font-size: 1.2rem;">Earn points with every purchase and redeem exciting rewards!</p>
         
-        <div>
-          <span class="reward-icon">🏆</span>
-          <span class="reward-icon">💰</span>
-          <span class="reward-icon">✈️</span>
-          <span class="reward-icon">🎁</span>
+        <div class="points-system">
+          <h3>How Points Work</h3>
+          <ul>
+            <li>💰 <strong>1 RM spent = 1 Point</strong> (excluding delivery fees)</li>
+            <li>🎁 <strong>100 Points = RM 1</strong> in redemption value</li>
+            <li>🎂 <strong>Birthday Bonus:</strong> 500 points automatically added in your birthday month</li>
+            <li>👥 <strong>Referral Bonus:</strong> 500 points for each successful referral</li>
+          </ul>
         </div>
         
-        <p style="font-size: 1.2rem; max-width: 800px; margin: 20px auto;">
-          We're preparing something special for our loyal customers! Our rewards program will offer exclusive benefits, 
-          cash bonuses and amazing gifts based on your purchases and referrals.
-        </p>
-        
-        <div style="margin-top: 30px;">
-          <button onclick="notifyMe()" style="
-            background: white;
-            color: var(--primary-color);
-            border: none;
-            padding: 12px 25px;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-          ">
-            Notify Me When Launched
-          </button>
+        <div class="program-highlights">
+          <div class="highlight-card">
+            <h3>Earn Points</h3>
+            <ul>
+              <li>🛍️ Every purchase earns points</li>
+              <li>🎂 Birthday month bonus</li>
+              <li>👥 Refer friends and earn</li>
+              <li>📝 Write product reviews</li>
+              <li>📅 Participate in special promotions</li>
+            </ul>
+          </div>
+          
+          <div class="highlight-card">
+            <h3>Redeem Points</h3>
+            <ul>
+              <li>💰 Discount vouchers</li>
+              <li>🎁 Free products</li>
+              <li>🚚 Free delivery</li>
+              <li>💎 Exclusive items</li>
+              <li>📦 Special gift sets</li>
+            </ul>
+          </div>
+          
+          <div class="highlight-card">
+            <h3>Point Benefits</h3>
+            <ul>
+              <li>💳 Points never expire</li>
+              <li>📱 Track your balance online</li>
+              <li>🔄 Combine with other offers</li>
+              <li>🎯 Exclusive member deals</li>
+              <li>🏆 VIP status at higher tiers</li>
+            </ul>
+          </div>
         </div>
-      </div>
+        
+        <div class="testimonial">
+          <p>"I redeemed my points for a free Aloe Vera Gel last month! The rewards program makes shopping even more rewarding."</p>
+          <p class="testimonial-author">- Lisa T., 29, Johor Bahru</p>
+        </div>
+        
+        <div class="testimonial">
+          <p>"The birthday bonus was a nice surprise! I used my points to get RM50 off my next order."</p>
+          <p class="testimonial-author">- Raj K., 35, Penang</p>
+        </div>
+        
+        <a href="#" onclick="showTab('account'); showAccountTab('redeem');" class="cta-button">View Available Rewards</a>
+      </section>
     </div>
 
     <div id="account" class="tab-content">
@@ -1329,6 +1373,9 @@
             <label for="phone">Phone Number</label>
             <input type="tel" id="phone" value="+601111033154">
             
+            <label for="birthday">Birthday</label>
+            <input type="date" id="birthday" value="1990-01-15">
+            
             <label for="address">Shipping Address</label>
             <textarea id="address" rows="4">123 Jalan Merdeka, Kuala Lumpur, Malaysia</textarea>
             
@@ -1350,6 +1397,7 @@
                 <th>Date</th>
                 <th>Items</th>
                 <th>Total</th>
+                <th>Points Earned</th>
                 <th>Status</th>
               </tr>
             </thead>
@@ -1359,6 +1407,7 @@
                 <td>15/7/2025</td>
                 <td>Aloe Vera Gel, Bee Honey</td>
                 <td>RM 249.58</td>
+                <td>250</td>
                 <td>Delivered</td>
               </tr>
               <tr>
@@ -1366,6 +1415,7 @@
                 <td>5/7/2025</td>
                 <td>Royal Jelly, Fields of Greens</td>
                 <td>RM 225.31</td>
+                <td>225</td>
                 <td>Delivered</td>
               </tr>
               <tr>
@@ -1373,6 +1423,7 @@
                 <td>20/6/2025</td>
                 <td>Aloe Berry Nectar</td>
                 <td>RM 116.79</td>
+                <td>115</td>
                 <td>Delivered</td>
               </tr>
             </tbody>
@@ -1403,7 +1454,7 @@
               <span class="points">+500 pts</span>
             </li>
             <li>
-              <span>1/6/2025 - Birthday Bonus</span>
+              <span>15/1/2025 - Birthday Bonus</span>
               <span class="points">+100 pts</span>
             </li>
             <li>
@@ -1522,85 +1573,99 @@
       { id: 1, name: "Aloe Vera Gel", price: 116.79, image: "aloe-vera-gel.jpg", 
        benefits: "Supports digestion, boosts immunity, promotes skin health, enhances nutrient absorption, helps detoxify the body", 
        consumption: "Take 30-60ml daily, preferably on empty stomach",
-       bestSeller: true, grandOpeningSpecial: true },
+       bestSeller: true, grandOpeningSpecial: true, points: 117 },
       { id: 2, name: "Aloe Berry Nectar", price: 116.79, image: "aloe-berry-nectar.jpg", 
        benefits: "Antioxidant support, immune system booster, natural energy, supports urinary health, rich in vitamin C", 
        consumption: "30-60ml daily, can be mixed with water or juice",
-       bestSeller: true, grandOpeningSpecial: true },
+       bestSeller: true, grandOpeningSpecial: true, points: 117 },
       { id: 3, name: "Bee Honey", price: 132.57, image: "bee-honey.jpg", 
        benefits: "Natural energy, soothes throat, antioxidant properties, supports digestion, promotes wound healing", 
        consumption: "1-2 teaspoons daily, can be added to drinks",
-       bestSeller: true, grandOpeningSpecial: true },
+       bestSeller: true, grandOpeningSpecial: true, points: 133 },
       { id: 4, name: "Royal Jelly", price: 139.21, image: "royal-jelly.jpg", 
        benefits: "Energy booster, supports immune system, anti-aging, hormone balance, supports skin renewal", 
        consumption: "1 tablet daily, preferably in the morning",
-       bestSeller: true, grandOpeningSpecial: true },
+       bestSeller: true, grandOpeningSpecial: true, points: 139 },
       { id: 5, name: "Bee Propolis", price: 139.21, image: "bee-propolis.jpg", 
        benefits: "Immune support, natural antibiotic, throat health, anti-inflammatory, promotes oral health", 
        consumption: "1 tablet daily or as needed",
-       bestSeller: true, grandOpeningSpecial: true },
+       bestSeller: true, grandOpeningSpecial: true, points: 139 },
       { id: 6, name: "Arctic Sea", price: 130.10, image: "arctic-sea.jpg", 
        benefits: "Heart health, joint support, brain function, supports vision, reduces inflammation", 
        consumption: "2 softgels twice daily with meals",
-       bestSeller: true, grandOpeningSpecial: true },
+       bestSeller: true, grandOpeningSpecial: true, points: 130 },
       { id: 7, name: "Fields of Greens", price: 86.10, image: "fields-of-greens.jpg", 
        benefits: "Detoxification, digestion, alkalizing, supports weight management, rich in chlorophyll", 
        consumption: "1 tablet 3 times daily with water",
-       bestSeller: true, grandOpeningSpecial: true },
+       bestSeller: true, grandOpeningSpecial: true, points: 86 },
       { id: 8, name: "Aloe First", price: 93.40, image: "aloe-first.jpg", 
        benefits: "Skin hydration, cooling relief, wound soothing, relieves sunburn, pre-hair treatment spray", 
        consumption: "Spray directly on skin as needed",
-       bestSeller: true, grandOpeningSpecial: true },
+       bestSeller: true, grandOpeningSpecial: true, points: 93 },
       { id: 9, name: "Aloe Propolis Creme", price: 92.08, image: "aloe-propolis-creme.jpg", 
        benefits: "Skin repair, moisturizing, protective barrier, soothes irritated skin, supports healing of minor cuts", 
        consumption: "Apply generously on dry or irritated areas",
-       bestSeller: true, grandOpeningSpecial: true },
+       bestSeller: true, grandOpeningSpecial: true, points: 92 },
       { id: 10, name: "Forever Bright Toothgel", price: 31.62, image: "bright-toothgel.jpg", 
        benefits: "Fluoride-free, fresh breath, aloe-based care, gentle on gums, whitens teeth naturally", 
        consumption: "Brush teeth twice daily",
-       bestSeller: true, grandOpeningSpecial: true },
+       bestSeller: true, grandOpeningSpecial: true, points: 32 },
       { id: 11, name: "Aloe Peaches", price: 116.79, image: "aloe-peaches.jpg", 
        benefits: "Digestive health, vitamin C source, natural detoxification, maintains healthy skin, supports kidney function", 
-       consumption: "30-60ml daily, refrigerate after opening" },
+       consumption: "30-60ml daily, refrigerate after opening",
+       points: 117 },
       { id: 12, name: "Bee Pollen", price: 75.50, image: "bee-pollen.jpg", 
        benefits: "Natural multivitamin, energy enhancement, allergy relief, improves stamina, supports cardiovascular health", 
-       consumption: "1 tablet 3 times daily with meals" },
+       consumption: "1 tablet 3 times daily with meals",
+       points: 76 },
       { id: 13, name: "Absorbent-C", price: 75.50, image: "absorbent-c.jpg", 
        benefits: "Immune support, collagen production, antioxidant, helps iron absorption, supports healthy skin", 
-       consumption: "1-2 tablets daily with meals" },
+       consumption: "1-2 tablets daily with meals",
+       points: 76 },
       { id: 14, name: "Calcium Plus", price: 132.15, image: "calcium-plus.jpg", 
        benefits: "Bone support, muscle health, calcium + vitamin D, supports nerve function, helps prevent osteoporosis", 
-       consumption: "2 tablets daily with meals" },
+       consumption: "2 tablets daily with meals",
+       points: 132 },
       { id: 15, name: "Aloe Liquid Soap", price: 54.72, image: "aloe-liquid-soap.jpg", 
        benefits: "Gentle cleansing, moisturizes skin, aloe-based formula, suitable for sensitive skin, pH-balanced", 
-       consumption: "Use daily for face and body cleansing" },
+       consumption: "Use daily for face and body cleansing",
+       points: 55 },
       { id: 16, name: "Aloe Jojoba Shampoo", price: 91.66, image: "aloe-jojoba-shampoo.jpg", 
        benefits: "Hair nourishment, scalp care, sulfate-free, promotes hair strength, natural shine", 
-       consumption: "Massage into wet hair, rinse thoroughly" },
+       consumption: "Massage into wet hair, rinse thoroughly",
+       points: 92 },
       { id: 17, name: "Aloe Jojoba Conditioner", price: 91.66, image: "aloe-jojoba-conditioner.jpg", 
        benefits: "Moisturizing, smooth finish, aloe + jojoba, strengthens hair strands, prevents breakage", 
-       consumption: "Apply after shampoo, leave 1-2 minutes, rinse" },
+       consumption: "Apply after shampoo, leave 1-2 minutes, rinse",
+       points: 92 },
       { id: 18, name: "Aloe Sunscreen", price: 84.91, image: "aloe-sunscreen.jpg", 
        benefits: "UV protection, aloe-based, water-resistant, suitable for sensitive skin, prevents sunburn", 
-       consumption: "Apply 15 minutes before sun exposure" },
+       consumption: "Apply 15 minutes before sun exposure",
+       points: 85 },
       { id: 19, name: "Aloe MPD 2X Ultra", price: 114.47, image: "aloe-mp-lotion.jpg", 
        benefits: "Multi-purpose cleaner, concentrated, eco-friendly, gentle on skin, biodegradable formula", 
-       consumption: "Dilute as needed for laundry, dishes or surfaces" },
+       consumption: "Dilute as needed for laundry, dishes or surfaces",
+       points: 114 },
       { id: 20, name: "Avocado Face & Body Soap", price: 23.40, image: "avocado-soap.jpg", 
        benefits: "Softens skin, gentle cleansing, avocado oil-rich, suitable for all skin types, non-drying", 
-       consumption: "Use daily for face and body" },
+       consumption: "Use daily for face and body",
+       points: 23 },
       { id: 21, name: "Aloe Lips", price: 17.92, image: "aloe-lips.jpg", 
        benefits: "Lip protection, moisturizes, healing balm, soothes cracked lips, non-greasy finish", 
-       consumption: "Apply on lips as needed throughout the day" },
+       consumption: "Apply on lips as needed throughout the day",
+       points: 18 },
       { id: 22, name: "Forever Deodorant Stick", price: 34.91, image: "forever-deodorant.jpg", 
        benefits: "Natural fragrance, aloe soothing, easy glide, long-lasting protection, non-staining", 
-       consumption: "Use after shower daily" },
+       consumption: "Use after shower daily",
+       points: 35 },
       { id: 23, name: "Teh Tarik Halia", price: 25.90, image: "teh-tarik.jpg", 
        benefits: "Warming effect, digestion aid, ginger-infused, improves circulation, relieves bloating", 
-       consumption: "Mix sachet with hot water and stir well" },
+       consumption: "Mix sachet with hot water and stir well",
+       points: 26 },
       { id: 24, name: "Choco Malt Drink", price: 27.90, image: "choco-malt.jpg", 
        benefits: "Rich in B vitamins, iron for red blood cell production, supports metabolism, promotes growth, aids recovery after fatigue", 
-       consumption: "Mix 2-3 tablespoons in 150–200ml hot water or milk" }
+       consumption: "Mix 2-3 tablespoons in 150–200ml hot water or milk",
+       points: 28 }
     ];
 
     // Enhanced product suggestions mapping
@@ -1711,10 +1776,10 @@
                 <div style="color: var(--accent-color); font-weight: bold; margin-top: 5px;">${product.festivalTag}</div>
               </div>
             ` : `<div class="price">RM ${product.price.toFixed(2)}</div>`}
+            <div class="product-points">Earn ${product.points} points</div>
             <div class="benefits"><strong>Benefits:</strong> ${product.benefits}</div>
             <div class="consumption"><strong>How to use:</strong> ${product.consumption}</div>
             <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
-            <a href="https://wa.me/601111033154?text=I%20want%20to%20buy%20${encodeURIComponent(product.name)}" class="whatsapp-btn">Order via WhatsApp</a>
           </div>
         `;
       }).join('');
@@ -1768,7 +1833,8 @@
           name: product.name,
           price: discountedPrice,
           originalPrice: product.price,
-          quantity: 1
+          quantity: 1,
+          points: product.points
         });
       }
       
@@ -1819,10 +1885,13 @@
       
       let itemsHTML = '';
       let subtotal = 0;
+      let totalPoints = 0;
       
       cart.forEach(item => {
         const itemTotal = item.price * item.quantity;
+        const itemPoints = item.points * item.quantity;
         subtotal += itemTotal;
+        totalPoints += itemPoints;
         
         itemsHTML += `
           <div class="cart-item">
@@ -1871,7 +1940,8 @@
       
       const total = subtotal + postage;
       
-      cartItemsElement.innerHTML = itemsHTML + postageMessage;
+      cartItemsElement.innerHTML = itemsHTML + postageMessage + 
+        `<div class="cart-postage">You will earn <strong>${totalPoints} points</strong> with this order</div>`;
       cartTotalElement.textContent = total.toFixed(2);
     }
 
@@ -1914,6 +1984,7 @@
       // Calculate postage same as in updateCartDisplay
       let postage = 0;
       const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+      const totalPoints = cart.reduce((total, item) => total + (item.points * item.quantity), 0);
       
       if (subtotal >= 250) {
         postage = 0;
@@ -1943,6 +2014,7 @@
       message += `\nSubtotal: RM ${subtotal.toFixed(2)}\n`;
       message += `Postage: RM ${postage.toFixed(2)}\n`;
       message += `Total: RM ${(subtotal + postage).toFixed(2)}\n\n`;
+      message += `Points to be earned: ${totalPoints}\n\n`;
       message += `Please confirm my order. Thank you!`;
       
       const encodedMessage = encodeURIComponent(message);
@@ -1968,15 +2040,19 @@
         <a href="https://wa.me/601111033154" style="color:var(--primary-color);font-weight:bold;">Chat with us on WhatsApp</a></p>`;
       } else {
         result.innerHTML = `<h3 style="color:var(--primary-color);">Recommended Products:</h3>` + 
-          matchedProducts.map(p => `
-            <div class="suggestion-product">
-              <div>
-                <strong>${p.name}</strong><br>
-                <small>${p.recommendation}</small>
+          matchedProducts.map(p => {
+            const product = products.find(prod => prod.id === p.id);
+            return `
+              <div class="suggestion-product">
+                <div>
+                  <strong>${p.name}</strong><br>
+                  <small>${p.recommendation}</small>
+                  <div style="color:var(--accent-color);font-weight:bold;margin-top:5px;">Earn ${product.points} points</div>
+                </div>
+                <button onclick="addToCart(${p.id})">Add to Cart</button>
               </div>
-              <button onclick="addToCart(${p.id})">Add to Cart</button>
-            </div>
-          `).join("");
+            `;
+          }).join("");
       }
     }
 
