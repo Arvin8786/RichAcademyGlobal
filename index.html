@@ -1,554 +1,289 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forever Living by Mohd Arvinsd Isa - Grand Opening Special</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <style>
-        /* Custom CSS to override Tailwind */
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        /* Grand Opening Decorations */
-        .festival-decoration {
-            position: fixed;
-            z-index: 999;
-            pointer-events: none;
-            animation-timing-function: linear;
-        }
-
-        .opening-balloon {
-            width: 80px;
-            height: 100px;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 100"><path fill="%231a5276" d="M40,10 C60,10 70,30 70,50 C70,70 60,90 40,90 C20,90 10,70 10,50 C10,30 20,10 40,10 Z"/><path fill="%23f39c12" d="M30,30 L50,30 L50,50 L30,50 Z"/></svg>');
-            background-size: contain;
-            background-repeat: no-repeat;
-            animation: floatBalloon 20s linear infinite;
-        }
-
-        .opening-confetti {
-            width: 60px;
-            height: 60px;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60"><circle cx="30" cy="30" r="20" fill="%2327ae60"/><circle cx="15" cy="15" r="5" fill="%23f39c12"/><circle cx="45" cy="15" r="5" fill="%23f39c12"/><circle cx="15" cy="45" r="5" fill="%23f39c12"/><circle cx="45" cy="45" r="5" fill="%23f39c12"/></svg>');
-            background-size: contain;
-            background-repeat: no-repeat;
-            animation: floatConfetti 25s linear infinite;
-        }
-
-        .opening-banner {
-            width: 150px;
-            height: 80px;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 80"><rect width="150" height="80" fill="%231a5276"/><text x="75" y="45" font-family="Arial" font-size="20" fill="%23f39c12" text-anchor="middle">Grand Opening</text></svg>');
-            background-size: contain;
-            background-repeat: no-repeat;
-            animation: floatBanner 30s linear infinite;
-        }
-
-        @keyframes floatBalloon {
-            0% { transform: translateX(-80px) translateY(100px); }
-            100% { transform: translateX(calc(100vw + 80px)) translateY(300px); }
-        }
-
-        @keyframes floatConfetti {
-            0% { transform: translateX(-60px) translateY(150px); }
-            50% { transform: translateX(50vw) translateY(50px); }
-            100% { transform: translateX(calc(100vw + 60px)) translateY(200px); }
-        }
-
-        @keyframes floatBanner {
-            0% { transform: translateX(-150px) translateY(50px) rotate(-5deg); }
-            100% { transform: translateX(calc(100vw + 150px)) translateY(150px) rotate(5deg); }
-        }
-        /* Festival Popup Modal - Enhanced */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
-        .festival-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.9);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.5s;
-        }
-
-        .festival-content {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            max-width: 600px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            border: 3px solid var(--accent-color);
-        }
-
-        .festival-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 24px;
-            cursor: pointer;
-            color: #666;
-            transition: all 0.3s;
-        }
-
-        .festival-close:hover {
-            color: #000;
-            transform: rotate(90deg);
-        }
-
-        .festival-title {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: var(--primary-color);
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            animation: textGlow 2s infinite alternate;
-        }
-
-        @keyframes textGlow {
-            0% { text-shadow: 0 0 10px rgba(0,0,0,0.1); }
-            100% { text-shadow: 0 0 20px var(--accent-color); }
-        }
-
-        .festival-message {
-            font-size: 1.2rem;
-            margin-bottom: 25px;
-            color: #555;
-        }
-
-        .festival-image {
-            max-width: 100%;
-            height: 200px;
-            object-fit: contain;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border: 2px solid var(--accent-color);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .festival-offer {
-            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
-            padding: 15px;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            color: var(--primary-color);
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        /* Featured Product Animations */
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
-        }
-        .featured-product {
-            position: relative;
-            animation: float 3s ease-in-out infinite;
-            z-index: 1;
-            border: 2px solid var(--accent-color);
-        }
-
-        .featured-product::before {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: -5px;
-            right: -5px;
-            bottom: -5px;
-            background: linear-gradient(45deg,
-            var(--primary-color),
-            var(--secondary-color),
-            var(--accent-color));
-            z-index: -1;
-            border-radius: 10px;
-            opacity: 0.3;
-            animation: gradientRotate 8s linear infinite;
-        }
-
-        @keyframes gradientRotate {
-            0% { filter: hue-rotate(0deg); }
-            100% { filter: hue-rotate(360deg); }
-        }
-
-        .featured-badge {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            width: 60px;
-            height: 60px;
-            background: var(--accent-color);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 14px;
-            transform: rotate(15deg);
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-            animation: badgePulse 2s infinite;
-        }
-
-        @keyframes badgePulse {
-            0% { transform: rotate(15deg) scale(1); }
-            50% { transform: rotate(15deg) scale(1.1); }
-            100% { transform: rotate(15deg) scale(1); }
-        }
-
-        .discount-price {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin: 10px 0;
-        }
-
-        .original-price {
-            text-decoration: line-through;
-            color: #999;
-            font-size: 0.9em;
-        }
-
-        .new-price {
-            color: var(--secondary-color);
-            font-weight: bold;
-            font-size: 1.2em;
-            display: flex;
-            align-items: center;
-        }
-
-        .fire-icon {
-            margin-left: 5px;
-            color: #FF5722;
-            animation: fireBlink 1s infinite alternate;
-        }
-
-        @keyframes fireBlink {
-            0% { opacity: 0.7; transform: scale(1); }
-            100% { opacity: 1; transform: scale(1.2); }
-        }
-        /* Grand Opening Ribbon */
-        .grand-opening-ribbon {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 150px;
-            height: 150px;
-            overflow: hidden;
-            z-index: 100;
-        }
-
-        .grand-opening-ribbon::before,
-        .grand-opening-ribbon::after {
-            content: '';
-            position: absolute;
-            z-index: -1;
-            display: block;
-            border: 5px solid #f39c12;
-            border-top-color: transparent;
-            border-right-color: transparent;
-        }
-
-        .grand-opening-ribbon::before {
-            top: 0;
-            left: 0;
-        }
-
-        .grand-opening-ribbon::after {
-            bottom: 0;
-            right: 0;
-        }
-
-        .grand-opening-ribbon span {
-            position: absolute;
-            display: block;
-            width: 225px;
-            padding: 15px 0;
-            background-color: #1a5276;
-            box-shadow: 0 5px 10px rgba(0,0,0,.1);
-            color: #fff;
-            font-size: 13px;
-            text-align: center;
-            right: -25px;
-            top: 30px;
-            transform: rotate(45deg);
-        }
-        /* Quantity controls in cart */
-        .quantity-controls {
-            display: flex;
-            align-items: center;
-            margin-left: 10px;
-        }
-
-        .quantity-btn {
-            width: 25px;
-            height: 25px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            font-size: 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .quantity-btn:hover {
-            background: var(--accent-color);
-        }
-
-        .quantity-input {
-            width: 30px;
-            text-align: center;
-            margin: 0 5px;
-            border: 1px solid #ddd;
-            border-radius: 3px;
-        }
-
-        .cart-item-details {
-            display: flex;
-            align-items: center;
-        }
-
-        .cart-item-actions {
-            display: flex;
-            align-items: center;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forever Living by Mohd Arvinsd Isa - Grand Opening Special</title>
+  <!-- Link to the external CSS file -->
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body class="bg-gray-100 font-sans">
-<!-- Grand Opening Decorations -->
-<div id="festival-decorations">
+<body>
+
+  <!-- Grand Opening Decorations -->
+  <div id="festival-decorations">
     <div class="festival-decoration opening-balloon" style="top: 100px; animation-duration: 20s; animation-delay: 0s;"></div>
     <div class="festival-decoration opening-balloon" style="top: 300px; animation-duration: 25s; animation-delay: 5s;"></div>
     <div class="festival-decoration opening-confetti" style="top: 200px; animation-duration: 30s; animation-delay: 2s;"></div>
     <div class="festival-decoration opening-confetti" style="top: 400px; animation-duration: 35s; animation-delay: 7s;"></div>
     <div class="festival-decoration opening-banner" style="top: 150px; animation-duration: 40s; animation-delay: 3s;"></div>
-</div>
-<div class="grand-opening-ribbon">
-    <span>Grand Opening</span>
-</div>
-<header class="bg-white p-6 text-center border-b border-gray-300 relative">
-    <h1 class="text-2xl md:text-3xl text-blue-800 font-bold">
-        FOREVER LIVING by Mohd Arvind Isa
-        <span class="block text-lg text-yellow-600">Quality Wellness Products</span>
+  </div>
+
+  <header>
+    <h1 style="font-size: 28px; color: var(--primary-color);">
+      FOREVER LIVING by Mohd Arvind Isa
+      <span style="font-size: 18px; color: var(--secondary-color); display: block;">Quality Wellness Products</span>
     </h1>
-    <div class="absolute top-6 right-6 text-2xl cursor-pointer" onClick="toggleCart()" role="button" aria-label="View Cart">
-        <i class="fas fa-shopping-cart"></i>
-        <span id="cart-count" class="ml-1">0</span>
+    <div class="cart-icon" onclick="toggleCart()">
+      🛒 <span id="cart-count">0</span>
     </div>
-</header>
+  </header>
 
-<nav class="bg-blue-800 relative z-10">
-    <ul class="flex flex-wrap justify-center p-2">
-        <li><a href="#" onClick="showTab('products')" class="text-white px-4 py-2 rounded hover:underline">Products</a></li>
-        <li><a href="#" onClick="showTab('cds')" class="text-white px-4 py-2 rounded hover:underline">Cabaran Detox Sihat @CDS</a></li>
-        <li><a href="#" onClick="showTab('business')" class="text-white px-4 py-2 rounded hover:underline">Business Opportunity</a></li>
-        <li><a href="#" onClick="showTab('rewards')" class="text-white px-4 py-2 rounded hover:underline">Rewards</a></li>
-        <li><a href="#" onClick="showTab('account')" class="text-white px-4 py-2 rounded hover:underline">My Account</a></li>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="showTab('products')">Products</a></li>
+      <li><a href="#" onclick="showTab('cds')">Cabaran Detox Sihat @CDS </a></li>
+      <li><a href="#" onclick="showTab('business')">Business Opportunity</a></li>
+      <li><a href="#" onclick="showTab('rewards')">Rewards</a></li>
     </ul>
-</nav>
+  </nav>
 
-<main class="container mx-auto py-8">
+  <main>
     <div id="products" class="tab-content active">
-        <section class="mb-8">
-            <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
-                <strong class="font-bold">🎉 GRAND OPENING SPECIAL 🎉</strong>
-                <span class="block sm:inline">Enjoy 5% OFF on our top 10 bestselling products!</span>
-                <span class="block sm:inline font-semibold mt-2">Promotion Period: 21/7/2025 - 24/8/2025</span>
-            </div>
-        </section>
+      <div class="special-offer-banner">
+        <h2>🎉 GRAND OPENING SPECIAL 🎉</h2>
+        <p>Enjoy 5% OFF on our top 10 bestselling products!</p>
+        <p style="font-size: 1.1em; margin-top: 5px; font-weight: bold;">Promotion Period: 21/7/2025 - 24/8/2025</p>
+      </div>
 
-        <section class="mb-8">
-            <div class="relative">
-                <input type="text" id="product-search" placeholder="Search products..." class="w-full px-4 py-2 border-2 border-blue-800 rounded-full focus:outline-none focus:border-green-500 transition-colors duration-300">
-                <div class="absolute top-0 right-0 mt-2 mr-4 text-blue-800">
-                    <i class="fas fa-search"></i>
-                </div>
-            </div>
-        </section>
+      <div class="search-container">
+        <input type="text" id="product-search" placeholder="Search products...">
+        <span class="search-icon">🔍</span>
+      </div>
 
-        <section class="mb-8">
-            <div class="bg-white p-6 rounded shadow-md border-2 border-green-500">
-                <h2 class="text-xl text-blue-800 font-semibold mb-4 text-center">AI Product Suggestion</h2>
-                <p class="text-gray-700">Tell our AI your symptoms and we'll recommend the best Forever Living products for you:</p>
-                <input type="text" id="symptom-input" placeholder="e.g. joint pain, low energy, digestion issues..." class="w-full px-4 py-2 border border-blue-800 rounded mb-4 focus:outline-none focus:border-blue-500">
-                <button onClick="suggestProduct()" class="block w-full bg-blue-800 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                    Get Product Suggestions
-                </button>
-                <div id="suggestion-result" class="mt-4 p-4 bg-gray-50 rounded border-l-4 border-green-500"></div>
-            </div>
-        </section>
-
-        <h2 class="text-2xl text-blue-800 font-semibold mb-4">Our Products - Grand Opening Special!</h2>
-        <div id="product-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Product items will be dynamically added here -->
-        </div>
-        <div class="text-center mt-6 text-gray-600">More products coming soon! Stay tuned for updates.</div>
+      <div class="ai-suggestion-box">
+        <h2>AI Product Suggestion</h2>
+        <p>Tell our AI your symptoms and we'll recommend the best Forever Living products for you:</p>
+        <input type="text" id="symptom-input" placeholder="e.g. joint pain, low energy, digestion issues...">
+        <button id="suggest-btn" onclick="suggestProduct()">Get Product Suggestions</button>
+        <div id="suggestion-result"></div>
+      </div>
+      
+      <h2>Our Products - Grand Opening Special!</h2>
+      <div id="product-list" class="product-list"></div>
+      <div class="coming-soon">More products coming soon! Stay tuned for updates.</div>
     </div>
 
-    <!-- CDS Section -->
     <div id="cds" class="tab-content">
-        <section class="bg-white p-8 rounded shadow-md mb-8">
-            <h2 class="text-3xl text-blue-800 font-semibold mb-6 text-center">Cabaran Detox Sihat (CDS)</h2>
-            <p class="text-center text-lg text-gray-700 mb-6">Transform your health in just 7 days with our proven detox program</p>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-gray-50 rounded p-4 shadow-sm">
-                    <h3 class="text-xl text-blue-800 font-semibold border-b-2 border-blue-800 pb-2 mb-3">What You Get</h3>
-                    <ul class="list-disc list-inside text-gray-700">
-                        <li>✅ Personalized Forever product package</li>
-                        <li>📋 Detailed meal plan & recipes</li>
-                        <li>📱 Daily coaching via WhatsApp</li>
-                        <li>👥 Private support community</li>
-                        <li>📚 Educational materials</li>
-                    </ul>
-                </div>
-
-                <div class="bg-gray-50 rounded p-4 shadow-sm">
-                    <h3 class="text-xl text-blue-800 font-semibold border-b-2 border-blue-800 pb-2 mb-3">Benefits</h3>
-                    <ul class="list-disc list-inside text-gray-700">
-                        <li>⚡ Boost energy levels</li>
-                        <li>🌿 Natural detoxification</li>
-                        <li>⚖️ Healthy weight management</li>
-                        <li>🧠 Improved mental clarity</li>
-                        <li>😴 Better sleep quality</li>
-                    </ul>
-                </div>
-
-                <div class="bg-gray-50 rounded p-4 shadow-sm">
-                    <h3 class="text-xl text-blue-800 font-semibold border-b-2 border-blue-800 pb-2 mb-3">Program Details</h3>
-                    <ul class="list-disc list-inside text-gray-700">
-                        <li>⏳ 7-day intensive program</li>
-                        <li>📦 Delivered in 5-10 working days</li>
-                        <li>👨‍🏫 Experienced coach support</li>
-                        <li>🎯 Results-driven approach</li>
-                        <li>📊 Progress tracking tools</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="mb-8">
-                <h3 class="text-center text-2xl text-blue-800 font-semibold mb-4">How It Works</h3>
-                <div class="relative">
-                    <div class="flex flex-col md:flex-row">
-                        <div class="step md:w-1/4 relative pl-24 mb-6 md:mb-0">
-                            <div class="step-number absolute left-0 top-0 w-16 h-16 bg-blue-800 text-white rounded-full flex items-center justify-center text-3xl font-bold">1</div>
-                            <h4 class="text-xl text-blue-800 font-semibold mb-2">Registration</h4>
-                            <p class="text-gray-700">Complete your registration and health assessment to receive a personalized program tailored to your needs.</p>
-                        </div>
-
-                        <div class="step md:w-1/4 relative pl-24 mb-6 md:mb-0">
-                            <div class="step-number absolute left-0 top-0 w-16 h-16 bg-blue-800 text-white rounded-full flex items-center justify-center text-3xl font-bold">2</div>
-                            <h4 class="text-xl text-blue-800 font-semibold mb-2">Receive Your Kit</h4>
-                            <p class="text-gray-700">Get your Forever Living product package delivered to your doorstep with detailed instructions.</p>
-                        </div>
-
-                        <div class="step md:w-1/4 relative pl-24 mb-6 md:mb-0">
-                            <div class="step-number absolute left-0 top-0 w-16 h-16 bg-blue-800 text-white rounded-full flex items-center justify-center text-3xl font-bold">3</div>
-                            <h4 class="text-xl text-blue-800 font-semibold mb-2">Daily Guidance</h4>
-                            <p class="text-gray-700">Follow the daily plan with support from your coach and community through WhatsApp.</p>
-                        </div>
-
-                        <div class="step md:w-1/4 relative pl-24">
-                            <div class="step-number absolute left-0 top-0 w-16 h-16 bg-blue-800 text-white rounded-full flex items-center justify-center text-3xl font-bold">4</div>
-                            <h4 class="text-xl text-blue-800 font-semibold mb-2">Transformation</h4>
-                            <p class="text-gray-700">Experience noticeable improvements in your energy, digestion, and overall wellbeing by day 7.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-green-50 p-6 border-l-4 border-blue-800 italic mb-6">
-                <p>"After completing CDS, I lost 3kg and my chronic bloating disappeared. I now have so much more energy throughout the day!"</p>
-                <p class="text-right font-semibold text-blue-800">- Aina S., 32, Kuala Lumpur</p>
-            </div>
-
-            <a href="https://wa.me/601111033154?text=I%20want%20to%20join%20CDS%20Program" class="block w-full md:w-1/2 mx-auto bg-yellow-500 hover:bg-yellow-600 text-white text-center py-3 rounded font-bold transition-colors duration-300">Join CDS Now</a>
-        </section>
+      <section class="program-section">
+        <h2>Cabaran Detox Sihat (CDS)</h2>
+        <p style="text-align: center; font-size: 1.2rem;">Transform your health in just 7 days with our proven detox program</p>
+        
+        <div class="program-highlights">
+          <div class="highlight-card">
+            <h3>What You Get</h3>
+            <ul>
+              <li>✅ Personalized Forever product package</li>
+              <li>📋 Detailed meal plan & recipes</li>
+              <li>📱 Daily coaching via WhatsApp</li>
+              <li>👥 Private support community</li>
+              <li>📚 Educational materials</li>
+            </ul>
+          </div>
+          
+          <div class="highlight-card">
+            <h3>Benefits</h3>
+            <ul>
+              <li>⚡ Boost energy levels</li>
+              <li>🌿 Natural detoxification</li>
+              <li>⚖️ Healthy weight management</li>
+              <li>🧠 Improved mental clarity</li>
+              <li>😴 Better sleep quality</li>
+            </ul>
+          </div>
+          
+          <div class="highlight-card">
+            <h3>Program Details</h3>
+            <ul>
+             <li>⏳ 7-day intensive program</li>
+             <li>📦 Delivered in 5-10 working days</li>
+             <li>👨‍🏫 Experienced coach support</li>
+             <li>🎯 Results-driven approach</li>
+             <li>📊 Progress tracking tools</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="program-steps">
+          <h3 style="text-align: center;">How It Works</h3>
+          <div class="step">
+            <h4>Registration</h4>
+            <p>Complete your registration and health assessment to receive a personalized program tailored to your needs.</p>
+          </div>
+          <div class="step">
+            <h4>Receive Your Kit</h4>
+            <p>Get your Forever Living product package delivered to your doorstep with detailed instructions.</p>
+          </div>
+          <div class="step">
+            <h4>Daily Guidance</h4>
+            <p>Follow the daily plan with support from your coach and community through WhatsApp.</p>
+          </div>
+          <div class="step">
+            <h4>Transformation</h4>
+            <p>Experience noticeable improvements in your energy, digestion, and overall wellbeing by day 7.</p>
+          </div>
+        </div>
+        
+        <div class="testimonial">
+          <p>"After completing CDS, I lost 3kg and my chronic bloating disappeared. I now have so much more energy throughout the day!"</p>
+          <p class="testimonial-author">- Aina S., 32, Kuala Lumpur</p>
+        </div>
+        
+        <a href="https://wa.me/601111033154?text=I%20want%20to%20join%20CDS%20Program" class="cta-button">Join CDS Now</a>
+      </section>
     </div>
 
-    <!-- Business Opportunity Section -->
     <div id="business" class="tab-content">
-        <section class="bg-white p-8 rounded shadow-md mb-8">
-            <h2 class="text-3xl text-blue-800 font-semibold mb-6 text-center">Build Your Forever Business</h2>
-            <p class="text-center text-lg text-gray-700 mb-6">Start your journey to financial freedom with our proven system</p>
+      <section class="program-section">
+        <h2>Build Your Forever Business</h2>
+        <p style="text-align: center; font-size: 1.2rem;">Start your journey to financial freedom with our proven system</p>
+        
+        <div class="program-highlights">
+          <div class="highlight-card">
+            <h3>Why Join Us?</h3>
+            <ul>
+              <li>💰 Earn 30-50% commission</li>
+              <li>🌍 Work from anywhere</li>
+              <li>⏱ Flexible hours</li>
+              <li>📈 Unlimited income potential</li>
+              <li>🛍️ Discount on products</li>
+            </ul>
+          </div>
+          
+          <div class="highlight-card">
+            <h3>What We Provide</h3>
+            <ul>
+              <li>🎓 Complete training program</li>
+              <li>📱 Marketing materials</li>
+              <li>🤝 Mentorship</li>
+              <li>👥 Team support</li>
+              <li>🏆 Recognition program</li>
+            </ul>
+          </div>
+          
+          <div class="highlight-card">
+            <h3>Success Path</h3>
+            <ul>
+              <li>1️⃣ Start part-time</li>
+              <li>2️⃣ Build your customer base</li>
+              <li>3️⃣ Recruit your team</li>
+              <li>4️⃣ Earn residual income</li>
+              <li>5️⃣ Achieve financial freedom</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="program-steps">
+          <h3 style="text-align: center;">Your Business Journey</h3>
+          <div class="step">
+            <h4>Step 1: Enroll</h4>
+            <p>Register as a Forever Business Owner (FBO) and receive your starter kit with everything you need to begin.</p>
+          </div>
+          <div class="step">
+            <h4>Step 2: Learn</h4>
+            <p>Complete our comprehensive training program with ongoing support from your upline and team.</p>
+          </div>
+          <div class="step">
+            <h4>Step 3: Implement</h4>
+            <p>Start sharing products and the business opportunity using our proven marketing system.</p>
+          </div>
+          <div class="step">
+            <h4>Step 4: Grow</h4>
+            <p>Build your team and leverage our compensation plan to maximize your earnings.</p>
+          </div>
+        </div>
+        
+        <div class="testimonial">
+          <p>"I joined Forever Living 2 years ago as a side hustle. Today it's my full-time business earning me RM15,000 monthly!"</p>
+          <p class="testimonial-author">- Ahmad F., 28, Penang</p>
+        </div>
+        
+        <div class="testimonial">
+          <p>"The training and support system helped me build confidence. I now have a team of 50 people across Malaysia."</p>
+          <p class="testimonial-author">- Sarah L., 35, Johor Bahru</p>
+        </div>
+        
+        <a href="https://wa.me/601111033154?text=I%20want%20to%20join%20Forever%20Business" class="cta-button">Start Your Business Today</a>
+      </section>
+    </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-gray-50 rounded p-4 shadow-sm">
-                    <h3 class="text-xl text-blue-800 font-semibold border-b-2 border-blue-800 pb-2 mb-3">Why Join Us?</h3>
-                    <ul class="list-disc list-inside text-gray-700">
-                        <li>💰 Earn 30-50% commission</li>
-                        <li>🌍 Work from anywhere</li>
-                        <li>⏱ Flexible hours</li>
-                        <li>📈 Unlimited income potential</li>
-                        <li>🛍️ Discount on products</li>
-                    </ul>
-                </div>
+    <div id="rewards" class="tab-content">
+      <div class="rewards-container" id="rewards-animation">
+        <h1 class="rewards-title">EXCITING REWARDS COMING SOON!</h1>
+        <p class="rewards-subtitle">Stay tuned for our amazing loyalty program</p>
+        
+        <div>
+          <span class="reward-icon">🏆</span>
+          <span class="reward-icon">💰</span>
+          <span class="reward-icon">✈️</span>
+          <span class="reward-icon">🎁</span>
+        </div>
+        
+        <p style="font-size: 1.2rem; max-width: 800px; margin: 20px auto;">
+          We're preparing something special for our loyal customers! Our rewards program will offer exclusive benefits, 
+          cash bonuses and amazing gifts based on your purchases and referrals.
+        </p>
+        
+        <div style="margin-top: 30px;">
+          <button onclick="notifyMe()" style="
+            background: white;
+            color: var(--primary-color);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+          ">
+            Notify Me When Launched
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
 
-                <div class="bg-gray-50 rounded p-4 shadow-sm">
-                    <h3 class="text-xl text-blue-800 font-semibold border-b-2 border-blue-800 pb-2 mb-3">What We Provide</h3>
-                    <ul class="list-disc list-inside text-gray-700">
-                        <li>🎓 Complete training program</li>
-                        <li>📱 Marketing materials</li>
-                        <li>🤝 Mentorship</li>
-                        <li>👥 Team support</li>
-                        <li>🏆 Recognition program</li>
-                    </ul>
-                </div>
+  <!-- Cart Modal -->
+  <div id="cart-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="toggleCart()">×</span>
+      <h2>Your Shopping Cart</h2>
+      <div id="cart-items"></div>
+      <div class="cart-total">Total: RM <span id="cart-total">0.00</span></div>
+      
+      <div class="delivery-offer">
+        🚚 FREE NATIONWIDE DELIVERY for orders RM 250 and above! Limited time offer.
+      </div>
+      
+      <div class="customer-info-form">
+        <h3>Customer Information</h3>
+        <input type="text" id="customer-name" placeholder="Your Full Name" required>
+        <input type="tel" id="customer-phone" placeholder="Your WhatsApp Number" required>
+        <button class="checkout-btn" onclick="checkout()">Complete Order via WhatsApp</button>
+      </div>
+    </div>
+  </div>
 
-                <div class="bg-gray-50 rounded p-4 shadow-sm">
-                    <h3 class="text-xl text-blue-800 font-semibold border-b-2 border-blue-800 pb-2 mb-3">Success Path</h3>
-                    <ul class="list-disc list-inside text-gray-700">
-                        <li>1️⃣ Start part-time</li>
-                        <li>2️⃣ Build your customer base</li>
-                        <li>3️⃣ Recruit your team</li>
-                        <li>4️⃣ Earn residual income</li>
-                        <li>5️⃣ Achieve financial freedom</li>
-                    </ul>
-                </div>
-            </div>
+  <!-- Festival Popup Modal -->
+  <div id="festival-modal" class="festival-modal" style="display: flex;">
+    <div class="festival-content">
+      <span class="festival-close" onclick="closeFestivalModal()">×</span>
+      <h2 class="festival-title">Online Store Opening Sale!</h2>
+      <img src="https://via.placeholder.com/600x200/1a5276/f39c12?text=Welcome+to+Our+Store" alt="Grand Opening Banner">
+      <p class="festival-message">Welcome to our online store! Enjoy special opening discounts on selected products.</p>
+      <div class="festival-offer">5% OFF on Top Products!</div>
+      <button class="add-to-cart" onclick="closeFestivalModal()" style="width: auto; margin: 0 auto;">Start Shopping</button>
+    </div>
+  </div>
 
-            <div class="mb-8">
-                <h3 class="text-center text-2xl text-blue-800 font-semibold mb-4">Your Business Journey</h3>
-                <div class="relative">
-                    <div class="flex flex-col md:flex-row">
-                        <div class="step md:w-1/4 relative pl-24 mb-6 md:mb-0">
-                            <div class="step-number absolute left-0 top-0 w-16 h-16 bg-blue-800 text-white rounded-full flex items-center justify-center text-3xl font-bold">1</div>
-                            <h4 class="text-xl text-blue-800 font-semibold mb-2">Step 1: Enroll</h4>
-                            <p class="text-gray-700">Register as a Forever Business Owner (FBO) and receive your starter kit with everything you need to begin.</p>
-                        </div>
+  <footer>
+    <p>© 2025 Forever Living by Mohd Arvind Isa. Powered by Rich Academy Global. All rights reserved.</p>
+    <div class="timestamp">Last updated: <span id="current-date"></span></div>
+    <section class="disclaimer">
+      <strong>Disclaimer:</strong> This website is operated by an independent Registered Forever Business Owner (FBO) under Rich Academy Global and is not the official site of Forever Living Products. Product names, trademarks, and registered trademarks are property of Forever Living Products International, Inc.
+    </section>
+  </footer>
 
-                        <div class="step md:w-1/4 relative pl-24 mb-6 md:mb-0">
-                            <div class="step-number absolute left-0 top-0 w-16 h-16 bg-blue-800 text-white rounded-full flex items-center justify-center text-3xl font-bold">2</div>
-                            <h4 class="text-xl text-blue-800 font-semibold mb-2">Step 2: Learn</h4>
-                            <p class="text-gray-700">Complete our comprehensive training program with ongoing support from your upline and team.</p>
-                        </div>
-
-                        <div class="step md:w-1/4 relative pl-24 mb-6 md:mb-0">
-                            <div class="step-number absolute left-0 top-0 w-16 h-1
+  <!-- Link to the external JavaScript file -->
+  <script src="script.js"></script>
+</body>
+</html>
