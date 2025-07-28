@@ -153,6 +153,13 @@
     .cta-button { display: block; width: fit-content; margin: 30px auto; background: linear-gradient(135deg, var(--secondary-color), #e67e22); color: var(--light-text); text-align: center; padding: 15px 40px; border-radius: 50px; font-weight: bold; text-decoration: none; font-size: 1.2rem; transition: all 0.3s; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
     .cta-button:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.3); }
 
+    /* --- Rewards Section --- */
+    .rewards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+    .reward-item { background: var(--light-gray); border: 1px solid #ddd; border-radius: var(--border-radius); padding: 20px; text-align: center; }
+    .reward-item img { max-width: 100%; height: 100px; object-fit: contain; margin-bottom: 15px; border-radius: 8px; }
+    .reward-item h4 { margin: 10px 0 5px; }
+    .reward-item .points-cost { font-weight: bold; color: var(--accent-color); }
+
     /* --- Footer --- */
     footer { background: var(--primary-color); color: var(--light-text); padding: 40px 20px; text-align: center; margin-top: 30px; }
     .disclaimer { margin-top: 20px; background-color: rgba(255,255,255,0.1); color: #ddd; padding: 15px; border-radius: var(--border-radius); max-width: 800px; margin-left: auto; margin-right: auto; }
@@ -161,7 +168,7 @@
     .floating-cart-btn {
         position: fixed;
         bottom: 20px;
-        left: 20px;
+        right: 20px;
         width: 60px;
         height: 60px;
         background-color: var(--primary-color);
@@ -211,6 +218,7 @@
         border-radius: 50%; cursor: pointer; font-weight: bold;
     }
     .quantity-display { font-weight: 600; min-width: 20px; text-align: center; }
+    .remove-item-btn { font-size: 1.2rem; color: #cc0000; cursor: pointer; margin-left: 15px; }
     .cart-summary { margin-top: 20px; font-size: 1.1rem; }
     .summary-line { display: flex; justify-content: space-between; padding: 8px 0; }
     .summary-line.total { font-weight: bold; font-size: 1.3rem; border-top: 2px solid #333; margin-top: 10px; }
@@ -335,9 +343,47 @@
     </div>
 
     <div id="rewards" class="tab-content">
-        <section class="hero-section">
-            <h2><i class="fa-solid fa-star"></i> Exciting Rewards Coming Soon!</h2>
-            <p>Our new loyalty program will reward you for every purchase. Stay tuned!</p>
+        <section class="program-section">
+            <h2><i class="fa-solid fa-award"></i> Redeem Your Points</h2>
+            <p style="text-align: center; font-size: 1.2rem;">Use your points to redeem exciting vouchers and products!</p>
+            
+            <h3 style="margin-top: 40px;">Vouchers</h3>
+            <div class="rewards-grid">
+                <div class="reward-item">
+                    <img src="https://via.placeholder.com/200x100/27ae60/ffffff?text=RM+5" alt="RM 5 Voucher">
+                    <h4>RM 5 Voucher</h4>
+                    <p class="points-cost">500 Points</p>
+                </div>
+                <div class="reward-item">
+                    <img src="https://via.placeholder.com/200x100/1a5276/ffffff?text=RM+10" alt="RM 10 Voucher">
+                    <h4>RM 10 Voucher</h4>
+                    <p class="points-cost">1000 Points</p>
+                </div>
+                <div class="reward-item">
+                    <img src="https://via.placeholder.com/200x100/c0392b/ffffff?text=RM+20" alt="RM 20 Voucher">
+                    <h4>RM 20 Voucher</h4>
+                    <p class="points-cost">2000 Points</p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 40px;">Products</h3>
+            <div class="rewards-grid">
+                <div class="reward-item">
+                    <img src="aloe-vera-gel.jpg" alt="Aloe Vera Gel">
+                    <h4>Aloe Vera Gel</h4>
+                    <p class="points-cost">10000 Points</p>
+                </div>
+                <div class="reward-item">
+                    <img src="aloe-berry-nectar.jpg" alt="Aloe Berry Nectar">
+                    <h4>Aloe Berry Nectar</h4>
+                    <p class="points-cost">10000 Points</p>
+                </div>
+                <div class="reward-item">
+                    <img src="aloe-peaches.jpg" alt="Aloe Peaches">
+                    <h4>Aloe Peaches</h4>
+                    <p class="points-cost">10000 Points</p>
+                </div>
+            </div>
         </section>
     </div>
   </main>
@@ -410,7 +456,7 @@
   </footer>
 
   <script>
-    // --- DATA (Unchanged) ---
+    // --- DATA (Restored to full list) ---
     const products = [
       { id: 1, name: "Aloe Vera Gel", price: 116.79, image: "aloe-vera-gel.jpg", benefits: "Supports digestion, boosts immunity, promotes skin health, enhances nutrient absorption, helps detoxify the body.", consumption: "Take 30-60ml daily, preferably on empty stomach.", bestSeller: true, grandOpeningSpecial: true },
       { id: 2, name: "Aloe Berry Nectar", price: 116.79, image: "aloe-berry-nectar.jpg", benefits: "Antioxidant support, immune system booster, natural energy, supports urinary health, rich in vitamin C.", consumption: "30-60ml daily, can be mixed with water or juice.", bestSeller: true, grandOpeningSpecial: true },
@@ -424,6 +470,18 @@
       { id: 10, name: "Forever Bright Toothgel", price: 31.62, image: "bright-toothgel.jpg", benefits: "Fluoride-free, fresh breath, aloe-based care, gentle on gums, whitens teeth naturally.", consumption: "Brush teeth twice daily.", bestSeller: true, grandOpeningSpecial: true },
       { id: 11, name: "Aloe Peaches", price: 116.79, image: "aloe-peaches.jpg", benefits: "Digestive health, vitamin C source, natural detoxification, maintains healthy skin, supports kidney function.", consumption: "30-60ml daily, refrigerate after opening." },
       { id: 12, name: "Bee Pollen", price: 75.50, image: "bee-pollen.jpg", benefits: "Natural multivitamin, energy enhancement, allergy relief, improves stamina, supports cardiovascular health.", consumption: "1 tablet 3 times daily with meals." },
+      { id: 13, name: "Absorbent-C", price: 75.50, image: "absorbent-c.jpg", benefits: "Immune support, collagen production, antioxidant, helps iron absorption, supports healthy skin.", consumption: "1-2 tablets daily with meals." },
+      { id: 14, name: "Calcium Plus", price: 132.15, image: "calcium-plus.jpg", benefits: "Bone support, muscle health, calcium + vitamin D, supports nerve function, helps prevent osteoporosis.", consumption: "2 tablets daily with meals." },
+      { id: 15, name: "Aloe Liquid Soap", price: 54.72, image: "aloe-liquid-soap.jpg", benefits: "Gentle cleansing, moisturizes skin, aloe-based formula, suitable for sensitive skin, pH-balanced.", consumption: "Use daily for face and body cleansing." },
+      { id: 16, name: "Aloe Jojoba Shampoo", price: 91.66, image: "aloe-jojoba-shampoo.jpg", benefits: "Hair nourishment, scalp care, sulfate-free, promotes hair strength, natural shine.", consumption: "Massage into wet hair, rinse thoroughly." },
+      { id: 17, name: "Aloe Jojoba Conditioner", price: 91.66, image: "aloe-jojoba-conditioner.jpg", benefits: "Moisturizing, smooth finish, aloe + jojoba, strengthens hair strands, prevents breakage.", consumption: "Apply after shampoo, leave 1-2 minutes, rinse." },
+      { id: 18, name: "Aloe Sunscreen", price: 84.91, image: "aloe-sunscreen.jpg", benefits: "UV protection, aloe-based, water-resistant, suitable for sensitive skin, prevents sunburn.", consumption: "Apply 15 minutes before sun exposure." },
+      { id: 19, name: "Aloe MPD 2X Ultra", price: 114.47, image: "aloe-mp-lotion.jpg", benefits: "Multi-purpose cleaner, concentrated, eco-friendly, gentle on skin, biodegradable formula.", consumption: "Dilute as needed for laundry, dishes or surfaces." },
+      { id: 20, name: "Avocado Face & Body Soap", price: 23.40, image: "avocado-soap.jpg", benefits: "Softens skin, gentle cleansing, avocado oil-rich, suitable for all skin types, non-drying.", consumption: "Use daily for face and body." },
+      { id: 21, name: "Aloe Lips", price: 17.92, image: "aloe-lips.jpg", benefits: "Lip protection, moisturizes, healing balm, soothes cracked lips, non-greasy finish.", consumption: "Apply on lips as needed throughout the day." },
+      { id: 22, name: "Forever Deodorant Stick", price: 34.91, image: "forever-deodorant.jpg", benefits: "Natural fragrance, aloe soothing, easy glide, long-lasting protection, non-staining.", consumption: "Use after shower daily." },
+      { id: 23, name: "Teh Tarik Halia", price: 25.90, image: "teh-tarik.jpg", benefits: "Warming effect, digestion aid, ginger-infused, improves circulation, relieves bloating.", consumption: "Mix sachet with hot water and stir well." },
+      { id: 24, name: "Choco Malt Drink", price: 27.90, image: "choco-malt.jpg", benefits: "Rich in B vitamins, iron for red blood cell production, supports metabolism, promotes growth, aids recovery after fatigue.", consumption: "Mix 2-3 tablespoons in 150–200ml hot water or milk." }
     ];
     const productSuggestions = { "digestion": { id: 1, name: "Aloe Vera Gel", recommendation: "30-60ml daily on empty stomach for digestive support" }, "bloating": { id: 1, name: "Aloe Vera Gel", recommendation: "30-60ml daily to reduce bloating" }, "low energy": { id: 4, name: "Royal Jelly", recommendation: "1 tablet morning and afternoon" }, "joint pain": { id: 6, name: "Arctic Sea", recommendation: "2 softgels twice daily for joint support" }};
     let cart = [];
@@ -527,6 +585,12 @@
         }
     }
 
+    function removeItemFromCart(productId) {
+        cart = cart.filter(p => p.id !== productId);
+        updateCartDisplay();
+        updateCartCount();
+    }
+
     function calculateShipping(cart, subtotal) {
         if (subtotal >= 250) {
             return { fee: 0, message: "FREE" };
@@ -574,7 +638,10 @@
                     <button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button>
                 </div>
             </div>
-            <span>RM ${(item.price * item.quantity).toFixed(2)}</span>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span>RM ${(item.price * item.quantity).toFixed(2)}</span>
+                <span class="remove-item-btn" onclick="removeItemFromCart(${item.id})">×</span>
+            </div>
           </div>`;
       });
       
