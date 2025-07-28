@@ -28,9 +28,9 @@
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes slideIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes promoGlow {
-      0% { box-shadow: 0 0 3px rgba(39, 174, 96, 0.4); }
-      50% { box-shadow: 0 0 15px rgba(39, 174, 96, 0.7); }
-      100% { box-shadow: 0 0 3px rgba(39, 174, 96, 0.4); }
+      0% { box-shadow: 0 0 5px rgba(39, 174, 96, 0.5); }
+      50% { box-shadow: 0 0 20px rgba(39, 174, 96, 0.8); }
+      100% { box-shadow: 0 0 5px rgba(39, 174, 96, 0.5); }
     }
 
     /* --- Base Styles --- */
@@ -144,6 +144,13 @@
     .price-section { margin: 15px 0; text-align: center; }
     .original-price { text-decoration: line-through; color: #999; font-size: 1rem; margin-right: 10px; }
     .new-price { color: var(--secondary-color); font-weight: bold; font-size: 1.5rem; }
+    .product-points {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--accent-color);
+        text-align: center;
+        margin-top: 10px;
+    }
     .product-actions { margin-top: auto; }
     .btn {
         display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -412,6 +419,7 @@
       productList.innerHTML = discountedProducts.map(product => {
         const isFeatured = product.grandOpeningSpecial;
         const hasDiscount = product.originalPrice !== undefined;
+        const points = Math.floor(product.price / 10) * 10;
         
         return `
           <div class="product ${isFeatured ? 'promo-highlight' : ''}" id="product-${product.id}">
@@ -426,6 +434,9 @@
                         <span class="original-price">RM ${product.originalPrice.toFixed(2)}</span>
                         <span class="new-price">RM ${product.price.toFixed(2)}</span>
                     ` : `<span class="new-price">RM ${product.price.toFixed(2)}</span>`}
+                </div>
+                <div class="product-points">
+                    <i class="fa-solid fa-star"></i> Earn ${points} Points
                 </div>
                 <div class="product-actions">
                     <button class="btn btn-primary" onclick="addToCart(${product.id})"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
