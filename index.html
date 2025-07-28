@@ -1017,6 +1017,106 @@
       cursor: not-allowed;
     }
     
+    /* Login System Styles */
+    .login-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .login-content {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+      animation: fadeIn 0.3s;
+    }
+    
+    .login-tabs {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #eee;
+    }
+    
+    .login-tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    .login-tab.active {
+      border-bottom: 3px solid var(--primary-color);
+      color: var(--primary-color);
+    }
+    
+    .login-form {
+      display: none;
+    }
+    
+    .login-form.active {
+      display: block;
+    }
+    
+    .login-form input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .login-form button {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    
+    .login-form button:hover {
+      background: #1a237e;
+    }
+    
+    /* Redeemed Vouchers */
+    .redeemed-vouchers {
+      margin-top: 30px;
+    }
+    
+    .voucher-item {
+      background: #f0f8f0;
+      padding: 15px;
+      border-left: 4px solid var(--accent-color);
+      margin-bottom: 15px;
+      border-radius: 4px;
+    }
+    
+    .voucher-code {
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+    
+    .voucher-status {
+      float: right;
+      background: var(--accent-color);
+      color: white;
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-size: 0.8em;
+    }
+    
     .login-form {
       max-width: 400px;
       margin: 0 auto;
@@ -1342,7 +1442,7 @@
           <p class="testimonial-author">- Raj K., 35, Penang</p>
         </div>
         
-        <a href="#" onclick="showTab('account'); showAccountTab('redeem');" class="cta-button">View Available Rewards</a>
+        <button onclick="showLoginModal()" class="cta-button">Login to View Rewards</button>
       </section>
     </div>
 
@@ -1353,6 +1453,15 @@
         <div class="account-status">
           <h3>Welcome back, <span id="account-name">Guest</span>!</h3>
           <p>Member since: <span id="member-since">2025</span> | Points: <span id="account-points">0</span></p>
+          <button onclick="showLoginModal()" style="
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+            cursor: pointer;
+          ">Login</button>
         </div>
         
         <div class="account-tabs">
@@ -1365,19 +1474,19 @@
         <div id="profile-tab" class="account-tab-content active">
           <form class="account-form">
             <label for="full-name">Full Name</label>
-            <input type="text" id="full-name" value="Mohd Arvind Isa">
+            <input type="text" id="full-name" placeholder="Your full name">
             
             <label for="email">Email</label>
-            <input type="email" id="email" value="arvind@example.com">
+            <input type="email" id="email" placeholder="Your email">
             
             <label for="phone">Phone Number</label>
-            <input type="tel" id="phone" value="+601111033154">
+            <input type="tel" id="phone" placeholder="Your phone number">
             
             <label for="birthday">Birthday</label>
-            <input type="date" id="birthday" value="1990-01-15">
+            <input type="date" id="birthday">
             
             <label for="address">Shipping Address</label>
-            <textarea id="address" rows="4">123 Jalan Merdeka, Kuala Lumpur, Malaysia</textarea>
+            <textarea id="address" rows="4" placeholder="Your shipping address"></textarea>
             
             <label for="password">Change Password</label>
             <input type="password" id="password" placeholder="Enter new password">
@@ -1385,7 +1494,7 @@
             <label for="confirm-password">Confirm Password</label>
             <input type="password" id="confirm-password" placeholder="Confirm new password">
             
-            <button type="button">Update Profile</button>
+            <button type="button" onclick="updateProfile()">Update Profile</button>
           </form>
         </div>
         
@@ -1403,28 +1512,7 @@
             </thead>
             <tbody>
               <tr>
-                <td>FL-10025</td>
-                <td>15/7/2025</td>
-                <td>Aloe Vera Gel, Bee Honey</td>
-                <td>RM 249.58</td>
-                <td>250</td>
-                <td>Delivered</td>
-              </tr>
-              <tr>
-                <td>FL-10018</td>
-                <td>5/7/2025</td>
-                <td>Royal Jelly, Fields of Greens</td>
-                <td>RM 225.31</td>
-                <td>225</td>
-                <td>Delivered</td>
-              </tr>
-              <tr>
-                <td>FL-10005</td>
-                <td>20/6/2025</td>
-                <td>Aloe Berry Nectar</td>
-                <td>RM 116.79</td>
-                <td>115</td>
-                <td>Delivered</td>
+                <td colspan="6" style="text-align: center;">Please login to view your order history</td>
               </tr>
             </tbody>
           </table>
@@ -1432,94 +1520,20 @@
         
         <div id="points-tab" class="account-tab-content">
           <div class="points-balance">
-            Your Points Balance: <span>1,250</span>
+            Your Points Balance: <span id="points-balance">0</span>
           </div>
           
           <h3>Points History</h3>
           <ul class="points-history">
-            <li>
-              <span>15/7/2025 - Purchase (Order FL-10025)</span>
-              <span class="points">+250 pts</span>
-            </li>
-            <li>
-              <span>5/7/2025 - Purchase (Order FL-10018)</span>
-              <span class="points">+225 pts</span>
-            </li>
-            <li>
-              <span>20/6/2025 - Purchase (Order FL-10005)</span>
-              <span class="points">+115 pts</span>
-            </li>
-            <li>
-              <span>10/6/2025 - Referral Bonus</span>
-              <span class="points">+500 pts</span>
-            </li>
-            <li>
-              <span>15/1/2025 - Birthday Bonus</span>
-              <span class="points">+100 pts</span>
-            </li>
-            <li>
-              <span>25/5/2025 - Product Review</span>
-              <span class="points">+50 pts</span>
-            </li>
+            <li style="text-align: center;">Please login to view your points history</li>
           </ul>
         </div>
         
         <div id="redeem-tab" class="account-tab-content">
           <h3>Available Rewards</h3>
-          
-          <div class="redeem-item">
-            <div>
-              <h4>RM 50 Voucher</h4>
-              <p>Redeemable on your next purchase</p>
-            </div>
-            <div>
-              <span style="font-weight: bold; color: var(--accent-color);">500 pts</span>
-              <button>Redeem</button>
-            </div>
-          </div>
-          
-          <div class="redeem-item">
-            <div>
-              <h4>Free Aloe Lips</h4>
-              <p>Forever Aloe Lips with your next order</p>
-            </div>
-            <div>
-              <span style="font-weight: bold; color: var(--accent-color);">250 pts</span>
-              <button>Redeem</button>
-            </div>
-          </div>
-          
-          <div class="redeem-item">
-            <div>
-              <h4>Free Delivery</h4>
-              <p>Free nationwide delivery on your next order</p>
-            </div>
-            <div>
-              <span style="font-weight: bold; color: var(--accent-color);">300 pts</span>
-              <button>Redeem</button>
-            </div>
-          </div>
-          
-          <div class="redeem-item">
-            <div>
-              <h4>CDS Program Discount</h4>
-              <p>20% off Cabaran Detox Sihat program</p>
-            </div>
-            <div>
-              <span style="font-weight: bold; color: var(--accent-color);">750 pts</span>
-              <button>Redeem</button>
-            </div>
-          </div>
-          
-          <div class="redeem-item">
-            <div>
-              <h4>Business Starter Kit</h4>
-              <p>Free Forever Business Owner starter kit</p>
-            </div>
-            <div>
-              <span style="font-weight: bold; color: var(--accent-color);">1,500 pts</span>
-              <button disabled>Not enough points</button>
-            </div>
+          <div style="text-align: center; margin: 20px 0;">
+            <p>Please login to view available rewards</p>
+            <button onclick="showLoginModal()" class="cta-button" style="width: auto; margin: 0 auto;">Login Now</button>
           </div>
         </div>
       </section>
@@ -1556,6 +1570,36 @@
       <p class="festival-message">Welcome to our online store! Enjoy special opening discounts on selected products.</p>
       <div class="festival-offer">5% OFF on Top Products!</div>
       <button class="add-to-cart" onclick="closeFestivalModal()" style="width: auto; margin: 0 auto;">Start Shopping</button>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div id="login-modal" class="login-modal">
+    <div class="login-content">
+      <span class="close" onclick="closeLoginModal()">&times;</span>
+      
+      <div class="login-tabs">
+        <div class="login-tab active" onclick="showLoginForm('login')">Login</div>
+        <div class="login-tab" onclick="showLoginForm('register')">Register</div>
+      </div>
+      
+      <div id="login-form" class="login-form active">
+        <h3>Member Login</h3>
+        <input type="email" id="login-email" placeholder="Your Email">
+        <input type="password" id="login-password" placeholder="Your Password">
+        <button onclick="login()">Login</button>
+        <p style="text-align: center; margin-top: 15px;"><a href="#" style="color: var(--primary-color);">Forgot password?</a></p>
+      </div>
+      
+      <div id="register-form" class="login-form">
+        <h3>Create Account</h3>
+        <input type="text" id="register-name" placeholder="Full Name">
+        <input type="email" id="register-email" placeholder="Email">
+        <input type="tel" id="register-phone" placeholder="Phone Number">
+        <input type="password" id="register-password" placeholder="Create Password">
+        <input type="password" id="register-confirm" placeholder="Confirm Password">
+        <button onclick="register()">Register</button>
+      </div>
     </div>
   </div>
 
@@ -1693,7 +1737,7 @@
       "allergies": { id: 6, name: "Bee Pollen", recommendation: "1 tablet daily to help with seasonal allergies" },
       "sinus": { id: 5, name: "Bee Propolis", recommendation: "1 tablet twice daily for sinus relief" },
       "infection": { id: 5, name: "Bee Propolis", recommendation: "1 tablet three times daily to fight infection" },
-      "runny nose": { id: 5, name: "Bee Propolis", recommendation: "1 tablet twice daily for respiratory support" },
+      "runny nose": { id: 5, name: "Bee Propolis", recommendation: "1 tablet twice daily to clear congestion" },
       "congestion": { id: 5, name: "Bee Propolis", recommendation: "1 tablet twice daily to clear congestion" },
       "sneezing": { id: 6, name: "Bee Pollen", recommendation: "1 tablet daily for allergy-related sneezing" },
       "itchy eyes": { id: 6, name: "Bee Pollen", recommendation: "1 tablet daily for allergy symptoms" },
@@ -1730,6 +1774,30 @@
     };
 
     let cart = [];
+    
+    // User management system
+    let currentUser = null;
+    const users = [
+      // Sample user - in a real app this would come from a database
+      { 
+        id: 1, 
+        name: "Mohd Arvind Isa", 
+        email: "arvind@example.com", 
+        phone: "+601111033154", 
+        password: "password123", 
+        points: 1250,
+        birthday: "1990-01-15",
+        orders: [
+          { id: "FL-10025", date: "15/7/2025", items: "Aloe Vera Gel, Bee Honey", total: 249.58, points: 250 },
+          { id: "FL-10018", date: "5/7/2025", items: "Royal Jelly, Fields of Greens", total: 225.31, points: 225 },
+          { id: "FL-10005", date: "20/6/2025", items: "Aloe Berry Nectar", total: 116.79, points: 115 }
+        ],
+        redeemed: [
+          { code: "FLV-2025-001", item: "RM50 Voucher", points: 500, date: "10/6/2025", status: "Used" },
+          { code: "FLV-2025-045", item: "Free Delivery", points: 300, date: "15/7/2025", status: "Active" }
+        ]
+      }
+    ];
 
     // Apply Grand Opening discount to selected products
     function applyGrandOpeningDiscount(products) {
@@ -2098,6 +2166,330 @@
       });
     }
 
+    // Login system functions
+    function showLoginModal() {
+      document.getElementById('login-modal').style.display = 'flex';
+    }
+
+    function closeLoginModal() {
+      document.getElementById('login-modal').style.display = 'none';
+    }
+
+    function showLoginForm(formType) {
+      document.querySelectorAll('.login-tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.login-form').forEach(form => form.classList.remove('active'));
+      
+      document.querySelector(`.login-tab[onclick="showLoginForm('${formType}')"]`).classList.add('active');
+      document.getElementById(`${formType}-form`).classList.add('active');
+    }
+
+    function login() {
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      
+      const user = users.find(u => u.email === email && u.password === password);
+      
+      if (user) {
+        currentUser = user;
+        closeLoginModal();
+        updateAccountDisplay();
+        showTab('account');
+        alert(`Welcome back, ${user.name}!`);
+      } else {
+        alert('Invalid email or password. Please try again.');
+      }
+    }
+
+    function register() {
+      const name = document.getElementById('register-name').value;
+      const email = document.getElementById('register-email').value;
+      const phone = document.getElementById('register-phone').value;
+      const password = document.getElementById('register-password').value;
+      const confirm = document.getElementById('register-confirm').value;
+      
+      if (password !== confirm) {
+        alert('Passwords do not match!');
+        return;
+      }
+      
+      if (users.some(u => u.email === email)) {
+        alert('This email is already registered!');
+        return;
+      }
+      
+      const newUser = {
+        id: users.length + 1,
+        name,
+        email,
+        phone,
+        password,
+        points: 0,
+        birthday: "",
+        orders: [],
+        redeemed: []
+      };
+      
+      users.push(newUser);
+      currentUser = newUser;
+      closeLoginModal();
+      updateAccountDisplay();
+      showTab('account');
+      alert(`Welcome to Forever Living, ${name}! Your account has been created.`);
+    }
+
+    function logout() {
+      currentUser = null;
+      updateAccountDisplay();
+      alert('You have been logged out.');
+    }
+
+    function updateProfile() {
+      if (!currentUser) {
+        alert('Please login to update your profile');
+        showLoginModal();
+        return;
+      }
+      
+      const name = document.getElementById('full-name').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const birthday = document.getElementById('birthday').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+      
+      if (password && password !== confirmPassword) {
+        alert('Passwords do not match!');
+        return;
+      }
+      
+      currentUser.name = name || currentUser.name;
+      currentUser.email = email || currentUser.email;
+      currentUser.phone = phone || currentUser.phone;
+      currentUser.birthday = birthday || currentUser.birthday;
+      
+      if (password) {
+        currentUser.password = password;
+      }
+      
+      updateAccountDisplay();
+      alert('Profile updated successfully!');
+    }
+
+    function updateAccountDisplay() {
+      if (currentUser) {
+        document.getElementById('account-name').textContent = currentUser.name;
+        document.getElementById('account-points').textContent = currentUser.points;
+        document.getElementById('points-balance').textContent = currentUser.points;
+        
+        // Update profile form
+        document.getElementById('full-name').value = currentUser.name;
+        document.getElementById('email').value = currentUser.email;
+        document.getElementById('phone').value = currentUser.phone;
+        document.getElementById('birthday').value = currentUser.birthday;
+        
+        // Update orders table
+        const ordersTable = document.querySelector('#orders-tab table tbody');
+        if (currentUser.orders.length > 0) {
+          ordersTable.innerHTML = currentUser.orders.map(order => `
+            <tr>
+              <td>${order.id}</td>
+              <td>${order.date}</td>
+              <td>${order.items}</td>
+              <td>RM ${order.total.toFixed(2)}</td>
+              <td>${order.points}</td>
+              <td>Completed</td>
+            </tr>
+          `).join('');
+        } else {
+          ordersTable.innerHTML = '<tr><td colspan="6" style="text-align: center;">No orders yet</td></tr>';
+        }
+        
+        // Update points history
+        const pointsHistory = document.querySelector('#points-tab .points-history');
+        pointsHistory.innerHTML = '';
+        
+        // Add birthday points if in birthday month
+        if (currentUser.birthday) {
+          const now = new Date();
+          const birthday = new Date(currentUser.birthday);
+          if (now.getMonth() === birthday.getMonth()) {
+            pointsHistory.innerHTML += `
+              <li>
+                <span>${birthday.getDate()}/${birthday.getMonth()+1}/${now.getFullYear()} - Birthday Bonus</span>
+                <span class="points">+500 pts</span>
+              </li>
+            `;
+          }
+        }
+        
+        // Add other points
+        currentUser.orders.forEach(order => {
+          pointsHistory.innerHTML += `
+            <li>
+              <span>${order.date} - Purchase (Order ${order.id})</span>
+              <span class="points">+${order.points} pts</span>
+            </li>
+          `;
+        });
+        
+        // Update redeem tab
+        const redeemTab = document.querySelector('#redeem-tab');
+        redeemTab.innerHTML = `
+          <h3>Available Rewards</h3>
+          
+          <div class="redeem-item">
+            <div>
+              <h4>RM 50 Voucher</h4>
+              <p>Redeemable on your next purchase</p>
+            </div>
+            <div>
+              <span style="font-weight: bold; color: var(--accent-color);">500 pts</span>
+              <button onclick="redeemReward('RM50 Voucher', 500)">Redeem</button>
+            </div>
+          </div>
+          
+          <div class="redeem-item">
+            <div>
+              <h4>Free Aloe Lips</h4>
+              <p>Forever Aloe Lips with your next order</p>
+            </div>
+            <div>
+              <span style="font-weight: bold; color: var(--accent-color);">250 pts</span>
+              <button onclick="redeemReward('Free Aloe Lips', 250)">Redeem</button>
+            </div>
+          </div>
+          
+          <div class="redeem-item">
+            <div>
+              <h4>Free Delivery</h4>
+              <p>Free nationwide delivery on your next order</p>
+            </div>
+            <div>
+              <span style="font-weight: bold; color: var(--accent-color);">300 pts</span>
+              <button onclick="redeemReward('Free Delivery', 300)">Redeem</button>
+            </div>
+          </div>
+          
+          <div class="redeem-item">
+            <div>
+              <h4>CDS Program Discount</h4>
+              <p>20% off Cabaran Detox Sihat program</p>
+            </div>
+            <div>
+              <span style="font-weight: bold; color: var(--accent-color);">750 pts</span>
+              <button onclick="redeemReward('CDS Program Discount', 750)">Redeem</button>
+            </div>
+          </div>
+          
+          <div class="redeem-item">
+            <div>
+              <h4>Business Starter Kit</h4>
+              <p>Free Forever Business Owner starter kit</p>
+            </div>
+            <div>
+              <span style="font-weight: bold; color: var(--accent-color);">1,500 pts</span>
+              <button ${currentUser.points < 1500 ? 'disabled' : ''} onclick="redeemReward('Business Starter Kit', 1500)">Redeem</button>
+            </div>
+          </div>
+          
+          <div class="redeemed-vouchers">
+            <h3>Your Redeemed Vouchers</h3>
+            ${currentUser.redeemed.length > 0 ? 
+              currentUser.redeemed.map(voucher => `
+                <div class="voucher-item">
+                  <div class="voucher-code">${voucher.code} - ${voucher.item}</div>
+                  <div class="voucher-status">${voucher.status}</div>
+                  <div>Redeemed: ${voucher.date} | ${voucher.points} points</div>
+                </div>
+              `).join('') : 
+              '<p>You have not redeemed any vouchers yet.</p>'}
+          </div>
+        `;
+        
+        // Update account status
+        document.querySelector('.account-status').innerHTML = `
+          <h3>Welcome back, ${currentUser.name}!</h3>
+          <p>Member since: ${currentUser.birthday ? new Date(currentUser.birthday).getFullYear() : '2025'} | Points: ${currentUser.points}</p>
+          <button onclick="logout()" style="
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+            cursor: pointer;
+          ">Logout</button>
+        `;
+      } else {
+        // Default view when not logged in
+        document.getElementById('account-name').textContent = 'Guest';
+        document.getElementById('account-points').textContent = '0';
+        document.getElementById('points-balance').textContent = '0';
+        
+        document.querySelector('#orders-tab table tbody').innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align: center;">Please login to view your order history</td>
+          </tr>
+        `;
+        
+        document.querySelector('#points-tab .points-history').innerHTML = `
+          <li style="text-align: center;">Please login to view your points history</li>
+        `;
+        
+        document.querySelector('#redeem-tab').innerHTML = `
+          <h3>Available Rewards</h3>
+          <div style="text-align: center; margin: 20px 0;">
+            <p>Please login to view available rewards</p>
+            <button onclick="showLoginModal()" class="cta-button" style="width: auto; margin: 0 auto;">Login Now</button>
+          </div>
+        `;
+        
+        document.querySelector('.account-status').innerHTML = `
+          <h3>Welcome back, Guest!</h3>
+          <p>Member since: 2025 | Points: 0</p>
+          <button onclick="showLoginModal()" style="
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+            cursor: pointer;
+          ">Login</button>
+        `;
+      }
+    }
+
+    function redeemReward(item, points) {
+      if (!currentUser) {
+        alert('Please login to redeem rewards');
+        showLoginModal();
+        return;
+      }
+      
+      if (currentUser.points < points) {
+        alert(`You don't have enough points to redeem this item. You need ${points - currentUser.points} more points.`);
+        return;
+      }
+      
+      if (confirm(`Are you sure you want to redeem ${item} for ${points} points?`)) {
+        // Generate a random voucher code
+        const code = `FLV-${new Date().getFullYear()}-${Math.floor(100 + Math.random() * 900)}`;
+        
+        currentUser.points -= points;
+        currentUser.redeemed.push({
+          code,
+          item,
+          points,
+          date: new Date().toLocaleDateString('en-GB'),
+          status: 'Active'
+        });
+        
+        updateAccountDisplay();
+        alert(`Success! Your voucher code is ${code}. You can use it during checkout.`);
+      }
+    }
+
     // Initialize the page
     document.addEventListener('DOMContentLoaded', function() {
       // Set current date in footer
@@ -2127,6 +2519,11 @@
         const festivalModal = document.getElementById('festival-modal');
         if (event.target === festivalModal) {
           closeFestivalModal();
+        }
+        
+        const loginModal = document.getElementById('login-modal');
+        if (event.target === loginModal) {
+          closeLoginModal();
         }
       }
     });
