@@ -28,9 +28,9 @@
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes slideIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes promoGlow {
-      0% { box-shadow: 0 0 5px rgba(39, 174, 96, 0.5); }
-      50% { box-shadow: 0 0 20px rgba(39, 174, 96, 0.8); }
-      100% { box-shadow: 0 0 5px rgba(39, 174, 96, 0.5); }
+      0% { box-shadow: 0 0 3px rgba(39, 174, 96, 0.4); }
+      50% { box-shadow: 0 0 15px rgba(39, 174, 96, 0.7); }
+      100% { box-shadow: 0 0 3px rgba(39, 174, 96, 0.4); }
     }
 
     /* --- Base Styles --- */
@@ -103,6 +103,25 @@
       margin-bottom: 30px;
     }
     .hero-section h2 { color: var(--light-text); }
+    .hero-section .promo-period {
+        background-color: rgba(255, 255, 255, 0.15);
+        padding: 10px 20px;
+        border-radius: 50px;
+        display: inline-block;
+        font-weight: 600;
+    }
+
+    /* --- Search & AI Suggestion --- */
+    .search-container { margin-bottom: 30px; position: relative; }
+    #product-search { width: 100%; padding: 15px 50px 15px 25px; border: 2px solid #ddd; border-radius: 50px; font-size: 1rem; outline: none; transition: all 0.3s; }
+    #product-search:focus { border-color: var(--primary-color); box-shadow: 0 0 10px rgba(26, 82, 118, 0.2); }
+    .search-icon { position: absolute; right: 25px; top: 50%; transform: translateY(-50%); color: var(--primary-color); font-size: 1.2rem; }
+    .ai-suggestion-box { background: var(--light-text); padding: 30px; border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 30px; text-align: center; }
+    #symptom-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin: 10px 0; }
+    #suggest-btn { background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: var(--light-text); border: none; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: all 0.3s; margin-top: 10px; }
+    #suggest-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+    #suggestion-result { margin-top: 20px; text-align: left; }
+    .suggestion-product { background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--accent-color); }
 
     /* --- Product List & Cards --- */
     .product-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
@@ -117,7 +136,7 @@
       overflow: hidden;
     }
     .product:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0,0,0,0.12); }
-    .product.promo-highlight { animation: promoGlow 2s infinite ease-in-out; }
+    .product.promo-highlight { animation: promoGlow 2.5s infinite ease-in-out; }
     .product-image-container { height: 220px; padding: 15px; display: flex; align-items: center; justify-content: center; }
     .product img { max-width: 100%; max-height: 100%; object-fit: contain; }
     .product-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; text-align: left; }
@@ -138,6 +157,21 @@
       color: white; padding: 5px 40px; transform: rotate(45deg);
       font-weight: bold; font-size: 0.9rem; box-shadow: 0 3px 10px rgba(0,0,0,0.2);
     }
+
+    /* --- CDS & Business Sections --- */
+    .program-section { background: var(--light-text); padding: 40px; border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 30px; }
+    .program-section h2 { font-size: 2.5rem; text-align: center; }
+    .program-highlights { display: flex; flex-wrap: wrap; justify-content: space-around; margin: 30px 0; gap: 20px; }
+    .highlight-card { flex: 1; min-width: 280px; background: var(--light-gray); border: 1px solid #e0e0e0; border-radius: var(--border-radius); padding: 20px; transition: transform 0.3s, box-shadow 0.3s; }
+    .highlight-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+    .highlight-card h3 { border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; }
+    .highlight-card ul { list-style: none; padding: 0; }
+    .highlight-card li { margin-bottom: 10px; display: flex; align-items: flex-start; }
+    .highlight-card .fa-solid { color: var(--accent-color); margin-right: 10px; margin-top: 5px; }
+    .testimonial { background: #f0f8f0; padding: 20px; border-left: 4px solid var(--accent-color); margin: 20px 0; font-style: italic; border-radius: 0 8px 8px 0; }
+    .testimonial-author { text-align: right; font-weight: bold; color: var(--primary-color); }
+    .cta-button { display: block; width: fit-content; margin: 30px auto; background: linear-gradient(135deg, var(--secondary-color), #e67e22); color: var(--light-text); text-align: center; padding: 15px 40px; border-radius: 50px; font-weight: bold; text-decoration: none; font-size: 1.2rem; transition: all 0.3s; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+    .cta-button:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.3); }
 
     /* --- Modal & Cart Styles --- */
     .modal {
@@ -179,7 +213,10 @@
 
   <header>
     <div class="container">
-        <h1>FOREVER LIVING by Mohd Arvind Isa</h1>
+        <h1>
+          FOREVER LIVING by Mohd Arvind Isa
+          <span style="font-size: 1rem; color: #555; display: block; font-weight: 400;">Quality Wellness Products</span>
+        </h1>
         <div class="cart-icon" onclick="toggleCart()">
           <i class="fa-solid fa-cart-shopping"></i>
           <span id="cart-count">0</span>
@@ -203,12 +240,86 @@
       <section class="hero-section">
         <h2><i class="fa-solid fa-gift"></i> GRAND OPENING SPECIAL</h2>
         <p>Enjoy 5% OFF on our top 10 bestselling products!</p>
+        <div class="promo-period">
+            Promotion Period: 21/7/2025 - 24/8/2025
+        </div>
       </section>
+
+      <div class="search-container">
+        <input type="text" id="product-search" placeholder="Search for products...">
+        <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+      </div>
+
+      <div class="ai-suggestion-box">
+        <h2><i class="fa-solid fa-robot"></i> AI Product Suggestion</h2>
+        <p>Tell our AI your symptoms, and we'll recommend the best products for you.</p>
+        <input type="text" id="symptom-input" placeholder="e.g., joint pain, low energy, digestion issues...">
+        <button id="suggest-btn" onclick="suggestProduct()">Get Suggestions</button>
+        <div id="suggestion-result"></div>
+      </div>
       
       <h2 style="text-align: center; font-size: 2.2rem; margin: 40px 0 30px;">Our Products</h2>
       <div id="product-list" class="product-list"></div>
     </div>
-    <!-- Other tab content divs would go here -->
+
+    <div id="cds" class="tab-content">
+      <section class="program-section">
+        <h2>Cabaran Detox Sihat (CDS)</h2>
+        <p style="text-align: center; font-size: 1.2rem;">Transform your health in just 7 days with our proven detox program</p>
+        <div class="program-highlights">
+          <div class="highlight-card">
+            <h3><i class="fa-solid fa-box-open"></i> What You Get</h3>
+            <ul>
+              <li><i class="fa-solid fa-check-circle"></i> Personalized Forever product package</li>
+              <li><i class="fa-solid fa-check-circle"></i> Detailed meal plan & recipes</li>
+              <li><i class="fa-solid fa-check-circle"></i> Daily coaching via WhatsApp</li>
+            </ul>
+          </div>
+          <div class="highlight-card">
+            <h3><i class="fa-solid fa-spa"></i> Benefits</h3>
+            <ul>
+              <li><i class="fa-solid fa-check-circle"></i> Boost energy levels</li>
+              <li><i class="fa-solid fa-check-circle"></i> Healthy weight management</li>
+              <li><i class="fa-solid fa-check-circle"></i> Improved mental clarity</li>
+            </ul>
+          </div>
+        </div>
+        <a href="https://wa.me/601111033154?text=I%20want%20to%20join%20CDS%20Program" class="cta-button">Join CDS Now <i class="fa-solid fa-arrow-right"></i></a>
+      </section>
+    </div>
+
+    <div id="business" class="tab-content">
+      <section class="program-section">
+        <h2>Build Your Forever Business</h2>
+        <p style="text-align: center; font-size: 1.2rem;">Start your journey to financial freedom with our proven system</p>
+        <div class="program-highlights">
+          <div class="highlight-card">
+            <h3><i class="fa-solid fa-briefcase"></i> Why Join Us?</h3>
+            <ul>
+              <li><i class="fa-solid fa-check-circle"></i> Earn 30-50% commission</li>
+              <li><i class="fa-solid fa-check-circle"></i> Work from anywhere</li>
+              <li><i class="fa-solid fa-check-circle"></i> Flexible hours</li>
+            </ul>
+          </div>
+          <div class="highlight-card">
+            <h3><i class="fa-solid fa-handshake-angle"></i> What We Provide</h3>
+            <ul>
+              <li><i class="fa-solid fa-check-circle"></i> Complete training program</li>
+              <li><i class="fa-solid fa-check-circle"></i> Marketing materials & mentorship</li>
+              <li><i class="fa-solid fa-check-circle"></i> Strong team support</li>
+            </ul>
+          </div>
+        </div>
+        <a href="https://wa.me/601111033154?text=I%20want%20to%20join%20Forever%20Business" class="cta-button">Start Your Business Today <i class="fa-solid fa-arrow-right"></i></a>
+      </section>
+    </div>
+
+    <div id="rewards" class="tab-content">
+        <section class="hero-section">
+            <h2><i class="fa-solid fa-star"></i> Exciting Rewards Coming Soon!</h2>
+            <p>Our new loyalty program will reward you for every purchase. Stay tuned!</p>
+        </section>
+    </div>
   </main>
 
   <!-- Cart Modal -->
@@ -278,6 +389,7 @@
       { id: 11, name: "Aloe Peaches", price: 116.79, image: "aloe-peaches.jpg", benefits: "Digestive health, vitamin C source...", consumption: "30-60ml daily..." },
       { id: 12, name: "Bee Pollen", price: 75.50, image: "bee-pollen.jpg", benefits: "Natural multivitamin, energy enhancement...", consumption: "1 tablet 3 times daily..." },
     ];
+    const productSuggestions = { "digestion": { id: 1, name: "Aloe Vera Gel", recommendation: "30-60ml daily on empty stomach for digestive support" }, "bloating": { id: 1, name: "Aloe Vera Gel", recommendation: "30-60ml daily to reduce bloating" }, "low energy": { id: 4, name: "Royal Jelly", recommendation: "1 tablet morning and afternoon" }, "joint pain": { id: 6, name: "Arctic Sea", recommendation: "2 softgels twice daily for joint support" }};
     let cart = [];
 
     // --- LOGIC (Updated) ---
@@ -447,6 +559,28 @@
       
       const encodedMessage = encodeURIComponent(message);
       window.open(`https://wa.me/601111033154?text=${encodedMessage}`, '_blank');
+    }
+
+    function suggestProduct() {
+      const input = document.getElementById("symptom-input").value.toLowerCase();
+      const resultDiv = document.getElementById("suggestion-result");
+      let matchedProducts = [];
+      for (const [symptom, productInfo] of Object.entries(productSuggestions)) {
+        if (input.includes(symptom)) {
+          const existing = matchedProducts.find(p => p.id === productInfo.id);
+          if (!existing) { matchedProducts.push(productInfo); }
+        }
+      }
+      if (matchedProducts.length === 0) {
+        resultDiv.innerHTML = `<p>We recommend consulting with our health advisor for personalized recommendations. <a href="https://wa.me/601111033154" style="color:var(--primary-color);font-weight:bold;">Chat with us on WhatsApp</a></p>`;
+      } else {
+        resultDiv.innerHTML = `<h3 style="color:var(--primary-color);">Recommended Products:</h3>` + 
+          matchedProducts.map(p => `
+            <div class="suggestion-product">
+              <div><strong>${p.name}</strong><br><small>${p.recommendation}</small></div>
+              <button class="btn btn-primary" style="padding: 5px 15px;" onclick="addToCart(${p.id})">Add</button>
+            </div>`).join("");
+      }
     }
 
     function closeFestivalModal() {
