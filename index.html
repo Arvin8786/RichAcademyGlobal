@@ -189,8 +189,10 @@
     .reward-item .btn:disabled { background-color: #ccc; cursor: not-allowed; }
 
     /* --- Sales History Table --- */
-    .history-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    .history-table th, .history-table td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+    .history-table-container { overflow-x: auto; }
+    .history-table { width: 100%; border-collapse: collapse; margin-top: 20px; min-width: 800px; }
+    .history-table th, .history-table td { padding: 12px; border: 1px solid #ddd; text-align: left; white-space: nowrap; }
+    .history-table td.items-cell { white-space: normal; }
     .history-table th { background-color: var(--primary-color); color: white; }
 
     /* --- Floating Cart Button --- */
@@ -370,20 +372,23 @@
         <section class="program-section">
             <h2><i class="fa-solid fa-clipboard-list"></i> Verified Sales History</h2>
             <p style="text-align: center;">This is a log of all manually verified purchases.</p>
-            <table class="history-table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Customer Name</th>
-                        <th>Customer Phone</th>
-                        <th>Total (RM)</th>
-                        <th>Verification Code</th>
-                    </tr>
-                </thead>
-                <tbody id="sales-history-body">
-                    <!-- Sales will be dynamically inserted here -->
-                </tbody>
-            </table>
+            <div class="history-table-container">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Order Number</th>
+                            <th>Name</th>
+                            <th>Phone Number</th>
+                            <th>Items (Qty)</th>
+                            <th>Total Amount (RM)</th>
+                            <th>Total Points Issued</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sales-history-body">
+                        <!-- Sales will be dynamically inserted here -->
+                    </tbody>
+                </table>
+            </div>
         </section>
     </div>
   </main>
@@ -665,7 +670,6 @@
       }
       
       if (modal.style.display === 'flex') {
-          // Reset to cart view every time it's opened unless there's a pending order
           if (!pendingOrder) {
               document.getElementById('cart-view').style.display = 'block';
               document.getElementById('verification-view').style.display = 'none';
@@ -780,7 +784,7 @@
           customerName: name,
           customerPhone: phone,
           cart: [...cart],
-          total: total.toFixed(2)
+          totalAmount: total.toFixed(2)
       };
 
       let message = `Hi, I would like to place an order:\n\nName: ${name}\nPhone: ${phone}\n\n--- ORDER DETAILS ---\n`;
@@ -805,50 +809,42 @@
 
         let codes = getPreVerifiedCodes();
         if (codes.includes(codeInput)) {
-            // Code is valid, record the sale
             let history = getSalesHistory();
+            
+            const orderNumber = `FL-${Date.now().toString().slice(-6)}`;
+            const subtotal = pendingOrder.cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const totalPoints = Math.floor(subtotal);
+            const itemsString = pendingOrder.cart.map(item => `${item.name} (x${item.quantity})`).join(', ');
+
             const newRecord = {
-                date: new Date().toLocaleDateString('en-GB'),
+                orderNumber: orderNumber,
                 customerName: pendingOrder.customerName,
                 customerPhone: pendingOrder.customerPhone,
-                total: pendingOrder.total,
-                code: codeInput
+                items: itemsString,
+                totalAmount: pendingOrder.totalAmount,
+                totalPoints: totalPoints
             };
             history.push(newRecord);
             saveSalesHistory(history);
 
-            // Remove the used code
             const updatedCodes = codes.filter(c => c !== codeInput);
             savePreVerifiedCodes(updatedCodes);
 
             statusEl.textContent = 'Purchase verified successfully! Thank you.';
             statusEl.style.color = 'green';
 
-            // Clear everything
             cart = [];
             pendingOrder = null;
             updateCartCount();
             
             setTimeout(() => {
-                toggleCart(true); // Close modal after a delay
+                toggleCart(true);
             }, 2000);
 
         } else {
-            // Code is invalid
             statusEl.textContent = 'Invalid or already used verification code. Please check and try again.';
             statusEl.style.color = 'red';
         }
-    }
-
-    function maskData(type, data) {
-        if (!data) return 'N/A';
-        if (type === 'name') {
-            return data.split(' ').map(part => part.length > 2 ? `${part[0]}...${part.slice(-1)}` : part).join(' ');
-        }
-        if (type === 'phone') {
-            return data.length > 7 ? `${data.substring(0, 3)}...${data.slice(-4)}` : data;
-        }
-        return data;
     }
 
     function renderSalesHistory() {
@@ -857,17 +853,18 @@
         if (!historyBody) return;
 
         if (history.length === 0) {
-            historyBody.innerHTML = '<tr><td colspan="5">No verified sales have been recorded yet.</td></tr>';
+            historyBody.innerHTML = '<tr><td colspan="6">No verified sales have been recorded yet.</td></tr>';
             return;
         }
 
         historyBody.innerHTML = history.map(record => `
             <tr>
-                <td>${record.date}</td>
-                <td>${maskData('name', record.customerName)}</td>
-                <td>${maskData('phone', record.customerPhone)}</td>
-                <td>${record.total}</td>
-                <td>${record.code}</td>
+                <td>${record.orderNumber}</td>
+                <td>${record.customerName}</td>
+                <td>${record.customerPhone}</td>
+                <td class="items-cell">${record.items}</td>
+                <td>${record.totalAmount}</td>
+                <td>${record.totalPoints}</td>
             </tr>
         `).join('');
     }
