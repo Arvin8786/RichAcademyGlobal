@@ -28,13 +28,13 @@
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes slideIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes promoGlow {
-      0% { box-shadow: 0 0 5px rgba(39, 174, 96, 0.5); }
-      50% { box-shadow: 0 0 20px rgba(39, 174, 96, 0.8); }
-      100% { box-shadow: 0 0 5px rgba(39, 174, 96, 0.5); }
+      0% { box-shadow: 0 0 5px rgba(243, 156, 18, 0.6); }
+      50% { box-shadow: 0 0 20px rgba(243, 156, 18, 0.9); }
+      100% { box-shadow: 0 0 5px rgba(243, 156, 18, 0.6); }
     }
     @keyframes confetti-fall {
-        0% { transform: translateY(-100vh) rotate(0deg); }
-        100% { transform: translateY(100vh) rotate(720deg); }
+        0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
     }
 
     /* --- Base Styles --- */
@@ -61,21 +61,22 @@
     .confetti {
         position: fixed;
         width: 10px;
-        height: 10px;
-        background-color: var(--secondary-color);
-        opacity: 0.7;
+        height: 15px;
+        opacity: 0.8;
         animation: confetti-fall 5s linear infinite;
         z-index: 9999;
         pointer-events: none;
     }
     #countdown-timer {
         background-color: rgba(0,0,0,0.2);
-        padding: 10px 20px;
+        padding: 15px 30px; /* Increased padding */
         border-radius: 50px;
         margin-top: 20px;
         display: inline-block;
-        font-size: 1.2rem;
-        font-weight: 600;
+        font-size: 1.8rem; /* Made bigger */
+        font-weight: 700;
+        color: #fff;
+        border: 2px solid #fff;
     }
 
     /* --- Header & Navigation --- */
@@ -133,6 +134,18 @@
         font-weight: 600;
     }
 
+    /* --- Search & AI Suggestion --- */
+    .search-container { margin-bottom: 30px; position: relative; }
+    #product-search { width: 100%; padding: 15px 50px 15px 25px; border: 2px solid #ddd; border-radius: 50px; font-size: 1rem; outline: none; transition: all 0.3s; }
+    #product-search:focus { border-color: var(--primary-color); box-shadow: 0 0 10px rgba(26, 82, 118, 0.2); }
+    .search-icon { position: absolute; right: 25px; top: 50%; transform: translateY(-50%); color: var(--primary-color); font-size: 1.2rem; }
+    .ai-suggestion-box { background: var(--light-text); padding: 30px; border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 30px; text-align: center; }
+    #symptom-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin: 10px 0; }
+    #suggest-btn { background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: var(--light-text); border: none; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: all 0.3s; margin-top: 10px; }
+    #suggest-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+    #suggestion-result { margin-top: 20px; text-align: left; }
+    .suggestion-product { background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--accent-color); }
+
     /* --- Product List & Cards --- */
     .product-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
     .product {
@@ -172,6 +185,21 @@
       color: white; padding: 5px 40px; transform: rotate(45deg);
       font-weight: bold; font-size: 0.9rem; box-shadow: 0 3px 10px rgba(0,0,0,0.2);
     }
+
+    /* --- CDS & Business Sections --- */
+    .program-section { background: var(--light-text); padding: 40px; border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 30px; }
+    .program-section h2 { font-size: 2.5rem; text-align: center; }
+    .program-highlights { display: flex; flex-wrap: wrap; justify-content: space-around; margin: 30px 0; gap: 20px; }
+    .highlight-card { flex: 1; min-width: 280px; background: var(--light-gray); border: 1px solid #e0e0e0; border-radius: var(--border-radius); padding: 20px; transition: transform 0.3s, box-shadow 0.3s; }
+    .highlight-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+    .highlight-card h3 { border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; }
+    .highlight-card ul { list-style: none; padding: 0; }
+    .highlight-card li { margin-bottom: 10px; display: flex; align-items: flex-start; }
+    .highlight-card .fa-solid { color: var(--accent-color); margin-right: 10px; margin-top: 5px; }
+    .testimonial { background: #f0f8f0; padding: 20px; border-left: 4px solid var(--accent-color); margin: 20px 0; font-style: italic; border-radius: 0 8px 8px 0; }
+    .testimonial-author { text-align: right; font-weight: bold; color: var(--primary-color); }
+    .cta-button { display: block; width: fit-content; margin: 30px auto; background: linear-gradient(135deg, var(--secondary-color), #e67e22); color: var(--light-text); text-align: center; padding: 15px 40px; border-radius: 50px; font-weight: bold; text-decoration: none; font-size: 1.2rem; transition: all 0.3s; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+    .cta-button:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.3); }
 
     /* --- Rewards Section --- */
     .rewards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
@@ -522,6 +550,11 @@
         { id: 51, name: "ALOE BIO-CELLULOSE MASK", price: 146.00, promoPrice: 107.31, image: "bio-cellulose-mask.jpg", benefits: "Deeply hydrates and conditions skin.", consumption: "Use once a week." },
         { id: 52, name: "REPLENISHING SKIN OIL", price: 132.00, promoPrice: 97.02, image: "skin-oil.jpg", benefits: "Nourishes with a blend of oils.", consumption: "Apply a few drops to face." },
         { id: 53, name: "PROTECTING DAY LOTION", price: 167.99, promoPrice: 123.47, image: "day-lotion.jpg", benefits: "Moisturizes and protects with SPF.", consumption: "Apply in the morning." },
+        { id: 54, name: "C9 LITE VANILLA with FIBER", price: 749.02, promoPrice: 550.53, image: "c9-vanilla.jpg", benefits: "9-day nutritional reset program.", consumption: "Follow included guide." },
+        { id: 55, name: "C9 LITE CHOCO with FIBER", price: 749.02, promoPrice: 550.53, image: "c9-choco.jpg", benefits: "9-day nutritional reset program.", consumption: "Follow included guide." },
+        { id: 56, name: "DAILY NUTRITION PACK", price: 542.07, promoPrice: 398.42, image: "daily-nutrition-pack.jpg", benefits: "Daily supplement pack.", consumption: "Take one pack daily." },
+        { id: 57, name: "SYJP PACK #1", price: 1613.36, promoPrice: null, image: "syjp-pack1.jpg", benefits: "Business starter pack.", consumption: "N/A" },
+        { id: 58, name: "SYJP PACK #2", price: 1613.98, promoPrice: null, image: "syjp-pack2.jpg", benefits: "Business starter pack.", consumption: "N/A" }
     ];
     let cart = [];
     const promoEndDate = new Date("August 2, 2025 23:59:59").getTime();
