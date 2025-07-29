@@ -160,6 +160,7 @@
     .reward-item h4 { margin: 10px 0 5px; }
     .reward-item .points-cost { font-weight: bold; color: var(--accent-color); margin-bottom: 15px; }
     .reward-item .btn { margin-top: auto; }
+    .reward-item .btn:disabled { background-color: #ccc; cursor: not-allowed; }
 
     /* --- Login & User Dashboard --- */
     #login-page, #user-dashboard { display: none; }
@@ -248,6 +249,16 @@
         background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
         padding: 15px; border-radius: 8px; font-weight: bold;
         font-size: 1.3rem; margin-bottom: 20px; color: white;
+    }
+
+    /* --- Footer & Disclaimer --- */
+    footer { background: var(--primary-color); color: var(--light-text); padding: 40px 20px; text-align: center; margin-top: 30px; }
+    .disclaimer {
+        margin-top: 10px;
+        background-color: #fff3cd;
+        color: #856404;
+        padding: 15px;
+        border-top: 1px solid #ffeeba;
     }
   </style>
 </head>
@@ -365,19 +376,19 @@
                     <img src="https://i.imgur.com/O9yP2aH.png" alt="RM 5 Voucher">
                     <h4>RM 5 Voucher</h4>
                     <p class="points-cost">500 Points</p>
-                    <button class="btn btn-primary">Redeem</button>
+                    <button class="btn btn-primary redeem-btn">Redeem</button>
                 </div>
                 <div class="reward-item">
                     <img src="https://i.imgur.com/sY2a2qG.png" alt="RM 10 Voucher">
                     <h4>RM 10 Voucher</h4>
                     <p class="points-cost">1000 Points</p>
-                    <button class="btn btn-primary">Redeem</button>
+                    <button class="btn btn-primary redeem-btn">Redeem</button>
                 </div>
                 <div class="reward-item">
                     <img src="https://i.imgur.com/Jz4Y8fW.png" alt="RM 20 Voucher">
                     <h4>RM 20 Voucher</h4>
                     <p class="points-cost">2000 Points</p>
-                    <button class="btn btn-primary">Redeem</button>
+                    <button class="btn btn-primary redeem-btn">Redeem</button>
                 </div>
             </div>
 
@@ -387,19 +398,19 @@
                     <img src="aloe-vera-gel.jpg" alt="Aloe Vera Gel">
                     <h4>Aloe Vera Gel</h4>
                     <p class="points-cost">10000 Points</p>
-                    <button class="btn btn-primary">Redeem</button>
+                    <button class="btn btn-primary redeem-btn">Redeem</button>
                 </div>
                 <div class="reward-item">
                     <img src="aloe-berry-nectar.jpg" alt="Aloe Berry Nectar">
                     <h4>Aloe Berry Nectar</h4>
                     <p class="points-cost">10000 Points</p>
-                    <button class="btn btn-primary">Redeem</button>
+                    <button class="btn btn-primary redeem-btn">Redeem</button>
                 </div>
                 <div class="reward-item">
                     <img src="aloe-peaches.jpg" alt="Aloe Peaches">
                     <h4>Aloe Peaches</h4>
                     <p class="points-cost">10000 Points</p>
-                    <button class="btn btn-primary">Redeem</button>
+                    <button class="btn btn-primary redeem-btn">Redeem</button>
                 </div>
             </div>
         </section>
@@ -407,12 +418,20 @@
   </main>
 
   <div id="login-page" class="container">
-    <div class="form-container">
+    <div id="login-form-container" class="form-container">
         <h2>Login to Your Account</h2>
-        <input type="email" placeholder="Email Address">
-        <input type="password" placeholder="Password">
+        <input type="email" id="login-email" placeholder="Email Address">
+        <input type="password" id="login-password" placeholder="Password">
         <button class="btn btn-primary" onclick="login()">Login</button>
-        <p style="margin-top: 20px; font-size: 0.9rem;">Don't have an account? <a href="#" style="color: var(--primary-color);">Register here</a></p>
+        <p style="margin-top: 20px; font-size: 0.9rem;">Don't have an account? <a href="#" onclick="toggleAuthForms()">Register here</a></p>
+    </div>
+    <div id="register-form-container" class="form-container" style="display: none;">
+        <h2>Create a New Account</h2>
+        <input type="text" id="register-name" placeholder="Full Name">
+        <input type="email" id="register-email" placeholder="Email Address">
+        <input type="password" id="register-password" placeholder="Password">
+        <button class="btn btn-primary" onclick="registerUser()">Register</button>
+        <p style="margin-top: 20px; font-size: 0.9rem;">Already have an account? <a href="#" onclick="toggleAuthForms()">Login here</a></p>
     </div>
   </div>
 
@@ -427,22 +446,27 @@
 
     <div id="profile" class="user-tab-content active">
         <h3>Personal Details</h3>
-        <p><strong>Name:</strong> John Doe</p>
-        <p><strong>Email:</strong> john.doe@example.com</p>
-        <p><strong>Phone:</strong> +60 12-345 6789</p>
-        <p><strong>Total Points:</strong> 1250</p>
+        <p><strong>Name:</strong> <span id="dash-name"></span></p>
+        <p><strong>Email:</strong> <span id="dash-email"></span></p>
+        <p><strong>Total Points:</strong> <span id="dash-points"></span></p>
     </div>
     <div id="points-history" class="user-tab-content">
         <h3>Points History</h3>
-        <p>No points history yet.</p>
+        <table class="history-table">
+            <thead><tr><th>Date</th><th>Description</th><th>Points</th></tr></thead>
+            <tbody id="dash-points-history"></tbody>
+        </table>
     </div>
     <div id="redemption-history" class="user-tab-content">
         <h3>Redemption History</h3>
-        <p>No redemptions yet.</p>
+        <table class="history-table">
+            <thead><tr><th>Date</th><th>Item Redeemed</th><th>Points Used</th></tr></thead>
+            <tbody id="dash-redemption-history"></tbody>
+        </table>
     </div>
     <div id="my-vouchers" class="user-tab-content">
         <h3>My Vouchers</h3>
-        <p>You have no active vouchers.</p>
+        <div id="dash-vouchers"></div>
     </div>
   </div>
 
@@ -490,9 +514,9 @@
     <div class="container">
       <p>© 2025 Forever Living by Mohd Arvind Isa. Powered by Rich Academy Global. All rights reserved.</p>
       <div class="timestamp">Last updated: <span id="current-date"></span></div>
-      <div class="disclaimer">
+      <section class="disclaimer">
         <strong>Disclaimer:</strong> This website is operated by an independent Registered Forever Business Owner (FBO) under Rich Academy Global and is not the official site of Forever Living Products. Product names, trademarks, and registered trademarks are property of Forever Living Products International, Inc.
-      </div>
+      </section>
     </div>
   </footer>
 
@@ -711,6 +735,30 @@
       const total = subtotal + shipping.fee;
       const points = Math.floor(subtotal);
       
+      // Save purchase history for logged-in user
+      const loggedInUserEmail = sessionStorage.getItem('loggedInUser');
+      if (loggedInUserEmail) {
+          let users = JSON.parse(localStorage.getItem('users')) || [];
+          const userIndex = users.findIndex(u => u.email === loggedInUserEmail);
+          if (userIndex !== -1) {
+              const newPurchase = {
+                  id: `#${Date.now().toString().slice(-4)}`,
+                  date: new Date().toLocaleDateString('en-GB'),
+                  total: total.toFixed(2),
+                  status: 'Processing'
+              };
+              const newPoints = {
+                  date: new Date().toLocaleDateString('en-GB'),
+                  description: `Order ${newPurchase.id}`,
+                  points: `+${points}`
+              };
+              users[userIndex].purchaseHistory.push(newPurchase);
+              users[userIndex].pointsHistory.push(newPoints);
+              users[userIndex].totalPoints += points;
+              localStorage.setItem('users', JSON.stringify(users));
+          }
+      }
+
       let message = `Hi, I would like to place an order:\n\n`;
       message += `Name: ${name}\nPhone: ${phone}\n\n`;
       message += `--- ORDER DETAILS ---\n`;
@@ -726,6 +774,11 @@
       
       const encodedMessage = encodeURIComponent(message);
       window.open(`https://wa.me/601111033154?text=${encodedMessage}`, '_blank');
+      
+      // Clear cart after checkout
+      cart = [];
+      updateCartCount();
+      toggleCart();
     }
 
     function closeFestivalModal() {
@@ -756,26 +809,97 @@
         showTab(tabId);
     }
 
+    function toggleAuthForms() {
+        const loginForm = document.getElementById('login-form-container');
+        const registerForm = document.getElementById('register-form-container');
+        if (loginForm.style.display === 'none') {
+            loginForm.style.display = 'block';
+            registerForm.style.display = 'none';
+        } else {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+        }
+    }
+
+    function registerUser() {
+        const name = document.getElementById('register-name').value.trim();
+        const email = document.getElementById('register-email').value.trim();
+        const password = document.getElementById('register-password').value.trim();
+
+        if (!name || !email || !password) {
+            alert('Please fill in all fields.');
+            return;
+        }
+
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        if (users.find(user => user.email === email)) {
+            alert('An account with this email already exists.');
+            return;
+        }
+
+        const newUser = {
+            name, email, password,
+            totalPoints: 0,
+            purchaseHistory: [],
+            pointsHistory: [],
+            redemptionHistory: [],
+            myVouchers: []
+        };
+        users.push(newUser);
+        localStorage.setItem('users', JSON.stringify(users));
+        alert('Registration successful! Please login.');
+        toggleAuthForms();
+    }
+
     function login() {
-        // This is a simulation. In a real app, you'd verify credentials.
-        document.getElementById('login-page').style.display = 'none';
-        document.getElementById('user-dashboard').style.display = 'block';
-        document.getElementById('login-nav-btn').style.display = 'none';
-        document.getElementById('logout-nav-btn').style.display = 'block';
+        const email = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value.trim();
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        const user = users.find(u => u.email === email && u.password === password);
+
+        if (user) {
+            sessionStorage.setItem('loggedInUser', user.email);
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('user-dashboard').style.display = 'block';
+            document.getElementById('login-nav-btn').style.display = 'none';
+            document.getElementById('logout-nav-btn').style.display = 'block';
+            renderDashboard(user);
+        } else {
+            alert('Invalid email or password.');
+        }
     }
 
     function logout() {
+        sessionStorage.removeItem('loggedInUser');
         showMainStore();
         document.getElementById('login-nav-btn').style.display = 'block';
         document.getElementById('logout-nav-btn').style.display = 'none';
+        updateRedeemButtonsState();
     }
 
-    function showUserTab(tabId, element) {
-        document.querySelectorAll('.user-tab-content').forEach(el => el.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
+    function renderDashboard(user) {
+        document.getElementById('dash-name').textContent = user.name;
+        document.getElementById('dash-email').textContent = user.email;
+        document.getElementById('dash-points').textContent = user.totalPoints;
         
-        document.querySelectorAll('.dashboard-nav a').forEach(el => el.classList.remove('active'));
-        element.classList.add('active');
+        const pointsHistoryBody = document.getElementById('dash-points-history');
+        pointsHistoryBody.innerHTML = user.pointsHistory.length ? user.pointsHistory.map(p => `<tr><td>${p.date}</td><td>${p.description}</td><td style="color: green;">${p.points}</td></tr>`).join('') : '<tr><td colspan="3">No points history.</td></tr>';
+        
+        // Add rendering for other dashboard tabs here if needed
+        document.getElementById('dash-redemption-history').innerHTML = '<tr><td colspan="3">No redemption history.</td></tr>';
+        document.getElementById('dash-vouchers').innerHTML = '<p>You have no active vouchers.</p>';
+    }
+
+    function updateRedeemButtonsState() {
+        const isLoggedIn = !!sessionStorage.getItem('loggedInUser');
+        document.querySelectorAll('.redeem-btn').forEach(btn => {
+            btn.disabled = !isLoggedIn;
+            if (!isLoggedIn) {
+                btn.title = "You must be logged in to redeem.";
+            } else {
+                btn.title = "";
+            }
+        });
     }
 
     // Initialize the page
@@ -786,6 +910,7 @@
       });
       renderProducts();
       showTab('products');
+      updateRedeemButtonsState(); // Initial check
       if (localStorage.getItem('festivalPopupClosed') === 'true') {
         document.getElementById('festival-modal').style.display = 'none';
       }
