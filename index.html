@@ -32,6 +32,10 @@
       50% { box-shadow: 0 0 20px rgba(39, 174, 96, 0.8); }
       100% { box-shadow: 0 0 5px rgba(39, 174, 96, 0.5); }
     }
+    @keyframes confetti-fall {
+        0% { transform: translateY(-100vh) rotate(0deg); }
+        100% { transform: translateY(100vh) rotate(720deg); }
+    }
 
     /* --- Base Styles --- */
     *, *::before, *::after { box-sizing: border-box; }
@@ -46,6 +50,33 @@
     }
     .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
     h1, h2, h3, h4 { color: var(--primary-color); font-weight: 600; }
+
+    /* --- Grand Opening Theme --- */
+    body.grand-opening-active {
+        background: linear-gradient(45deg, #fff1e7, #e6f7ff);
+    }
+    .grand-opening-active .hero-section {
+        border: 4px dashed var(--secondary-color);
+    }
+    .confetti {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        background-color: var(--secondary-color);
+        opacity: 0.7;
+        animation: confetti-fall 5s linear infinite;
+        z-index: 9999;
+        pointer-events: none;
+    }
+    #countdown-timer {
+        background-color: rgba(0,0,0,0.2);
+        padding: 10px 20px;
+        border-radius: 50px;
+        margin-top: 20px;
+        display: inline-block;
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
 
     /* --- Header & Navigation --- */
     header {
@@ -280,8 +311,11 @@
       <section class="hero-section">
         <h2><i class="fa-solid fa-gift"></i> GRAND OPENING SPECIAL</h2>
         <p>Enjoy special promotional prices on all our products!</p>
-        <div class="promo-period">
-            Promotion Period: 31/07/2025 to 02/08/2025
+        <div id="promo-details">
+            <div class="promo-period">
+                Promotion Ends: 2 August 2025
+            </div>
+            <div id="countdown-timer"></div>
         </div>
       </section>
       <div id="product-list" class="product-list"></div>
@@ -435,88 +469,97 @@
   <script>
     // --- DATA (Updated with all 58 products and promo prices) ---
     const products = [
-        { id: 1, name: "ALOE VERA GEL", price: 116.79, promoPrice: 85.84, image: "aloe-vera-gel.jpg" },
-        { id: 2, name: "ALOE BERRY NECTAR", price: 116.79, promoPrice: 85.84, image: "aloe-berry-nectar.jpg" },
-        { id: 3, name: "ALOE BITS N' PEACHES", price: 116.79, promoPrice: 85.84, image: "aloe-peaches.jpg" },
-        { id: 4, name: "LITE VANILLA", price: 155.72, promoPrice: 114.45, image: "lite-vanilla.jpg" },
-        { id: 5, name: "LITE CHOCO", price: 155.72, promoPrice: 114.45, image: "lite-choco.jpg" },
-        { id: 6, name: "SUPERGREENS", price: 214.71, promoPrice: 157.82, image: "supergreens.jpg" },
-        { id: 7, name: "FIBER", price: 124.44, promoPrice: 91.47, image: "fiber.jpg" },
-        { id: 8, name: "TONGKAT ALI", price: 19.90, promoPrice: 18.80, image: "tongkat-ali.jpg" },
-        { id: 9, name: "WHITE COFFEE", price: 15.99, promoPrice: 15.11, image: "white-coffee.jpg" },
-        { id: 10, name: "CHOCOLATE MALT DRINK", price: 27.90, promoPrice: 24.94, image: "choco-malt.jpg" },
-        { id: 11, name: "TEH TARIK HALIA", price: 25.90, promoPrice: 23.15, image: "teh-tarik.jpg" },
-        { id: 12, name: "BEE HONEY", price: 132.57, promoPrice: 97.44, image: "bee-honey.jpg" },
-        { id: 13, name: "BEE POLLEN", price: 75.50, promoPrice: 55.49, image: "bee-pollen.jpg" },
-        { id: 14, name: "BEE PROPOLIS", price: 139.21, promoPrice: 102.32, image: "bee-propolis.jpg" },
-        { id: 15, name: "ROYAL GELLY", price: 139.21, promoPrice: 102.32, image: "royal-jelly.jpg" },
-        { id: 16, name: "OMEGA 3 PLUS", price: 130.10, promoPrice: 95.62, image: "arctic-sea.jpg" },
-        { id: 17, name: "ABSORBENT-C", price: 75.50, promoPrice: 55.49, image: "absorbent-c.jpg" },
-        { id: 18, name: "FIELDS OF GREENS", price: 86.10, promoPrice: 63.28, image: "fields-of-greens.jpg" },
-        { id: 19, name: "CALCIUM PLUS TABLET", price: 132.15, promoPrice: 97.14, image: "calcium-plus.jpg" },
-        { id: 20, name: "ALOE LIPS", price: 20.33, promoPrice: 14.94, image: "aloe-lips.jpg" },
-        { id: 21, name: "BRIGHT TOOTHGEL", price: 41.29, promoPrice: 30.35, image: "bright-toothgel.jpg" },
-        { id: 22, name: "ALOE FIRST", price: 90.83, promoPrice: 66.76, image: "aloe-first.jpg" },
-        { id: 23, name: "DEODORANT STICK", price: 50.73, promoPrice: 37.29, image: "forever-deodorant.jpg" },
-        { id: 24, name: "AVOCADO SOAP", price: 30.68, promoPrice: 22.55, image: "avocado-soap.jpg" },
-        { id: 25, name: "ALOE LIQUID SOAP", price: 120.91, promoPrice: 88.87, image: "aloe-liquid-soap.jpg" },
-        { id: 26, name: "JOJOBA SHAMPOO", price: 105.93, promoPrice: 77.86, image: "aloe-jojoba-shampoo.jpg" },
-        { id: 27, name: "JOJOBA CONDITIONER", price: 117.70, promoPrice: 86.51, image: "aloe-jojoba-conditioner.jpg" },
-        { id: 28, name: "ALOE BODY WASH", price: 120.91, promoPrice: 88.87, image: "aloe-body-wash.jpg" },
-        { id: 29, name: "ALOE BODY LOTION", price: 112.35, promoPrice: 82.58, image: "aloe-body-lotion.jpg" },
-        { id: 30, name: "ALOE PROPOLIS CREME", price: 90.83, promoPrice: 66.76, image: "aloe-propolis-creme.jpg" },
-        { id: 31, name: "ALOE VERA GELLY", price: 70.78, promoPrice: 52.03, image: "aloe-vera-gelly.jpg" },
-        { id: 32, name: "ALOE MOISTURIZING", price: 70.78, promoPrice: 52.03, image: "aloe-moisturizing.jpg" },
-        { id: 33, name: "ALOE MASSAGE LOTION", price: 70.78, promoPrice: 52.03, image: "aloe-massage-lotion.jpg" },
-        { id: 34, name: "ALOE MSM GEL", price: 86.00, promoPrice: 63.21, image: "aloe-msm-gel.jpg" },
-        { id: 35, name: "ALOE SUNSCREEN", price: 89.07, promoPrice: 65.47, image: "aloe-sunscreen.jpg" },
-        { id: 36, name: "ALOE SCRUB", price: 77.86, promoPrice: 57.23, image: "aloe-scrub.jpg" },
-        { id: 37, name: "MASK POWDER", price: 102.90, promoPrice: 75.63, image: "mask-powder.jpg" },
-        { id: 38, name: "R3 FACTOR-SKIN DEFENSE", price: 160.97, promoPrice: 118.31, image: "r3-factor.jpg" },
-        { id: 39, name: "FOREVER ALPHA-E FACTOR", price: 144.90, promoPrice: 106.50, image: "alpha-e-factor.jpg" },
-        { id: 40, name: "INFINITE HYDRATING CLEANSER", price: 131.20, promoPrice: 96.43, image: "infinite-cleanser.jpg" },
-        { id: 41, name: "INFINITE FIRMING SERUM", price: 190.47, promoPrice: 140.00, image: "infinite-serum.jpg" },
-        { id: 42, name: "INFINITE RESTORING CREME", price: 221.56, promoPrice: 162.86, image: "infinite-creme.jpg" },
-        { id: 43, name: "BALANCING TONER", price: 106.18, promoPrice: 78.05, image: "balancing-toner.jpg" },
-        { id: 44, name: "AWAKENING EYE CREAM", price: 89.66, promoPrice: 65.90, image: "eye-cream.jpg" },
-        { id: 45, name: "ALOE ACTIVATOR", price: 80.59, promoPrice: 59.23, image: "aloe-activator.jpg" },
-        { id: 46, name: "HYDRATING SERUM", price: 156.56, promoPrice: 115.07, image: "hydrating-serum.jpg" },
-        { id: 47, name: "S.REFRESHING G.CLEANSER", price: 115.61, promoPrice: 84.98, image: "refreshing-cleanser.jpg" },
-        { id: 48, name: "S. IILUMINATING GEL", price: 107.35, promoPrice: 78.91, image: "illuminating-gel.jpg" },
-        { id: 49, name: "S. REFINING GEL MASK", price: 115.61, promoPrice: 84.98, image: "refining-mask.jpg" },
-        { id: 50, name: "S.SMOOTHING GEL MOISTURIZER", price: 115.76, promoPrice: 85.08, image: "smoothing-moisturizer.jpg" },
-        { id: 51, name: "ALOE BIO-CELLULOSE MASK", price: 146.00, promoPrice: 107.31, image: "bio-cellulose-mask.jpg" },
-        { id: 52, name: "REPLENISHING SKIN OIL", price: 132.00, promoPrice: 97.02, image: "skin-oil.jpg" },
-        { id: 53, name: "PROTECTING DAY LOTION", price: 167.99, promoPrice: 123.47, image: "day-lotion.jpg" },
-        { id: 54, name: "C9 LITE VANILLA with FIBER", price: 749.02, promoPrice: 550.53, image: "c9-vanilla.jpg" },
-        { id: 55, name: "C9 LITE CHOCO with FIBER", price: 749.02, promoPrice: 550.53, image: "c9-choco.jpg" },
-        { id: 56, name: "DAILY NUTRITION PACK", price: 542.07, promoPrice: 398.42, image: "daily-nutrition-pack.jpg" },
-        { id: 57, name: "SYJP PACK #1", price: 1613.36, promoPrice: null, image: "syjp-pack1.jpg" },
-        { id: 58, name: "SYJP PACK #2", price: 1613.98, promoPrice: null, image: "syjp-pack2.jpg" }
+        { id: 1, name: "ALOE VERA GEL", price: 116.79, promoPrice: 85.84, image: "aloe-vera-gel.jpg", benefits: "Supports digestion, boosts immunity.", consumption: "Take 30-60ml daily." },
+        { id: 2, name: "ALOE BERRY NECTAR", price: 116.79, promoPrice: 85.84, image: "aloe-berry-nectar.jpg", benefits: "Antioxidant support, immune system booster.", consumption: "30-60ml daily." },
+        { id: 3, name: "ALOE BITS N' PEACHES", price: 116.79, promoPrice: 85.84, image: "aloe-peaches.jpg", benefits: "Digestive health, vitamin C source.", consumption: "30-60ml daily." },
+        { id: 4, name: "LITE VANILLA", price: 155.72, promoPrice: 114.45, image: "lite-vanilla.jpg", benefits: "Meal replacement for weight management.", consumption: "Mix with milk or water." },
+        { id: 5, name: "LITE CHOCO", price: 155.72, promoPrice: 114.45, image: "lite-choco.jpg", benefits: "Meal replacement for weight management.", consumption: "Mix with milk or water." },
+        { id: 6, name: "SUPERGREENS", price: 214.71, promoPrice: 157.82, image: "supergreens.jpg", benefits: "Rich in antioxidants and nutrients.", consumption: "Mix with water or juice." },
+        { id: 7, name: "FIBER", price: 124.44, promoPrice: 91.47, image: "fiber.jpg", benefits: "Supports digestive health.", consumption: "Mix with water." },
+        { id: 8, name: "TONGKAT ALI", price: 19.90, promoPrice: 18.80, image: "tongkat-ali.jpg", benefits: "Supports men's health and vitality.", consumption: "As per packaging." },
+        { id: 9, name: "WHITE COFFEE", price: 15.99, promoPrice: 15.11, image: "white-coffee.jpg", benefits: "Rich and aromatic coffee.", consumption: "Mix with hot water." },
+        { id: 10, name: "CHOCOLATE MALT DRINK", price: 27.90, promoPrice: 24.94, image: "choco-malt.jpg", benefits: "Nutritious chocolate malt drink.", consumption: "Mix with hot water or milk." },
+        { id: 11, name: "TEH TARIK HALIA", price: 25.90, promoPrice: 23.15, image: "teh-tarik.jpg", benefits: "Ginger tea for warmth and digestion.", consumption: "Mix with hot water." },
+        { id: 12, name: "BEE HONEY", price: 132.57, promoPrice: 97.44, image: "bee-honey.jpg", benefits: "Natural energy and soothes throat.", consumption: "1-2 teaspoons daily." },
+        { id: 13, name: "BEE POLLEN", price: 75.50, promoPrice: 55.49, image: "bee-pollen.jpg", benefits: "Natural multivitamin and energy booster.", consumption: "1 tablet 3 times daily." },
+        { id: 14, name: "BEE PROPOLIS", price: 139.21, promoPrice: 102.32, image: "bee-propolis.jpg", benefits: "Immune support, natural antibiotic.", consumption: "1 tablet daily." },
+        { id: 15, name: "ROYAL GELLY", price: 139.21, promoPrice: 102.32, image: "royal-jelly.jpg", benefits: "Energy booster, supports immune system.", consumption: "1 tablet daily." },
+        { id: 16, name: "OMEGA 3 PLUS", price: 130.10, promoPrice: 95.62, image: "arctic-sea.jpg", benefits: "Supports heart and brain health.", consumption: "2 softgels twice daily." },
+        { id: 17, name: "ABSORBENT-C", price: 75.50, promoPrice: 55.49, image: "absorbent-c.jpg", benefits: "Immune support, antioxidant.", consumption: "1-2 tablets daily." },
+        { id: 18, name: "FIELDS OF GREENS", price: 86.10, promoPrice: 63.28, image: "fields-of-greens.jpg", benefits: "Detoxification and digestion support.", consumption: "1 tablet 3 times daily." },
+        { id: 19, name: "CALCIUM PLUS TABLET", price: 132.15, promoPrice: 97.14, image: "calcium-plus.jpg", benefits: "Supports bone health.", consumption: "2 tablets daily." },
+        { id: 20, name: "ALOE LIPS", price: 20.33, promoPrice: 14.94, image: "aloe-lips.jpg", benefits: "Moisturizes and protects lips.", consumption: "Apply as needed." },
+        { id: 21, name: "BRIGHT TOOTHGEL", price: 41.29, promoPrice: 30.35, image: "bright-toothgel.jpg", benefits: "Fluoride-free, gentle on gums.", consumption: "Brush teeth twice daily." },
+        { id: 22, name: "ALOE FIRST", price: 90.83, promoPrice: 66.76, image: "aloe-first.jpg", benefits: "Soothes skin irritations.", consumption: "Spray on skin as needed." },
+        { id: 23, name: "DEODORANT STICK", price: 50.73, promoPrice: 37.29, image: "forever-deodorant.jpg", benefits: "Long-lasting protection.", consumption: "Apply daily." },
+        { id: 24, name: "AVOCADO SOAP", price: 30.68, promoPrice: 22.55, image: "avocado-soap.jpg", benefits: "Gentle cleansing for face and body.", consumption: "Use daily." },
+        { id: 25, name: "ALOE LIQUID SOAP", price: 120.91, promoPrice: 88.87, image: "aloe-liquid-soap.jpg", benefits: "Moisturizing hand and face wash.", consumption: "Use daily." },
+        { id: 26, name: "JOJOBA SHAMPOO", price: 105.93, promoPrice: 77.86, image: "aloe-jojoba-shampoo.jpg", benefits: "Nourishes hair and scalp.", consumption: "Massage into wet hair." },
+        { id: 27, name: "JOJOBA CONDITIONER", price: 117.70, promoPrice: 86.51, image: "aloe-jojoba-conditioner.jpg", benefits: "Moisturizes and strengthens hair.", consumption: "Apply after shampoo." },
+        { id: 28, name: "ALOE BODY WASH", price: 120.91, promoPrice: 88.87, image: "aloe-body-wash.jpg", benefits: "Gentle, moisturizing body wash.", consumption: "Use daily in shower." },
+        { id: 29, name: "ALOE BODY LOTION", price: 112.35, promoPrice: 82.58, image: "aloe-body-lotion.jpg", benefits: "Hydrates and softens skin.", consumption: "Apply to body as needed." },
+        { id: 30, name: "ALOE PROPOLIS CREME", price: 90.83, promoPrice: 66.76, image: "aloe-propolis-creme.jpg", benefits: "Soothes and moisturizes dry skin.", consumption: "Apply generously." },
+        { id: 31, name: "ALOE VERA GELLY", price: 70.78, promoPrice: 52.03, image: "aloe-vera-gelly.jpg", benefits: "Soothes minor skin irritations.", consumption: "Apply to affected area." },
+        { id: 32, name: "ALOE MOISTURIZING", price: 70.78, promoPrice: 52.03, image: "aloe-moisturizing.jpg", benefits: "Hydrates face and body.", consumption: "Apply as needed." },
+        { id: 33, name: "ALOE MASSAGE LOTION", price: 70.78, promoPrice: 52.03, image: "aloe-massage-lotion.jpg", benefits: "Soothing lotion for massage.", consumption: "Massage into skin." },
+        { id: 34, name: "ALOE MSM GEL", price: 86.00, promoPrice: 63.21, image: "aloe-msm-gel.jpg", benefits: "Soothes joints and muscles.", consumption: "Apply to affected areas." },
+        { id: 35, name: "ALOE SUNSCREEN", price: 89.07, promoPrice: 65.47, image: "aloe-sunscreen.jpg", benefits: "UV protection with aloe.", consumption: "Apply before sun exposure." },
+        { id: 36, name: "ALOE SCRUB", price: 77.86, promoPrice: 57.23, image: "aloe-scrub.jpg", benefits: "Gently exfoliates skin.", consumption: "Use 2-3 times a week." },
+        { id: 37, name: "MASK POWDER", price: 102.90, promoPrice: 75.63, image: "mask-powder.jpg", benefits: "Cleanses and tightens pores.", consumption: "Mix with Aloe Activator." },
+        { id: 38, name: "R3 FACTOR-SKIN DEFENSE", price: 160.97, promoPrice: 118.31, image: "r3-factor.jpg", benefits: "Helps skin retain moisture.", consumption: "Apply to face and neck." },
+        { id: 39, name: "FOREVER ALPHA-E FACTOR", price: 144.90, promoPrice: 106.50, image: "alpha-e-factor.jpg", benefits: "Nourishes and restores skin.", consumption: "Apply a few drops to face." },
+        { id: 40, name: "INFINITE HYDRATING CLEANSER", price: 131.20, promoPrice: 96.43, image: "infinite-cleanser.jpg", benefits: "Gentle, hydrating cleanser.", consumption: "Use morning and night." },
+        { id: 41, name: "INFINITE FIRMING SERUM", price: 190.47, promoPrice: 140.00, image: "infinite-serum.jpg", benefits: "Reduces appearance of fine lines.", consumption: "Apply to face." },
+        { id: 42, name: "INFINITE RESTORING CREME", price: 221.56, promoPrice: 162.86, image: "infinite-creme.jpg", benefits: "Deeply moisturizes and restores skin.", consumption: "Apply to face and neck." },
+        { id: 43, name: "BALANCING TONER", price: 106.18, promoPrice: 78.05, image: "balancing-toner.jpg", benefits: "Refreshes and balances skin.", consumption: "Apply after cleansing." },
+        { id: 44, name: "AWAKENING EYE CREAM", price: 89.66, promoPrice: 65.90, image: "eye-cream.jpg", benefits: "Reduces puffiness and dark circles.", consumption: "Pat gently around eyes." },
+        { id: 45, name: "ALOE ACTIVATOR", price: 80.59, promoPrice: 59.23, image: "aloe-activator.jpg", benefits: "Cleanses, soothes and refreshes.", consumption: "Use with Mask Powder." },
+        { id: 46, name: "HYDRATING SERUM", price: 156.56, promoPrice: 115.07, image: "hydrating-serum.jpg", benefits: "Boosts skin hydration.", consumption: "Apply to face." },
+        { id: 47, name: "S.REFRESHING G.CLEANSER", price: 115.61, promoPrice: 84.98, image: "refreshing-cleanser.jpg", benefits: "Gentle gel cleanser.", consumption: "Use morning and night." },
+        { id: 48, name: "S. IILUMINATING GEL", price: 107.35, promoPrice: 78.91, image: "illuminating-gel.jpg", benefits: "Brightens skin appearance.", consumption: "Apply to face." },
+        { id: 49, name: "S. REFINING GEL MASK", price: 115.61, promoPrice: 84.98, image: "refining-mask.jpg", benefits: "Refines pores and moisturizes.", consumption: "Use 2-3 times a week." },
+        { id: 50, name: "S.SMOOTHING GEL MOISTURIZER", price: 115.76, promoPrice: 85.08, image: "smoothing-moisturizer.jpg", benefits: "Lightweight gel moisturizer.", consumption: "Apply to face." },
+        { id: 51, name: "ALOE BIO-CELLULOSE MASK", price: 146.00, promoPrice: 107.31, image: "bio-cellulose-mask.jpg", benefits: "Deeply hydrates and conditions skin.", consumption: "Use once a week." },
+        { id: 52, name: "REPLENISHING SKIN OIL", price: 132.00, promoPrice: 97.02, image: "skin-oil.jpg", benefits: "Nourishes with a blend of oils.", consumption: "Apply a few drops to face." },
+        { id: 53, name: "PROTECTING DAY LOTION", price: 167.99, promoPrice: 123.47, image: "day-lotion.jpg", benefits: "Moisturizes and protects with SPF.", consumption: "Apply in the morning." },
+        { id: 54, name: "C9 LITE VANILLA with FIBER", price: 749.02, promoPrice: 550.53, image: "c9-vanilla.jpg", benefits: "9-day nutritional reset program.", consumption: "Follow included guide." },
+        { id: 55, name: "C9 LITE CHOCO with FIBER", price: 749.02, promoPrice: 550.53, image: "c9-choco.jpg", benefits: "9-day nutritional reset program.", consumption: "Follow included guide." },
+        { id: 56, name: "DAILY NUTRITION PACK", price: 542.07, promoPrice: 398.42, image: "daily-nutrition-pack.jpg", benefits: "Daily supplement pack.", consumption: "Take one pack daily." },
+        { id: 57, name: "SYJP PACK #1", price: 1613.36, promoPrice: null, image: "syjp-pack1.jpg", benefits: "Business starter pack.", consumption: "N/A" },
+        { id: 58, name: "SYJP PACK #2", price: 1613.98, promoPrice: null, image: "syjp-pack2.jpg", benefits: "Business starter pack.", consumption: "N/A" }
     ];
     let cart = [];
+    const promoEndDate = new Date("August 2, 2025 23:59:59").getTime();
 
     // --- LOGIC (Updated) ---
+
+    function isPromoActive() {
+        return new Date().getTime() < promoEndDate;
+    }
 
     function renderProducts() {
       const productList = document.getElementById('product-list');
       if (!productList) return;
       const isLoggedIn = !!sessionStorage.getItem('loggedInUser');
+      const promoActive = isPromoActive();
       
       productList.innerHTML = products.map(product => {
-        const finalPrice = product.promoPrice || product.price;
-        const hasDiscount = !!product.promoPrice;
+        const finalPrice = promoActive && product.promoPrice ? product.promoPrice : product.price;
+        const hasDiscount = promoActive && product.promoPrice;
         const points = Math.floor(finalPrice);
         const wishlistBtn = isLoggedIn ? `<button class="btn btn-secondary" onclick="addToWishlist(${product.id})"><i class="fa-solid fa-heart"></i> Add to Wishlist</button>` : '';
         
         return `
-          <div class="product">
+          <div class="product ${hasDiscount ? 'promo-highlight' : ''}">
+            ${hasDiscount ? '<div class="featured-badge">Promo!</div>' : ''}
             <div class="product-image-container"><img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/200x200?text=Image+Not+Found'"></div>
             <div class="product-info">
                 <h3>${product.name}</h3>
                 <div class="price-section">
                     ${hasDiscount ? `<span class="original-price">RM ${product.price.toFixed(2)}</span><span class="new-price">RM ${finalPrice.toFixed(2)}</span>` : `<span class="new-price">RM ${finalPrice.toFixed(2)}</span>`}
                 </div>
+                <div class="benefits"><strong>Benefits:</strong> ${product.benefits}</div>
+                <div class="consumption"><strong>Usage:</strong> ${product.consumption}</div>
                 <div class="product-points"><i class="fa-solid fa-star"></i> Earn ${points} Points</div>
                 <div class="product-actions">
                     <button class="btn btn-primary" onclick="addToCart(${product.id})"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
@@ -545,7 +588,7 @@
         existingItem.quantity++;
       } else {
         const productData = products.find(p => p.id === productId);
-        const finalPrice = productData.promoPrice || productData.price;
+        const finalPrice = isPromoActive() && productData.promoPrice ? productData.promoPrice : productData.price;
         cart.push({ id: productData.id, name: productData.name, price: finalPrice, quantity: 1 });
       }
       updateCartCount();
@@ -809,13 +852,59 @@
         });
     }
 
+    function startCountdown() {
+        const countdownEl = document.getElementById('countdown-timer');
+        const promoDetailsEl = document.getElementById('promo-details');
+
+        const interval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = promoEndDate - now;
+
+            if (distance < 0) {
+                clearInterval(interval);
+                promoDetailsEl.innerHTML = '<div class="promo-period">Our Grand Opening promotion has ended.</div>';
+                document.body.classList.remove('grand-opening-active');
+                renderProducts(); // Re-render products with original prices
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            countdownEl.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }, 1000);
+    }
+
+    function createConfetti() {
+        for (let i = 0; i < 50; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            confetti.style.animationDelay = Math.random() * 5 + 's';
+            confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+            document.body.appendChild(confetti);
+        }
+    }
+
     // Initialize the page
     document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      
+      if (isPromoActive()) {
+          document.body.classList.add('grand-opening-active');
+          startCountdown();
+          createConfetti();
+      } else {
+          document.getElementById('promo-details').innerHTML = '<div class="promo-period">Our Grand Opening promotion has ended.</div>';
+      }
+
       renderProducts();
       showTab('products');
       updateRedeemButtonsState();
     });
   </script>
 </body>
-</html>```
+</html>
