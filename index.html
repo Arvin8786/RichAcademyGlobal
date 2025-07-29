@@ -3,13 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Forever Living by Mohd Arvinsd Isa - Grand Opening Special</title>
+  <title>Forever Living by Mohd Arvind Isa - Grand Opening Special</title>
   
   <!-- Google Fonts & Font Awesome Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- jsPDF Library for PDF Generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
 
   <style>
     :root {
@@ -427,6 +431,7 @@
           <h3 style="margin-top: 20px;">Customer Information</h3>
           <input type="text" id="customer-name" placeholder="Your Full Name" required>
           <input type="tel" id="customer-phone" placeholder="Your WhatsApp Number" required>
+          <input type="email" id="customer-email" placeholder="Your Email Address (for receipt)" required>
           <button class="btn btn-primary checkout-btn" onclick="initiateCheckout()">Complete Order via WhatsApp</button>
         </div>
         <div class="free-shipping-promo">🚚 FREE NATIONWIDE DELIVERY for orders RM 250 and above!</div>
@@ -436,9 +441,9 @@
         <h2>Verify Your Purchase</h2>
         <p>After completing your payment via WhatsApp, you will receive a verification code from us.</p>
         <div id="verification-section">
-            <p>Please enter the code below to confirm your order and have it recorded in our system.</p>
+            <p>Please enter the code below to confirm your order and have it recorded in our system. A PDF receipt will be generated automatically.</p>
             <input type="text" id="verification-code" placeholder="Enter Verification Code">
-            <button class="btn btn-primary" onclick="verifyPurchase()">Verify Purchase</button>
+            <button class="btn btn-primary" onclick="verifyPurchase()">Verify & Generate Receipt</button>
             <p id="verification-status" style="margin-top: 15px; font-weight: bold;"></p>
         </div>
         <button class="btn btn-secondary" style="margin-top: 20px;" onclick="toggleCart(true)">Cancel Verification</button>
@@ -515,7 +520,6 @@
         if (codes) {
             return JSON.parse(codes);
         } else {
-            // Default list of 100 codes if none are in localStorage
             const defaultCodes = [
                 '8kE2n9sPqV3xR7b', 'aZ5hGjLpW9cQfT6', 'mN1vXzC4bK8gY2d', 'rT7uI9oP5lKjHgF', 'eW3sD6fG8hJ1kL0',
                 'zX9c8V7b6N5m4L3', 'qW2e4R5t6Y7u8I9', 'aS3d5F6g7H8j9K1', 'pL9oK8iJ7uH6yG5', 'fD4sA3gH6jK9lO1',
@@ -610,27 +614,37 @@
         }
 
         const keywords = {
-            'digestion': [1, 2, 3, 7, 11, 18], 'immune': [1, 2, 14, 15, 17], 'energy': [12, 13, 15],
-            'weight': [4, 5], 'skin': [22, 24, 25, 28, 29, 30, 31, 32, 35, 36, 38, 39, 40, 42, 51, 52, 45, 46, 47, 48, 49, 50, 53],
-            'joint': [34], 'muscle': [34], 'heart': [16], 'brain': [16], 'bone': [19], 'lips': [20],
-            'hair': [26, 27], 'detox': [18, 6], 'men': [8], 'throat': [12], 'antioxidant': [2, 6, 17],
-            'face': [24, 25, 32, 38, 39, 40, 41, 42, 43, 44, 46, 47, 48, 50, 52, 53]
+            'digestion': [1, 2, 3, 7, 11, 18], 'constipation': [1, 7, 18], 'bloated': [1, 7, 11],
+            'immune': [1, 2, 14, 15, 17], 'flu': [14, 17], 'cough': [12, 14], 'cold': [14, 17],
+            'energy': [12, 13, 15, 8], 'fatigue': [13, 15, 8], 'tired': [13, 15, 8],
+            'weight': [4, 5, 6], 'diet': [4, 5, 7],
+            'skin': [22, 24, 25, 28, 29, 30, 31, 32, 35, 36, 38, 39, 40, 42, 51, 52, 45, 46, 47, 48, 49, 50, 53],
+            'dry skin': [30, 32, 29, 39, 52], 'acne': [30, 24, 21], 'eczema': [30, 22, 31], 'sunburn': [35, 22, 31],
+            'joint': [34, 16], 'muscle pain': [33, 34], 'arthritis': [34, 16],
+            'heart': [16], 'cholesterol': [16, 18], 'brain': [16], 'memory': [16],
+            'bone': [19], 'calcium': [19],
+            'lips': [20], 'hair': [26, 27], 'scalp': [26],
+            'detox': [18, 6, 1, 2, 3], 'cleanse': [6, 18, 1],
+            'men': [8], 'vitality': [8, 15],
+            'throat': [12, 14], 'antioxidant': [2, 6, 17, 39],
+            'face': [24, 25, 32, 38, 39, 40, 41, 42, 43, 44, 46, 47, 48, 50, 52, 53],
+            'wrinkles': [38, 39, 41, 42], 'aging': [38, 39, 41, 15]
         };
 
-        let suggestedIds = [];
+        let suggestedIds = new Set();
         for (const key in keywords) {
             if (symptom.includes(key)) {
-                suggestedIds.push(...keywords[key]);
+                keywords[key].forEach(id => suggestedIds.add(id));
             }
         }
         
         products.forEach(p => {
-            if (p.benefits.toLowerCase().includes(symptom) && !suggestedIds.includes(p.id)) {
-                suggestedIds.push(p.id);
+            if (p.benefits.toLowerCase().includes(symptom)) {
+                suggestedIds.add(p.id);
             }
         });
 
-        const uniqueIds = [...new Set(suggestedIds)];
+        const uniqueIds = Array.from(suggestedIds);
 
         if (uniqueIds.length > 0) {
             let resultHTML = '<h4>Based on your concern, we suggest:</h4>';
@@ -773,7 +787,8 @@
     function initiateCheckout() {
       const name = document.getElementById('customer-name').value.trim();
       const phone = document.getElementById('customer-phone').value.trim();
-      if (!name || !phone) { alert('Please enter your name and phone number'); return; }
+      const email = document.getElementById('customer-email').value.trim();
+      if (!name || !phone || !email) { alert('Please enter your name, phone number, and email address.'); return; }
       if (cart.length === 0) { alert('Your cart is empty'); return; }
       
       const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
@@ -783,11 +798,14 @@
       pendingOrder = {
           customerName: name,
           customerPhone: phone,
+          customerEmail: email,
           cart: [...cart],
+          subtotal: subtotal,
+          shipping: shipping,
           totalAmount: total.toFixed(2)
       };
 
-      let message = `Hi, I would like to place an order:\n\nName: ${name}\nPhone: ${phone}\n\n--- ORDER DETAILS ---\n`;
+      let message = `Hi, I would like to place an order:\n\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\n\n--- ORDER DETAILS ---\n`;
       cart.forEach(item => { message += `- ${item.name} (x${item.quantity}) - RM ${(item.price * item.quantity).toFixed(2)}\n`; });
       message += `\n--- SUMMARY ---\nSubtotal: RM ${subtotal.toFixed(2)}\nShipping: ${shipping.message}\nTOTAL: RM ${total.toFixed(2)}\n`;
       message += `\nPlease confirm my order. Thank you!`;
@@ -812,8 +830,7 @@
             let history = getSalesHistory();
             
             const orderNumber = `FL-${Date.now().toString().slice(-6)}`;
-            const subtotal = pendingOrder.cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-            const totalPoints = Math.floor(subtotal);
+            const totalPoints = Math.floor(pendingOrder.subtotal);
             const itemsString = pendingOrder.cart.map(item => `${item.name} (x${item.quantity})`).join(', ');
 
             const newRecord = {
@@ -830,7 +847,9 @@
             const updatedCodes = codes.filter(c => c !== codeInput);
             savePreVerifiedCodes(updatedCodes);
 
-            statusEl.textContent = 'Purchase verified successfully! Thank you.';
+            generatePDF(newRecord, pendingOrder);
+
+            statusEl.textContent = 'Purchase verified! Your receipt is downloading...';
             statusEl.style.color = 'green';
 
             cart = [];
@@ -839,12 +858,80 @@
             
             setTimeout(() => {
                 toggleCart(true);
-            }, 2000);
+            }, 2500);
 
         } else {
             statusEl.textContent = 'Invalid or already used verification code. Please check and try again.';
             statusEl.style.color = 'red';
         }
+    }
+
+    function generatePDF(record, orderDetails) {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        doc.setFontSize(20);
+        doc.text("Purchase Receipt", 105, 20, null, null, "center");
+        
+        doc.setFontSize(12);
+        doc.text(`Order Number: ${record.orderNumber}`, 14, 40);
+        doc.text(`Date: ${new Date().toLocaleDateString('en-GB')}`, 14, 47);
+
+        doc.text("Bill To:", 14, 60);
+        doc.text(orderDetails.customerName, 14, 67);
+        doc.text(orderDetails.customerPhone, 14, 74);
+        doc.text(orderDetails.customerEmail, 14, 81);
+
+        const tableColumn = ["Item Description", "Quantity", "Unit Price (RM)", "Total (RM)"];
+        const tableRows = [];
+
+        orderDetails.cart.forEach(item => {
+            const itemData = [
+                item.name,
+                item.quantity,
+                item.price.toFixed(2),
+                (item.price * item.quantity).toFixed(2)
+            ];
+            tableRows.push(itemData);
+        });
+
+        doc.autoTable({
+            head: [tableColumn],
+            body: tableRows,
+            startY: 90,
+            theme: 'grid',
+            headStyles: { fillColor: [26, 82, 118] }
+        });
+
+        let finalY = doc.lastAutoTable.finalY || 100;
+        
+        doc.setFontSize(12);
+        doc.text(`Subtotal: RM ${orderDetails.subtotal.toFixed(2)}`, 14, finalY + 10);
+        doc.text(`Shipping: ${orderDetails.shipping.message}`, 14, finalY + 17);
+        doc.setFontSize(14);
+        doc.setFont(undefined, 'bold');
+        doc.text(`Total Amount: RM ${orderDetails.totalAmount}`, 14, finalY + 27);
+        
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(10);
+        doc.text("Thank you for your purchase!", 105, finalY + 40, null, null, "center");
+
+        doc.save(`Receipt-Order-${record.orderNumber}.pdf`);
+    }
+
+    function maskData(type, data) {
+        if (!data) return 'N/A';
+        if (type === 'name') {
+            const parts = data.split(' ');
+            if (parts.length > 1) {
+                return `${parts[0].charAt(0)}... ${parts[parts.length - 1]}`;
+            }
+            return `${data.charAt(0)}...`;
+        }
+        if (type === 'phone') {
+            return data.length > 7 ? `${data.substring(0, 3)}...${data.slice(-4)}` : data;
+        }
+        return data;
     }
 
     function renderSalesHistory() {
@@ -860,8 +947,8 @@
         historyBody.innerHTML = history.map(record => `
             <tr>
                 <td>${record.orderNumber}</td>
-                <td>${record.customerName}</td>
-                <td>${record.customerPhone}</td>
+                <td>${maskData('name', record.customerName)}</td>
+                <td>${maskData('phone', record.customerPhone)}</td>
                 <td class="items-cell">${record.items}</td>
                 <td>${record.totalAmount}</td>
                 <td>${record.totalPoints}</td>
@@ -917,6 +1004,10 @@
       } else {
           document.getElementById('promo-details').innerHTML = '<div class="promo-period">Our Grand Opening promotion has ended.</div>';
       }
+
+      // Clear sales history on first load for privacy in this shared environment
+      // In a real-world scenario, you would not clear this.
+      // localStorage.removeItem('salesHistory'); 
 
       renderProducts();
       renderSalesHistory();
