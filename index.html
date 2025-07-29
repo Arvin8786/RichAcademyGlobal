@@ -515,36 +515,34 @@
 
     // --- LOGIC ---
 
-    function getPreVerifiedCodes() {
-        const codes = localStorage.getItem('preVerifiedCodes');
-        if (codes) {
-            return JSON.parse(codes);
-        } else {
-            // Corrected, unique list of 100 codes
-            const defaultCodes = [
-                '8kE2n9sPqV3xR7b', 'aZ5hGjLpW9cQfT6', 'mN1vXzC4bK8gY2d', 'rT7uI9oP5lKjHgF', 'eW3sD6fG8hJ1kL0',
-                'zX9c8V7b6N5m4L3', 'qW2e4R5t6Y7u8I9', 'aS3d5F6g7H8j9K1', 'pL9oK8iJ7uH6yG5', 'fD4sA3gH6jK9lO1',
-                'zxcVbnmAsdfGhjK', 'qweRtyuiOpLkjHg', 'mnbVcxZlkjHGFd', 'poiUytrewQasDf', 'lkjHgfdsaZxcVb',
-                'nJ5hB8vC2xZ1mP3', 'gK6lF9dD4sA7gH2', 'jH7g8F5d4S3a2L1', 'kL0oK8iJ7uH6yG5', 'pL1oK8iJ7uH6yG5',
-                'qAz2wSx3eDc4rFv', 'tGb5yHn6jUm7kI8', 'lO9p0oK8iJ7uH6y', 'gT5fR4dE3sW2qA1', 'zX8c8V7b6N5m4L3',
-                'bV1c2X3z4A5s6D7', 'fG8h9J0kLpOiUy', 'tReWqAsdFghJkL', 'mNbVcXZlkJhGfD', 'sAqW2eR4tY6uI8',
-                'oP9iU7yT5rE3wQ1', 'lKjHgFdSaZxCvB', 'nJmKlOiuYhTgrE', 'fDsA3gH6jK9lO2', 'pL9oK8iJ7uH6yG4',
-                'aZ5hGjLpW9cQfT5', 'mN1vXzC4bK8gY2e', 'rT7uI9oP5lKjHgE', 'eW3sD6fG8hJ1kL9', 'zX9c8V7b6N5m4L2',
-                'qW2e4R5t6Y7u8I8', 'aS3d5F6g7H8j9K0', 'pL9oK8iJ7uH6yG3', 'fD4sA3gH6jK9lO0', 'zxcVbnmAsdfGhjJ',
-                'qweRtyuiOpLkjHf', 'mnbVcxZlkjHGFc', 'poiUytrewQasDe', 'lkjHgfdsaZxcVa', 'nJ5hB8vC2xZ1mP2',
-                'gK6lF9dD4sA7gH1', 'jH7g8F5d4S3a2L0', 'kL0oK8iJ7uH6yG4', 'pL1oK8iJ7uH6yG3', 'qAz2wSx3eDc4rFw',
-                'tGb5yHn6jUm7kI7', 'lO9p0oK8iJ7uH6x', 'gT5fR4dE3sW2qA0', 'zX8c8V7b6N5m4L2', 'bV1c2X3z4A5s6D6',
-                'fG8h9J0kLpOiUx', 'tReWqAsdFghJkK', 'mNbVcXZlkJhGfC', 'sAqW2eR4tY6uI7', 'oP9iU7yT5rE3wQ0',
-                'lKjHgFdSaZxCvA', 'nJmKlOiuYhTgrD', 'fDsA3gH6jK9lO3', 'pL9oK8iJ7uH6yG2', 'aZ5hGjLpW9cQfT4',
-                'mN1vXzC4bK8gY2f', 'rT7uI9oP5lKjHgD', 'eW3sD6fG8hJ1kL8', 'zX9c8V7b6N5m4L1', 'qW2e4R5t6Y7u8I7',
-                'aS3d5F6g7H8j9K9', 'pL9oK8iJ7uH6yG1', 'fD4sA3gH6jK9lO9', 'zxcVbnmAsdfGhjH', 'qweRtyuiOpLkjHe',
-                'mnbVcxZlkjHGFb', 'poiUytrewQasDd', 'lkjHgfdsaZxcVz', 'nJ5hB8vC2xZ1mP1', 'gK6lF9dD4sA7gH0',
-                'jH7g8F5d4S3a2L9', 'kL0oK8iJ7uH6yG2', 'pL1oK8iJ7uH6yG1', 'qAz2wSx3eDc4rFt', 'tGb5yHn6jUm7kI6',
-                'lO9p0oK8iJ7uH6w', 'gT5fR4dE3sW2qA9', 'zX8c8V7b6N5m4L1', 'bV1c2X3z4A5s6D5', 'fG8h9J0kLpOiUw'
-            ];
-            localStorage.setItem('preVerifiedCodes', JSON.stringify(defaultCodes));
-            return defaultCodes;
-        }
+    // The master list of all valid, one-time-use codes.
+    const masterCodeList = [
+        '4R8sT2bE9Vn7kM3', 'P5wJ1xY6zQ0cE7f', 'L9gH4aD1kF8jT2p', 'Z3oV6iU7yB2nC1x', 'M5rQ4sT9vW1xY8z',
+        'A1bC2dE3fG4hI5j', 'K6lM7nO8pQ9rS0t', 'U1vW2xY3z4A5bC6', 'D7eF8gH9iJ0kL1m', 'N2oP3qR4sT5uV6w',
+        'X7yZ8aB9cDeFgH1', 'I2jK3lM4nO5pQ6r', 'S7tU8vW9xY0zAbC', 'dE1fG2hI3jK4lM5', 'nO6pQ7rS8tU9vW0',
+        'xY1z2A3b4C5d6E7', 'fG8hI9jK0lM1nO2', 'pQ3rS4tU5vW6xY7', 'z8A9bC0dE1fG2h3', 'I4jK5lM6nO7pQ8r',
+        'S9tU0vW1xY2z3A4', 'bC5dE6fG7hI8jK9', 'lM0nO1pQ2rS3tU4', 'vW5xY6z7A8bC9d0', 'E1fG2hI3jK4lM5n',
+        'O6pQ7rS8tU9vW0x', 'Y1z2A3b4C5d6E7f', 'G8hI9jK0lM1nO2p', 'Q3rS4tU5vW6xY7z', '8A9bC0dE1fG2hI3',
+        'jK4lM5nO6pQ7rS8', 'tU9vW0xY1z2A3b4', 'C5dE6fG7hI8jK9l', 'M0nO1pQ2rS3tU4v', 'W5xY6z7A8bC9d0e',
+        'F1gH2iJ3kL4mN5o', 'P6qR7sT8uV9wX0y', 'Z1aB2c3D4e5F6g7', 'H8iJ9kL0mN1oP2q', 'R3sT4uV5wX6yZ7a',
+        'B8c9D0e1F2g3H4i', 'J5kL6mN7oP8qR9s', 'T0uV1wX2yZ3aB4c', '5D6e7F8g9H0iJ1k', 'L2mN3oP4qR5sT6u',
+        'V7wX8yZ9aB0c1D2', 'e3F4g5H6i7J8k9l', 'M0nO1pQ2rS3tU4v', 'W5xY6z7A8bC9d0e', 'F1gH2iJ3kL4mN5o',
+        'P6qR7sT8uV9wX0y', 'Z1aB2c3D4e5F6g7', 'H8iJ9kL0mN1oP2q', 'R3sT4uV5wX6yZ7a', 'B8c9D0e1F2g3H4i',
+        'J5kL6mN7oP8qR9s', 'T0uV1wX2yZ3aB4c', '5D6e7F8g9H0iJ1k', 'L2mN3oP4qR5sT6u', 'V7wX8yZ9aB0c1D2',
+        'e3F4g5H6i7J8k9l', 'M0nO1pQ2rS3tU4v', 'W5xY6z7A8bC9d0e', 'F1gH2iJ3kL4mN5o', 'P6qR7sT8uV9wX0y',
+        'Z1aB2c3D4e5F6g7', 'H8iJ9kL0mN1oP2q', 'R3sT4uV5wX6yZ7a', 'B8c9D0e1F2g3H4i', 'J5kL6mN7oP8qR9s',
+        'T0uV1wX2yZ3aB4c', '5D6e7F8g9H0iJ1k', 'L2mN3oP4qR5sT6u', 'V7wX8yZ9aB0c1D2', 'e3F4g5H6i7J8k9l',
+        'M0nO1pQ2rS3tU4v', 'W5xY6z7A8bC9d0e', 'F1gH2iJ3kL4mN5o', 'P6qR7sT8uV9wX0y', 'Z1aB2c3D4e5F6g7',
+        'H8iJ9kL0mN1oP2q', 'R3sT4uV5wX6yZ7a', 'B8c9D0e1F2g3H4i', 'J5kL6mN7oP8qR9s', 'T0uV1wX2yZ3aB4c',
+        '5D6e7F8g9H0iJ1k', 'L2mN3oP4qR5sT6u', 'V7wX8yZ9aB0c1D2', 'e3F4g5H6i7J8k9l', 'M0nO1pQ2rS3tU4v'
+    ];
+
+    function getUsedCodes() {
+        return JSON.parse(localStorage.getItem('usedVerificationCodes')) || [];
+    }
+
+    function saveUsedCodes(usedCodes) {
+        localStorage.setItem('usedVerificationCodes', JSON.stringify(usedCodes));
     }
 
     function getSalesHistory() {
@@ -553,10 +551,6 @@
 
     function saveSalesHistory(history) {
         localStorage.setItem('salesHistory', JSON.stringify(history));
-    }
-
-    function savePreVerifiedCodes(codes) {
-        localStorage.setItem('preVerifiedCodes', JSON.stringify(codes));
     }
 
     function isPromoActive() {
@@ -826,8 +820,10 @@
             return;
         }
 
-        let codes = getPreVerifiedCodes();
-        if (codes.includes(codeInput)) {
+        const usedCodes = getUsedCodes();
+        
+        // Check if code is in the master list AND not in the used list
+        if (masterCodeList.includes(codeInput) && !usedCodes.includes(codeInput)) {
             let history = getSalesHistory();
             
             const orderNumber = `FL-${Date.now().toString().slice(-6)}`;
@@ -845,8 +841,9 @@
             history.push(newRecord);
             saveSalesHistory(history);
 
-            const updatedCodes = codes.filter(c => c !== codeInput);
-            savePreVerifiedCodes(updatedCodes);
+            // Add the code to the used list and save it
+            usedCodes.push(codeInput);
+            saveUsedCodes(usedCodes);
 
             generatePDF(newRecord, pendingOrder);
 
@@ -1005,9 +1002,6 @@
       } else {
           document.getElementById('promo-details').innerHTML = '<div class="promo-period">Our Grand Opening promotion has ended.</div>';
       }
-
-      // To clear history for testing, you can uncomment the line below
-      // localStorage.removeItem('salesHistory'); 
 
       renderProducts();
       renderSalesHistory();
