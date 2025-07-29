@@ -87,19 +87,6 @@
       border-bottom: 1px solid #e0e0e0;
       position: relative;
     }
-    .header-account-links {
-        position: absolute;
-        top: 50%;
-        right: 20px;
-        transform: translateY(-50%);
-    }
-    .header-account-links a {
-        color: var(--primary-color);
-        text-decoration: none;
-        font-weight: 600;
-        cursor: pointer;
-    }
-    .header-account-links a:hover { color: var(--accent-color); }
 
     nav {
       background-color: var(--primary-color);
@@ -186,44 +173,11 @@
       font-weight: bold; font-size: 0.9rem; box-shadow: 0 3px 10px rgba(0,0,0,0.2);
     }
 
-    /* --- CDS & Business Sections --- */
+    /* --- Business Section --- */
     .program-section { background: var(--light-text); padding: 40px; border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 30px; }
     .program-section h2 { font-size: 2.5rem; text-align: center; }
-    .program-highlights { display: flex; flex-wrap: wrap; justify-content: space-around; margin: 30px 0; gap: 20px; }
-    .highlight-card { flex: 1; min-width: 280px; background: var(--light-gray); border: 1px solid #e0e0e0; border-radius: var(--border-radius); padding: 20px; transition: transform 0.3s, box-shadow 0.3s; }
-    .highlight-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
-    .highlight-card h3 { border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; }
-    .highlight-card ul { list-style: none; padding: 0; }
-    .highlight-card li { margin-bottom: 10px; display: flex; align-items: flex-start; }
-    .highlight-card .fa-solid { color: var(--accent-color); margin-right: 10px; margin-top: 5px; }
-    .testimonial { background: #f0f8f0; padding: 20px; border-left: 4px solid var(--accent-color); margin: 20px 0; font-style: italic; border-radius: 0 8px 8px 0; }
-    .testimonial-author { text-align: right; font-weight: bold; color: var(--primary-color); }
     .cta-button { display: block; width: fit-content; margin: 30px auto; background: linear-gradient(135deg, var(--secondary-color), #e67e22); color: var(--light-text); text-align: center; padding: 15px 40px; border-radius: 50px; font-weight: bold; text-decoration: none; font-size: 1.2rem; transition: all 0.3s; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
     .cta-button:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.3); }
-
-    /* --- Rewards Section --- */
-    .rewards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-    .reward-item { background: var(--light-gray); border: 1px solid #ddd; border-radius: var(--border-radius); padding: 20px; text-align: center; display: flex; flex-direction: column; }
-    .reward-item img { max-width: 100%; height: 100px; object-fit: contain; margin-bottom: 15px; border-radius: 8px; }
-    .reward-item h4 { margin: 10px 0 5px; }
-    .reward-item .points-cost { font-weight: bold; color: var(--accent-color); margin-bottom: 15px; }
-    .reward-item .btn { margin-top: auto; }
-    .reward-item .btn:disabled { background-color: #ccc; cursor: not-allowed; }
-
-    /* --- Login & User Dashboard --- */
-    #auth-page, #dashboard-page { display: none; }
-    .dashboard-layout { display: flex; gap: 30px; align-items: flex-start; margin-top: 30px; }
-    .dashboard-nav { flex: 0 0 250px; }
-    .dashboard-nav a { display: block; background: var(--light-text); border: 1px solid #ddd; padding: 15px 20px; border-radius: 8px; text-decoration: none; color: var(--primary-color); font-weight: 600; margin-bottom: 10px; cursor: pointer; }
-    .dashboard-nav a.active { background: var(--primary-color); color: var(--light-text); border-color: var(--primary-color); }
-    .dashboard-content { flex-grow: 1; background: white; padding: 30px; border-radius: var(--border-radius); box-shadow: var(--shadow); }
-    .user-tab-content { display: none; }
-    .user-tab-content.active { display: block; animation: fadeIn 0.5s; }
-    .form-container { max-width: 500px; margin: 40px auto; padding: 30px; background: white; border-radius: var(--border-radius); box-shadow: var(--shadow); }
-    .form-container input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; }
-    .history-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    .history-table th, .history-table td { padding: 12px; border: 1px solid #ddd; text-align: left; }
-    .history-table th { background-color: var(--primary-color); color: white; }
 
     /* --- Floating Cart Button --- */
     .floating-cart-btn {
@@ -283,10 +237,6 @@
     .cart-summary { margin-top: 20px; font-size: 1.1rem; }
     .summary-line { display: flex; justify-content: space-between; padding: 8px 0; }
     .summary-line.total { font-weight: bold; font-size: 1.3rem; border-top: 2px solid #333; margin-top: 10px; }
-    .points-earned {
-        background-color: #fff3cd; color: #856404; padding: 10px;
-        border-radius: 8px; text-align: center; margin-top: 15px; font-weight: bold;
-    }
     .guest-remark {
         background-color: #f8d7da; color: #721c24; padding: 10px;
         border-radius: 8px; text-align: center; margin-top: 15px; font-weight: bold;
@@ -317,9 +267,6 @@
           FOREVER LIVING by Mohd Arvind Isa
           <span style="font-size: 1rem; color: #555; display: block; font-weight: 400;">Quality Wellness Products</span>
         </h1>
-        <div class="header-account-links">
-            <a id="account-link" onclick="showAuthPage()">Login</a>
-        </div>
     </div>
   </header>
 
@@ -327,9 +274,7 @@
     <div class="container">
         <ul id="main-nav">
           <li><a onclick="showTab('products')">Products</a></li>
-          <li><a onclick="showTab('cds')">Cabaran Detox Sihat</a></li>
           <li><a onclick="showTab('business')">Business Opportunity</a></li>
-          <li><a onclick="showTab('rewards')">Rewards</a></li>
         </ul>
     </div>
   </nav>
@@ -346,38 +291,28 @@
             <div id="countdown-timer"></div>
         </div>
       </section>
+
+      <section class="ai-suggestion-box">
+        <h3><i class="fa-solid fa-robot"></i> AI Product Suggester</h3>
+        <p>Describe your health concern (e.g., "dry skin", "low energy", "joint pain") and our AI will suggest a product for you.</p>
+        <input type="text" id="symptom-input" placeholder="Enter your symptom or concern...">
+        <button id="suggest-btn" onclick="suggestProduct()">Get Suggestion</button>
+        <div id="suggestion-result"></div>
+      </section>
+
+      <div class="search-container">
+        <input type="text" id="product-search" onkeyup="filterProducts()" placeholder="Search for products by name...">
+        <i class="fa-solid fa-search search-icon"></i>
+      </div>
+
       <div id="product-list" class="product-list"></div>
     </div>
-    <div id="cds" class="tab-content">
-      <section class="program-section"><h2>Cabaran Detox Sihat (CDS)</h2></section>
-    </div>
     <div id="business" class="tab-content">
-      <section class="program-section"><h2>Build Your Forever Business</h2></section>
-    </div>
-    <div id="rewards" class="tab-content">
-        <section class="program-section">
-            <h2><i class="fa-solid fa-award"></i> Redeem Your Points</h2>
-            <div class="rewards-grid">
-                <div class="reward-item">
-                    <img src="https://i.imgur.com/O9yP2aH.png" alt="RM 5 Voucher">
-                    <h4>RM 5 Voucher</h4>
-                    <p class="points-cost">500 Points</p>
-                    <button class="btn btn-primary redeem-btn">Redeem</button>
-                </div>
-                <div class="reward-item">
-                    <img src="https://i.imgur.com/sY2a2qG.png" alt="RM 10 Voucher">
-                    <h4>RM 10 Voucher</h4>
-                    <p class="points-cost">1000 Points</p>
-                    <button class="btn btn-primary redeem-btn">Redeem</button>
-                </div>
-                <div class="reward-item">
-                    <img src="https://i.imgur.com/Jz4Y8fW.png" alt="RM 20 Voucher">
-                    <h4>RM 20 Voucher</h4>
-                    <p class="points-cost">2000 Points</p>
-                    <button class="btn btn-primary redeem-btn">Redeem</button>
-                </div>
-            </div>
-        </section>
+      <section class="program-section">
+        <h2>Build Your Forever Business</h2>
+        <p style="text-align: center; max-width: 700px; margin: 0 auto 30px;">Join a community of entrepreneurs and build a business that offers financial freedom and a healthier lifestyle. With Forever Living, you get a proven business model, world-class products, and unparalleled support.</p>
+        <a href="https://wa.me/601111033154?text=Hi,%20I'm%20interested%20in%20the%20Forever%20Living%20business%20opportunity." class="cta-button" target="_blank">Learn More & Get Started</a>
+      </section>
     </div>
   </main>
 
@@ -386,84 +321,10 @@
       <p>© 2025 Forever Living by Mohd Arvind Isa. All rights reserved.</p>
       <div class="timestamp">Last updated: <span id="current-date"></span></div>
       <section class="disclaimer">
-        <strong>Disclaimer:</strong> This website is operated by an independent Forever Business Owner.
+        <strong>Disclaimer:</strong> This website is operated by an independent Forever Business Owner. The products shown are not intended to diagnose, treat, cure, or prevent any specific disease or class of diseases. You should consult your family physician if you are experiencing a medical problem. Statements and information provided on this site are for informational purposes only and are not intended to substitute for advice from your physician or other health care professional.
       </section>
     </div>
   </footer>
-</div>
-
-<div id="auth-page" style="display: none;">
-    <div class="form-container">
-        <div id="login-form-container">
-            <h2>Login to Your Account</h2>
-            <input type="email" id="login-email" placeholder="Email Address">
-            <input type="password" id="login-password" placeholder="Password">
-            <button class="btn btn-primary" onclick="login()">Login</button>
-            <p style="margin-top: 20px; font-size: 0.9rem;">Don't have an account? <a href="#" onclick="toggleAuthForms()">Register here</a></p>
-        </div>
-        <div id="register-form-container" style="display: none;">
-            <h2>Create a New Account</h2>
-            <input type="text" id="register-name" placeholder="Full Name">
-            <input type="email" id="register-email" placeholder="Email Address">
-            <input type="password" id="register-password" placeholder="Password">
-            <button class="btn btn-primary" onclick="registerUser()">Register</button>
-            <p style="margin-top: 20px; font-size: 0.9rem;">Already have an account? <a href="#" onclick="toggleAuthForms()">Login here</a></p>
-        </div>
-        <button class="btn btn-secondary" style="margin-top: 20px;" onclick="showStorePage()">Continue as Guest</button>
-    </div>
-</div>
-
-<div id="dashboard-page" style="display: none;">
-    <header>
-        <div class="container">
-            <h1>My Account</h1>
-            <div class="header-account-links">
-                <a onclick="logout()">Logout</a>
-            </div>
-        </div>
-    </header>
-    <div class="container dashboard-layout">
-        <nav class="dashboard-nav">
-            <a href="#" class="active" onclick="showUserTab('profile', this)">My Profile</a>
-            <a href="#" onclick="showUserTab('update-profile', this)">Update Profile</a>
-            <a href="#" onclick="showUserTab('purchase-history', this)">Purchase History</a>
-            <a href="#" onclick="showUserTab('points-history', this)">Points History</a>
-            <a href="#" onclick="showUserTab('wishlist', this)">My Wishlist</a>
-        </nav>
-        <div class="dashboard-content">
-            <div id="profile" class="user-tab-content active">
-                <h3>Personal Details</h3>
-                <p><strong>Name:</strong> <span id="dash-name"></span></p>
-                <p><strong>Email:</strong> <span id="dash-email"></span></p>
-                <p><strong>Phone:</strong> <span id="dash-phone"></span></p>
-                <p><strong>Total Points:</strong> <span id="dash-points"></span></p>
-            </div>
-            <div id="update-profile" class="user-tab-content">
-                <h3>Update Your Profile</h3>
-                <input type="text" id="update-name" placeholder="Full Name">
-                <input type="tel" id="update-phone" placeholder="Phone Number">
-                <button class="btn btn-primary" onclick="updateProfile()">Save Changes</button>
-            </div>
-            <div id="purchase-history" class="user-tab-content">
-                <h3>Purchase History</h3>
-                <table class="history-table">
-                    <thead><tr><th>Order ID</th><th>Date</th><th>Total</th><th>Status</th></tr></thead>
-                    <tbody id="dash-purchase-history"></tbody>
-                </table>
-            </div>
-            <div id="points-history" class="user-tab-content">
-                <h3>Points History</h3>
-                <table class="history-table">
-                    <thead><tr><th>Date</th><th>Description</th><th>Points</th></tr></thead>
-                    <tbody id="dash-points-history"></tbody>
-                </table>
-            </div>
-            <div id="wishlist" class="user-tab-content">
-                <h3>My Wishlist</h3>
-                <div id="dash-wishlist" class="product-list"></div>
-            </div>
-        </div>
-    </div>
 </div>
 
   <!-- Floating Cart Button -->
@@ -483,7 +344,9 @@
         <div class="summary-line"><span>Shipping</span><span id="cart-shipping">RM 0.00</span></div>
         <div class="summary-line total"><span>Total</span><span id="cart-total">RM 0.00</span></div>
       </div>
-      <div id="points-container"></div>
+      <div id="points-container">
+          <div class="guest-remark">Register or login to earn points on this purchase!</div>
+      </div>
       <div class="customer-info-form">
         <h3 style="margin-top: 20px;">Customer Information</h3>
         <input type="text" id="customer-name" placeholder="Your Full Name" required>
@@ -502,7 +365,7 @@
         { id: 3, name: "ALOE BITS N' PEACHES", price: 116.79, promoPrice: 85.84, image: "aloe-peaches.jpg", benefits: "Digestive health, vitamin C source.", consumption: "30-60ml daily." },
         { id: 4, name: "LITE VANILLA", price: 155.72, promoPrice: 114.45, image: "lite-vanilla.jpg", benefits: "Meal replacement for weight management.", consumption: "Mix with milk or water." },
         { id: 5, name: "LITE CHOCO", price: 155.72, promoPrice: 114.45, image: "lite-choco.jpg", benefits: "Meal replacement for weight management.", consumption: "Mix with milk or water." },
-        { id: 6, name: "SUPERGREENS", price: 214.71, promoPrice: 157.82, image: "supergreens.jpg", benefits: "Rich in antioxidants and nutrients.", consumption: "Mix with water or juice." },
+        { id: 6, name: "SUPERGREENS", price: 214.71, promoPrice: 157.82, image: "supergreens.jpg", benefits: "Rich in antioxidants and nutrients. Detoxification.", consumption: "Mix with water or juice." },
         { id: 7, name: "FIBER", price: 124.44, promoPrice: 91.47, image: "fiber.jpg", benefits: "Supports digestive health.", consumption: "Mix with water." },
         { id: 8, name: "TONGKAT ALI", price: 19.90, promoPrice: 18.80, image: "tongkat-ali.jpg", benefits: "Supports men's health and vitality.", consumption: "As per packaging." },
         { id: 9, name: "WHITE COFFEE", price: 15.99, promoPrice: 15.11, image: "white-coffee.jpg", benefits: "Rich and aromatic coffee.", consumption: "Mix with hot water." },
@@ -520,41 +383,41 @@
         { id: 21, name: "BRIGHT TOOTHGEL", price: 41.29, promoPrice: 30.35, image: "bright-toothgel.jpg", benefits: "Fluoride-free, gentle on gums.", consumption: "Brush teeth twice daily." },
         { id: 22, name: "ALOE FIRST", price: 90.83, promoPrice: 66.76, image: "aloe-first.jpg", benefits: "Soothes skin irritations.", consumption: "Spray on skin as needed." },
         { id: 23, name: "DEODORANT STICK", price: 50.73, promoPrice: 37.29, image: "forever-deodorant.jpg", benefits: "Long-lasting protection.", consumption: "Apply daily." },
-        { id: 24, name: "AVOCADO SOAP", price: 30.68, promoPrice: 22.55, image: "avocado-soap.jpg", benefits: "Gentle cleansing for face and body.", consumption: "Use daily." },
-        { id: 25, name: "ALOE LIQUID SOAP", price: 120.91, promoPrice: 88.87, image: "aloe-liquid-soap.jpg", benefits: "Moisturizing hand and face wash.", consumption: "Use daily." },
+        { id: 24, name: "AVOCADO SOAP", price: 30.68, promoPrice: 22.55, image: "avocado-soap.jpg", benefits: "Gentle cleansing for face and body skin.", consumption: "Use daily." },
+        { id: 25, name: "ALOE LIQUID SOAP", price: 120.91, promoPrice: 88.87, image: "aloe-liquid-soap.jpg", benefits: "Moisturizing hand and face skin wash.", consumption: "Use daily." },
         { id: 26, name: "JOJOBA SHAMPOO", price: 105.93, promoPrice: 77.86, image: "aloe-jojoba-shampoo.jpg", benefits: "Nourishes hair and scalp.", consumption: "Massage into wet hair." },
         { id: 27, name: "JOJOBA CONDITIONER", price: 117.70, promoPrice: 86.51, image: "aloe-jojoba-conditioner.jpg", benefits: "Moisturizes and strengthens hair.", consumption: "Apply after shampoo." },
-        { id: 28, name: "ALOE BODY WASH", price: 120.91, promoPrice: 88.87, image: "aloe-body-wash.jpg", benefits: "Gentle, moisturizing body wash.", consumption: "Use daily in shower." },
+        { id: 28, name: "ALOE BODY WASH", price: 120.91, promoPrice: 88.87, image: "aloe-body-wash.jpg", benefits: "Gentle, moisturizing body skin wash.", consumption: "Use daily in shower." },
         { id: 29, name: "ALOE BODY LOTION", price: 112.35, promoPrice: 82.58, image: "aloe-body-lotion.jpg", benefits: "Hydrates and softens skin.", consumption: "Apply to body as needed." },
         { id: 30, name: "ALOE PROPOLIS CREME", price: 90.83, promoPrice: 66.76, image: "aloe-propolis-creme.jpg", benefits: "Soothes and moisturizes dry skin.", consumption: "Apply generously." },
         { id: 31, name: "ALOE VERA GELLY", price: 70.78, promoPrice: 52.03, image: "aloe-vera-gelly.jpg", benefits: "Soothes minor skin irritations.", consumption: "Apply to affected area." },
-        { id: 32, name: "ALOE MOISTURIZING", price: 70.78, promoPrice: 52.03, image: "aloe-moisturizing.jpg", benefits: "Hydrates face and body.", consumption: "Apply as needed." },
+        { id: 32, name: "ALOE MOISTURIZING", price: 70.78, promoPrice: 52.03, image: "aloe-moisturizing.jpg", benefits: "Hydrates face and body skin.", consumption: "Apply as needed." },
         { id: 33, name: "ALOE MASSAGE LOTION", price: 70.78, promoPrice: 52.03, image: "aloe-massage-lotion.jpg", benefits: "Soothing lotion for massage.", consumption: "Massage into skin." },
         { id: 34, name: "ALOE MSM GEL", price: 86.00, promoPrice: 63.21, image: "aloe-msm-gel.jpg", benefits: "Soothes joints and muscles.", consumption: "Apply to affected areas." },
-        { id: 35, name: "ALOE SUNSCREEN", price: 89.07, promoPrice: 65.47, image: "aloe-sunscreen.jpg", benefits: "UV protection with aloe.", consumption: "Apply before sun exposure." },
+        { id: 35, name: "ALOE SUNSCREEN", price: 89.07, promoPrice: 65.47, image: "aloe-sunscreen.jpg", benefits: "UV protection with aloe for skin.", consumption: "Apply before sun exposure." },
         { id: 36, name: "ALOE SCRUB", price: 77.86, promoPrice: 57.23, image: "aloe-scrub.jpg", benefits: "Gently exfoliates skin.", consumption: "Use 2-3 times a week." },
         { id: 37, name: "MASK POWDER", price: 102.90, promoPrice: 75.63, image: "mask-powder.jpg", benefits: "Cleanses and tightens pores.", consumption: "Mix with Aloe Activator." },
         { id: 38, name: "R3 FACTOR-SKIN DEFENSE", price: 160.97, promoPrice: 118.31, image: "r3-factor.jpg", benefits: "Helps skin retain moisture.", consumption: "Apply to face and neck." },
         { id: 39, name: "FOREVER ALPHA-E FACTOR", price: 144.90, promoPrice: 106.50, image: "alpha-e-factor.jpg", benefits: "Nourishes and restores skin.", consumption: "Apply a few drops to face." },
-        { id: 40, name: "INFINITE HYDRATING CLEANSER", price: 131.20, promoPrice: 96.43, image: "infinite-cleanser.jpg", benefits: "Gentle, hydrating cleanser.", consumption: "Use morning and night." },
+        { id: 40, name: "INFINITE HYDRATING CLEANSER", price: 131.20, promoPrice: 96.43, image: "infinite-cleanser.jpg", benefits: "Gentle, hydrating skin cleanser.", consumption: "Use morning and night." },
         { id: 41, name: "INFINITE FIRMING SERUM", price: 190.47, promoPrice: 140.00, image: "infinite-serum.jpg", benefits: "Reduces appearance of fine lines.", consumption: "Apply to face." },
         { id: 42, name: "INFINITE RESTORING CREME", price: 221.56, promoPrice: 162.86, image: "infinite-creme.jpg", benefits: "Deeply moisturizes and restores skin.", consumption: "Apply to face and neck." },
         { id: 43, name: "BALANCING TONER", price: 106.18, promoPrice: 78.05, image: "balancing-toner.jpg", benefits: "Refreshes and balances skin.", consumption: "Apply after cleansing." },
         { id: 44, name: "AWAKENING EYE CREAM", price: 89.66, promoPrice: 65.90, image: "eye-cream.jpg", benefits: "Reduces puffiness and dark circles.", consumption: "Pat gently around eyes." },
-        { id: 45, name: "ALOE ACTIVATOR", price: 80.59, promoPrice: 59.23, image: "aloe-activator.jpg", benefits: "Cleanses, soothes and refreshes.", consumption: "Use with Mask Powder." },
+        { id: 45, name: "ALOE ACTIVATOR", price: 80.59, promoPrice: 59.23, image: "aloe-activator.jpg", benefits: "Cleanses, soothes and refreshes skin.", consumption: "Use with Mask Powder." },
         { id: 46, name: "HYDRATING SERUM", price: 156.56, promoPrice: 115.07, image: "hydrating-serum.jpg", benefits: "Boosts skin hydration.", consumption: "Apply to face." },
-        { id: 47, name: "S.REFRESHING G.CLEANSER", price: 115.61, promoPrice: 84.98, image: "refreshing-cleanser.jpg", benefits: "Gentle gel cleanser.", consumption: "Use morning and night." },
+        { id: 47, name: "S.REFRESHING G.CLEANSER", price: 115.61, promoPrice: 84.98, image: "refreshing-cleanser.jpg", benefits: "Gentle gel skin cleanser.", consumption: "Use morning and night." },
         { id: 48, name: "S. IILUMINATING GEL", price: 107.35, promoPrice: 78.91, image: "illuminating-gel.jpg", benefits: "Brightens skin appearance.", consumption: "Apply to face." },
-        { id: 49, name: "S. REFINING GEL MASK", price: 115.61, promoPrice: 84.98, image: "refining-mask.jpg", benefits: "Refines pores and moisturizes.", consumption: "Use 2-3 times a week." },
-        { id: 50, name: "S.SMOOTHING GEL MOISTURIZER", price: 115.76, promoPrice: 85.08, image: "smoothing-moisturizer.jpg", benefits: "Lightweight gel moisturizer.", consumption: "Apply to face." },
+        { id: 49, name: "S. REFINING GEL MASK", price: 115.61, promoPrice: 84.98, image: "refining-mask.jpg", benefits: "Refines pores and moisturizes skin.", consumption: "Use 2-3 times a week." },
+        { id: 50, name: "S.SMOOTHING GEL MOISTURIZER", price: 115.76, promoPrice: 85.08, image: "smoothing-moisturizer.jpg", benefits: "Lightweight gel moisturizer for skin.", consumption: "Apply to face." },
         { id: 51, name: "ALOE BIO-CELLULOSE MASK", price: 146.00, promoPrice: 107.31, image: "bio-cellulose-mask.jpg", benefits: "Deeply hydrates and conditions skin.", consumption: "Use once a week." },
-        { id: 52, name: "REPLENISHING SKIN OIL", price: 132.00, promoPrice: 97.02, image: "skin-oil.jpg", benefits: "Nourishes with a blend of oils.", consumption: "Apply a few drops to face." },
-        { id: 53, name: "PROTECTING DAY LOTION", price: 167.99, promoPrice: 123.47, image: "day-lotion.jpg", benefits: "Moisturizes and protects with SPF.", consumption: "Apply in the morning." },
+        { id: 52, name: "REPLENISHING SKIN OIL", price: 132.00, promoPrice: 97.02, image: "skin-oil.jpg", benefits: "Nourishes with a blend of oils for skin.", consumption: "Apply a few drops to face." },
+        { id: 53, name: "PROTECTING DAY LOTION", price: 167.99, promoPrice: 123.47, image: "day-lotion.jpg", benefits: "Moisturizes and protects skin with SPF.", consumption: "Apply in the morning." },
     ];
     let cart = [];
     const promoEndDate = new Date("August 2, 2025 23:59:59").getTime();
 
-    // --- LOGIC (Updated) ---
+    // --- LOGIC ---
 
     function isPromoActive() {
         return new Date().getTime() < promoEndDate;
@@ -563,14 +426,12 @@
     function renderProducts() {
       const productList = document.getElementById('product-list');
       if (!productList) return;
-      const isLoggedIn = !!sessionStorage.getItem('loggedInUser');
       const promoActive = isPromoActive();
       
       productList.innerHTML = products.map(product => {
         const finalPrice = promoActive && product.promoPrice ? product.promoPrice : product.price;
         const hasDiscount = promoActive && product.promoPrice;
         const points = Math.floor(finalPrice);
-        const wishlistBtn = isLoggedIn ? `<button class="btn btn-secondary" onclick="addToWishlist(${product.id})"><i class="fa-solid fa-heart"></i> Add to Wishlist</button>` : '';
         
         return `
           <div class="product ${hasDiscount ? 'promo-highlight' : ''}">
@@ -583,14 +444,75 @@
                 </div>
                 <div class="benefits"><strong>Benefits:</strong> ${product.benefits}</div>
                 <div class="consumption"><strong>Usage:</strong> ${product.consumption}</div>
-                <div class="product-points"><i class="fa-solid fa-star"></i> Earn ${points} Points</div>
+                <div class="product-points"><i class="fa-solid fa-star"></i> Earn ${points} Points (with account)</div>
                 <div class="product-actions">
                     <button class="btn btn-primary" onclick="addToCart(${product.id})"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
-                    ${wishlistBtn}
                 </div>
             </div>
           </div>`;
       }).join('');
+    }
+
+    function filterProducts() {
+        const query = document.getElementById('product-search').value.toLowerCase();
+        const productCards = document.querySelectorAll('#product-list .product');
+        productCards.forEach(card => {
+            const productName = card.querySelector('h3').textContent.toLowerCase();
+            if (productName.includes(query)) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    function suggestProduct() {
+        const symptom = document.getElementById('symptom-input').value.toLowerCase().trim();
+        const resultContainer = document.getElementById('suggestion-result');
+        if (!symptom) {
+            resultContainer.innerHTML = '<p style="color: red;">Please enter a symptom or health concern.</p>';
+            return;
+        }
+
+        const keywords = {
+            'digestion': [1, 2, 3, 7, 11, 18], 'immune': [1, 2, 14, 15, 17], 'energy': [12, 13, 15],
+            'weight': [4, 5], 'skin': [22, 24, 25, 28, 29, 30, 31, 32, 35, 36, 38, 39, 40, 42, 51, 52, 45, 46, 47, 48, 49, 50, 53],
+            'joint': [34], 'muscle': [34], 'heart': [16], 'brain': [16], 'bone': [19], 'lips': [20],
+            'hair': [26, 27], 'detox': [18, 6], 'men': [8], 'throat': [12], 'antioxidant': [2, 6, 17],
+            'face': [24, 25, 32, 38, 39, 40, 41, 42, 43, 44, 46, 47, 48, 50, 52, 53]
+        };
+
+        let suggestedIds = [];
+        for (const key in keywords) {
+            if (symptom.includes(key)) {
+                suggestedIds.push(...keywords[key]);
+            }
+        }
+        
+        products.forEach(p => {
+            if (p.benefits.toLowerCase().includes(symptom) && !suggestedIds.includes(p.id)) {
+                suggestedIds.push(p.id);
+            }
+        });
+
+        const uniqueIds = [...new Set(suggestedIds)];
+
+        if (uniqueIds.length > 0) {
+            let resultHTML = '<h4>Based on your concern, we suggest:</h4>';
+            uniqueIds.slice(0, 3).forEach(id => {
+                const product = products.find(p => p.id === id);
+                if (product) {
+                    resultHTML += `
+                        <div class="suggestion-product">
+                            <span style="flex-grow: 1;"><strong>${product.name}</strong> - ${product.benefits}</span>
+                            <button class="btn btn-primary" style="width: auto; padding: 8px 15px; flex-shrink: 0;" onclick="addToCart(${product.id}); toggleCart();">Add</button>
+                        </div>`;
+                }
+            });
+            resultContainer.innerHTML = resultHTML;
+        } else {
+            resultContainer.innerHTML = '<p>We could not find a specific match. Try searching for products directly or use broader terms like "skin" or "energy".</p>';
+        }
     }
 
     function showTab(tabId) {
@@ -651,14 +573,12 @@
       const subtotalEl = document.getElementById('cart-subtotal');
       const shippingEl = document.getElementById('cart-shipping');
       const totalEl = document.getElementById('cart-total');
-      const pointsContainer = document.getElementById('points-container');
       
       if (cart.length === 0) {
         cartItemsEl.innerHTML = '<p>Your cart is empty</p>';
         subtotalEl.textContent = 'RM 0.00';
         shippingEl.textContent = 'RM 0.00';
         totalEl.textContent = 'RM 0.00';
-        pointsContainer.innerHTML = '';
         return;
       }
       
@@ -685,19 +605,11 @@
       
       const shipping = calculateShipping(cart, subtotal);
       const total = subtotal + shipping.fee;
-      const points = Math.floor(subtotal);
-      const isLoggedIn = !!sessionStorage.getItem('loggedInUser');
 
       cartItemsEl.innerHTML = itemsHTML;
       subtotalEl.textContent = `RM ${subtotal.toFixed(2)}`;
       shippingEl.textContent = shipping.message;
       totalEl.textContent = `RM ${total.toFixed(2)}`;
-      
-      if (isLoggedIn) {
-          pointsContainer.innerHTML = `<div class="points-earned"><i class="fa-solid fa-star"></i> Points Earned: <span id="points-earned">${points}</span></div>`;
-      } else {
-          pointsContainer.innerHTML = `<div class="guest-remark">Register or login to earn points on this purchase!</div>`;
-      }
     }
 
     function updateCartCount() {
@@ -714,165 +626,17 @@
       const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
       const shipping = calculateShipping(cart, subtotal);
       const total = subtotal + shipping.fee;
-      const points = Math.floor(subtotal);
       
-      const loggedInUserEmail = sessionStorage.getItem('loggedInUser');
-      if (loggedInUserEmail) {
-          let users = JSON.parse(localStorage.getItem('users')) || [];
-          const userIndex = users.findIndex(u => u.email === loggedInUserEmail);
-          if (userIndex !== -1) {
-              const newPurchase = { id: `#${Date.now().toString().slice(-4)}`, date: new Date().toLocaleDateString('en-GB'), total: total.toFixed(2), status: 'Processing' };
-              const newPoints = { date: new Date().toLocaleDateString('en-GB'), description: `Order ${newPurchase.id}`, points: `+${points}` };
-              users[userIndex].purchaseHistory.push(newPurchase);
-              users[userIndex].pointsHistory.push(newPoints);
-              users[userIndex].totalPoints += points;
-              localStorage.setItem('users', JSON.stringify(users));
-          }
-      }
-
       let message = `Hi, I would like to place an order:\n\nName: ${name}\nPhone: ${phone}\n\n--- ORDER DETAILS ---\n`;
       cart.forEach(item => { message += `- ${item.name} (x${item.quantity}) - RM ${(item.price * item.quantity).toFixed(2)}\n`; });
       message += `\n--- SUMMARY ---\nSubtotal: RM ${subtotal.toFixed(2)}\nShipping: ${shipping.message}\nTOTAL: RM ${total.toFixed(2)}\n`;
-      if (loggedInUserEmail) message += `Points Earned: ${points}\n\n`;
-      message += `Please confirm my order. Thank you!`;
+      message += `\nPlease confirm my order. Thank you!`;
       
       window.open(`https://wa.me/601111033154?text=${encodeURIComponent(message)}`, '_blank');
       
       cart = [];
       updateCartCount();
       toggleCart();
-    }
-
-    // --- User Account Functions ---
-    function showPage(pageId) {
-        document.getElementById('store-wrapper').style.display = 'none';
-        document.getElementById('auth-page').style.display = 'none';
-        document.getElementById('dashboard-page').style.display = 'none';
-        document.getElementById(pageId).style.display = 'block';
-    }
-    
-    function showAuthPage() { showPage('auth-page'); }
-    function showStorePage() { showPage('store-wrapper'); }
-    function showDashboardPage() { showPage('dashboard-page'); }
-
-    function toggleAuthForms() {
-        const loginForm = document.getElementById('login-form-container');
-        const registerForm = document.getElementById('register-form-container');
-        loginForm.style.display = loginForm.style.display === 'none' ? 'block' : 'none';
-        registerForm.style.display = registerForm.style.display === 'none' ? 'block' : 'none';
-    }
-
-    function registerUser() {
-        const name = document.getElementById('register-name').value.trim();
-        const email = document.getElementById('register-email').value.trim();
-        const password = document.getElementById('register-password').value.trim();
-        if (!name || !email || !password) { alert('Please fill in all fields.'); return; }
-
-        let users = JSON.parse(localStorage.getItem('users')) || [];
-        if (users.find(user => user.email === email)) { alert('An account with this email already exists.'); return; }
-
-        users.push({ name, email, password, phone: '', totalPoints: 0, purchaseHistory: [], pointsHistory: [], redemptionHistory: [], myVouchers: [], wishlist: [] });
-        localStorage.setItem('users', JSON.stringify(users));
-        alert('Registration successful! Please login.');
-        toggleAuthForms();
-    }
-
-    function login() {
-        const email = document.getElementById('login-email').value.trim();
-        const password = document.getElementById('login-password').value.trim();
-        let users = JSON.parse(localStorage.getItem('users')) || [];
-        const user = users.find(u => u.email === email && u.password === password);
-
-        if (user) {
-            sessionStorage.setItem('loggedInUser', user.email);
-            document.getElementById('account-link').textContent = 'My Account';
-            document.getElementById('account-link').setAttribute('onclick', 'showDashboardPage()');
-            renderDashboard(user);
-            showDashboardPage();
-            renderProducts(); // Re-render to show wishlist buttons
-            updateRedeemButtonsState();
-        } else {
-            alert('Invalid email or password.');
-        }
-    }
-
-    function logout() {
-        sessionStorage.removeItem('loggedInUser');
-        document.getElementById('account-link').textContent = 'Login';
-        document.getElementById('account-link').setAttribute('onclick', 'showAuthPage()');
-        showStorePage();
-        renderProducts(); // Re-render to hide wishlist buttons
-        updateRedeemButtonsState();
-    }
-
-    function renderDashboard(user) {
-        document.getElementById('dash-name').textContent = user.name;
-        document.getElementById('dash-email').textContent = user.email;
-        document.getElementById('dash-phone').textContent = user.phone || 'Not set';
-        document.getElementById('dash-points').textContent = user.totalPoints;
-        
-        document.getElementById('update-name').value = user.name;
-        document.getElementById('update-phone').value = user.phone || '';
-
-        const purchaseHistoryBody = document.getElementById('dash-purchase-history');
-        purchaseHistoryBody.innerHTML = user.purchaseHistory.length ? user.purchaseHistory.map(p => `<tr><td>${p.id}</td><td>${p.date}</td><td>RM ${p.total}</td><td>${p.status}</td></tr>`).join('') : '<tr><td colspan="4">No purchases yet.</td></tr>';
-
-        const pointsHistoryBody = document.getElementById('dash-points-history');
-        pointsHistoryBody.innerHTML = user.pointsHistory.length ? user.pointsHistory.map(p => `<tr><td>${p.date}</td><td>${p.description}</td><td style="color: green;">${p.points}</td></tr>`).join('') : '<tr><td colspan="3">No points history.</td></tr>';
-        
-        const wishlistContainer = document.getElementById('dash-wishlist');
-        wishlistContainer.innerHTML = user.wishlist.length ? user.wishlist.map(productId => {
-            const product = products.find(p => p.id === productId);
-            return product ? `<div class="product"><h3>${product.name}</h3><img src="${product.image}" style="height:100px; object-fit:contain;"><button class="btn btn-primary" onclick="addToCart(${product.id}); toggleCart();">Add to Cart</button></div>` : '';
-        }).join('') : '<p>Your wishlist is empty.</p>';
-    }
-
-    function updateProfile() {
-        const loggedInUserEmail = sessionStorage.getItem('loggedInUser');
-        if (!loggedInUserEmail) return;
-        let users = JSON.parse(localStorage.getItem('users')) || [];
-        const userIndex = users.findIndex(u => u.email === loggedInUserEmail);
-
-        if (userIndex !== -1) {
-            users[userIndex].name = document.getElementById('update-name').value.trim();
-            users[userIndex].phone = document.getElementById('update-phone').value.trim();
-            localStorage.setItem('users', JSON.stringify(users));
-            alert('Profile updated successfully!');
-            renderDashboard(users[userIndex]);
-            showUserTab('profile', document.querySelector('.dashboard-nav a'));
-        }
-    }
-
-    function addToWishlist(productId) {
-        const loggedInUserEmail = sessionStorage.getItem('loggedInUser');
-        if (!loggedInUserEmail) { alert('Please login to add items to your wishlist.'); return; }
-        let users = JSON.parse(localStorage.getItem('users')) || [];
-        const userIndex = users.findIndex(u => u.email === loggedInUserEmail);
-
-        if (userIndex !== -1) {
-            if (!users[userIndex].wishlist.includes(productId)) {
-                users[userIndex].wishlist.push(productId);
-                localStorage.setItem('users', JSON.stringify(users));
-                alert('Item added to your wishlist!');
-            } else {
-                alert('This item is already in your wishlist.');
-            }
-        }
-    }
-
-    function showUserTab(tabId, element) {
-        document.querySelectorAll('.user-tab-content').forEach(el => el.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        document.querySelectorAll('.dashboard-nav a').forEach(el => el.classList.remove('active'));
-        element.classList.add('active');
-    }
-
-    function updateRedeemButtonsState() {
-        const isLoggedIn = !!sessionStorage.getItem('loggedInUser');
-        document.querySelectorAll('.redeem-btn').forEach(btn => {
-            btn.disabled = !isLoggedIn;
-            btn.title = isLoggedIn ? "" : "You must be logged in to redeem.";
-        });
     }
 
     function startCountdown() {
@@ -926,7 +690,6 @@
 
       renderProducts();
       showTab('products');
-      updateRedeemButtonsState();
     });
   </script>
 </body>
