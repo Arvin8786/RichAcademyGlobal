@@ -63,7 +63,7 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     nav ul { display: flex; list-style: none; padding: 10px 0; margin: 0; justify-content: center; flex-wrap: wrap; }
-    nav a { color: var(--light-text); text-decoration: none; font-weight: 600; padding: 10px 20px; display: inline-block; position: relative; transition: color 0.3s; }
+    nav a { color: var(--light-text); text-decoration: none; font-weight: 600; padding: 10px 20px; display: inline-block; position: relative; transition: color 0.3s; cursor: pointer; }
     nav a::after { content: ''; position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); width: 0; height: 2px; background-color: var(--secondary-color); transition: width 0.3s; }
     nav a:hover { color: #f1c40f; }
     nav a:hover::after { width: 60%; }
@@ -87,18 +87,6 @@
         display: inline-block;
         font-weight: 600;
     }
-
-    /* --- Search & AI Suggestion --- */
-    .search-container { margin-bottom: 30px; position: relative; }
-    #product-search { width: 100%; padding: 15px 50px 15px 25px; border: 2px solid #ddd; border-radius: 50px; font-size: 1rem; outline: none; transition: all 0.3s; }
-    #product-search:focus { border-color: var(--primary-color); box-shadow: 0 0 10px rgba(26, 82, 118, 0.2); }
-    .search-icon { position: absolute; right: 25px; top: 50%; transform: translateY(-50%); color: var(--primary-color); font-size: 1.2rem; }
-    .ai-suggestion-box { background: var(--light-text); padding: 30px; border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 30px; text-align: center; }
-    #symptom-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin: 10px 0; }
-    #suggest-btn { background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: var(--light-text); border: none; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: all 0.3s; margin-top: 10px; }
-    #suggest-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-    #suggestion-result { margin-top: 20px; text-align: left; }
-    .suggestion-product { background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--accent-color); }
 
     /* --- Product List & Cards --- */
     .product-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
@@ -138,31 +126,26 @@
       font-weight: bold; font-size: 0.9rem; box-shadow: 0 3px 10px rgba(0,0,0,0.2);
     }
 
-    /* --- CDS & Business Sections --- */
-    .program-section { background: var(--light-text); padding: 40px; border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 30px; }
-    .program-section h2 { font-size: 2.5rem; text-align: center; }
-    .program-highlights { display: flex; flex-wrap: wrap; justify-content: space-around; margin: 30px 0; gap: 20px; }
-    .highlight-card { flex: 1; min-width: 280px; background: var(--light-gray); border: 1px solid #e0e0e0; border-radius: var(--border-radius); padding: 20px; transition: transform 0.3s, box-shadow 0.3s; }
-    .highlight-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
-    .highlight-card h3 { border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; }
-    .highlight-card ul { list-style: none; padding: 0; }
-    .highlight-card li { margin-bottom: 10px; display: flex; align-items: flex-start; }
-    .highlight-card .fa-solid { color: var(--accent-color); margin-right: 10px; margin-top: 5px; }
-    .testimonial { background: #f0f8f0; padding: 20px; border-left: 4px solid var(--accent-color); margin: 20px 0; font-style: italic; border-radius: 0 8px 8px 0; }
-    .testimonial-author { text-align: right; font-weight: bold; color: var(--primary-color); }
-    .cta-button { display: block; width: fit-content; margin: 30px auto; background: linear-gradient(135deg, var(--secondary-color), #e67e22); color: var(--light-text); text-align: center; padding: 15px 40px; border-radius: 50px; font-weight: bold; text-decoration: none; font-size: 1.2rem; transition: all 0.3s; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-    .cta-button:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.3); }
-
     /* --- Rewards Section --- */
     .rewards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-    .reward-item { background: var(--light-gray); border: 1px solid #ddd; border-radius: var(--border-radius); padding: 20px; text-align: center; }
+    .reward-item { background: var(--light-gray); border: 1px solid #ddd; border-radius: var(--border-radius); padding: 20px; text-align: center; display: flex; flex-direction: column; }
     .reward-item img { max-width: 100%; height: 100px; object-fit: contain; margin-bottom: 15px; border-radius: 8px; }
     .reward-item h4 { margin: 10px 0 5px; }
-    .reward-item .points-cost { font-weight: bold; color: var(--accent-color); }
+    .reward-item .points-cost { font-weight: bold; color: var(--accent-color); margin-bottom: 15px; }
+    .reward-item .btn { margin-top: auto; }
 
-    /* --- Footer --- */
-    footer { background: var(--primary-color); color: var(--light-text); padding: 40px 20px; text-align: center; margin-top: 30px; }
-    .disclaimer { margin-top: 20px; background-color: rgba(255,255,255,0.1); color: #ddd; padding: 15px; border-radius: var(--border-radius); max-width: 800px; margin-left: auto; margin-right: auto; }
+    /* --- Login & User Dashboard --- */
+    #login-page, #user-dashboard { display: none; }
+    .dashboard-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+    .dashboard-nav a { background: var(--light-gray); border: 1px solid #ddd; padding: 10px 20px; border-radius: 50px; text-decoration: none; color: var(--primary-color); font-weight: 600; }
+    .dashboard-nav a.active { background: var(--primary-color); color: var(--light-text); }
+    .user-tab-content { display: none; }
+    .user-tab-content.active { display: block; animation: fadeIn 0.5s; }
+    .form-container { max-width: 500px; margin: 40px auto; padding: 30px; background: white; border-radius: var(--border-radius); box-shadow: var(--shadow); }
+    .form-container input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; }
+    .history-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    .history-table th, .history-table td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+    .history-table th { background-color: var(--primary-color); color: white; }
 
     /* --- Floating Cart Button --- */
     .floating-cart-btn {
@@ -254,16 +237,19 @@
 
   <nav>
     <div class="container">
-        <ul>
-          <li><a href="#" onclick="showTab('products')">Products</a></li>
-          <li><a href="#" onclick="showTab('cds')">Cabaran Detox Sihat</a></li>
-          <li><a href="#" onclick="showTab('business')">Business Opportunity</a></li>
-          <li><a href="#" onclick="showTab('rewards')">Rewards</a></li>
+        <ul id="main-nav">
+          <li><a onclick="showMainStore()">Home</a></li>
+          <li><a onclick="showMainStoreAndTab('products')">Products</a></li>
+          <li><a onclick="showMainStoreAndTab('cds')">Cabaran Detox Sihat</a></li>
+          <li><a onclick="showMainStoreAndTab('business')">Business Opportunity</a></li>
+          <li><a onclick="showMainStoreAndTab('rewards')">Rewards</a></li>
+          <li><a id="login-nav-btn" onclick="showLoginPage()">Login</a></li>
+          <li><a id="logout-nav-btn" onclick="logout()" style="display:none;">Logout</a></li>
         </ul>
     </div>
   </nav>
 
-  <main class="container">
+  <main id="main-content" class="container">
     <div id="products" class="tab-content active">
       <section class="hero-section">
         <h2><i class="fa-solid fa-gift"></i> GRAND OPENING SPECIAL</h2>
@@ -272,73 +258,20 @@
             Promotion Period: 21/7/2025 - 24/8/2025
         </div>
       </section>
-
-      <div class="search-container">
-        <input type="text" id="product-search" placeholder="Search for products...">
-        <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
-      </div>
-
-      <div class="ai-suggestion-box">
-        <h2><i class="fa-solid fa-robot"></i> AI Product Suggestion</h2>
-        <p>Tell our AI your symptoms, and we'll recommend the best products for you.</p>
-        <input type="text" id="symptom-input" placeholder="e.g., joint pain, low energy, digestion issues...">
-        <button id="suggest-btn" onclick="suggestProduct()">Get Suggestions</button>
-        <div id="suggestion-result"></div>
-      </div>
-      
-      <h2 style="text-align: center; font-size: 2.2rem; margin: 40px 0 30px;">Our Products</h2>
       <div id="product-list" class="product-list"></div>
     </div>
 
     <div id="cds" class="tab-content">
       <section class="program-section">
         <h2>Cabaran Detox Sihat (CDS)</h2>
-        <p style="text-align: center; font-size: 1.2rem;">Transform your health in just 7 days with our proven detox program</p>
-        <div class="program-highlights">
-          <div class="highlight-card">
-            <h3><i class="fa-solid fa-box-open"></i> What You Get</h3>
-            <ul>
-              <li><i class="fa-solid fa-check-circle"></i> Personalized Forever product package</li>
-              <li><i class="fa-solid fa-check-circle"></i> Detailed meal plan & recipes</li>
-              <li><i class="fa-solid fa-check-circle"></i> Daily coaching via WhatsApp</li>
-            </ul>
-          </div>
-          <div class="highlight-card">
-            <h3><i class="fa-solid fa-spa"></i> Benefits</h3>
-            <ul>
-              <li><i class="fa-solid fa-check-circle"></i> Boost energy levels</li>
-              <li><i class="fa-solid fa-check-circle"></i> Healthy weight management</li>
-              <li><i class="fa-solid fa-check-circle"></i> Improved mental clarity</li>
-            </ul>
-          </div>
-        </div>
-        <a href="https://wa.me/601111033154?text=I%20want%20to%20join%20CDS%20Program" class="cta-button">Join CDS Now <i class="fa-solid fa-arrow-right"></i></a>
+        <p style="text-align: center; font-size: 1.2rem;">Transform your health in just 7 days</p>
       </section>
     </div>
 
     <div id="business" class="tab-content">
       <section class="program-section">
         <h2>Build Your Forever Business</h2>
-        <p style="text-align: center; font-size: 1.2rem;">Start your journey to financial freedom with our proven system</p>
-        <div class="program-highlights">
-          <div class="highlight-card">
-            <h3><i class="fa-solid fa-briefcase"></i> Why Join Us?</h3>
-            <ul>
-              <li><i class="fa-solid fa-check-circle"></i> Earn 30-50% commission</li>
-              <li><i class="fa-solid fa-check-circle"></i> Work from anywhere</li>
-              <li><i class="fa-solid fa-check-circle"></i> Flexible hours</li>
-            </ul>
-          </div>
-          <div class="highlight-card">
-            <h3><i class="fa-solid fa-handshake-angle"></i> What We Provide</h3>
-            <ul>
-              <li><i class="fa-solid fa-check-circle"></i> Complete training program</li>
-              <li><i class="fa-solid fa-check-circle"></i> Marketing materials & mentorship</li>
-              <li><i class="fa-solid fa-check-circle"></i> Strong team support</li>
-            </ul>
-          </div>
-        </div>
-        <a href="https://wa.me/601111033154?text=I%20want%20to%20join%20Forever%20Business" class="cta-button">Start Your Business Today <i class="fa-solid fa-arrow-right"></i></a>
+        <p style="text-align: center; font-size: 1.2rem;">Start your journey to financial freedom</p>
       </section>
     </div>
 
@@ -350,19 +283,22 @@
             <h3 style="margin-top: 40px;">Vouchers</h3>
             <div class="rewards-grid">
                 <div class="reward-item">
-                    <img src="rm5.jpg" alt="RM 5 Voucher">
+                    <img src="https://i.imgur.com/O9yP2aH.png" alt="RM 5 Voucher">
                     <h4>RM 5 Voucher</h4>
                     <p class="points-cost">500 Points</p>
+                    <button class="btn btn-primary">Redeem</button>
                 </div>
                 <div class="reward-item">
-                    <img src="rm10.jpg" alt="RM 10 Voucher">
+                    <img src="https://i.imgur.com/sY2a2qG.png" alt="RM 10 Voucher">
                     <h4>RM 10 Voucher</h4>
                     <p class="points-cost">1000 Points</p>
+                    <button class="btn btn-primary">Redeem</button>
                 </div>
                 <div class="reward-item">
-                    <img src="rm20.jpg" alt="RM 20 Voucher">
+                    <img src="https://i.imgur.com/Jz4Y8fW.png" alt="RM 20 Voucher">
                     <h4>RM 20 Voucher</h4>
                     <p class="points-cost">2000 Points</p>
+                    <button class="btn btn-primary">Redeem</button>
                 </div>
             </div>
 
@@ -372,24 +308,78 @@
                     <img src="aloe-vera-gel.jpg" alt="Aloe Vera Gel">
                     <h4>Aloe Vera Gel</h4>
                     <p class="points-cost">10000 Points</p>
+                    <button class="btn btn-primary">Redeem</button>
                 </div>
                 <div class="reward-item">
                     <img src="aloe-berry-nectar.jpg" alt="Aloe Berry Nectar">
                     <h4>Aloe Berry Nectar</h4>
                     <p class="points-cost">10000 Points</p>
+                    <button class="btn btn-primary">Redeem</button>
                 </div>
                 <div class="reward-item">
                     <img src="aloe-peaches.jpg" alt="Aloe Peaches">
                     <h4>Aloe Peaches</h4>
                     <p class="points-cost">10000 Points</p>
+                    <button class="btn btn-primary">Redeem</button>
                 </div>
             </div>
         </section>
     </div>
   </main>
 
+  <div id="login-page" class="container">
+    <div class="form-container">
+        <h2>Login to Your Account</h2>
+        <input type="email" placeholder="Email Address">
+        <input type="password" placeholder="Password">
+        <button class="btn btn-primary" onclick="login()">Login</button>
+        <p style="margin-top: 20px; font-size: 0.9rem;">Don't have an account? <a href="#" style="color: var(--primary-color);">Register here</a></p>
+    </div>
+  </div>
+
+  <div id="user-dashboard" class="container">
+    <h2>My Account</h2>
+    <nav class="dashboard-nav">
+        <a href="#" class="active" onclick="showUserTab('profile', this)">My Profile</a>
+        <a href="#" onclick="showUserTab('purchase-history', this)">Purchase History</a>
+        <a href="#" onclick="showUserTab('points-history', this)">Points History</a>
+        <a href="#" onclick="showUserTab('redemption-history', this)">Redemption History</a>
+        <a href="#" onclick="showUserTab('my-vouchers', this)">My Vouchers</a>
+    </nav>
+
+    <div id="profile" class="user-tab-content active">
+        <h3>Personal Details</h3>
+        <p><strong>Name:</strong> John Doe</p>
+        <p><strong>Email:</strong> john.doe@example.com</p>
+        <p><strong>Phone:</strong> +60 12-345 6789</p>
+        <p><strong>Total Points:</strong> 1250</p>
+    </div>
+    <div id="purchase-history" class="user-tab-content">
+        <h3>Purchase History</h3>
+        <table class="history-table">
+            <thead><tr><th>Order ID</th><th>Date</th><th>Total</th><th>Status</th></tr></thead>
+            <tbody><tr><td>#1002</td><td>15 Jul 2025</td><td>RM 150.50</td><td>Completed</td></tr></tbody>
+        </table>
+    </div>
+    <div id="points-history" class="user-tab-content">
+        <h3>Points History</h3>
+        <table class="history-table">
+            <thead><tr><th>Date</th><th>Description</th><th>Points</th></tr></thead>
+            <tbody><tr><td>15 Jul 2025</td><td>Order #1002</td><td style="color: green;">+150</td></tr></tbody>
+        </table>
+    </div>
+    <div id="redemption-history" class="user-tab-content">
+        <h3>Redemption History</h3>
+        <p>No redemptions yet.</p>
+    </div>
+    <div id="my-vouchers" class="user-tab-content">
+        <h3>My Vouchers</h3>
+        <p>You have no active vouchers.</p>
+    </div>
+  </div>
+
   <!-- Floating Cart Button -->
-  <div class="floating-cart-btn" onclick="toggleCart()">
+  <div id="floating-cart" class="floating-cart-btn" onclick="toggleCart()">
     <i class="fa-solid fa-cart-shopping"></i>
     <span id="cart-count">0</span>
   </div>
@@ -400,36 +390,19 @@
       <span class="close" onclick="toggleCart()">×</span>
       <h2>Your Shopping Cart</h2>
       <div id="cart-items"><p>Your cart is currently empty.</p></div>
-      
       <div class="cart-summary">
-        <div class="summary-line">
-          <span>Subtotal</span>
-          <span id="cart-subtotal">RM 0.00</span>
-        </div>
-        <div class="summary-line">
-          <span>Shipping</span>
-          <span id="cart-shipping">RM 0.00</span>
-        </div>
-        <div class="summary-line total">
-          <span>Total</span>
-          <span id="cart-total">RM 0.00</span>
-        </div>
+        <div class="summary-line"><span>Subtotal</span><span id="cart-subtotal">RM 0.00</span></div>
+        <div class="summary-line"><span>Shipping</span><span id="cart-shipping">RM 0.00</span></div>
+        <div class="summary-line total"><span>Total</span><span id="cart-total">RM 0.00</span></div>
       </div>
-
-      <div class="points-earned">
-        <i class="fa-solid fa-star"></i> Points Earned: <span id="points-earned">0</span>
-      </div>
-      
+      <div class="points-earned"><i class="fa-solid fa-star"></i> Points Earned: <span id="points-earned">0</span></div>
       <div class="customer-info-form">
         <h3 style="margin-top: 20px;">Customer Information</h3>
         <input type="text" id="customer-name" placeholder="Your Full Name" required style="width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ddd; border-radius: 4px;">
         <input type="tel" id="customer-phone" placeholder="Your WhatsApp Number" required style="width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ddd; border-radius: 4px;">
         <button class="btn btn-primary checkout-btn" onclick="checkout()">Complete Order via WhatsApp</button>
       </div>
-
-      <div class="free-shipping-promo">
-        🚚 FREE NATIONWIDE DELIVERY for orders RM 250 and above!
-      </div>
+      <div class="free-shipping-promo">🚚 FREE NATIONWIDE DELIVERY for orders RM 250 and above!</div>
     </div>
   </div>
 
@@ -483,13 +456,12 @@
       { id: 23, name: "Teh Tarik Halia", price: 25.90, image: "teh-tarik.jpg", benefits: "Warming effect, digestion aid, ginger-infused, improves circulation, relieves bloating.", consumption: "Mix sachet with hot water and stir well." },
       { id: 24, name: "Choco Malt Drink", price: 27.90, image: "choco-malt.jpg", benefits: "Rich in B vitamins, iron for red blood cell production, supports metabolism, promotes growth, aids recovery after fatigue.", consumption: "Mix 2-3 tablespoons in 150–200ml hot water or milk." }
     ];
-    const productSuggestions = { "digestion": { id: 1, name: "Aloe Vera Gel", recommendation: "30-60ml daily on empty stomach for digestive support" }, "bloating": { id: 1, name: "Aloe Vera Gel", recommendation: "30-60ml daily to reduce bloating" }, "low energy": { id: 4, name: "Royal Jelly", recommendation: "1 tablet morning and afternoon" }, "joint pain": { id: 6, name: "Arctic Sea", recommendation: "2 softgels twice daily for joint support" }};
     let cart = [];
 
     // --- LOGIC (Updated) ---
 
     function applyGrandOpeningDiscount(products) {
-      const discountRate = 0.05; // 5% discount
+      const discountRate = 0.05;
       return products.map(product => {
         if (product.grandOpeningSpecial) {
           return { ...product, originalPrice: product.price, price: product.price * (1 - discountRate) };
@@ -506,7 +478,7 @@
       productList.innerHTML = discountedProducts.map(product => {
         const isFeatured = product.grandOpeningSpecial;
         const hasDiscount = product.originalPrice !== undefined;
-        const points = Math.floor(product.price / 10) * 10;
+        const points = Math.floor(product.price); // Corrected points logic
         
         return `
           <div class="product ${isFeatured ? 'promo-highlight' : ''}" id="product-${product.id}">
@@ -537,7 +509,7 @@
     }
 
     function showTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('#main-content .tab-content').forEach(el => el.classList.remove('active'));
       const activeTab = document.getElementById(tabId);
       if(activeTab) activeTab.classList.add('active');
     }
@@ -578,10 +550,11 @@
         if (item) {
             item.quantity--;
             if (item.quantity <= 0) {
-                cart = cart.filter(p => p.id !== productId);
+                removeItemFromCart(productId);
+            } else {
+                updateCartDisplay();
+                updateCartCount();
             }
-            updateCartDisplay();
-            updateCartCount();
         }
     }
 
@@ -598,13 +571,11 @@
         if (cart.length === 0) {
             return { fee: 0, message: "RM 0.00" };
         }
-
         const baseShipping = 14.00;
-        const reductionPerItem = 0.30; // 30%
+        const reductionPerItem = 0.30;
         const totalReduction = reductionPerItem * (cart.length - 1);
         const finalFee = baseShipping * (1 - totalReduction);
-
-        const calculatedFee = Math.max(0, finalFee); // Ensure fee is not negative
+        const calculatedFee = Math.max(0, finalFee);
         return { fee: calculatedFee, message: `RM ${calculatedFee.toFixed(2)}` };
     }
     
@@ -647,7 +618,7 @@
       
       const shipping = calculateShipping(cart, subtotal);
       const total = subtotal + shipping.fee;
-      const points = Math.floor(subtotal / 10) * 10;
+      const points = Math.floor(subtotal); // Corrected points logic
 
       cartItemsEl.innerHTML = itemsHTML;
       subtotalEl.textContent = `RM ${subtotal.toFixed(2)}`;
@@ -670,7 +641,7 @@
       const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
       const shipping = calculateShipping(cart, subtotal);
       const total = subtotal + shipping.fee;
-      const points = Math.floor(subtotal / 10) * 10;
+      const points = Math.floor(subtotal);
       
       let message = `Hi, I would like to place an order:\n\n`;
       message += `Name: ${name}\nPhone: ${phone}\n\n`;
@@ -689,33 +660,54 @@
       window.open(`https://wa.me/601111033154?text=${encodedMessage}`, '_blank');
     }
 
-    function suggestProduct() {
-      const input = document.getElementById("symptom-input").value.toLowerCase();
-      const resultDiv = document.getElementById("suggestion-result");
-      let matchedProducts = [];
-      for (const [symptom, productInfo] of Object.entries(productSuggestions)) {
-        if (input.includes(symptom)) {
-          const existing = matchedProducts.find(p => p.id === productInfo.id);
-          if (!existing) { matchedProducts.push(productInfo); }
-        }
-      }
-      if (matchedProducts.length === 0) {
-        resultDiv.innerHTML = `<p>We recommend consulting with our health advisor for personalized recommendations. <a href="https://wa.me/601111033154" style="color:var(--primary-color);font-weight:bold;">Chat with us on WhatsApp</a></p>`;
-      } else {
-        resultDiv.innerHTML = `<h3 style="color:var(--primary-color);">Recommended Products:</h3>` + 
-          matchedProducts.map(p => `
-            <div class="suggestion-product">
-              <div><strong>${p.name}</strong><br><small>${p.recommendation}</small></div>
-              <button class="btn btn-primary" style="padding: 5px 15px;" onclick="addToCart(${p.id})">Add</button>
-            </div>`).join("");
-      }
-    }
-
     function closeFestivalModal() {
       localStorage.setItem('festivalPopupClosed', 'true');
       const modal = document.getElementById('festival-modal');
       modal.style.animation = "fadeOut 0.4s";
       setTimeout(() => { modal.style.display = 'none'; }, 350);
+    }
+
+    // --- NEW User Account Functions ---
+    function showLoginPage() {
+        document.getElementById('main-content').style.display = 'none';
+        document.getElementById('user-dashboard').style.display = 'none';
+        document.getElementById('login-page').style.display = 'block';
+        document.getElementById('floating-cart').style.display = 'none';
+    }
+
+    function showMainStore() {
+        document.getElementById('login-page').style.display = 'none';
+        document.getElementById('user-dashboard').style.display = 'none';
+        document.getElementById('main-content').style.display = 'block';
+        document.getElementById('floating-cart').style.display = 'flex';
+        showTab('products');
+    }
+    
+    function showMainStoreAndTab(tabId) {
+        showMainStore();
+        showTab(tabId);
+    }
+
+    function login() {
+        // This is a simulation. In a real app, you'd verify credentials.
+        document.getElementById('login-page').style.display = 'none';
+        document.getElementById('user-dashboard').style.display = 'block';
+        document.getElementById('login-nav-btn').style.display = 'none';
+        document.getElementById('logout-nav-btn').style.display = 'block';
+    }
+
+    function logout() {
+        showMainStore();
+        document.getElementById('login-nav-btn').style.display = 'block';
+        document.getElementById('logout-nav-btn').style.display = 'none';
+    }
+
+    function showUserTab(tabId, element) {
+        document.querySelectorAll('.user-tab-content').forEach(el => el.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        
+        document.querySelectorAll('.dashboard-nav a').forEach(el => el.classList.remove('active'));
+        element.classList.add('active');
     }
 
     // Initialize the page
