@@ -520,26 +520,27 @@
         if (codes) {
             return JSON.parse(codes);
         } else {
+            // Corrected, unique list of 100 codes
             const defaultCodes = [
                 '8kE2n9sPqV3xR7b', 'aZ5hGjLpW9cQfT6', 'mN1vXzC4bK8gY2d', 'rT7uI9oP5lKjHgF', 'eW3sD6fG8hJ1kL0',
                 'zX9c8V7b6N5m4L3', 'qW2e4R5t6Y7u8I9', 'aS3d5F6g7H8j9K1', 'pL9oK8iJ7uH6yG5', 'fD4sA3gH6jK9lO1',
                 'zxcVbnmAsdfGhjK', 'qweRtyuiOpLkjHg', 'mnbVcxZlkjHGFd', 'poiUytrewQasDf', 'lkjHgfdsaZxcVb',
-                'nJ5hB8vC2xZ1mP3', 'gK6lF9dD4sA7gH2', 'jH7g8F5d4S3a2L1', 'kL9oK8iJ7uH6yG5', 'pL9oK8iJ7uH6yG5',
-                'qAz2wSx3eDc4rFv', 'tGb5yHn6jUm7kI8', 'lO9p0oK8iJ7uH6y', 'gT5fR4dE3sW2qA1', 'zX9c8V7b6N5m4L3',
+                'nJ5hB8vC2xZ1mP3', 'gK6lF9dD4sA7gH2', 'jH7g8F5d4S3a2L1', 'kL0oK8iJ7uH6yG5', 'pL1oK8iJ7uH6yG5',
+                'qAz2wSx3eDc4rFv', 'tGb5yHn6jUm7kI8', 'lO9p0oK8iJ7uH6y', 'gT5fR4dE3sW2qA1', 'zX8c8V7b6N5m4L3',
                 'bV1c2X3z4A5s6D7', 'fG8h9J0kLpOiUy', 'tReWqAsdFghJkL', 'mNbVcXZlkJhGfD', 'sAqW2eR4tY6uI8',
-                'oP9iU7yT5rE3wQ1', 'lKjHgFdSaZxCvB', 'nJmKlOiuYhTgrE', 'fDsA3gH6jK9lO1', 'pL9oK8iJ7uH6yG5',
-                'aZ5hGjLpW9cQfT6', 'mN1vXzC4bK8gY2d', 'rT7uI9oP5lKjHgF', 'eW3sD6fG8hJ1kL0', 'zX9c8V7b6N5m4L3',
-                'qW2e4R5t6Y7u8I9', 'aS3d5F6g7H8j9K1', 'pL9oK8iJ7uH6yG5', 'fD4sA3gH6jK9lO1', 'zxcVbnmAsdfGhjK',
-                'qweRtyuiOpLkjHg', 'mnbVcxZlkjHGFd', 'poiUytrewQasDf', 'lkjHgfdsaZxcVb', 'nJ5hB8vC2xZ1mP3',
-                'gK6lF9dD4sA7gH2', 'jH7g8F5d4S3a2L1', 'kL9oK8iJ7uH6yG5', 'pL9oK8iJ7uH6yG5', 'qAz2wSx3eDc4rFv',
-                'tGb5yHn6jUm7kI8', 'lO9p0oK8iJ7uH6y', 'gT5fR4dE3sW2qA1', 'zX9c8V7b6N5m4L3', 'bV1c2X3z4A5s6D7',
-                'fG8h9J0kLpOiUy', 'tReWqAsdFghJkL', 'mNbVcXZlkJhGfD', 'sAqW2eR4tY6uI8', 'oP9iU7yT5rE3wQ1',
-                'lKjHgFdSaZxCvB', 'nJmKlOiuYhTgrE', 'fDsA3gH6jK9lO1', 'pL9oK8iJ7uH6yG5', 'aZ5hGjLpW9cQfT6',
-                'mN1vXzC4bK8gY2d', 'rT7uI9oP5lKjHgF', 'eW3sD6fG8hJ1kL0', 'zX9c8V7b6N5m4L3', 'qW2e4R5t6Y7u8I9',
-                'aS3d5F6g7H8j9K1', 'pL9oK8iJ7uH6yG5', 'fD4sA3gH6jK9lO1', 'zxcVbnmAsdfGhjK', 'qweRtyuiOpLkjHg',
-                'mnbVcxZlkjHGFd', 'poiUytrewQasDf', 'lkjHgfdsaZxcVb', 'nJ5hB8vC2xZ1mP3', 'gK6lF9dD4sA7gH2',
-                'jH7g8F5d4S3a2L1', 'kL9oK8iJ7uH6yG5', 'pL9oK8iJ7uH6yG5', 'qAz2wSx3eDc4rFv', 'tGb5yHn6jUm7kI8',
-                'lO9p0oK8iJ7uH6y', 'gT5fR4dE3sW2qA1', 'zX9c8V7b6N5m4L3', 'bV1c2X3z4A5s6D7', 'fG8h9J0kLpOiUy'
+                'oP9iU7yT5rE3wQ1', 'lKjHgFdSaZxCvB', 'nJmKlOiuYhTgrE', 'fDsA3gH6jK9lO2', 'pL9oK8iJ7uH6yG4',
+                'aZ5hGjLpW9cQfT5', 'mN1vXzC4bK8gY2e', 'rT7uI9oP5lKjHgE', 'eW3sD6fG8hJ1kL9', 'zX9c8V7b6N5m4L2',
+                'qW2e4R5t6Y7u8I8', 'aS3d5F6g7H8j9K0', 'pL9oK8iJ7uH6yG3', 'fD4sA3gH6jK9lO0', 'zxcVbnmAsdfGhjJ',
+                'qweRtyuiOpLkjHf', 'mnbVcxZlkjHGFc', 'poiUytrewQasDe', 'lkjHgfdsaZxcVa', 'nJ5hB8vC2xZ1mP2',
+                'gK6lF9dD4sA7gH1', 'jH7g8F5d4S3a2L0', 'kL0oK8iJ7uH6yG4', 'pL1oK8iJ7uH6yG3', 'qAz2wSx3eDc4rFw',
+                'tGb5yHn6jUm7kI7', 'lO9p0oK8iJ7uH6x', 'gT5fR4dE3sW2qA0', 'zX8c8V7b6N5m4L2', 'bV1c2X3z4A5s6D6',
+                'fG8h9J0kLpOiUx', 'tReWqAsdFghJkK', 'mNbVcXZlkJhGfC', 'sAqW2eR4tY6uI7', 'oP9iU7yT5rE3wQ0',
+                'lKjHgFdSaZxCvA', 'nJmKlOiuYhTgrD', 'fDsA3gH6jK9lO3', 'pL9oK8iJ7uH6yG2', 'aZ5hGjLpW9cQfT4',
+                'mN1vXzC4bK8gY2f', 'rT7uI9oP5lKjHgD', 'eW3sD6fG8hJ1kL8', 'zX9c8V7b6N5m4L1', 'qW2e4R5t6Y7u8I7',
+                'aS3d5F6g7H8j9K9', 'pL9oK8iJ7uH6yG1', 'fD4sA3gH6jK9lO9', 'zxcVbnmAsdfGhjH', 'qweRtyuiOpLkjHe',
+                'mnbVcxZlkjHGFb', 'poiUytrewQasDd', 'lkjHgfdsaZxcVz', 'nJ5hB8vC2xZ1mP1', 'gK6lF9dD4sA7gH0',
+                'jH7g8F5d4S3a2L9', 'kL0oK8iJ7uH6yG2', 'pL1oK8iJ7uH6yG1', 'qAz2wSx3eDc4rFt', 'tGb5yHn6jUm7kI6',
+                'lO9p0oK8iJ7uH6w', 'gT5fR4dE3sW2qA9', 'zX8c8V7b6N5m4L1', 'bV1c2X3z4A5s6D5', 'fG8h9J0kLpOiUw'
             ];
             localStorage.setItem('preVerifiedCodes', JSON.stringify(defaultCodes));
             return defaultCodes;
@@ -1005,8 +1006,7 @@
           document.getElementById('promo-details').innerHTML = '<div class="promo-period">Our Grand Opening promotion has ended.</div>';
       }
 
-      // Clear sales history on first load for privacy in this shared environment
-      // In a real-world scenario, you would not clear this.
+      // To clear history for testing, you can uncomment the line below
       // localStorage.removeItem('salesHistory'); 
 
       renderProducts();
