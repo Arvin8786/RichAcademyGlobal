@@ -510,8 +510,28 @@
         if (codes) {
             return JSON.parse(codes);
         } else {
-            // Default codes if none are in localStorage
-            const defaultCodes = ['SALE123', 'BUY456', 'FL789', 'PROMO2025', 'VERIFYME'];
+            // Default list of 100 codes if none are in localStorage
+            const defaultCodes = [
+                '8kE2n9sPqV3xR7b', 'aZ5hGjLpW9cQfT6', 'mN1vXzC4bK8gY2d', 'rT7uI9oP5lKjHgF', 'eW3sD6fG8hJ1kL0',
+                'zX9c8V7b6N5m4L3', 'qW2e4R5t6Y7u8I9', 'aS3d5F6g7H8j9K1', 'pL9oK8iJ7uH6yG5', 'fD4sA3gH6jK9lO1',
+                'zxcVbnmAsdfGhjK', 'qweRtyuiOpLkjHg', 'mnbVcxZlkjHGFd', 'poiUytrewQasDf', 'lkjHgfdsaZxcVb',
+                'nJ5hB8vC2xZ1mP3', 'gK6lF9dD4sA7gH2', 'jH7g8F5d4S3a2L1', 'kL9oK8iJ7uH6yG5', 'pL9oK8iJ7uH6yG5',
+                'qAz2wSx3eDc4rFv', 'tGb5yHn6jUm7kI8', 'lO9p0oK8iJ7uH6y', 'gT5fR4dE3sW2qA1', 'zX9c8V7b6N5m4L3',
+                'bV1c2X3z4A5s6D7', 'fG8h9J0kLpOiUy', 'tReWqAsdFghJkL', 'mNbVcXZlkJhGfD', 'sAqW2eR4tY6uI8',
+                'oP9iU7yT5rE3wQ1', 'lKjHgFdSaZxCvB', 'nJmKlOiuYhTgrE', 'fDsA3gH6jK9lO1', 'pL9oK8iJ7uH6yG5',
+                'aZ5hGjLpW9cQfT6', 'mN1vXzC4bK8gY2d', 'rT7uI9oP5lKjHgF', 'eW3sD6fG8hJ1kL0', 'zX9c8V7b6N5m4L3',
+                'qW2e4R5t6Y7u8I9', 'aS3d5F6g7H8j9K1', 'pL9oK8iJ7uH6yG5', 'fD4sA3gH6jK9lO1', 'zxcVbnmAsdfGhjK',
+                'qweRtyuiOpLkjHg', 'mnbVcxZlkjHGFd', 'poiUytrewQasDf', 'lkjHgfdsaZxcVb', 'nJ5hB8vC2xZ1mP3',
+                'gK6lF9dD4sA7gH2', 'jH7g8F5d4S3a2L1', 'kL9oK8iJ7uH6yG5', 'pL9oK8iJ7uH6yG5', 'qAz2wSx3eDc4rFv',
+                'tGb5yHn6jUm7kI8', 'lO9p0oK8iJ7uH6y', 'gT5fR4dE3sW2qA1', 'zX9c8V7b6N5m4L3', 'bV1c2X3z4A5s6D7',
+                'fG8h9J0kLpOiUy', 'tReWqAsdFghJkL', 'mNbVcXZlkJhGfD', 'sAqW2eR4tY6uI8', 'oP9iU7yT5rE3wQ1',
+                'lKjHgFdSaZxCvB', 'nJmKlOiuYhTgrE', 'fDsA3gH6jK9lO1', 'pL9oK8iJ7uH6yG5', 'aZ5hGjLpW9cQfT6',
+                'mN1vXzC4bK8gY2d', 'rT7uI9oP5lKjHgF', 'eW3sD6fG8hJ1kL0', 'zX9c8V7b6N5m4L3', 'qW2e4R5t6Y7u8I9',
+                'aS3d5F6g7H8j9K1', 'pL9oK8iJ7uH6yG5', 'fD4sA3gH6jK9lO1', 'zxcVbnmAsdfGhjK', 'qweRtyuiOpLkjHg',
+                'mnbVcxZlkjHGFd', 'poiUytrewQasDf', 'lkjHgfdsaZxcVb', 'nJ5hB8vC2xZ1mP3', 'gK6lF9dD4sA7gH2',
+                'jH7g8F5d4S3a2L1', 'kL9oK8iJ7uH6yG5', 'pL9oK8iJ7uH6yG5', 'qAz2wSx3eDc4rFv', 'tGb5yHn6jUm7kI8',
+                'lO9p0oK8iJ7uH6y', 'gT5fR4dE3sW2qA1', 'zX9c8V7b6N5m4L3', 'bV1c2X3z4A5s6D7', 'fG8h9J0kLpOiUy'
+            ];
             localStorage.setItem('preVerifiedCodes', JSON.stringify(defaultCodes));
             return defaultCodes;
         }
