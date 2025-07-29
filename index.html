@@ -69,11 +69,11 @@
     }
     #countdown-timer {
         background-color: rgba(0,0,0,0.2);
-        padding: 15px 30px; /* Increased padding */
+        padding: 15px 30px;
         border-radius: 50px;
         margin-top: 20px;
         display: inline-block;
-        font-size: 1.8rem; /* Made bigger */
+        font-size: 1.8rem;
         font-weight: 700;
         color: #fff;
         border: 2px solid #fff;
@@ -173,11 +173,25 @@
       font-weight: bold; font-size: 0.9rem; box-shadow: 0 3px 10px rgba(0,0,0,0.2);
     }
 
-    /* --- Business Section --- */
+    /* --- Program & Business Sections --- */
     .program-section { background: var(--light-text); padding: 40px; border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 30px; }
     .program-section h2 { font-size: 2.5rem; text-align: center; }
     .cta-button { display: block; width: fit-content; margin: 30px auto; background: linear-gradient(135deg, var(--secondary-color), #e67e22); color: var(--light-text); text-align: center; padding: 15px 40px; border-radius: 50px; font-weight: bold; text-decoration: none; font-size: 1.2rem; transition: all 0.3s; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
     .cta-button:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.3); }
+
+    /* --- Rewards Section --- */
+    .rewards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+    .reward-item { background: var(--light-gray); border: 1px solid #ddd; border-radius: var(--border-radius); padding: 20px; text-align: center; display: flex; flex-direction: column; }
+    .reward-item img { max-width: 100%; height: 100px; object-fit: contain; margin-bottom: 15px; border-radius: 8px; }
+    .reward-item h4 { margin: 10px 0 5px; }
+    .reward-item .points-cost { font-weight: bold; color: var(--accent-color); margin-bottom: 15px; }
+    .reward-item .btn { margin-top: auto; }
+    .reward-item .btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+    /* --- Sales History Table --- */
+    .history-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    .history-table th, .history-table td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+    .history-table th { background-color: var(--primary-color); color: white; }
 
     /* --- Floating Cart Button --- */
     .floating-cart-btn {
@@ -237,15 +251,25 @@
     .cart-summary { margin-top: 20px; font-size: 1.1rem; }
     .summary-line { display: flex; justify-content: space-between; padding: 8px 0; }
     .summary-line.total { font-weight: bold; font-size: 1.3rem; border-top: 2px solid #333; margin-top: 10px; }
-    .guest-remark {
-        background-color: #f8d7da; color: #721c24; padding: 10px;
-        border-radius: 8px; text-align: center; margin-top: 15px; font-weight: bold;
-    }
     .free-shipping-promo {
         background-color: #e0f2f1; color: var(--accent-color); padding: 10px;
         border-radius: 8px; text-align: center; margin-top: 20px; font-weight: bold;
     }
     .checkout-btn { width: 100%; margin-top: 15px; }
+    #verification-section {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: var(--light-gray);
+        border-radius: var(--border-radius);
+        text-align: center;
+    }
+    #verification-section input {
+        width: 100%;
+        padding: 12px;
+        margin: 15px 0;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
     
     /* --- Footer & Disclaimer --- */
     footer { background: var(--primary-color); color: var(--light-text); padding: 40px 20px; text-align: center; margin-top: 30px; }
@@ -275,6 +299,8 @@
         <ul id="main-nav">
           <li><a onclick="showTab('products')">Products</a></li>
           <li><a onclick="showTab('business')">Business Opportunity</a></li>
+          <li><a onclick="showTab('rewards')">Rewards</a></li>
+          <li><a onclick="showTab('sales-history')">Sales History</a></li>
         </ul>
     </div>
   </nav>
@@ -307,12 +333,58 @@
 
       <div id="product-list" class="product-list"></div>
     </div>
+
     <div id="business" class="tab-content">
       <section class="program-section">
         <h2>Build Your Forever Business</h2>
         <p style="text-align: center; max-width: 700px; margin: 0 auto 30px;">Join a community of entrepreneurs and build a business that offers financial freedom and a healthier lifestyle. With Forever Living, you get a proven business model, world-class products, and unparalleled support.</p>
         <a href="https://wa.me/601111033154?text=Hi,%20I'm%20interested%20in%20the%20Forever%20Living%20business%20opportunity." class="cta-button" target="_blank">Learn More & Get Started</a>
       </section>
+    </div>
+
+    <div id="rewards" class="tab-content">
+        <section class="program-section">
+            <h2><i class="fa-solid fa-award"></i> Redeem Your Points</h2>
+            <p style="text-align: center;">Points can be manually added by the administrator after a verified purchase. Contact us to redeem.</p>
+            <div class="rewards-grid">
+                <div class="reward-item">
+                    <img src="https://i.imgur.com/O9yP2aH.png" alt="RM 5 Voucher">
+                    <h4>RM 5 Voucher</h4>
+                    <p class="points-cost">500 Points</p>
+                </div>
+                <div class="reward-item">
+                    <img src="https://i.imgur.com/sY2a2qG.png" alt="RM 10 Voucher">
+                    <h4>RM 10 Voucher</h4>
+                    <p class="points-cost">1000 Points</p>
+                </div>
+                <div class="reward-item">
+                    <img src="https://i.imgur.com/Jz4Y8fW.png" alt="RM 20 Voucher">
+                    <h4>RM 20 Voucher</h4>
+                    <p class="points-cost">2000 Points</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="sales-history" class="tab-content">
+        <section class="program-section">
+            <h2><i class="fa-solid fa-clipboard-list"></i> Verified Sales History</h2>
+            <p style="text-align: center;">This is a log of all manually verified purchases.</p>
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Customer Name</th>
+                        <th>Customer Phone</th>
+                        <th>Total (RM)</th>
+                        <th>Verification Code</th>
+                    </tr>
+                </thead>
+                <tbody id="sales-history-body">
+                    <!-- Sales will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </section>
     </div>
   </main>
 
@@ -336,29 +408,42 @@
   <!-- Cart Modal -->
   <div id="cart-modal" class="modal">
     <div class="modal-content">
-      <span class="close" onclick="toggleCart()">×</span>
-      <h2>Your Shopping Cart</h2>
-      <div id="cart-items"><p>Your cart is currently empty.</p></div>
-      <div class="cart-summary">
-        <div class="summary-line"><span>Subtotal</span><span id="cart-subtotal">RM 0.00</span></div>
-        <div class="summary-line"><span>Shipping</span><span id="cart-shipping">RM 0.00</span></div>
-        <div class="summary-line total"><span>Total</span><span id="cart-total">RM 0.00</span></div>
+      <span class="close" onclick="toggleCart(true)">×</span>
+      
+      <div id="cart-view">
+        <h2>Your Shopping Cart</h2>
+        <div id="cart-items"><p>Your cart is currently empty.</p></div>
+        <div class="cart-summary">
+          <div class="summary-line"><span>Subtotal</span><span id="cart-subtotal">RM 0.00</span></div>
+          <div class="summary-line"><span>Shipping</span><span id="cart-shipping">RM 0.00</span></div>
+          <div class="summary-line total"><span>Total</span><span id="cart-total">RM 0.00</span></div>
+        </div>
+        <div class="customer-info-form">
+          <h3 style="margin-top: 20px;">Customer Information</h3>
+          <input type="text" id="customer-name" placeholder="Your Full Name" required>
+          <input type="tel" id="customer-phone" placeholder="Your WhatsApp Number" required>
+          <button class="btn btn-primary checkout-btn" onclick="initiateCheckout()">Complete Order via WhatsApp</button>
+        </div>
+        <div class="free-shipping-promo">🚚 FREE NATIONWIDE DELIVERY for orders RM 250 and above!</div>
       </div>
-      <div id="points-container">
-          <div class="guest-remark">Register or login to earn points on this purchase!</div>
+
+      <div id="verification-view" style="display: none;">
+        <h2>Verify Your Purchase</h2>
+        <p>After completing your payment via WhatsApp, you will receive a verification code from us.</p>
+        <div id="verification-section">
+            <p>Please enter the code below to confirm your order and have it recorded in our system.</p>
+            <input type="text" id="verification-code" placeholder="Enter Verification Code">
+            <button class="btn btn-primary" onclick="verifyPurchase()">Verify Purchase</button>
+            <p id="verification-status" style="margin-top: 15px; font-weight: bold;"></p>
+        </div>
+        <button class="btn btn-secondary" style="margin-top: 20px;" onclick="toggleCart(true)">Cancel Verification</button>
       </div>
-      <div class="customer-info-form">
-        <h3 style="margin-top: 20px;">Customer Information</h3>
-        <input type="text" id="customer-name" placeholder="Your Full Name" required>
-        <input type="tel" id="customer-phone" placeholder="Your WhatsApp Number" required>
-        <button class="btn btn-primary checkout-btn" onclick="checkout()">Complete Order via WhatsApp</button>
-      </div>
-      <div class="free-shipping-promo">🚚 FREE NATIONWIDE DELIVERY for orders RM 250 and above!</div>
+
     </div>
   </div>
 
   <script>
-    // --- DATA (Updated with all 58 products and promo prices) ---
+    // --- DATA ---
     const products = [
         { id: 1, name: "ALOE VERA GEL", price: 116.79, promoPrice: 85.84, image: "aloe-vera-gel.jpg", benefits: "Supports digestion, boosts immunity.", consumption: "Take 30-60ml daily." },
         { id: 2, name: "ALOE BERRY NECTAR", price: 116.79, promoPrice: 85.84, image: "aloe-berry-nectar.jpg", benefits: "Antioxidant support, immune system booster.", consumption: "30-60ml daily." },
@@ -415,9 +500,34 @@
         { id: 53, name: "PROTECTING DAY LOTION", price: 167.99, promoPrice: 123.47, image: "day-lotion.jpg", benefits: "Moisturizes and protects skin with SPF.", consumption: "Apply in the morning." },
     ];
     let cart = [];
+    let pendingOrder = null;
     const promoEndDate = new Date("August 2, 2025 23:59:59").getTime();
 
     // --- LOGIC ---
+
+    function getPreVerifiedCodes() {
+        const codes = localStorage.getItem('preVerifiedCodes');
+        if (codes) {
+            return JSON.parse(codes);
+        } else {
+            // Default codes if none are in localStorage
+            const defaultCodes = ['SALE123', 'BUY456', 'FL789', 'PROMO2025', 'VERIFYME'];
+            localStorage.setItem('preVerifiedCodes', JSON.stringify(defaultCodes));
+            return defaultCodes;
+        }
+    }
+
+    function getSalesHistory() {
+        return JSON.parse(localStorage.getItem('salesHistory')) || [];
+    }
+
+    function saveSalesHistory(history) {
+        localStorage.setItem('salesHistory', JSON.stringify(history));
+    }
+
+    function savePreVerifiedCodes(codes) {
+        localStorage.setItem('preVerifiedCodes', JSON.stringify(codes));
+    }
 
     function isPromoActive() {
         return new Date().getTime() < promoEndDate;
@@ -444,7 +554,7 @@
                 </div>
                 <div class="benefits"><strong>Benefits:</strong> ${product.benefits}</div>
                 <div class="consumption"><strong>Usage:</strong> ${product.consumption}</div>
-                <div class="product-points"><i class="fa-solid fa-star"></i> Earn ${points} Points (with account)</div>
+                <div class="product-points"><i class="fa-solid fa-star"></i> Earn ${points} Points</div>
                 <div class="product-actions">
                     <button class="btn btn-primary" onclick="addToCart(${product.id})"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
                 </div>
@@ -518,13 +628,32 @@
     function showTab(tabId) {
       document.querySelectorAll('#main-content .tab-content').forEach(el => el.classList.remove('active'));
       const activeTab = document.getElementById(tabId);
-      if(activeTab) activeTab.classList.add('active');
+      if(activeTab) {
+          activeTab.classList.add('active');
+          if (tabId === 'sales-history') {
+              renderSalesHistory();
+          }
+      }
     }
 
-    function toggleCart() {
+    function toggleCart(forceClose = false) {
       const modal = document.getElementById('cart-modal');
-      modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
-      if (modal.style.display === 'flex') updateCartDisplay();
+      if (forceClose) {
+          modal.style.display = 'none';
+      } else {
+          modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+      }
+      
+      if (modal.style.display === 'flex') {
+          // Reset to cart view every time it's opened unless there's a pending order
+          if (!pendingOrder) {
+              document.getElementById('cart-view').style.display = 'block';
+              document.getElementById('verification-view').style.display = 'none';
+              document.getElementById('verification-status').textContent = '';
+              document.getElementById('verification-code').value = '';
+              updateCartDisplay();
+          }
+      }
     }
 
     function addToCart(productId) {
@@ -617,7 +746,7 @@
       document.getElementById('cart-count').textContent = count;
     }
 
-    function checkout() {
+    function initiateCheckout() {
       const name = document.getElementById('customer-name').value.trim();
       const phone = document.getElementById('customer-phone').value.trim();
       if (!name || !phone) { alert('Please enter your name and phone number'); return; }
@@ -627,6 +756,13 @@
       const shipping = calculateShipping(cart, subtotal);
       const total = subtotal + shipping.fee;
       
+      pendingOrder = {
+          customerName: name,
+          customerPhone: phone,
+          cart: [...cart],
+          total: total.toFixed(2)
+      };
+
       let message = `Hi, I would like to place an order:\n\nName: ${name}\nPhone: ${phone}\n\n--- ORDER DETAILS ---\n`;
       cart.forEach(item => { message += `- ${item.name} (x${item.quantity}) - RM ${(item.price * item.quantity).toFixed(2)}\n`; });
       message += `\n--- SUMMARY ---\nSubtotal: RM ${subtotal.toFixed(2)}\nShipping: ${shipping.message}\nTOTAL: RM ${total.toFixed(2)}\n`;
@@ -634,9 +770,86 @@
       
       window.open(`https://wa.me/601111033154?text=${encodeURIComponent(message)}`, '_blank');
       
-      cart = [];
-      updateCartCount();
-      toggleCart();
+      document.getElementById('cart-view').style.display = 'none';
+      document.getElementById('verification-view').style.display = 'block';
+    }
+
+    function verifyPurchase() {
+        const codeInput = document.getElementById('verification-code').value.trim();
+        const statusEl = document.getElementById('verification-status');
+        if (!codeInput) {
+            statusEl.textContent = 'Please enter a code.';
+            statusEl.style.color = 'red';
+            return;
+        }
+
+        let codes = getPreVerifiedCodes();
+        if (codes.includes(codeInput)) {
+            // Code is valid, record the sale
+            let history = getSalesHistory();
+            const newRecord = {
+                date: new Date().toLocaleDateString('en-GB'),
+                customerName: pendingOrder.customerName,
+                customerPhone: pendingOrder.customerPhone,
+                total: pendingOrder.total,
+                code: codeInput
+            };
+            history.push(newRecord);
+            saveSalesHistory(history);
+
+            // Remove the used code
+            const updatedCodes = codes.filter(c => c !== codeInput);
+            savePreVerifiedCodes(updatedCodes);
+
+            statusEl.textContent = 'Purchase verified successfully! Thank you.';
+            statusEl.style.color = 'green';
+
+            // Clear everything
+            cart = [];
+            pendingOrder = null;
+            updateCartCount();
+            
+            setTimeout(() => {
+                toggleCart(true); // Close modal after a delay
+            }, 2000);
+
+        } else {
+            // Code is invalid
+            statusEl.textContent = 'Invalid or already used verification code. Please check and try again.';
+            statusEl.style.color = 'red';
+        }
+    }
+
+    function maskData(type, data) {
+        if (!data) return 'N/A';
+        if (type === 'name') {
+            return data.split(' ').map(part => part.length > 2 ? `${part[0]}...${part.slice(-1)}` : part).join(' ');
+        }
+        if (type === 'phone') {
+            return data.length > 7 ? `${data.substring(0, 3)}...${data.slice(-4)}` : data;
+        }
+        return data;
+    }
+
+    function renderSalesHistory() {
+        const history = getSalesHistory();
+        const historyBody = document.getElementById('sales-history-body');
+        if (!historyBody) return;
+
+        if (history.length === 0) {
+            historyBody.innerHTML = '<tr><td colspan="5">No verified sales have been recorded yet.</td></tr>';
+            return;
+        }
+
+        historyBody.innerHTML = history.map(record => `
+            <tr>
+                <td>${record.date}</td>
+                <td>${maskData('name', record.customerName)}</td>
+                <td>${maskData('phone', record.customerPhone)}</td>
+                <td>${record.total}</td>
+                <td>${record.code}</td>
+            </tr>
+        `).join('');
     }
 
     function startCountdown() {
@@ -651,7 +864,7 @@
                 clearInterval(interval);
                 promoDetailsEl.innerHTML = '<div class="promo-period">Our Grand Opening promotion has ended.</div>';
                 document.body.classList.remove('grand-opening-active');
-                renderProducts(); // Re-render products with original prices
+                renderProducts();
                 return;
             }
 
@@ -689,6 +902,7 @@
       }
 
       renderProducts();
+      renderSalesHistory();
       showTab('products');
     });
   </script>
