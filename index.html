@@ -55,20 +55,6 @@
       border-bottom: 1px solid #e0e0e0;
       position: relative;
     }
-    .header-account-links {
-        position: absolute;
-        top: 50%;
-        right: 20px;
-        transform: translateY(-50%);
-    }
-    .header-account-links a {
-        color: var(--primary-color);
-        text-decoration: none;
-        font-weight: 600;
-        cursor: pointer;
-    }
-    .header-account-links a:hover { color: var(--accent-color); }
-
     nav {
       background-color: var(--primary-color);
       position: sticky;
@@ -102,6 +88,18 @@
         font-weight: 600;
     }
 
+    /* --- Search & AI Suggestion --- */
+    .search-container { margin-bottom: 30px; position: relative; }
+    #product-search { width: 100%; padding: 15px 50px 15px 25px; border: 2px solid #ddd; border-radius: 50px; font-size: 1rem; outline: none; transition: all 0.3s; }
+    #product-search:focus { border-color: var(--primary-color); box-shadow: 0 0 10px rgba(26, 82, 118, 0.2); }
+    .search-icon { position: absolute; right: 25px; top: 50%; transform: translateY(-50%); color: var(--primary-color); font-size: 1.2rem; }
+    .ai-suggestion-box { background: var(--light-text); padding: 30px; border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 30px; text-align: center; }
+    #symptom-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin: 10px 0; }
+    #suggest-btn { background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: var(--light-text); border: none; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: all 0.3s; margin-top: 10px; }
+    #suggest-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+    #suggestion-result { margin-top: 20px; text-align: left; }
+    .suggestion-product { background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--accent-color); }
+
     /* --- Product List & Cards --- */
     .product-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
     .product {
@@ -126,7 +124,7 @@
     .original-price { text-decoration: line-through; color: #999; font-size: 1rem; margin-right: 10px; }
     .new-price { color: var(--secondary-color); font-weight: bold; font-size: 1.5rem; }
     .product-points { font-size: 0.9rem; font-weight: 600; color: var(--accent-color); text-align: center; margin-top: 10px; }
-    .product-actions { margin-top: auto; display: flex; flex-direction: column; gap: 10px; }
+    .product-actions { margin-top: auto; }
     .btn {
         display: inline-flex; align-items: center; justify-content: center; gap: 8px;
         width: 100%; padding: 12px 15px; border-radius: 50px; text-decoration: none;
@@ -134,13 +132,26 @@
     }
     .btn-primary { background: var(--primary-color); color: var(--light-text); }
     .btn-primary:hover { background: #123e5a; transform: scale(1.05); }
-    .btn-secondary { background: var(--light-gray); color: var(--primary-color); border: 1px solid var(--primary-color); }
-    .btn-secondary:hover { background: #e0e0e0; }
     .featured-badge {
       position: absolute; top: 15px; right: -40px; background: var(--secondary-color);
       color: white; padding: 5px 40px; transform: rotate(45deg);
       font-weight: bold; font-size: 0.9rem; box-shadow: 0 3px 10px rgba(0,0,0,0.2);
     }
+
+    /* --- CDS & Business Sections --- */
+    .program-section { background: var(--light-text); padding: 40px; border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 30px; }
+    .program-section h2 { font-size: 2.5rem; text-align: center; }
+    .program-highlights { display: flex; flex-wrap: wrap; justify-content: space-around; margin: 30px 0; gap: 20px; }
+    .highlight-card { flex: 1; min-width: 280px; background: var(--light-gray); border: 1px solid #e0e0e0; border-radius: var(--border-radius); padding: 20px; transition: transform 0.3s, box-shadow 0.3s; }
+    .highlight-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+    .highlight-card h3 { border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; }
+    .highlight-card ul { list-style: none; padding: 0; }
+    .highlight-card li { margin-bottom: 10px; display: flex; align-items: flex-start; }
+    .highlight-card .fa-solid { color: var(--accent-color); margin-right: 10px; margin-top: 5px; }
+    .testimonial { background: #f0f8f0; padding: 20px; border-left: 4px solid var(--accent-color); margin: 20px 0; font-style: italic; border-radius: 0 8px 8px 0; }
+    .testimonial-author { text-align: right; font-weight: bold; color: var(--primary-color); }
+    .cta-button { display: block; width: fit-content; margin: 30px auto; background: linear-gradient(135deg, var(--secondary-color), #e67e22); color: var(--light-text); text-align: center; padding: 15px 40px; border-radius: 50px; font-weight: bold; text-decoration: none; font-size: 1.2rem; transition: all 0.3s; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+    .cta-button:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.3); }
 
     /* --- Rewards Section --- */
     .rewards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
@@ -152,12 +163,10 @@
     .reward-item .btn:disabled { background-color: #ccc; cursor: not-allowed; }
 
     /* --- Login & User Dashboard --- */
-    #auth-page, #dashboard-page { display: none; }
-    .dashboard-layout { display: flex; gap: 30px; align-items: flex-start; margin-top: 30px; }
-    .dashboard-nav { flex: 0 0 250px; }
-    .dashboard-nav a { display: block; background: var(--light-text); border: 1px solid #ddd; padding: 15px 20px; border-radius: 8px; text-decoration: none; color: var(--primary-color); font-weight: 600; margin-bottom: 10px; cursor: pointer; }
-    .dashboard-nav a.active { background: var(--primary-color); color: var(--light-text); border-color: var(--primary-color); }
-    .dashboard-content { flex-grow: 1; background: white; padding: 30px; border-radius: var(--border-radius); box-shadow: var(--shadow); }
+    #login-page, #user-dashboard { display: none; }
+    .dashboard-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+    .dashboard-nav a { background: var(--light-gray); border: 1px solid #ddd; padding: 10px 20px; border-radius: 50px; text-decoration: none; color: var(--primary-color); font-weight: 600; cursor: pointer; }
+    .dashboard-nav a.active { background: var(--primary-color); color: var(--light-text); }
     .user-tab-content { display: none; }
     .user-tab-content.active { display: block; animation: fadeIn 0.5s; }
     .form-container { max-width: 500px; margin: 40px auto; padding: 30px; background: white; border-radius: var(--border-radius); box-shadow: var(--shadow); }
@@ -228,16 +237,20 @@
         background-color: #fff3cd; color: #856404; padding: 10px;
         border-radius: 8px; text-align: center; margin-top: 15px; font-weight: bold;
     }
-    .guest-remark {
-        background-color: #f8d7da; color: #721c24; padding: 10px;
-        border-radius: 8px; text-align: center; margin-top: 15px; font-weight: bold;
-    }
     .free-shipping-promo {
         background-color: #e0f2f1; color: var(--accent-color); padding: 10px;
         border-radius: 8px; text-align: center; margin-top: 20px; font-weight: bold;
     }
     .checkout-btn { width: 100%; margin-top: 15px; }
     
+    /* --- Festival Popup --- */
+    #festival-modal .modal-content { border: 4px solid var(--accent-color); text-align: center; }
+    #festival-modal .festival-offer {
+        background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+        padding: 15px; border-radius: 8px; font-weight: bold;
+        font-size: 1.3rem; margin-bottom: 20px; color: white;
+    }
+
     /* --- Footer & Disclaimer --- */
     footer { background: var(--primary-color); color: var(--light-text); padding: 40px 20px; text-align: center; margin-top: 30px; }
     .disclaimer {
@@ -258,9 +271,6 @@
           FOREVER LIVING by Mohd Arvind Isa
           <span style="font-size: 1rem; color: #555; display: block; font-weight: 400;">Quality Wellness Products</span>
         </h1>
-        <div class="header-account-links">
-            <a id="account-link" onclick="showAuthPage()">Login</a>
-        </div>
     </div>
   </header>
 
@@ -271,6 +281,8 @@
           <li><a onclick="showTab('cds')">Cabaran Detox Sihat</a></li>
           <li><a onclick="showTab('business')">Business Opportunity</a></li>
           <li><a onclick="showTab('rewards')">Rewards</a></li>
+          <li><a id="login-nav-btn" onclick="showLoginPage()">Login</a></li>
+          <li><a id="logout-nav-btn" onclick="logout()" style="display:none;">Logout</a></li>
         </ul>
     </div>
   </nav>
@@ -284,17 +296,82 @@
             Promotion Period: 21/7/2025 - 24/8/2025
         </div>
       </section>
+
+      <div class="search-container">
+        <input type="text" id="product-search" placeholder="Search for products...">
+        <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+      </div>
+
+      <div class="ai-suggestion-box">
+        <h2><i class="fa-solid fa-robot"></i> AI Product Suggestion</h2>
+        <p>Tell our AI your symptoms, and we'll recommend the best products for you.</p>
+        <input type="text" id="symptom-input" placeholder="e.g., joint pain, low energy, digestion issues...">
+        <button id="suggest-btn" onclick="suggestProduct()">Get Suggestions</button>
+        <div id="suggestion-result"></div>
+      </div>
+      
+      <h2 style="text-align: center; font-size: 2.2rem; margin: 40px 0 30px;">Our Products</h2>
       <div id="product-list" class="product-list"></div>
     </div>
+
     <div id="cds" class="tab-content">
-      <section class="program-section"><h2>Cabaran Detox Sihat (CDS)</h2></section>
+      <section class="program-section">
+        <h2>Cabaran Detox Sihat (CDS)</h2>
+        <p style="text-align: center; font-size: 1.2rem;">Transform your health in just 7 days with our proven detox program</p>
+        <div class="program-highlights">
+          <div class="highlight-card">
+            <h3><i class="fa-solid fa-box-open"></i> What You Get</h3>
+            <ul>
+              <li><i class="fa-solid fa-check-circle"></i> Personalized Forever product package</li>
+              <li><i class="fa-solid fa-check-circle"></i> Detailed meal plan & recipes</li>
+              <li><i class="fa-solid fa-check-circle"></i> Daily coaching via WhatsApp</li>
+            </ul>
+          </div>
+          <div class="highlight-card">
+            <h3><i class="fa-solid fa-spa"></i> Benefits</h3>
+            <ul>
+              <li><i class="fa-solid fa-check-circle"></i> Boost energy levels</li>
+              <li><i class="fa-solid fa-check-circle"></i> Healthy weight management</li>
+              <li><i class="fa-solid fa-check-circle"></i> Improved mental clarity</li>
+            </ul>
+          </div>
+        </div>
+        <a href="https://wa.me/601111033154?text=I%20want%20to%20join%20CDS%20Program" class="cta-button">Join CDS Now <i class="fa-solid fa-arrow-right"></i></a>
+      </section>
     </div>
+
     <div id="business" class="tab-content">
-      <section class="program-section"><h2>Build Your Forever Business</h2></section>
+      <section class="program-section">
+        <h2>Build Your Forever Business</h2>
+        <p style="text-align: center; font-size: 1.2rem;">Start your journey to financial freedom with our proven system</p>
+        <div class="program-highlights">
+          <div class="highlight-card">
+            <h3><i class="fa-solid fa-briefcase"></i> Why Join Us?</h3>
+            <ul>
+              <li><i class="fa-solid fa-check-circle"></i> Earn 30-50% commission</li>
+              <li><i class="fa-solid fa-check-circle"></i> Work from anywhere</li>
+              <li><i class="fa-solid fa-check-circle"></i> Flexible hours</li>
+            </ul>
+          </div>
+          <div class="highlight-card">
+            <h3><i class="fa-solid fa-handshake-angle"></i> What We Provide</h3>
+            <ul>
+              <li><i class="fa-solid fa-check-circle"></i> Complete training program</li>
+              <li><i class="fa-solid fa-check-circle"></i> Marketing materials & mentorship</li>
+              <li><i class="fa-solid fa-check-circle"></i> Strong team support</li>
+            </ul>
+          </div>
+        </div>
+        <a href="https://wa.me/601111033154?text=I%20want%20to%20join%20Forever%20Business" class="cta-button">Start Your Business Today <i class="fa-solid fa-arrow-right"></i></a>
+      </section>
     </div>
+
     <div id="rewards" class="tab-content">
         <section class="program-section">
             <h2><i class="fa-solid fa-award"></i> Redeem Your Points</h2>
+            <p style="text-align: center; font-size: 1.2rem;">Use your points to redeem exciting vouchers and products!</p>
+            
+            <h3 style="margin-top: 40px;">Vouchers</h3>
             <div class="rewards-grid">
                 <div class="reward-item">
                     <img src="https://i.imgur.com/O9yP2aH.png" alt="RM 5 Voucher">
@@ -315,6 +392,28 @@
                     <button class="btn btn-primary redeem-btn">Redeem</button>
                 </div>
             </div>
+
+            <h3 style="margin-top: 40px;">Products</h3>
+            <div class="rewards-grid">
+                <div class="reward-item">
+                    <img src="aloe-vera-gel.jpg" alt="Aloe Vera Gel">
+                    <h4>Aloe Vera Gel</h4>
+                    <p class="points-cost">10000 Points</p>
+                    <button class="btn btn-primary redeem-btn">Redeem</button>
+                </div>
+                <div class="reward-item">
+                    <img src="aloe-berry-nectar.jpg" alt="Aloe Berry Nectar">
+                    <h4>Aloe Berry Nectar</h4>
+                    <p class="points-cost">10000 Points</p>
+                    <button class="btn btn-primary redeem-btn">Redeem</button>
+                </div>
+                <div class="reward-item">
+                    <img src="aloe-peaches.jpg" alt="Aloe Peaches">
+                    <h4>Aloe Peaches</h4>
+                    <p class="points-cost">10000 Points</p>
+                    <button class="btn btn-primary redeem-btn">Redeem</button>
+                </div>
+            </div>
         </section>
     </div>
   </main>
@@ -330,7 +429,7 @@
   </footer>
 </div>
 
-<div id="auth-page">
+<div id="login-page" style="display: none;">
     <div class="form-container">
         <div id="login-form-container">
             <h2>Login to Your Account</h2>
@@ -351,7 +450,7 @@
     </div>
 </div>
 
-<div id="dashboard-page">
+<div id="dashboard-page" style="display: none;">
     <header>
         <div class="container">
             <h1>My Account</h1>
@@ -657,11 +756,6 @@
       toggleCart();
     }
 
-    function closeFestivalModal() {
-      localStorage.setItem('festivalPopupClosed', 'true');
-      document.getElementById('festival-modal').style.display = 'none';
-    }
-
     // --- User Account Functions ---
     function showPage(pageId) {
         document.getElementById('store-wrapper').style.display = 'none';
@@ -800,9 +894,6 @@
       renderProducts();
       showTab('products');
       updateRedeemButtonsState();
-      if (localStorage.getItem('festivalPopupClosed') === 'true') {
-        document.getElementById('festival-modal').style.display = 'none';
-      }
     });
   </script>
 </body>
