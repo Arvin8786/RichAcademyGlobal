@@ -55,6 +55,20 @@
       border-bottom: 1px solid #e0e0e0;
       position: relative;
     }
+    .header-account-links {
+        position: absolute;
+        top: 50%;
+        right: 20px;
+        transform: translateY(-50%);
+    }
+    .header-account-links a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 600;
+        cursor: pointer;
+    }
+    .header-account-links a:hover { color: var(--accent-color); }
+
     nav {
       background-color: var(--primary-color);
       position: sticky;
@@ -88,18 +102,6 @@
         font-weight: 600;
     }
 
-    /* --- Search & AI Suggestion --- */
-    .search-container { margin-bottom: 30px; position: relative; }
-    #product-search { width: 100%; padding: 15px 50px 15px 25px; border: 2px solid #ddd; border-radius: 50px; font-size: 1rem; outline: none; transition: all 0.3s; }
-    #product-search:focus { border-color: var(--primary-color); box-shadow: 0 0 10px rgba(26, 82, 118, 0.2); }
-    .search-icon { position: absolute; right: 25px; top: 50%; transform: translateY(-50%); color: var(--primary-color); font-size: 1.2rem; }
-    .ai-suggestion-box { background: var(--light-text); padding: 30px; border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 30px; text-align: center; }
-    #symptom-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin: 10px 0; }
-    #suggest-btn { background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: var(--light-text); border: none; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: all 0.3s; margin-top: 10px; }
-    #suggest-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-    #suggestion-result { margin-top: 20px; text-align: left; }
-    .suggestion-product { background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--accent-color); }
-
     /* --- Product List & Cards --- */
     .product-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
     .product {
@@ -124,7 +126,7 @@
     .original-price { text-decoration: line-through; color: #999; font-size: 1rem; margin-right: 10px; }
     .new-price { color: var(--secondary-color); font-weight: bold; font-size: 1.5rem; }
     .product-points { font-size: 0.9rem; font-weight: 600; color: var(--accent-color); text-align: center; margin-top: 10px; }
-    .product-actions { margin-top: auto; }
+    .product-actions { margin-top: auto; display: flex; flex-direction: column; gap: 10px; }
     .btn {
         display: inline-flex; align-items: center; justify-content: center; gap: 8px;
         width: 100%; padding: 12px 15px; border-radius: 50px; text-decoration: none;
@@ -132,26 +134,13 @@
     }
     .btn-primary { background: var(--primary-color); color: var(--light-text); }
     .btn-primary:hover { background: #123e5a; transform: scale(1.05); }
+    .btn-secondary { background: var(--light-gray); color: var(--primary-color); border: 1px solid var(--primary-color); }
+    .btn-secondary:hover { background: #e0e0e0; }
     .featured-badge {
       position: absolute; top: 15px; right: -40px; background: var(--secondary-color);
       color: white; padding: 5px 40px; transform: rotate(45deg);
       font-weight: bold; font-size: 0.9rem; box-shadow: 0 3px 10px rgba(0,0,0,0.2);
     }
-
-    /* --- CDS & Business Sections --- */
-    .program-section { background: var(--light-text); padding: 40px; border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 30px; }
-    .program-section h2 { font-size: 2.5rem; text-align: center; }
-    .program-highlights { display: flex; flex-wrap: wrap; justify-content: space-around; margin: 30px 0; gap: 20px; }
-    .highlight-card { flex: 1; min-width: 280px; background: var(--light-gray); border: 1px solid #e0e0e0; border-radius: var(--border-radius); padding: 20px; transition: transform 0.3s, box-shadow 0.3s; }
-    .highlight-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
-    .highlight-card h3 { border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; }
-    .highlight-card ul { list-style: none; padding: 0; }
-    .highlight-card li { margin-bottom: 10px; display: flex; align-items: flex-start; }
-    .highlight-card .fa-solid { color: var(--accent-color); margin-right: 10px; margin-top: 5px; }
-    .testimonial { background: #f0f8f0; padding: 20px; border-left: 4px solid var(--accent-color); margin: 20px 0; font-style: italic; border-radius: 0 8px 8px 0; }
-    .testimonial-author { text-align: right; font-weight: bold; color: var(--primary-color); }
-    .cta-button { display: block; width: fit-content; margin: 30px auto; background: linear-gradient(135deg, var(--secondary-color), #e67e22); color: var(--light-text); text-align: center; padding: 15px 40px; border-radius: 50px; font-weight: bold; text-decoration: none; font-size: 1.2rem; transition: all 0.3s; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-    .cta-button:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.3); }
 
     /* --- Rewards Section --- */
     .rewards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
@@ -163,10 +152,12 @@
     .reward-item .btn:disabled { background-color: #ccc; cursor: not-allowed; }
 
     /* --- Login & User Dashboard --- */
-    #login-page, #user-dashboard { display: none; }
-    .dashboard-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
-    .dashboard-nav a { background: var(--light-gray); border: 1px solid #ddd; padding: 10px 20px; border-radius: 50px; text-decoration: none; color: var(--primary-color); font-weight: 600; cursor: pointer; }
-    .dashboard-nav a.active { background: var(--primary-color); color: var(--light-text); }
+    #auth-page, #dashboard-page { display: none; }
+    .dashboard-layout { display: flex; gap: 30px; align-items: flex-start; margin-top: 30px; }
+    .dashboard-nav { flex: 0 0 250px; }
+    .dashboard-nav a { display: block; background: var(--light-text); border: 1px solid #ddd; padding: 15px 20px; border-radius: 8px; text-decoration: none; color: var(--primary-color); font-weight: 600; margin-bottom: 10px; cursor: pointer; }
+    .dashboard-nav a.active { background: var(--primary-color); color: var(--light-text); border-color: var(--primary-color); }
+    .dashboard-content { flex-grow: 1; background: white; padding: 30px; border-radius: var(--border-radius); box-shadow: var(--shadow); }
     .user-tab-content { display: none; }
     .user-tab-content.active { display: block; animation: fadeIn 0.5s; }
     .form-container { max-width: 500px; margin: 40px auto; padding: 30px; background: white; border-radius: var(--border-radius); box-shadow: var(--shadow); }
@@ -237,20 +228,16 @@
         background-color: #fff3cd; color: #856404; padding: 10px;
         border-radius: 8px; text-align: center; margin-top: 15px; font-weight: bold;
     }
+    .guest-remark {
+        background-color: #f8d7da; color: #721c24; padding: 10px;
+        border-radius: 8px; text-align: center; margin-top: 15px; font-weight: bold;
+    }
     .free-shipping-promo {
         background-color: #e0f2f1; color: var(--accent-color); padding: 10px;
         border-radius: 8px; text-align: center; margin-top: 20px; font-weight: bold;
     }
     .checkout-btn { width: 100%; margin-top: 15px; }
     
-    /* --- Festival Popup --- */
-    #festival-modal .modal-content { border: 4px solid var(--accent-color); text-align: center; }
-    #festival-modal .festival-offer {
-        background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
-        padding: 15px; border-radius: 8px; font-weight: bold;
-        font-size: 1.3rem; margin-bottom: 20px; color: white;
-    }
-
     /* --- Footer & Disclaimer --- */
     footer { background: var(--primary-color); color: var(--light-text); padding: 40px 20px; text-align: center; margin-top: 30px; }
     .disclaimer {
@@ -271,6 +258,9 @@
           FOREVER LIVING by Mohd Arvind Isa
           <span style="font-size: 1rem; color: #555; display: block; font-weight: 400;">Quality Wellness Products</span>
         </h1>
+        <div class="header-account-links">
+            <a id="account-link" onclick="showAuthPage()">Login</a>
+        </div>
     </div>
   </header>
 
@@ -281,8 +271,6 @@
           <li><a onclick="showTab('cds')">Cabaran Detox Sihat</a></li>
           <li><a onclick="showTab('business')">Business Opportunity</a></li>
           <li><a onclick="showTab('rewards')">Rewards</a></li>
-          <li><a id="login-nav-btn" onclick="showLoginPage()">Login</a></li>
-          <li><a id="logout-nav-btn" onclick="logout()" style="display:none;">Logout</a></li>
         </ul>
     </div>
   </nav>
@@ -291,87 +279,22 @@
     <div id="products" class="tab-content active">
       <section class="hero-section">
         <h2><i class="fa-solid fa-gift"></i> GRAND OPENING SPECIAL</h2>
-        <p>Enjoy 5% OFF on our top 10 bestselling products!</p>
+        <p>Enjoy special promotional prices on all our products!</p>
         <div class="promo-period">
-            Promotion Period: 21/7/2025 - 24/8/2025
+            Promotion Period: Starting 1 April 2025
         </div>
       </section>
-
-      <div class="search-container">
-        <input type="text" id="product-search" placeholder="Search for products...">
-        <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
-      </div>
-
-      <div class="ai-suggestion-box">
-        <h2><i class="fa-solid fa-robot"></i> AI Product Suggestion</h2>
-        <p>Tell our AI your symptoms, and we'll recommend the best products for you.</p>
-        <input type="text" id="symptom-input" placeholder="e.g., joint pain, low energy, digestion issues...">
-        <button id="suggest-btn" onclick="suggestProduct()">Get Suggestions</button>
-        <div id="suggestion-result"></div>
-      </div>
-      
-      <h2 style="text-align: center; font-size: 2.2rem; margin: 40px 0 30px;">Our Products</h2>
       <div id="product-list" class="product-list"></div>
     </div>
-
     <div id="cds" class="tab-content">
-      <section class="program-section">
-        <h2>Cabaran Detox Sihat (CDS)</h2>
-        <p style="text-align: center; font-size: 1.2rem;">Transform your health in just 7 days with our proven detox program</p>
-        <div class="program-highlights">
-          <div class="highlight-card">
-            <h3><i class="fa-solid fa-box-open"></i> What You Get</h3>
-            <ul>
-              <li><i class="fa-solid fa-check-circle"></i> Personalized Forever product package</li>
-              <li><i class="fa-solid fa-check-circle"></i> Detailed meal plan & recipes</li>
-              <li><i class="fa-solid fa-check-circle"></i> Daily coaching via WhatsApp</li>
-            </ul>
-          </div>
-          <div class="highlight-card">
-            <h3><i class="fa-solid fa-spa"></i> Benefits</h3>
-            <ul>
-              <li><i class="fa-solid fa-check-circle"></i> Boost energy levels</li>
-              <li><i class="fa-solid fa-check-circle"></i> Healthy weight management</li>
-              <li><i class="fa-solid fa-check-circle"></i> Improved mental clarity</li>
-            </ul>
-          </div>
-        </div>
-        <a href="https://wa.me/601111033154?text=I%20want%20to%20join%20CDS%20Program" class="cta-button">Join CDS Now <i class="fa-solid fa-arrow-right"></i></a>
-      </section>
+      <section class="program-section"><h2>Cabaran Detox Sihat (CDS)</h2></section>
     </div>
-
     <div id="business" class="tab-content">
-      <section class="program-section">
-        <h2>Build Your Forever Business</h2>
-        <p style="text-align: center; font-size: 1.2rem;">Start your journey to financial freedom with our proven system</p>
-        <div class="program-highlights">
-          <div class="highlight-card">
-            <h3><i class="fa-solid fa-briefcase"></i> Why Join Us?</h3>
-            <ul>
-              <li><i class="fa-solid fa-check-circle"></i> Earn 30-50% commission</li>
-              <li><i class="fa-solid fa-check-circle"></i> Work from anywhere</li>
-              <li><i class="fa-solid fa-check-circle"></i> Flexible hours</li>
-            </ul>
-          </div>
-          <div class="highlight-card">
-            <h3><i class="fa-solid fa-handshake-angle"></i> What We Provide</h3>
-            <ul>
-              <li><i class="fa-solid fa-check-circle"></i> Complete training program</li>
-              <li><i class="fa-solid fa-check-circle"></i> Marketing materials & mentorship</li>
-              <li><i class="fa-solid fa-check-circle"></i> Strong team support</li>
-            </ul>
-          </div>
-        </div>
-        <a href="https://wa.me/601111033154?text=I%20want%20to%20join%20Forever%20Business" class="cta-button">Start Your Business Today <i class="fa-solid fa-arrow-right"></i></a>
-      </section>
+      <section class="program-section"><h2>Build Your Forever Business</h2></section>
     </div>
-
     <div id="rewards" class="tab-content">
         <section class="program-section">
             <h2><i class="fa-solid fa-award"></i> Redeem Your Points</h2>
-            <p style="text-align: center; font-size: 1.2rem;">Use your points to redeem exciting vouchers and products!</p>
-            
-            <h3 style="margin-top: 40px;">Vouchers</h3>
             <div class="rewards-grid">
                 <div class="reward-item">
                     <img src="https://i.imgur.com/O9yP2aH.png" alt="RM 5 Voucher">
@@ -392,44 +315,22 @@
                     <button class="btn btn-primary redeem-btn">Redeem</button>
                 </div>
             </div>
-
-            <h3 style="margin-top: 40px;">Products</h3>
-            <div class="rewards-grid">
-                <div class="reward-item">
-                    <img src="aloe-vera-gel.jpg" alt="Aloe Vera Gel">
-                    <h4>Aloe Vera Gel</h4>
-                    <p class="points-cost">10000 Points</p>
-                    <button class="btn btn-primary redeem-btn">Redeem</button>
-                </div>
-                <div class="reward-item">
-                    <img src="aloe-berry-nectar.jpg" alt="Aloe Berry Nectar">
-                    <h4>Aloe Berry Nectar</h4>
-                    <p class="points-cost">10000 Points</p>
-                    <button class="btn btn-primary redeem-btn">Redeem</button>
-                </div>
-                <div class="reward-item">
-                    <img src="aloe-peaches.jpg" alt="Aloe Peaches">
-                    <h4>Aloe Peaches</h4>
-                    <p class="points-cost">10000 Points</p>
-                    <button class="btn btn-primary redeem-btn">Redeem</button>
-                </div>
-            </div>
         </section>
     </div>
   </main>
 
   <footer>
     <div class="container">
-      <p>© 2025 Forever Living by Mohd Arvind Isa. Powered by Rich Academy Global. All rights reserved.</p>
+      <p>© 2025 Forever Living by Mohd Arvind Isa. All rights reserved.</p>
       <div class="timestamp">Last updated: <span id="current-date"></span></div>
       <section class="disclaimer">
-        <strong>Disclaimer:</strong> This website is operated by an independent Registered Forever Business Owner (FBO) under Rich Academy Global and is not the official site of Forever Living Products. Product names, trademarks, and registered trademarks are property of Forever Living Products International, Inc.
+        <strong>Disclaimer:</strong> This website is operated by an independent Forever Business Owner.
       </section>
     </div>
   </footer>
 </div>
 
-<div id="login-page" style="display: none;">
+<div id="auth-page" style="display: none;">
     <div class="form-container">
         <div id="login-form-container">
             <h2>Login to Your Account</h2>
@@ -532,70 +433,90 @@
   </div>
 
   <script>
-    // --- DATA (Restored to full list) ---
+    // --- DATA (Updated with all 58 products and promo prices) ---
     const products = [
-      { id: 1, name: "Aloe Vera Gel", price: 116.79, image: "aloe-vera-gel.jpg", benefits: "Supports digestion, boosts immunity, promotes skin health, enhances nutrient absorption, helps detoxify the body.", consumption: "Take 30-60ml daily, preferably on empty stomach.", bestSeller: true, grandOpeningSpecial: true },
-      { id: 2, name: "Aloe Berry Nectar", price: 116.79, image: "aloe-berry-nectar.jpg", benefits: "Antioxidant support, immune system booster, natural energy, supports urinary health, rich in vitamin C.", consumption: "30-60ml daily, can be mixed with water or juice.", bestSeller: true, grandOpeningSpecial: true },
-      { id: 3, name: "Bee Honey", price: 132.57, image: "bee-honey.jpg", benefits: "Natural energy, soothes throat, antioxidant properties, supports digestion, promotes wound healing.", consumption: "1-2 teaspoons daily, can be added to drinks.", bestSeller: true, grandOpeningSpecial: true },
-      { id: 4, name: "Royal Jelly", price: 139.21, image: "royal-jelly.jpg", benefits: "Energy booster, supports immune system, anti-aging, hormone balance, supports skin renewal.", consumption: "1 tablet daily, preferably in the morning.", bestSeller: true, grandOpeningSpecial: true },
-      { id: 5, name: "Bee Propolis", price: 139.21, image: "bee-propolis.jpg", benefits: "Immune support, natural antibiotic, throat health, anti-inflammatory, promotes oral health.", consumption: "1 tablet daily or as needed.", bestSeller: true, grandOpeningSpecial: true },
-      { id: 6, name: "Arctic Sea", price: 130.10, image: "arctic-sea.jpg", benefits: "Heart health, joint support, brain function, supports vision, reduces inflammation.", consumption: "2 softgels twice daily with meals.", bestSeller: true, grandOpeningSpecial: true },
-      { id: 7, name: "Fields of Greens", price: 86.10, image: "fields-of-greens.jpg", benefits: "Detoxification, digestion, alkalizing, supports weight management, rich in chlorophyll.", consumption: "1 tablet 3 times daily with water.", bestSeller: true, grandOpeningSpecial: true },
-      { id: 8, name: "Aloe First", price: 93.40, image: "aloe-first.jpg", benefits: "Skin hydration, cooling relief, wound soothing, relieves sunburn, pre-hair treatment spray.", consumption: "Spray directly on skin as needed.", bestSeller: true, grandOpeningSpecial: true },
-      { id: 9, name: "Aloe Propolis Creme", price: 92.08, image: "aloe-propolis-creme.jpg", benefits: "Skin repair, moisturizing, protective barrier, soothes irritated skin, supports healing of minor cuts.", consumption: "Apply generously on dry or irritated areas.", bestSeller: true, grandOpeningSpecial: true },
-      { id: 10, name: "Forever Bright Toothgel", price: 31.62, image: "bright-toothgel.jpg", benefits: "Fluoride-free, fresh breath, aloe-based care, gentle on gums, whitens teeth naturally.", consumption: "Brush teeth twice daily.", bestSeller: true, grandOpeningSpecial: true },
-      { id: 11, name: "Aloe Peaches", price: 116.79, image: "aloe-peaches.jpg", benefits: "Digestive health, vitamin C source, natural detoxification, maintains healthy skin, supports kidney function.", consumption: "30-60ml daily, refrigerate after opening." },
-      { id: 12, name: "Bee Pollen", price: 75.50, image: "bee-pollen.jpg", benefits: "Natural multivitamin, energy enhancement, allergy relief, improves stamina, supports cardiovascular health.", consumption: "1 tablet 3 times daily with meals." },
-      { id: 13, name: "Absorbent-C", price: 75.50, image: "absorbent-c.jpg", benefits: "Immune support, collagen production, antioxidant, helps iron absorption, supports healthy skin.", consumption: "1-2 tablets daily with meals." },
-      { id: 14, name: "Calcium Plus", price: 132.15, image: "calcium-plus.jpg", benefits: "Bone support, muscle health, calcium + vitamin D, supports nerve function, helps prevent osteoporosis.", consumption: "2 tablets daily with meals." },
-      { id: 15, name: "Aloe Liquid Soap", price: 54.72, image: "aloe-liquid-soap.jpg", benefits: "Gentle cleansing, moisturizes skin, aloe-based formula, suitable for sensitive skin, pH-balanced.", consumption: "Use daily for face and body cleansing." },
-      { id: 16, name: "Aloe Jojoba Shampoo", price: 91.66, image: "aloe-jojoba-shampoo.jpg", benefits: "Hair nourishment, scalp care, sulfate-free, promotes hair strength, natural shine.", consumption: "Massage into wet hair, rinse thoroughly." },
-      { id: 17, name: "Aloe Jojoba Conditioner", price: 91.66, image: "aloe-jojoba-conditioner.jpg", benefits: "Moisturizing, smooth finish, aloe + jojoba, strengthens hair strands, prevents breakage.", consumption: "Apply after shampoo, leave 1-2 minutes, rinse." },
-      { id: 18, name: "Aloe Sunscreen", price: 84.91, image: "aloe-sunscreen.jpg", benefits: "UV protection, aloe-based, water-resistant, suitable for sensitive skin, prevents sunburn.", consumption: "Apply 15 minutes before sun exposure." },
-      { id: 19, name: "Aloe MPD 2X Ultra", price: 114.47, image: "aloe-mp-lotion.jpg", benefits: "Multi-purpose cleaner, concentrated, eco-friendly, gentle on skin, biodegradable formula.", consumption: "Dilute as needed for laundry, dishes or surfaces." },
-      { id: 20, name: "Avocado Face & Body Soap", price: 23.40, image: "avocado-soap.jpg", benefits: "Softens skin, gentle cleansing, avocado oil-rich, suitable for all skin types, non-drying.", consumption: "Use daily for face and body." },
-      { id: 21, name: "Aloe Lips", price: 17.92, image: "aloe-lips.jpg", benefits: "Lip protection, moisturizes, healing balm, soothes cracked lips, non-greasy finish.", consumption: "Apply on lips as needed throughout the day." },
-      { id: 22, name: "Forever Deodorant Stick", price: 34.91, image: "forever-deodorant.jpg", benefits: "Natural fragrance, aloe soothing, easy glide, long-lasting protection, non-staining.", consumption: "Use after shower daily." },
-      { id: 23, name: "Teh Tarik Halia", price: 25.90, image: "teh-tarik.jpg", benefits: "Warming effect, digestion aid, ginger-infused, improves circulation, relieves bloating.", consumption: "Mix sachet with hot water and stir well." },
-      { id: 24, name: "Choco Malt Drink", price: 27.90, image: "choco-malt.jpg", benefits: "Rich in B vitamins, iron for red blood cell production, supports metabolism, promotes growth, aids recovery after fatigue.", consumption: "Mix 2-3 tablespoons in 150–200ml hot water or milk." }
+        { id: 1, name: "ALOE VERA GEL", price: 116.79, promoPrice: 85.84, image: "aloe-vera-gel.jpg" },
+        { id: 2, name: "ALOE BERRY NECTAR", price: 116.79, promoPrice: 85.84, image: "aloe-berry-nectar.jpg" },
+        { id: 3, name: "ALOE BITS N' PEACHES", price: 116.79, promoPrice: 85.84, image: "aloe-peaches.jpg" },
+        { id: 4, name: "LITE VANILLA", price: 155.72, promoPrice: 114.45, image: "lite-vanilla.jpg" },
+        { id: 5, name: "LITE CHOCO", price: 155.72, promoPrice: 114.45, image: "lite-choco.jpg" },
+        { id: 6, name: "SUPERGREENS", price: 214.71, promoPrice: 157.82, image: "supergreens.jpg" },
+        { id: 7, name: "FIBER", price: 124.44, promoPrice: 91.47, image: "fiber.jpg" },
+        { id: 8, name: "TONGKAT ALI", price: 19.90, promoPrice: 18.80, image: "tongkat-ali.jpg" },
+        { id: 9, name: "WHITE COFFEE", price: 15.99, promoPrice: 15.11, image: "white-coffee.jpg" },
+        { id: 10, name: "CHOCOLATE MALT DRINK", price: 27.90, promoPrice: 24.94, image: "choco-malt.jpg" },
+        { id: 11, name: "TEH TARIK HALIA", price: 25.90, promoPrice: 23.15, image: "teh-tarik.jpg" },
+        { id: 12, name: "BEE HONEY", price: 132.57, promoPrice: 97.44, image: "bee-honey.jpg" },
+        { id: 13, name: "BEE POLLEN", price: 75.50, promoPrice: 55.49, image: "bee-pollen.jpg" },
+        { id: 14, name: "BEE PROPOLIS", price: 139.21, promoPrice: 102.32, image: "bee-propolis.jpg" },
+        { id: 15, name: "ROYAL GELLY", price: 139.21, promoPrice: 102.32, image: "royal-jelly.jpg" },
+        { id: 16, name: "OMEGA 3 PLUS", price: 130.10, promoPrice: 95.62, image: "arctic-sea.jpg" },
+        { id: 17, name: "ABSORBENT-C", price: 75.50, promoPrice: 55.49, image: "absorbent-c.jpg" },
+        { id: 18, name: "FIELDS OF GREENS", price: 86.10, promoPrice: 63.28, image: "fields-of-greens.jpg" },
+        { id: 19, name: "CALCIUM PLUS TABLET", price: 132.15, promoPrice: 97.14, image: "calcium-plus.jpg" },
+        { id: 20, name: "ALOE LIPS", price: 20.33, promoPrice: 14.94, image: "aloe-lips.jpg" },
+        { id: 21, name: "BRIGHT TOOTHGEL", price: 41.29, promoPrice: 30.35, image: "bright-toothgel.jpg" },
+        { id: 22, name: "ALOE FIRST", price: 90.83, promoPrice: 66.76, image: "aloe-first.jpg" },
+        { id: 23, name: "DEODORANT STICK", price: 50.73, promoPrice: 37.29, image: "forever-deodorant.jpg" },
+        { id: 24, name: "AVOCADO SOAP", price: 30.68, promoPrice: 22.55, image: "avocado-soap.jpg" },
+        { id: 25, name: "ALOE LIQUID SOAP", price: 120.91, promoPrice: 88.87, image: "aloe-liquid-soap.jpg" },
+        { id: 26, name: "JOJOBA SHAMPOO", price: 105.93, promoPrice: 77.86, image: "aloe-jojoba-shampoo.jpg" },
+        { id: 27, name: "JOJOBA CONDITIONER", price: 117.70, promoPrice: 86.51, image: "aloe-jojoba-conditioner.jpg" },
+        { id: 28, name: "ALOE BODY WASH", price: 120.91, promoPrice: 88.87, image: "aloe-body-wash.jpg" },
+        { id: 29, name: "ALOE BODY LOTION", price: 112.35, promoPrice: 82.58, image: "aloe-body-lotion.jpg" },
+        { id: 30, name: "ALOE PROPOLIS CREME", price: 90.83, promoPrice: 66.76, image: "aloe-propolis-creme.jpg" },
+        { id: 31, name: "ALOE VERA GELLY", price: 70.78, promoPrice: 52.03, image: "aloe-vera-gelly.jpg" },
+        { id: 32, name: "ALOE MOISTURIZING", price: 70.78, promoPrice: 52.03, image: "aloe-moisturizing.jpg" },
+        { id: 33, name: "ALOE MASSAGE LOTION", price: 70.78, promoPrice: 52.03, image: "aloe-massage-lotion.jpg" },
+        { id: 34, name: "ALOE MSM GEL", price: 86.00, promoPrice: 63.21, image: "aloe-msm-gel.jpg" },
+        { id: 35, name: "ALOE SUNSCREEN", price: 89.07, promoPrice: 65.47, image: "aloe-sunscreen.jpg" },
+        { id: 36, name: "ALOE SCRUB", price: 77.86, promoPrice: 57.23, image: "aloe-scrub.jpg" },
+        { id: 37, name: "MASK POWDER", price: 102.90, promoPrice: 75.63, image: "mask-powder.jpg" },
+        { id: 38, name: "R3 FACTOR-SKIN DEFENSE", price: 160.97, promoPrice: 118.31, image: "r3-factor.jpg" },
+        { id: 39, name: "FOREVER ALPHA-E FACTOR", price: 144.90, promoPrice: 106.50, image: "alpha-e-factor.jpg" },
+        { id: 40, name: "INFINITE HYDRATING CLEANSER", price: 131.20, promoPrice: 96.43, image: "infinite-cleanser.jpg" },
+        { id: 41, name: "INFINITE FIRMING SERUM", price: 190.47, promoPrice: 140.00, image: "infinite-serum.jpg" },
+        { id: 42, name: "INFINITE RESTORING CREME", price: 221.56, promoPrice: 162.86, image: "infinite-creme.jpg" },
+        { id: 43, name: "BALANCING TONER", price: 106.18, promoPrice: 78.05, image: "balancing-toner.jpg" },
+        { id: 44, name: "AWAKENING EYE CREAM", price: 89.66, promoPrice: 65.90, image: "eye-cream.jpg" },
+        { id: 45, name: "ALOE ACTIVATOR", price: 80.59, promoPrice: 59.23, image: "aloe-activator.jpg" },
+        { id: 46, name: "HYDRATING SERUM", price: 156.56, promoPrice: 115.07, image: "hydrating-serum.jpg" },
+        { id: 47, name: "S.REFRESHING G.CLEANSER", price: 115.61, promoPrice: 84.98, image: "refreshing-cleanser.jpg" },
+        { id: 48, name: "S. IILUMINATING GEL", price: 107.35, promoPrice: 78.91, image: "illuminating-gel.jpg" },
+        { id: 49, name: "S. REFINING GEL MASK", price: 115.61, promoPrice: 84.98, image: "refining-mask.jpg" },
+        { id: 50, name: "S.SMOOTHING GEL MOISTURIZER", price: 115.76, promoPrice: 85.08, image: "smoothing-moisturizer.jpg" },
+        { id: 51, name: "ALOE BIO-CELLULOSE MASK", price: 146.00, promoPrice: 107.31, image: "bio-cellulose-mask.jpg" },
+        { id: 52, name: "REPLENISHING SKIN OIL", price: 132.00, promoPrice: 97.02, image: "skin-oil.jpg" },
+        { id: 53, name: "PROTECTING DAY LOTION", price: 167.99, promoPrice: 123.47, image: "day-lotion.jpg" },
+        { id: 54, name: "C9 LITE VANILLA with FIBER", price: 749.02, promoPrice: 550.53, image: "c9-vanilla.jpg" },
+        { id: 55, name: "C9 LITE CHOCO with FIBER", price: 749.02, promoPrice: 550.53, image: "c9-choco.jpg" },
+        { id: 56, name: "DAILY NUTRITION PACK", price: 542.07, promoPrice: 398.42, image: "daily-nutrition-pack.jpg" },
+        { id: 57, name: "SYJP PACK #1", price: 1613.36, promoPrice: null, image: "syjp-pack1.jpg" },
+        { id: 58, name: "SYJP PACK #2", price: 1613.98, promoPrice: null, image: "syjp-pack2.jpg" }
     ];
     let cart = [];
 
     // --- LOGIC (Updated) ---
 
-    function applyGrandOpeningDiscount(products) {
-      const discountRate = 0.05;
-      return products.map(product => {
-        if (product.grandOpeningSpecial) {
-          return { ...product, originalPrice: product.price, price: product.price * (1 - discountRate) };
-        }
-        return product;
-      });
-    }
-
     function renderProducts() {
       const productList = document.getElementById('product-list');
       if (!productList) return;
-      const discountedProducts = applyGrandOpeningDiscount(products);
       const isLoggedIn = !!sessionStorage.getItem('loggedInUser');
       
-      productList.innerHTML = discountedProducts.map(product => {
-        const isFeatured = product.grandOpeningSpecial;
-        const hasDiscount = product.originalPrice !== undefined;
-        const points = Math.floor(product.price);
+      productList.innerHTML = products.map(product => {
+        const finalPrice = product.promoPrice || product.price;
+        const hasDiscount = !!product.promoPrice;
+        const points = Math.floor(finalPrice);
         const wishlistBtn = isLoggedIn ? `<button class="btn btn-secondary" onclick="addToWishlist(${product.id})"><i class="fa-solid fa-heart"></i> Add to Wishlist</button>` : '';
         
         return `
-          <div class="product ${isFeatured ? 'promo-highlight' : ''}">
-            ${isFeatured ? '<div class="featured-badge">Offer!</div>' : ''}
+          <div class="product">
             <div class="product-image-container"><img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/200x200?text=Image+Not+Found'"></div>
             <div class="product-info">
                 <h3>${product.name}</h3>
                 <div class="price-section">
-                    ${hasDiscount ? `<span class="original-price">RM ${product.originalPrice.toFixed(2)}</span><span class="new-price">RM ${product.price.toFixed(2)}</span>` : `<span class="new-price">RM ${product.price.toFixed(2)}</span>`}
+                    ${hasDiscount ? `<span class="original-price">RM ${product.price.toFixed(2)}</span><span class="new-price">RM ${finalPrice.toFixed(2)}</span>` : `<span class="new-price">RM ${finalPrice.toFixed(2)}</span>`}
                 </div>
-                <div class="benefits"><strong>Benefits:</strong> ${product.benefits}</div>
-                <div class="consumption"><strong>Usage:</strong> ${product.consumption}</div>
                 <div class="product-points"><i class="fa-solid fa-star"></i> Earn ${points} Points</div>
                 <div class="product-actions">
                     <button class="btn btn-primary" onclick="addToCart(${product.id})"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
@@ -624,8 +545,8 @@
         existingItem.quantity++;
       } else {
         const productData = products.find(p => p.id === productId);
-        const discountedData = applyGrandOpeningDiscount([productData])[0];
-        cart.push({ id: discountedData.id, name: discountedData.name, price: discountedData.price, quantity: 1 });
+        const finalPrice = productData.promoPrice || productData.price;
+        cart.push({ id: productData.id, name: productData.name, price: finalPrice, quantity: 1 });
       }
       updateCartCount();
     }
@@ -897,4 +818,4 @@
     });
   </script>
 </body>
-</html>
+</html>```
