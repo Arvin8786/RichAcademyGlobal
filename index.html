@@ -88,6 +88,18 @@
         font-weight: 600;
     }
 
+    /* --- Search & AI Suggestion --- */
+    .search-container { margin-bottom: 30px; position: relative; }
+    #product-search { width: 100%; padding: 15px 50px 15px 25px; border: 2px solid #ddd; border-radius: 50px; font-size: 1rem; outline: none; transition: all 0.3s; }
+    #product-search:focus { border-color: var(--primary-color); box-shadow: 0 0 10px rgba(26, 82, 118, 0.2); }
+    .search-icon { position: absolute; right: 25px; top: 50%; transform: translateY(-50%); color: var(--primary-color); font-size: 1.2rem; }
+    .ai-suggestion-box { background: var(--light-text); padding: 30px; border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 30px; text-align: center; }
+    #symptom-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin: 10px 0; }
+    #suggest-btn { background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: var(--light-text); border: none; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: all 0.3s; margin-top: 10px; }
+    #suggest-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+    #suggestion-result { margin-top: 20px; text-align: left; }
+    .suggestion-product { background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--accent-color); }
+
     /* --- Product List & Cards --- */
     .product-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
     .product {
@@ -126,6 +138,21 @@
       font-weight: bold; font-size: 0.9rem; box-shadow: 0 3px 10px rgba(0,0,0,0.2);
     }
 
+    /* --- CDS & Business Sections --- */
+    .program-section { background: var(--light-text); padding: 40px; border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 30px; }
+    .program-section h2 { font-size: 2.5rem; text-align: center; }
+    .program-highlights { display: flex; flex-wrap: wrap; justify-content: space-around; margin: 30px 0; gap: 20px; }
+    .highlight-card { flex: 1; min-width: 280px; background: var(--light-gray); border: 1px solid #e0e0e0; border-radius: var(--border-radius); padding: 20px; transition: transform 0.3s, box-shadow 0.3s; }
+    .highlight-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+    .highlight-card h3 { border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; }
+    .highlight-card ul { list-style: none; padding: 0; }
+    .highlight-card li { margin-bottom: 10px; display: flex; align-items: flex-start; }
+    .highlight-card .fa-solid { color: var(--accent-color); margin-right: 10px; margin-top: 5px; }
+    .testimonial { background: #f0f8f0; padding: 20px; border-left: 4px solid var(--accent-color); margin: 20px 0; font-style: italic; border-radius: 0 8px 8px 0; }
+    .testimonial-author { text-align: right; font-weight: bold; color: var(--primary-color); }
+    .cta-button { display: block; width: fit-content; margin: 30px auto; background: linear-gradient(135deg, var(--secondary-color), #e67e22); color: var(--light-text); text-align: center; padding: 15px 40px; border-radius: 50px; font-weight: bold; text-decoration: none; font-size: 1.2rem; transition: all 0.3s; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+    .cta-button:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.3); }
+
     /* --- Rewards Section --- */
     .rewards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
     .reward-item { background: var(--light-gray); border: 1px solid #ddd; border-radius: var(--border-radius); padding: 20px; text-align: center; display: flex; flex-direction: column; }
@@ -137,7 +164,7 @@
     /* --- Login & User Dashboard --- */
     #login-page, #user-dashboard { display: none; }
     .dashboard-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
-    .dashboard-nav a { background: var(--light-gray); border: 1px solid #ddd; padding: 10px 20px; border-radius: 50px; text-decoration: none; color: var(--primary-color); font-weight: 600; }
+    .dashboard-nav a { background: var(--light-gray); border: 1px solid #ddd; padding: 10px 20px; border-radius: 50px; text-decoration: none; color: var(--primary-color); font-weight: 600; cursor: pointer; }
     .dashboard-nav a.active { background: var(--primary-color); color: var(--light-text); }
     .user-tab-content { display: none; }
     .user-tab-content.active { display: block; animation: fadeIn 0.5s; }
@@ -238,7 +265,6 @@
   <nav>
     <div class="container">
         <ul id="main-nav">
-          <li><a onclick="showMainStore()">Home</a></li>
           <li><a onclick="showMainStoreAndTab('products')">Products</a></li>
           <li><a onclick="showMainStoreAndTab('cds')">Cabaran Detox Sihat</a></li>
           <li><a onclick="showMainStoreAndTab('business')">Business Opportunity</a></li>
@@ -258,20 +284,73 @@
             Promotion Period: 21/7/2025 - 24/8/2025
         </div>
       </section>
+
+      <div class="search-container">
+        <input type="text" id="product-search" placeholder="Search for products...">
+        <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+      </div>
+
+      <div class="ai-suggestion-box">
+        <h2><i class="fa-solid fa-robot"></i> AI Product Suggestion</h2>
+        <p>Tell our AI your symptoms, and we'll recommend the best products for you.</p>
+        <input type="text" id="symptom-input" placeholder="e.g., joint pain, low energy, digestion issues...">
+        <button id="suggest-btn" onclick="suggestProduct()">Get Suggestions</button>
+        <div id="suggestion-result"></div>
+      </div>
+      
+      <h2 style="text-align: center; font-size: 2.2rem; margin: 40px 0 30px;">Our Products</h2>
       <div id="product-list" class="product-list"></div>
     </div>
 
     <div id="cds" class="tab-content">
       <section class="program-section">
         <h2>Cabaran Detox Sihat (CDS)</h2>
-        <p style="text-align: center; font-size: 1.2rem;">Transform your health in just 7 days</p>
+        <p style="text-align: center; font-size: 1.2rem;">Transform your health in just 7 days with our proven detox program</p>
+        <div class="program-highlights">
+          <div class="highlight-card">
+            <h3><i class="fa-solid fa-box-open"></i> What You Get</h3>
+            <ul>
+              <li><i class="fa-solid fa-check-circle"></i> Personalized Forever product package</li>
+              <li><i class="fa-solid fa-check-circle"></i> Detailed meal plan & recipes</li>
+              <li><i class="fa-solid fa-check-circle"></i> Daily coaching via WhatsApp</li>
+            </ul>
+          </div>
+          <div class="highlight-card">
+            <h3><i class="fa-solid fa-spa"></i> Benefits</h3>
+            <ul>
+              <li><i class="fa-solid fa-check-circle"></i> Boost energy levels</li>
+              <li><i class="fa-solid fa-check-circle"></i> Healthy weight management</li>
+              <li><i class="fa-solid fa-check-circle"></i> Improved mental clarity</li>
+            </ul>
+          </div>
+        </div>
+        <a href="https://wa.me/601111033154?text=I%20want%20to%20join%20CDS%20Program" class="cta-button">Join CDS Now <i class="fa-solid fa-arrow-right"></i></a>
       </section>
     </div>
 
     <div id="business" class="tab-content">
       <section class="program-section">
         <h2>Build Your Forever Business</h2>
-        <p style="text-align: center; font-size: 1.2rem;">Start your journey to financial freedom</p>
+        <p style="text-align: center; font-size: 1.2rem;">Start your journey to financial freedom with our proven system</p>
+        <div class="program-highlights">
+          <div class="highlight-card">
+            <h3><i class="fa-solid fa-briefcase"></i> Why Join Us?</h3>
+            <ul>
+              <li><i class="fa-solid fa-check-circle"></i> Earn 30-50% commission</li>
+              <li><i class="fa-solid fa-check-circle"></i> Work from anywhere</li>
+              <li><i class="fa-solid fa-check-circle"></i> Flexible hours</li>
+            </ul>
+          </div>
+          <div class="highlight-card">
+            <h3><i class="fa-solid fa-handshake-angle"></i> What We Provide</h3>
+            <ul>
+              <li><i class="fa-solid fa-check-circle"></i> Complete training program</li>
+              <li><i class="fa-solid fa-check-circle"></i> Marketing materials & mentorship</li>
+              <li><i class="fa-solid fa-check-circle"></i> Strong team support</li>
+            </ul>
+          </div>
+        </div>
+        <a href="https://wa.me/601111033154?text=I%20want%20to%20join%20Forever%20Business" class="cta-button">Start Your Business Today <i class="fa-solid fa-arrow-right"></i></a>
       </section>
     </div>
 
@@ -341,7 +420,6 @@
     <h2>My Account</h2>
     <nav class="dashboard-nav">
         <a href="#" class="active" onclick="showUserTab('profile', this)">My Profile</a>
-        <a href="#" onclick="showUserTab('purchase-history', this)">Purchase History</a>
         <a href="#" onclick="showUserTab('points-history', this)">Points History</a>
         <a href="#" onclick="showUserTab('redemption-history', this)">Redemption History</a>
         <a href="#" onclick="showUserTab('my-vouchers', this)">My Vouchers</a>
@@ -354,19 +432,9 @@
         <p><strong>Phone:</strong> +60 12-345 6789</p>
         <p><strong>Total Points:</strong> 1250</p>
     </div>
-    <div id="purchase-history" class="user-tab-content">
-        <h3>Purchase History</h3>
-        <table class="history-table">
-            <thead><tr><th>Order ID</th><th>Date</th><th>Total</th><th>Status</th></tr></thead>
-            <tbody><tr><td>#1002</td><td>15 Jul 2025</td><td>RM 150.50</td><td>Completed</td></tr></tbody>
-        </table>
-    </div>
     <div id="points-history" class="user-tab-content">
         <h3>Points History</h3>
-        <table class="history-table">
-            <thead><tr><th>Date</th><th>Description</th><th>Points</th></tr></thead>
-            <tbody><tr><td>15 Jul 2025</td><td>Order #1002</td><td style="color: green;">+150</td></tr></tbody>
-        </table>
+        <p>No points history yet.</p>
     </div>
     <div id="redemption-history" class="user-tab-content">
         <h3>Redemption History</h3>
