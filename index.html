@@ -198,12 +198,35 @@
 
     /* --- Rewards Section --- */
     .rewards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-    .reward-item { background: var(--light-gray); border: 1px solid #ddd; border-radius: var(--border-radius); padding: 20px; text-align: center; display: flex; flex-direction: column; }
+    .reward-item { 
+        background: var(--light-gray); 
+        border: 1px solid #ddd; 
+        border-radius: var(--border-radius); 
+        padding: 20px; 
+        text-align: center; 
+        display: flex; 
+        flex-direction: column;
+        position: relative; /* Needed for the overlay */
+    }
     .reward-item img { max-width: 100%; height: 100px; object-fit: contain; margin-bottom: 15px; border-radius: 8px; }
     .reward-item h4 { margin: 10px 0 5px; }
     .reward-item .points-cost { font-weight: bold; color: var(--accent-color); margin-bottom: 15px; }
-    .reward-item .btn { margin-top: auto; }
-    .reward-item .btn:disabled { background-color: #ccc; cursor: not-allowed; }
+    .coming-soon-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.8);
+        color: var(--primary-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        border-radius: var(--border-radius);
+        backdrop-filter: blur(2px);
+    }
 
     /* --- Floating Cart Button --- */
     .floating-cart-btn {
@@ -247,6 +270,8 @@
     .modal-content {
       background-color: #fefefe; padding: 30px; border-radius: var(--border-radius);
       width: 90%; max-width: 600px; animation: slideIn 0.4s ease;
+      max-height: 90vh; /* Set max height */
+      overflow-y: auto; /* Enable scrolling */
     }
     .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; transition: color 0.3s; }
     .close:hover { color: black; }
@@ -263,6 +288,10 @@
     .cart-summary { margin-top: 20px; font-size: 1.1rem; }
     .summary-line { display: flex; justify-content: space-between; padding: 8px 0; }
     .summary-line.total { font-weight: bold; font-size: 1.3rem; border-top: 2px solid #333; margin-top: 10px; }
+    .points-earned {
+        background-color: #e0f2f1; color: var(--accent-color); padding: 10px;
+        border-radius: 8px; text-align: center; margin-top: 15px; font-weight: bold;
+    }
     .free-shipping-promo {
         background-color: #e0f2f1; color: var(--accent-color); padding: 10px;
         border-radius: 8px; text-align: center; margin-top: 20px; font-weight: bold;
@@ -387,16 +416,19 @@
                     <img src="aloe-vera-gel.jpg" alt="Aloe Vera Gel">
                     <h4>ALOE VERA GEL</h4>
                     <p class="points-cost"><span style="text-decoration: line-through; color: #999; font-weight: normal;">11700</span> 10000 Points</p>
+                    <div class="coming-soon-overlay"><span>Coming Soon</span></div>
                 </div>
                 <div class="reward-item">
                     <img src="aloe-berry-nectar.jpg" alt="Aloe Berry Nectar">
                     <h4>ALOE BERRY NECTAR</h4>
                     <p class="points-cost"><span style="text-decoration: line-through; color: #999; font-weight: normal;">11700</span> 10000 Points</p>
+                    <div class="coming-soon-overlay"><span>Coming Soon</span></div>
                 </div>
                 <div class="reward-item">
                     <img src="aloe-peaches.jpg" alt="Aloe Bits N' Peaches">
                     <h4>ALOE BITS N' PEACHES</h4>
                     <p class="points-cost"><span style="text-decoration: line-through; color: #999; font-weight: normal;">11700</span> 10000 Points</p>
+                    <div class="coming-soon-overlay"><span>Coming Soon</span></div>
                 </div>
             </div>
         </section>
@@ -432,6 +464,7 @@
           <div class="summary-line"><span>Subtotal</span><span id="cart-subtotal">RM 0.00</span></div>
           <div class="summary-line"><span>Shipping</span><span id="cart-shipping">RM 0.00</span></div>
           <div class="summary-line total"><span>Total</span><span id="cart-total">RM 0.00</span></div>
+          <div id="points-earned-display"></div>
         </div>
         <div class="customer-info-form">
           <h3 style="margin-top: 20px;">Customer & Shipping Information</h3>
@@ -710,12 +743,14 @@
       const subtotalEl = document.getElementById('cart-subtotal');
       const shippingEl = document.getElementById('cart-shipping');
       const totalEl = document.getElementById('cart-total');
+      const pointsEl = document.getElementById('points-earned-display');
       
       if (cart.length === 0) {
         cartItemsEl.innerHTML = '<p>Your cart is empty</p>';
         subtotalEl.textContent = 'RM 0.00';
         shippingEl.textContent = 'RM 0.00';
         totalEl.textContent = 'RM 0.00';
+        pointsEl.innerHTML = '';
         return;
       }
       
@@ -742,11 +777,13 @@
       
       const shipping = calculateShipping(cart, subtotal);
       const total = subtotal + shipping.fee;
+      const points = Math.floor(subtotal);
 
       cartItemsEl.innerHTML = itemsHTML;
       subtotalEl.textContent = `RM ${subtotal.toFixed(2)}`;
       shippingEl.textContent = shipping.message;
       totalEl.textContent = `RM ${total.toFixed(2)}`;
+      pointsEl.innerHTML = `<div class="points-earned"><i class="fa-solid fa-star"></i> Points to be Earned: ${points}</div>`;
     }
 
     function updateCartCount() {
@@ -824,15 +861,7 @@
         statusEl.style.color = 'blue';
 
         // --- GOOGLE SHEETS API URL ---
-        // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE
-        const googleScriptURL = 'https://script.google.com/macros/s/AKfycbyHVMx2BySXuEWZ2dQT6iQA3BORddmYaNHxAbW38Pf5wKtrHBW6jIM_3bOuijWvdv9l/exec';
-
-        if (googleScriptURL === 'https://script.google.com/macros/s/AKfycbyHVMx2BySXuEWZ2dQT6iQA3BORddmYaNHxAbW38Pf5wKtrHBW6jIM_3bOuijWvdv9l/exec') {
-            statusEl.textContent = 'Error: Website is not connected to the order database.';
-            statusEl.style.color = 'red';
-            verifyBtn.disabled = false;
-            return;
-        }
+        const googleScriptURL = 'https://script.google.com/macros/s/AKfycbyEX7KpuHy-wTujkk8ld6TR5aE6Lj3UrPF04qEhLA3hfiNqeZOlSzAPCgyVqhKn248/exec';
 
         try {
             // Check if code is valid and not used
