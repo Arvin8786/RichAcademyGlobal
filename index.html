@@ -726,9 +726,9 @@
         { id: 'RWD01', name: 'RM 5 Voucher', cost: 500, image: 'rm5.jpg', fallbackImage: 'https://i.imgur.com/O9yP2aH.png', type: 'voucher', redemptionValue: 'RM 5', available: true },
         { id: 'RWD02', name: 'RM 10 Voucher', cost: 1000, image: 'rm10.jpg', fallbackImage: 'https://i.imgur.com/sY2a2qG.png', type: 'voucher', redemptionValue: 'RM 10', available: true },
         { id: 'RWD03', name: 'RM 20 Voucher', cost: 2000, image: 'rm20.jpg', fallbackImage: 'https://i.imgur.com/Jz4Y8fW.png', type: 'voucher', redemptionValue: 'RM 20', available: true },
-        { id: 'RWD04', name: 'ALOE VERA GEL', cost: 10000, image: 'aloe-vera-gel.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Vera Gel', available: false }, // Coming Soon
-        { id: 'RWD05', name: 'ALOE BERRY NECTAR', cost: 10000, image: 'aloe-berry-nectar.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Berry Nectar', available: false }, // Coming Soon
-        { id: 'RWD06', name: 'ALOE BITS N\' PEACHES', cost: 10000, image: 'aloe-peaches.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Bits N\' Peaches', available: false }, // Coming Soon
+        { id: 'RWD04', name: 'ALOE VERA GEL', cost: 10000, image: 'aloe-vera-gel.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Vera Gel', available: false }, 
+        { id: 'RWD05', name: 'ALOE BERRY NECTAR', cost: 10000, image: 'aloe-berry-nectar.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Berry Nectar', available: false },
+        { id: 'RWD06', name: 'ALOE BITS N\' PEACHES', cost: 10000, image: 'aloe-peaches.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Bits N\' Peaches', available: false },
     ];
     let cart = [];
     let currentCustomer = null; // Stores logged-in customer data
@@ -1050,7 +1050,7 @@
         statusEl.style.color = 'blue';
 
         try {
-            const validationResponse = await fetch(`${GOOGLE_SCRIPT_URL}?action=validateCode&code=${codeInput}`);
+            const validationResponse = await fetch(`${GOOGLE_SCRIPT_URL}?action=validateCode&code=${encodeURIComponent(codeInput)}`);
             const validationResult = await validationResponse.json();
 
             if (validationResult.status === 'success' && validationResult.isValid) {
@@ -1367,7 +1367,7 @@
                     <img src="${imageSrc}" alt="${reward.name}" ${fallbackImg}>
                     <h4>${reward.name}</h4>
                     <p class="points-cost">
-                        ${(reward.id === 'RWD04' || reward.id === 'RWD05' || reward.id === 'RWD06') && reward.cost === 10000 ? '<span style="text-decoration: line-through; color: #999; font-weight: normal;">11700</span> ' : ''}
+                        ${(reward.id === 'RWD04' || reward.id === 'RWD05' || reward.id === 'RWD06') && reward.cost === 10000 && !reward.available ? '<span style="text-decoration: line-through; color: #999; font-weight: normal;">11700</span> ' : ''}
                         ${reward.cost} Points
                     </p>
                     <div class="redeem-btn-container">
