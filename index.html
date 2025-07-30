@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Forever Living by Mohd Arvinsd Isa - Grand Opening Special</title>
+  <title>Forever Living by Mohd Arvind Isa - Grand Opening Special</title>
   
   <!-- Google Fonts & Font Awesome Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -205,13 +205,6 @@
     .reward-item .btn { margin-top: auto; }
     .reward-item .btn:disabled { background-color: #ccc; cursor: not-allowed; }
 
-    /* --- Sales History Table --- */
-    .history-table-container { overflow-x: auto; }
-    .history-table { width: 100%; border-collapse: collapse; margin-top: 20px; min-width: 800px; }
-    .history-table th, .history-table td { padding: 12px; border: 1px solid #ddd; text-align: left; white-space: nowrap; }
-    .history-table td.items-cell { white-space: normal; }
-    .history-table th { background-color: var(--primary-color); color: white; }
-
     /* --- Floating Cart Button --- */
     .floating-cart-btn {
         position: fixed;
@@ -329,7 +322,6 @@
           <li><a onclick="showTab('products')">Products</a></li>
           <li><a onclick="showTab('business')">Business Opportunity</a></li>
           <li><a onclick="showTab('rewards')">Rewards</a></li>
-          <li><a onclick="showTab('sales-history')">Sales History</a></li>
         </ul>
     </div>
   </nav>
@@ -409,30 +401,6 @@
             </div>
         </section>
     </div>
-
-    <div id="sales-history" class="tab-content">
-        <section class="program-section">
-            <h2><i class="fa-solid fa-clipboard-list"></i> Verified Sales History</h2>
-            <p style="text-align: center;">This is a log of all manually verified purchases.</p>
-            <div class="history-table-container">
-                <table class="history-table">
-                    <thead>
-                        <tr>
-                            <th>Order Number</th>
-                            <th>Name</th>
-                            <th>Phone Number</th>
-                            <th>Items (Qty)</th>
-                            <th>Total Amount (RM)</th>
-                            <th>Total Points Issued</th>
-                        </tr>
-                    </thead>
-                    <tbody id="sales-history-body">
-                        <!-- Sales will be dynamically inserted here -->
-                    </tbody>
-                </table>
-            </div>
-        </section>
-    </div>
   </main>
 
   <footer>
@@ -484,9 +452,9 @@
         <h2>Verify Your Purchase</h2>
         <p>After completing your payment via WhatsApp, you will receive a verification code from us.</p>
         <div id="verification-section">
-            <p>Please enter the code below to confirm your order and have it recorded in our system. A PDF receipt will be generated automatically.</p>
+            <p>Please enter the code below to confirm your order. A PDF receipt will be generated and an email copy sent to the owner.</p>
             <input type="text" id="verification-code" placeholder="Enter Verification Code">
-            <button class="btn btn-primary" onclick="verifyPurchase()">Verify & Generate Receipt</button>
+            <button class="btn btn-primary" id="verify-btn" onclick="verifyPurchase()">Verify & Generate Receipt</button>
             <p id="verification-status" style="margin-top: 15px; font-weight: bold;"></p>
         </div>
         <button class="btn btn-secondary" style="margin-top: 20px;" onclick="toggleCart(true)">Cancel Verification</button>
@@ -556,43 +524,6 @@
     const promoEndDate = new Date("August 2, 2025 23:59:59").getTime();
 
     // --- LOGIC ---
-
-    // The master list of all valid, one-time-use codes.
-    const masterCodeList = [
-        '4R8sT2bE9Vn7kM3', 'P5wJ1xY6zQ0cE7f', 'L9gH4aD1kF8jT2p', 'Z3oV6iU7yB2nC1x', 'M5rQ4sT9vW1xY8z',
-        'A1bC2dE3fG4hI5j', 'K6lM7nO8pQ9rS0t', 'U1vW2xY3z4A5bC6', 'D7eF8gH9iJ0kL1m', 'N2oP3qR4sT5uV6w',
-        'X7yZ8aB9cDeFgH1', 'I2jK3lM4nO5pQ6r', 'S7tU8vW9xY0zAbC', 'dE1fG2hI3jK4lM5', 'nO6pQ7rS8tU9vW0',
-        'xY1z2A3b4C5d6E7', 'fG8hI9jK0lM1nO2', 'pQ3rS4tU5vW6xY7', 'z8A9bC0dE1fG2h3', 'I4jK5lM6nO7pQ8r',
-        'S9tU0vW1xY2z3A4', 'bC5dE6fG7hI8jK9', 'lM0nO1pQ2rS3tU4', 'vW5xY6z7A8bC9d0', 'E1fG2hI3jK4lM5n',
-        'O6pQ7rS8tU9vW0x', 'Y1z2A3b4C5d6E7f', 'G8hI9jK0lM1nO2p', 'Q3rS4tU5vW6xY7z', '8A9bC0dE1fG2hI3',
-        'jK4lM5nO6pQ7rS8', 'tU9vW0xY1z2A3b4', 'C5dE6fG7hI8jK9l', 'M0nO1pQ2rS3tU4v', 'W5xY6z7A8bC9d0e',
-        'F1gH2iJ3kL4mN5o', 'P6qR7sT8uV9wX0y', 'Z1aB2c3D4e5F6g7', 'H8iJ9kL0mN1oP2q', 'R3sT4uV5wX6yZ7a',
-        'B8c9D0e1F2g3H4i', 'J5kL6mN7oP8qR9s', 'T0uV1wX2yZ3aB4c', '5D6e7F8g9H0iJ1k', 'L2mN3oP4qR5sT6u',
-        'V7wX8yZ9aB0c1D2', 'e3F4g5H6i7J8k9l', 'M1nO2pQ3rS4tU5v', 'W6xY7z8A9bC0d1e', 'F2gH3iJ4kL5mN6o',
-        'P7qR8sT9uV0wX1y', 'Z2aB3c4D5e6F7g8', 'H9iJ0kL1mN2oP3q', 'R4sT5uV6wX7yZ8a', 'B9c0D1e2F3g4H5i',
-        'J6kL7mN8oP9qR0s', 'T1uV2wX3yZ4aB5c', '6D7e8F9g0H1iJ2k', 'L3mN4oP5qR6sT7u', 'V8wX0yZ1aB2c3D4',
-        'e5F6g7H8i9J0k1l', 'M2nO3pQ4rS5tU6v', 'W7xY8z9A0bC1d2e', 'F3gH4iJ5kL6mN7o', 'P8qR9sT0uV1wX2y',
-        'Z3aB4c5D6e7F8g9', 'H0iJ1kL2mN3oP4q', 'R5sT6uV7wX8yZ9a', 'B0c1D2e3F4g5H6i', 'J7kL8mN9oP0qR1s',
-        'T2uV3wX4yZ5aB6c', '7D8e9F0g1H2iJ3k', 'L4mN5oP6qR7sT8u', 'V9wX0yZ1aB2c3D4', 'e5F6g7H8i9J0k1l',
-        'M2nO3pQ4rS5tU6v', 'W7xY8z9A0bC1d2e', 'F3gH4iJ5kL6mN7o', 'P8qR9sT0uV1wX2y', 'Z3aB4c5D6e7F8g9',
-        'H0iJ1kL2mN3oP4q', 'R5sT6uV7wX8yZ9a', 'B0c1D2e3F4g5H6i', 'J7kL8mN9oP0qR1s', 'T2uV3wX4yZ5aB6c'
-    ];
-
-    function getUsedCodes() {
-        return JSON.parse(localStorage.getItem('usedVerificationCodes')) || [];
-    }
-
-    function saveUsedCodes(usedCodes) {
-        localStorage.setItem('usedVerificationCodes', JSON.stringify(usedCodes));
-    }
-
-    function getSalesHistory() {
-        return JSON.parse(localStorage.getItem('salesHistory')) || [];
-    }
-
-    function saveSalesHistory(history) {
-        localStorage.setItem('salesHistory', JSON.stringify(history));
-    }
 
     function isPromoActive() {
         return new Date().getTime() < promoEndDate;
@@ -705,9 +636,6 @@
       const activeTab = document.getElementById(tabId);
       if(activeTab) {
           activeTab.classList.add('active');
-          if (tabId === 'sales-history') {
-              renderSalesHistory();
-          }
       }
     }
 
@@ -874,13 +802,14 @@
         document.getElementById('verification-view').style.display = 'block';
     }
 
-    function verifyPurchase() {
+    async function verifyPurchase() {
         const codeInput = document.getElementById('verification-code').value.trim();
         const statusEl = document.getElementById('verification-status');
+        const verifyBtn = document.getElementById('verify-btn');
         let pendingOrder = JSON.parse(sessionStorage.getItem('pendingOrder'));
 
         if (!pendingOrder) {
-            statusEl.textContent = 'Error: No pending order found. Please refresh and try again.';
+            statusEl.textContent = 'Error: No pending order found. Please try again.';
             statusEl.style.color = 'red';
             return;
         }
@@ -890,46 +819,81 @@
             return;
         }
 
-        const usedCodes = getUsedCodes();
-        
-        if (masterCodeList.includes(codeInput) && !usedCodes.includes(codeInput)) {
-            let history = getSalesHistory();
-            
-            const orderNumber = `FL-${Date.now().toString().slice(-6)}`;
-            const totalPoints = Math.floor(pendingOrder.subtotal);
-            const itemsString = pendingOrder.cart.map(item => `${item.name} (x${item.quantity})`).join(', ');
+        verifyBtn.disabled = true;
+        statusEl.textContent = 'Verifying...';
+        statusEl.style.color = 'blue';
 
-            const newRecord = {
-                orderNumber: orderNumber,
-                customerName: pendingOrder.customerName,
-                customerPhone: pendingOrder.customerPhone,
-                items: itemsString,
-                totalAmount: pendingOrder.totalAmount,
-                totalPoints: totalPoints
-            };
-            history.push(newRecord);
-            saveSalesHistory(history);
+        // --- GOOGLE SHEETS API URL ---
+        // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE
+        const googleScriptURL = 'https://script.google.com/macros/s/AKfycbwjljEPdxx3tg-fu5izMCph8qaFEgHbGM-DPI9Pn5nL_mZDDwGLLx80IZLFQBCwNSGe/exec';
 
-            usedCodes.push(codeInput);
-            saveUsedCodes(usedCodes);
-
-            generatePDF(newRecord, pendingOrder);
-            sendReceiptByEmail(newRecord, pendingOrder);
-
-            statusEl.textContent = 'Purchase verified! Your receipt is downloading...';
-            statusEl.style.color = 'green';
-
-            cart = [];
-            sessionStorage.removeItem('pendingOrder');
-            updateCartCount();
-            
-            setTimeout(() => {
-                toggleCart(true);
-            }, 2500);
-
-        } else {
-            statusEl.textContent = 'Invalid or already used verification code. Please check and try again.';
+        if (googleScriptURL === 'YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE') {
+            statusEl.textContent = 'Error: Website is not connected to the order database.';
             statusEl.style.color = 'red';
+            verifyBtn.disabled = false;
+            return;
+        }
+
+        try {
+            // Check if code is valid and not used
+            const validationResponse = await fetch(`${googleScriptURL}?action=validateCode&code=${codeInput}`);
+            const validationResult = await validationResponse.json();
+
+            if (validationResult.status === 'success' && validationResult.isValid) {
+                // Code is valid, proceed to record the order
+                const orderNumber = `FL-${Date.now().toString().slice(-6)}`;
+                const totalPoints = Math.floor(pendingOrder.subtotal);
+                const itemsString = pendingOrder.cart.map(item => `${item.name} (x${item.quantity})`).join(', ');
+
+                const orderData = {
+                    action: 'addOrder',
+                    orderNumber: orderNumber,
+                    date: new Date().toLocaleString('en-GB'),
+                    customerName: pendingOrder.customerName,
+                    customerPhone: pendingOrder.customerPhone,
+                    customerEmail: pendingOrder.customerEmail,
+                    customerAddress: pendingOrder.customerAddress,
+                    items: itemsString,
+                    totalAmount: pendingOrder.totalAmount,
+                    totalPoints: totalPoints,
+                    usedCode: codeInput
+                };
+
+                const recordResponse = await fetch(googleScriptURL, {
+                    method: 'POST',
+                    body: JSON.stringify(orderData)
+                });
+                const recordResult = await recordResponse.json();
+
+                if (recordResult.status === 'success') {
+                    generatePDF(orderData, pendingOrder);
+                    sendReceiptByEmail(orderData, pendingOrder);
+
+                    statusEl.textContent = 'Purchase verified! Your receipt is downloading...';
+                    statusEl.style.color = 'green';
+
+                    cart = [];
+                    sessionStorage.removeItem('pendingOrder');
+                    updateCartCount();
+                    
+                    setTimeout(() => {
+                        toggleCart(true);
+                        verifyBtn.disabled = false;
+                    }, 2500);
+                } else {
+                    throw new Error(recordResult.message || 'Failed to record order.');
+                }
+
+            } else {
+                statusEl.textContent = validationResult.message || 'Invalid or already used verification code.';
+                statusEl.style.color = 'red';
+                verifyBtn.disabled = false;
+            }
+        } catch (error) {
+            console.error('Verification Error:', error);
+            statusEl.textContent = 'An error occurred. Please try again.';
+            statusEl.style.color = 'red';
+            verifyBtn.disabled = false;
         }
     }
 
@@ -1070,43 +1034,6 @@
         doc.save(`Receipt-Order-${record.orderNumber}.pdf`);
     }
 
-    function maskData(type, data) {
-        if (!data) return 'N/A';
-        if (type === 'name') {
-            const parts = data.split(' ');
-            if (parts.length > 1) {
-                return `${parts[0]} ${parts[parts.length - 1].charAt(0)}.`;
-            }
-            return `${data.substring(0, 3)}...`;
-        }
-        if (type === 'phone') {
-            return data.length > 7 ? `${data.substring(0, 3)}...${data.slice(-4)}` : data;
-        }
-        return data;
-    }
-
-    function renderSalesHistory() {
-        const history = getSalesHistory();
-        const historyBody = document.getElementById('sales-history-body');
-        if (!historyBody) return;
-
-        if (history.length === 0) {
-            historyBody.innerHTML = '<tr><td colspan="6">No verified sales have been recorded yet.</td></tr>';
-            return;
-        }
-
-        historyBody.innerHTML = history.map(record => `
-            <tr>
-                <td>${record.orderNumber}</td>
-                <td>${maskData('name', record.customerName)}</td>
-                <td>${maskData('phone', record.customerPhone)}</td>
-                <td class="items-cell">${record.items}</td>
-                <td>${record.totalAmount}</td>
-                <td>${record.totalPoints}</td>
-            </tr>
-        `).join('');
-    }
-
     function startCountdown() {
         const countdownEl = document.getElementById('countdown-timer');
         const promoDetailsEl = document.getElementById('promo-details');
@@ -1157,7 +1084,6 @@
       }
 
       renderProducts();
-      renderSalesHistory();
       
       // Check if there is a pending order from a previous session
       if (sessionStorage.getItem('pendingOrder')) {
