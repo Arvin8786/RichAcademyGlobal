@@ -319,6 +319,48 @@
         border-radius: 5px;
     }
     
+    /* --- Rewards Portal Styles --- */
+    .rewards-portal-container {
+        background: white;
+        padding: 30px;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+    }
+    .rewards-portal-container input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
+    .forgot-pac-link {
+        display: block;
+        text-align: right;
+        font-size: 0.9rem;
+        margin-top: -5px;
+        margin-bottom: 15px;
+        cursor: pointer;
+    }
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+    .points-display {
+        background: var(--accent-color);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 50px;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+    .history-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    .history-table th, .history-table td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+    .history-table th { background-color: var(--primary-color); color: white; }
+
     /* --- Footer & Disclaimer --- */
     footer { background: var(--primary-color); color: var(--light-text); padding: 40px 20px; text-align: center; margin-top: 30px; }
     .disclaimer {
@@ -351,6 +393,7 @@
           <li><a onclick="showTab('products')">Products</a></li>
           <li><a onclick="showTab('business')">Business Opportunity</a></li>
           <li><a onclick="showTab('rewards')">Rewards</a></li>
+          <li><a onclick="showTab('rewards-portal')">My Rewards</a></li>
         </ul>
     </div>
   </nav>
@@ -395,7 +438,7 @@
     <div id="rewards" class="tab-content">
         <section class="program-section">
             <h2><i class="fa-solid fa-award"></i> Redeem Your Points</h2>
-            <p style="text-align: center;">Points can be manually added by the administrator after a verified purchase. Contact us to redeem.</p>
+            <p style="text-align: center;">Log in to the "My Rewards" portal to redeem your points.</p>
             <div class="rewards-grid">
                 <div class="reward-item">
                     <img src="rm5.jpg" alt="RM 5 Voucher" onerror="this.src='https://i.imgur.com/O9yP2aH.png'">
@@ -432,6 +475,54 @@
                 </div>
             </div>
         </section>
+    </div>
+
+    <div id="rewards-portal" class="tab-content">
+        <div class="rewards-portal-container">
+            <!-- Login View -->
+            <div id="login-view">
+                <h2><i class="fa-solid fa-lock"></i> My Rewards Portal</h2>
+                <p>Log in to view your points balance and redeem rewards.</p>
+                <input type="email" id="login-email" placeholder="Enter Your Email Address">
+                <input type="text" id="login-pac" placeholder="Enter Your Personal Access Code (from your receipt)">
+                <a class="forgot-pac-link" onclick="forgotPAC()">Forgot my Personal Access Code?</a>
+                <button class="btn btn-primary" id="login-btn" onclick="login()">Login</button>
+                <p id="login-status" style="margin-top: 15px; font-weight: bold;"></p>
+            </div>
+
+            <!-- Dashboard View (hidden by default) -->
+            <div id="dashboard-view" style="display: none;">
+                <div class="dashboard-header">
+                    <div>
+                        <h2 style="margin: 0;">Welcome Back!</h2>
+                        <span id="customer-email-display"></span>
+                    </div>
+                    <button class="btn btn-secondary" onclick="logout()">Logout</button>
+                </div>
+                
+                <h3>Your Points Balance</h3>
+                <div class="points-display" id="customer-points-display">0 Points</div>
+
+                <h3 style="margin-top: 30px;">Redeemable Rewards</h3>
+                <div class="rewards-grid" id="redeemable-rewards-grid">
+                    <!-- Rewards will be populated by JavaScript -->
+                </div>
+
+                <h3 style="margin-top: 30px;">Your Redemption History</h3>
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Reward</th>
+                            <th>Points Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody id="redemption-history-body">
+                        <!-- History will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
   </main>
 
@@ -864,12 +955,10 @@
         const googleScriptURL = 'https://script.google.com/macros/s/AKfycbyEX7KpuHy-wTujkk8ld6TR5aE6Lj3UrPF04qEhLA3hfiNqeZOlSzAPCgyVqhKn248/exec';
 
         try {
-            // Check if code is valid and not used
             const validationResponse = await fetch(`${googleScriptURL}?action=validateCode&code=${codeInput}`);
             const validationResult = await validationResponse.json();
 
             if (validationResult.status === 'success' && validationResult.isValid) {
-                // Code is valid, proceed to record the order
                 const orderNumber = `FL-${Date.now().toString().slice(-6)}`;
                 const totalPoints = Math.floor(pendingOrder.subtotal);
                 const itemsString = pendingOrder.cart.map(item => `${item.name} (x${item.quantity})`).join(', ');
@@ -895,8 +984,8 @@
                 const recordResult = await recordResponse.json();
 
                 if (recordResult.status === 'success') {
-                    generatePDF(orderData, pendingOrder);
-                    sendReceiptByEmail(orderData, pendingOrder);
+                    generatePDF(orderData, pendingOrder, recordResult.newPAC, recordResult.totalPoints);
+                    sendReceiptByEmail(orderData, pendingOrder, recordResult.newPAC, recordResult.totalPoints);
 
                     statusEl.textContent = 'Purchase verified! Your receipt is downloading...';
                     statusEl.style.color = 'green';
@@ -926,8 +1015,7 @@
         }
     }
 
-    function sendReceiptByEmail(record, orderDetails) {
-        // This is where you'll put your EmailJS credentials
+    function sendReceiptByEmail(record, orderDetails, newPAC, totalPoints) {
         const serviceID = 'YOUR_SERVICE_ID';
         const templateID = 'YOUR_TEMPLATE_ID';
         const userID = 'YOUR_USER_ID';
@@ -957,33 +1045,26 @@
             subtotal: orderDetails.subtotal.toFixed(2),
             shipping: orderDetails.shipping.message,
             total_amount: orderDetails.totalAmount,
-            total_points: record.totalPoints
+            total_points: totalPoints,
+            personal_access_code: newPAC ? `Your new Personal Access Code is: ${newPAC}` : 'Your Personal Access Code remains the same.'
         };
 
         emailjs.send(serviceID, templateID, templateParams, userID)
-            .then(function(response) {
-               console.log('Email successfully sent!', response.status, response.text);
-            }, function(error) {
-               console.log('Failed to send email.', error);
-            });
+            .then(response => console.log('Email successfully sent!', response.status, response.text))
+            .catch(error => console.log('Failed to send email.', error));
     }
 
-    function generatePDF(record, orderDetails) {
+    function generatePDF(record, orderDetails, newPAC, totalPoints) {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         const logo = document.querySelector('.header-logo');
 
-        // Add the cursive font if available (jsPDF standard fonts don't include it)
-        // This is a fallback. For a true cursive font, you would need to embed a font file.
         try {
             doc.setFont('times', 'italic');
         } catch (e) {
-            console.warn("Cursive font not available, falling back to italic.");
             doc.setFont(undefined, 'italic');
         }
         const customerNameSignature = orderDetails.customerName;
-
-        // Reset font for the rest of the document
         doc.setFont('helvetica', 'normal');
 
         if (logo && logo.complete && logo.naturalHeight !== 0) {
@@ -1015,12 +1096,7 @@
         const tableRows = [];
 
         orderDetails.cart.forEach(item => {
-            const itemData = [
-                item.name,
-                item.quantity,
-                item.price.toFixed(2),
-                (item.price * item.quantity).toFixed(2)
-            ];
+            const itemData = [ item.name, item.quantity, item.price.toFixed(2), (item.price * item.quantity).toFixed(2) ];
             tableRows.push(itemData);
         });
 
@@ -1040,20 +1116,31 @@
         doc.setFontSize(14);
         doc.setFont(undefined, 'bold');
         doc.text(`Total Amount: RM ${orderDetails.totalAmount}`, 14, finalY + 27);
+        doc.text(`Total Accumulated Points: ${totalPoints}`, 14, finalY + 34);
         
         doc.setFont(undefined, 'normal');
         doc.setFontSize(10);
-        doc.text("Customer Signature:", 14, finalY + 45);
+        doc.text("Customer Signature:", 14, finalY + 50);
         
-        // Apply cursive font for the signature
         try {
             doc.setFont('times', 'italic');
             doc.setFontSize(14);
-            doc.text(customerNameSignature, 14, finalY + 55);
+            doc.text(customerNameSignature, 14, finalY + 60);
         } catch (e) {
             doc.setFont(undefined, 'italic');
             doc.setFontSize(14);
-            doc.text(customerNameSignature, 14, finalY + 55);
+            doc.text(customerNameSignature, 14, finalY + 60);
+        }
+
+        if (newPAC) {
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(10);
+            doc.text("IMPORTANT: Your Personal Access Code is:", 14, finalY + 75);
+            doc.setFont('courier', 'normal');
+            doc.text(newPAC, 14, finalY + 82);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(8);
+            doc.text("Keep this code safe. Use it with your email to log in to the 'My Rewards' portal.", 14, finalY + 87);
         }
 
         doc.setFont('helvetica', 'normal');
@@ -1114,7 +1201,6 @@
 
       renderProducts();
       
-      // Check if there is a pending order from a previous session
       if (sessionStorage.getItem('pendingOrder')) {
           toggleCart();
       } else {
