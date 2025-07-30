@@ -358,6 +358,7 @@
         font-size: 1.2rem;
         font-weight: bold;
     }
+    .history-table-container { overflow-x: auto; }
     .history-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
     .history-table th, .history-table td { padding: 12px; border: 1px solid #ddd; text-align: left; }
     .history-table th { background-color: var(--primary-color); color: white; }
@@ -663,6 +664,14 @@
         { id: 51, name: "ALOE BIO-CELLULOSE MASK", price: 146.00, promoPrice: 107.31, image: "bio-cellulose-mask.jpg", benefits: "Deeply hydrates and conditions skin.", consumption: "Use once a week." },
         { id: 52, name: "REPLENISHING SKIN OIL", price: 132.00, promoPrice: 97.02, image: "skin-oil.jpg", benefits: "Nourishes with a blend of oils for skin.", consumption: "Apply a few drops to face." },
         { id: 53, name: "PROTECTING DAY LOTION", price: 167.99, promoPrice: 123.47, image: "day-lotion.jpg", benefits: "Moisturizes and protects skin with SPF.", consumption: "Apply in the morning." },
+    ];
+    const rewards = [
+        { id: 'RWD01', name: 'RM 5 Voucher', cost: 500, image: 'rm5.jpg', fallbackImage: 'https://i.imgur.com/O9yP2aH.png', available: true },
+        { id: 'RWD02', name: 'RM 10 Voucher', cost: 1000, image: 'rm10.jpg', fallbackImage: 'https://i.imgur.com/sY2a2qG.png', available: true },
+        { id: 'RWD03', name: 'RM 20 Voucher', cost: 2000, image: 'rm20.jpg', fallbackImage: 'https://i.imgur.com/Jz4Y8fW.png', available: true },
+        { id: 'RWD04', name: 'ALOE VERA GEL', cost: 10000, image: 'aloe-vera-gel.jpg', fallbackImage: '', available: false },
+        { id: 'RWD05', name: 'ALOE BERRY NECTAR', cost: 10000, image: 'aloe-berry-nectar.jpg', fallbackImage: '', available: false },
+        { id: 'RWD06', name: 'ALOE BITS N\' PEACHES', cost: 10000, image: 'aloe-peaches.jpg', fallbackImage: '', available: false },
     ];
     let cart = [];
     const promoEndDate = new Date("August 2, 2025 23:59:59").getTime();
@@ -972,7 +981,7 @@
         statusEl.style.color = 'blue';
 
         // --- GOOGLE SHEETS API URL ---
-        const googleScriptURL = 'https://script.google.com/macros/s/AKfycbxpYs7pXlvoc0sb1RURk_v5KbFeG7TmMVlot6mi3alhOCWgk3jjj6jNf3_nIxiZsWbR/exec';
+        const googleScriptURL = 'https://script.google.com/macros/s/AKfycbyB3dphvqxJrqe3PEBjgEe7AaAdCiUyvAS4yJO410EvWXoTk6eXwcE9a1Qphc6YyIq6/exec';
 
         try {
             const validationResponse = await fetch(`${googleScriptURL}?action=validateCode&code=${codeInput}`);
