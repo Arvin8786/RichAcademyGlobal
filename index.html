@@ -200,7 +200,7 @@
     /* --- Rewards Section --- */
     .rewards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
     .reward-item { 
-        background: var(--light-text); /* Changed to white for better visibility with overlay */
+        background: var(--light-gray); 
         border: 1px solid #ddd; 
         border-radius: var(--border-radius); 
         padding: 20px; 
@@ -208,7 +208,6 @@
         display: flex; 
         flex-direction: column;
         position: relative; /* Needed for the overlay */
-        overflow: hidden; /* Ensure overlay stays within bounds */
     }
     .reward-item img { max-width: 100%; height: 100px; object-fit: contain; margin-bottom: 15px; border-radius: 8px; }
     .reward-item h4 { margin: 10px 0 5px; }
@@ -219,28 +218,15 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: rgba(255, 255, 255, 0.9); /* More opaque for "Coming Soon" */
+        background-color: rgba(255, 255, 255, 0.8);
         color: var(--primary-color);
         display: flex;
-        flex-direction: column; /* To stack text and potentially an icon */
         align-items: center;
         justify-content: center;
-        font-size: 1.4rem; /* Slightly smaller for text */
+        font-size: 1.5rem;
         font-weight: bold;
         border-radius: var(--border-radius);
         backdrop-filter: blur(2px);
-        text-align: center;
-        padding: 10px;
-        cursor: not-allowed;
-    }
-    .coming-soon-overlay span {
-        display: block;
-        margin-top: 5px;
-    }
-    .coming-soon-overlay .fa-solid {
-        font-size: 2rem; /* Icon size */
-        margin-bottom: 5px;
-        color: var(--secondary-color); /* Highlight icon */
     }
 
     /* --- Floating Cart Button --- */
@@ -354,11 +340,7 @@
         font-size: 0.9rem;
         margin-top: -5px;
         margin-bottom: 15px;
-        color: var(--primary-color);
         cursor: pointer;
-    }
-    .forgot-pac-link:hover {
-        text-decoration: underline;
     }
     .dashboard-header {
         display: flex;
@@ -375,39 +357,11 @@
         border-radius: 50px;
         font-size: 1.2rem;
         font-weight: bold;
-        display: inline-block; /* Ensure padding works */
     }
-    .history-table-container { 
-        max-height: 250px; /* Limit height for scrolling */
-        overflow-y: auto; 
-        margin-bottom: 20px;
-    }
-    .history-table { 
-        width: 100%; 
-        border-collapse: collapse; 
-        margin-top: 10px; /* Adjust margin here */
-        font-size: 0.9rem;
-    }
-    .history-table th, .history-table td { 
-        padding: 8px 12px; /* Adjusted padding */
-        border: 1px solid #ddd; 
-        text-align: left; 
-        white-space: nowrap; /* Prevent wrapping in cells */
-    }
-    .history-table th { 
-        background-color: var(--primary-color); 
-        color: white; 
-        position: sticky; /* Keep headers visible on scroll */
-        top: 0;
-        z-index: 10; /* Ensure header stays above content */
-    }
-    .reward-item .redeem-btn-container {
-        margin-top: 15px; /* Space between points and button */
-    }
-    .reward-item .redeem-btn-container button {
-        width: auto; /* Allow button to size itself */
-        padding: 8px 15px;
-    }
+    .history-table-container { overflow-x: auto; }
+    .history-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    .history-table th, .history-table td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+    .history-table th { background-color: var(--primary-color); color: white; }
 
     /* --- Footer & Disclaimer --- */
     footer { background: var(--primary-color); color: var(--light-text); padding: 40px 20px; text-align: center; margin-top: 30px; }
@@ -507,19 +461,19 @@
                     <img src="aloe-vera-gel.jpg" alt="Aloe Vera Gel">
                     <h4>ALOE VERA GEL</h4>
                     <p class="points-cost"><span style="text-decoration: line-through; color: #999; font-weight: normal;">11700</span> 10000 Points</p>
-                    <div class="coming-soon-overlay"><i class="fa-solid fa-hourglass-half"></i><span>Coming Soon</span></div>
+                    <div class="coming-soon-overlay"><span>Coming Soon</span></div>
                 </div>
                 <div class="reward-item">
                     <img src="aloe-berry-nectar.jpg" alt="Aloe Berry Nectar">
                     <h4>ALOE BERRY NECTAR</h4>
                     <p class="points-cost"><span style="text-decoration: line-through; color: #999; font-weight: normal;">11700</span> 10000 Points</p>
-                    <div class="coming-soon-overlay"><i class="fa-solid fa-hourglass-half"></i><span>Coming Soon</span></div>
+                    <div class="coming-soon-overlay"><span>Coming Soon</span></div>
                 </div>
                 <div class="reward-item">
                     <img src="aloe-peaches.jpg" alt="Aloe Bits N' Peaches">
                     <h4>ALOE BITS N' PEACHES</h4>
                     <p class="points-cost"><span style="text-decoration: line-through; color: #999; font-weight: normal;">11700</span> 10000 Points</p>
-                    <div class="coming-soon-overlay"><i class="fa-solid fa-hourglass-half"></i><span>Coming Soon</span></div>
+                    <div class="coming-soon-overlay"><span>Coming Soon</span></div>
                 </div>
             </div>
         </section>
@@ -543,7 +497,7 @@
                 <div class="dashboard-header">
                     <div>
                         <h2 style="margin: 0;">Welcome Back!</h2>
-                        <span id="customer-name-display"></span>
+                        <span id="customer-email-display"></span>
                     </div>
                     <button class="btn btn-secondary" onclick="logout()">Logout</button>
                 </div>
@@ -655,18 +609,7 @@
   </div>
 
   <script>
-    // --- Global Data / Rewards Configuration ---
-    // Defined Rewards for redemption
-    const rewards = [
-        { id: 'RWD01', name: 'RM 5 Voucher', cost: 500, image: 'rm5.jpg', fallbackImage: 'https://i.imgur.com/O9yP2aH.png', type: 'voucher', redemptionValue: 'RM 5', available: true },
-        { id: 'RWD02', name: 'RM 10 Voucher', cost: 1000, image: 'rm10.jpg', fallbackImage: 'https://i.imgur.com/sY2a2qG.png', type: 'voucher', redemptionValue: 'RM 10', available: true },
-        { id: 'RWD03', name: 'RM 20 Voucher', cost: 2000, image: 'rm20.jpg', fallbackImage: 'https://i.imgur.com/Jz4Y8fW.png', type: 'voucher', redemptionValue: 'RM 20', available: true },
-        { id: 'RWD04', name: 'ALOE VERA GEL', cost: 10000, image: 'aloe-vera-gel.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Vera Gel', available: false }, 
-        { id: 'RWD05', name: 'ALOE BERRY NECTAR', cost: 10000, image: 'aloe-berry-nectar.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Berry Nectar', available: false },
-        { id: 'RWD06', name: 'ALOE BITS N\' PEACHES', cost: 10000, image: 'aloe-peaches.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Bits N\' Peaches', available: false },
-    ];
-    
-    // Product data (kept for displaying main product list)
+    // --- DATA ---
     const products = [
         { id: 1, name: "ALOE VERA GEL", price: 116.79, promoPrice: 85.84, image: "aloe-vera-gel.jpg", benefits: "Supports digestion, boosts immunity.", consumption: "Take 30-60ml daily." },
         { id: 2, name: "ALOE BERRY NECTAR", price: 116.79, promoPrice: 85.84, image: "aloe-berry-nectar.jpg", benefits: "Antioxidant support, immune system booster.", consumption: "30-60ml daily." },
@@ -723,21 +666,18 @@
         { id: 53, name: "PROTECTING DAY LOTION", price: 167.99, promoPrice: 123.47, image: "day-lotion.jpg", benefits: "Moisturizes and protects skin with SPF.", consumption: "Apply in the morning." },
     ];
     const rewards = [
-        { id: 'RWD01', name: 'RM 5 Voucher', cost: 500, image: 'rm5.jpg', fallbackImage: 'https://i.imgur.com/O9yP2aH.png', type: 'voucher', redemptionValue: 'RM 5', available: true },
-        { id: 'RWD02', name: 'RM 10 Voucher', cost: 1000, image: 'rm10.jpg', fallbackImage: 'https://i.imgur.com/sY2a2qG.png', type: 'voucher', redemptionValue: 'RM 10', available: true },
-        { id: 'RWD03', name: 'RM 20 Voucher', cost: 2000, image: 'rm20.jpg', fallbackImage: 'https://i.imgur.com/Jz4Y8fW.png', type: 'voucher', redemptionValue: 'RM 20', available: true },
-        { id: 'RWD04', name: 'ALOE VERA GEL', cost: 10000, image: 'aloe-vera-gel.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Vera Gel', available: false }, 
-        { id: 'RWD05', name: 'ALOE BERRY NECTAR', cost: 10000, image: 'aloe-berry-nectar.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Berry Nectar', available: false },
-        { id: 'RWD06', name: 'ALOE BITS N\' PEACHES', cost: 10000, image: 'aloe-peaches.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Bits N\' Peaches', available: false },
+        { id: 'RWD01', name: 'RM 5 Voucher', cost: 500, image: 'rm5.jpg', fallbackImage: 'https://i.imgur.com/O9yP2aH.png', available: true },
+        { id: 'RWD02', name: 'RM 10 Voucher', cost: 1000, image: 'rm10.jpg', fallbackImage: 'https://i.imgur.com/sY2a2qG.png', available: true },
+        { id: 'RWD03', name: 'RM 20 Voucher', cost: 2000, image: 'rm20.jpg', fallbackImage: 'https://i.imgur.com/Jz4Y8fW.png', available: true },
+        { id: 'RWD04', name: 'ALOE VERA GEL', cost: 10000, image: 'aloe-vera-gel.jpg', fallbackImage: '', available: false },
+        { id: 'RWD05', name: 'ALOE BERRY NECTAR', cost: 10000, image: 'aloe-berry-nectar.jpg', fallbackImage: '', available: false },
+        { id: 'RWD06', name: 'ALOE BITS N\' PEACHES', cost: 10000, image: 'aloe-peaches.jpg', fallbackImage: '', available: false },
     ];
     let cart = [];
-    let currentCustomer = null; // Stores logged-in customer data
     const promoEndDate = new Date("August 2, 2025 23:59:59").getTime();
-    
-    // --- GOOGLE SHEETS API URL ---
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwWjUDAmtCcUswFlLa6FAWd-CjGmT39s6OfY-QcGe6sIEkaFXba71MtiqbnVuh1yzQ/exec'; 
 
-    // --- Core Functions ---
+    // --- LOGIC ---
+
     function isPromoActive() {
         return new Date().getTime() < promoEndDate;
     }
@@ -816,7 +756,7 @@
             if (symptom.includes(key)) {
                 keywords[key].forEach(id => suggestedIds.add(id));
             }
-        });
+        }
         
         products.forEach(p => {
             if (p.benefits.toLowerCase().includes(symptom)) {
@@ -849,15 +789,6 @@
       const activeTab = document.getElementById(tabId);
       if(activeTab) {
           activeTab.classList.add('active');
-          if (tabId === 'rewards-portal') {
-            // Check if customer is already logged in for rewards portal
-            if (sessionStorage.getItem('currentCustomer')) {
-                currentCustomer = JSON.parse(sessionStorage.getItem('currentCustomer'));
-                displayDashboard(currentCustomer);
-            } else {
-                showLoginView();
-            }
-          }
       }
     }
 
@@ -935,7 +866,7 @@
       const pointsEl = document.getElementById('points-earned-display');
       
       if (cart.length === 0) {
-        cartItemsEl.innerHTML = '<p>Your cart is empty.</p>';
+        cartItemsEl.innerHTML = '<p>Your cart is empty</p>';
         subtotalEl.textContent = 'RM 0.00';
         shippingEl.textContent = 'RM 0.00';
         totalEl.textContent = 'RM 0.00';
@@ -1049,8 +980,11 @@
         statusEl.textContent = 'Verifying...';
         statusEl.style.color = 'blue';
 
+        // --- GOOGLE SHEETS API URL ---
+        const googleScriptURL = 'https://script.google.com/macros/s/AKfycbxpYs7pXlvoc0sb1RURk_v5KbFeG7TmMVlot6mi3alhOCWgk3jjj6jNf3_nIxiZsWbR/exec';
+
         try {
-            const validationResponse = await fetch(`${GOOGLE_SCRIPT_URL}?action=validateCode&code=${encodeURIComponent(codeInput)}`);
+            const validationResponse = await fetch(`${googleScriptURL}?action=validateCode&code=${codeInput}`);
             const validationResult = await validationResponse.json();
 
             if (validationResult.status === 'success' && validationResult.isValid) {
@@ -1072,7 +1006,7 @@
                     usedCode: codeInput
                 };
 
-                const recordResponse = await fetch(GOOGLE_SCRIPT_URL, {
+                const recordResponse = await fetch(googleScriptURL, {
                     method: 'POST',
                     body: JSON.stringify(orderData)
                 });
@@ -1104,19 +1038,19 @@
             }
         } catch (error) {
             console.error('Verification Error:', error);
-            statusEl.textContent = 'An error occurred during verification. Please check console for details.';
+            statusEl.textContent = 'An error occurred. Please try again.';
             statusEl.style.color = 'red';
             verifyBtn.disabled = false;
         }
     }
 
     function sendReceiptByEmail(record, orderDetails, newPAC, totalPoints) {
-        const serviceID = 'YOUR_EMAILJS_SERVICE_ID'; // Replace with your EmailJS Service ID
-        const templateID = 'YOUR_EMAILJS_TEMPLATE_ID'; // Replace with your EmailJS Template ID for Admin Receipt
-        const userID = 'YOUR_EMAILJS_PUBLIC_KEY'; // Replace with your EmailJS Public Key
+        const serviceID = 'YOUR_SERVICE_ID';
+        const templateID = 'YOUR_TEMPLATE_ID';
+        const userID = 'YOUR_USER_ID';
 
-        if (serviceID === 'YOUR_EMAILJS_SERVICE_ID' || templateID === 'YOUR_EMAILJS_TEMPLATE_ID' || userID === 'YOUR_EMAILJS_PUBLIC_KEY') {
-            console.warn("EmailJS credentials not set. Skipping email notification.");
+        if (serviceID === 'YOUR_SERVICE_ID' || templateID === 'YOUR_TEMPLATE_ID' || userID === 'YOUR_USER_ID') {
+            console.log("EmailJS credentials not set. Skipping email.");
             return;
         }
 
@@ -1130,7 +1064,7 @@
         ).join('');
 
         const templateParams = {
-            to_email: 'arvin8786@gmail.com', // Your email
+            to_email: 'arvin8786@gmail.com',
             order_number: record.orderNumber,
             customer_name: orderDetails.customerName,
             customer_phone: orderDetails.customerPhone,
@@ -1164,7 +1098,7 @@
 
         if (logo && logo.complete && logo.naturalHeight !== 0) {
             try {
-                doc.addImage(logo, 'JPEG', 14, 12, 30, 30); // Larger logo: 30x30 units
+                doc.addImage(logo, 'JPEG', 14, 12, 30, 30);
             } catch (e) {
                 console.error("Error adding logo to PDF:", e);
             }
@@ -1173,7 +1107,7 @@
         doc.setFontSize(20);
         doc.text("Purchase Receipt", 105, 20, { align: 'center' });
         
-        doc.setFontSize(11); // Standardized size
+        doc.setFontSize(11);
         doc.text("Forever Living by Mohd Arvind Isa", 105, 30, { align: 'center' });
         doc.text("WhatsApp: 601111033154", 105, 35, { align: 'center' });
 
@@ -1231,7 +1165,7 @@
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(10);
             doc.text("IMPORTANT: Your Personal Access Code is:", 14, finalY + 75);
-            doc.setFont('courier', 'normal'); // Monospace font for code
+            doc.setFont('courier', 'normal');
             doc.text(newPAC, 14, finalY + 82);
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(8);
@@ -1282,247 +1216,7 @@
         }
     }
 
-    // --- Rewards Portal Functions ---
-    let currentCustomer = null; // Stores logged-in customer data
-
-    async function login() {
-        const email = document.getElementById('login-email').value.trim();
-        const pac = document.getElementById('login-pac').value.trim();
-        const loginStatusEl = document.getElementById('login-status');
-        const loginBtn = document.getElementById('login-btn');
-
-        if (!email || !pac) {
-            loginStatusEl.textContent = 'Please enter both email and Personal Access Code.';
-            loginStatusEl.style.color = 'red';
-            return;
-        }
-
-        loginBtn.disabled = true;
-        loginStatusEl.textContent = 'Logging in...';
-        loginStatusEl.style.color = 'blue';
-
-        try {
-            const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=login&email=${encodeURIComponent(email)}&pac=${encodeURIComponent(pac)}`);
-            const result = await response.json();
-
-            if (result.status === 'success') {
-                currentCustomer = result.customer; // Store customer data
-                currentCustomer.purchaseHistory = result.purchaseHistory; // Attach history
-                currentCustomer.redemptionHistory = result.redemptionHistory; // Attach history
-                sessionStorage.setItem('currentCustomer', JSON.stringify(currentCustomer)); // Persist login
-                displayDashboard(currentCustomer);
-            } else {
-                loginStatusEl.textContent = result.message || 'Login failed. Please check your email and PAC.';
-                loginStatusEl.style.color = 'red';
-            }
-        } catch (error) {
-            console.error('Login error:', error);
-            loginStatusEl.textContent = 'An error occurred during login. Please try again.';
-            loginStatusEl.style.color = 'red';
-        } finally {
-            loginBtn.disabled = false;
-        }
-    }
-
-    function logout() {
-        currentCustomer = null;
-        sessionStorage.removeItem('currentCustomer');
-        showLoginView();
-        document.getElementById('login-status').textContent = 'Logged out successfully.';
-        document.getElementById('login-status').style.color = 'green';
-    }
-
-    function showLoginView() {
-        document.getElementById('login-view').style.display = 'block';
-        document.getElementById('dashboard-view').style.display = 'none';
-        document.getElementById('login-email').value = '';
-        document.getElementById('login-pac').value = '';
-        document.getElementById('login-status').textContent = '';
-    }
-
-    function displayDashboard(customerData) {
-        document.getElementById('login-view').style.display = 'none';
-        document.getElementById('dashboard-view').style.display = 'block';
-        document.getElementById('customer-name-display').textContent = customerData.name;
-        document.getElementById('customer-points-display').textContent = `${customerData.points} Points`;
-
-        renderRedeemableRewards(customerData.points);
-        renderPurchaseHistory(customerData.purchaseHistory);
-        renderRedemptionHistory(customerData.redemptionHistory);
-    }
-
-    function renderRedeemableRewards(customerPoints) {
-        const redeemableGrid = document.getElementById('redeemable-rewards-grid');
-        redeemableGrid.innerHTML = rewards.map(reward => {
-            const canAfford = customerPoints >= reward.cost && reward.available;
-            const btnClass = canAfford ? 'btn-primary' : 'btn-secondary';
-            const btnDisabled = canAfford ? '' : 'disabled';
-            const redeemFunction = canAfford ? `onclick="redeemReward('${reward.id}', '${reward.name}', ${reward.cost})"` : '';
-            const overlay = reward.available ? '' : `<div class="coming-soon-overlay"><i class="fa-solid fa-hourglass-half"></i><span>Coming Soon</span></div>`;
-            const imageSrc = reward.image || 'https://via.placeholder.com/100x100?text=Reward';
-            const fallbackImg = reward.fallbackImage ? `onerror="this.src='${reward.fallbackImage}'"` : '';
-
-            return `
-                <div class="reward-item">
-                    <img src="${imageSrc}" alt="${reward.name}" ${fallbackImg}>
-                    <h4>${reward.name}</h4>
-                    <p class="points-cost">
-                        ${(reward.id === 'RWD04' || reward.id === 'RWD05' || reward.id === 'RWD06') && reward.cost === 10000 && !reward.available ? '<span style="text-decoration: line-through; color: #999; font-weight: normal;">11700</span> ' : ''}
-                        ${reward.cost} Points
-                    </p>
-                    <div class="redeem-btn-container">
-                        <button class="btn ${btnClass}" ${btnDisabled} ${redeemFunction}>Redeem</button>
-                    </div>
-                    ${overlay}
-                </div>
-            `;
-        }).join('');
-    }
-
-    function renderPurchaseHistory(history) {
-        const historyBody = document.getElementById('purchase-history-body');
-        if (!historyBody) return;
-        
-        if (!history || history.length === 0) {
-            historyBody.innerHTML = '<tr><td colspan="4">No purchase history found.</td></tr>';
-            return;
-        }
-
-        historyBody.innerHTML = history.map(record => `
-            <tr>
-                <td>${record.orderNumber}</td>
-                <td>${record.date}</td>
-                <td>${record.items}</td>
-                <td>${record.points}</td>
-            </tr>
-        `).join('');
-    }
-
-    function renderRedemptionHistory(history) {
-        const historyBody = document.getElementById('redemption-history-body');
-        if (!historyBody) return;
-
-        if (!history || history.length === 0) {
-            historyBody.innerHTML = '<tr><td colspan="3">No redemption history found.</td></tr>';
-            return;
-        }
-
-        historyBody.innerHTML = history.map(record => `
-            <tr>
-                <td>${record.date}</td>
-                <td>${record.reward}</td>
-                <td>${record.cost}</td>
-            </tr>
-        `).join('');
-    }
-
-    async function redeemReward(rewardId, rewardName, rewardCost) {
-        if (!currentCustomer) {
-            alert('Please log in to redeem rewards.');
-            return;
-        }
-
-        const confirmRedeem = confirm(`Are you sure you want to redeem ${rewardName} for ${rewardCost} points?`);
-        if (!confirmRedeem) return;
-
-        const customerEmail = currentCustomer.email;
-        const customerPAC = currentCustomer.pac; // PAC is stored on login session
-
-        // Disable all redeem buttons to prevent multiple clicks
-        document.querySelectorAll('#redeemable-rewards-grid .btn').forEach(btn => btn.disabled = true);
-
-        try {
-            const response = await fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify({
-                    action: 'redeemReward',
-                    email: customerEmail,
-                    pac: customerPAC,
-                    reward: { id: rewardId, name: rewardName, cost: rewardCost }
-                })
-            });
-            const result = await response.json();
-
-            if (result.status === 'success') {
-                alert(result.message + ` Your remaining points: ${result.newPoints}`);
-                currentCustomer.points = result.newPoints; // Update local points
-                currentCustomer.redemptionHistory.unshift({ // Add new redemption to local history
-                    date: new Date().toLocaleDateString('en-GB'),
-                    reward: rewardName,
-                    cost: rewardCost
-                });
-                sessionStorage.setItem('currentCustomer', JSON.stringify(currentCustomer)); // Update session storage
-                displayDashboard(currentCustomer); // Re-render dashboard
-            } else {
-                alert(result.message || 'Redemption failed.');
-            }
-        } catch (error) {
-            console.error('Redemption error:', error);
-            alert('An error occurred during redemption. Please try again.');
-        } finally {
-            // Re-enable redeem buttons after operation (renderRedeemableRewards will handle disabling based on points)
-            document.querySelectorAll('#redeemable-rewards-grid .btn').forEach(btn => btn.disabled = false);
-            renderRedeemableRewards(currentCustomer.points); // Ensure buttons are correctly enabled/disabled
-        }
-    }
-
-    async function forgotPAC() {
-        const email = document.getElementById('login-email').value.trim();
-        const loginStatusEl = document.getElementById('login-status');
-        const loginBtn = document.getElementById('login-btn'); 
-
-        if (!email) {
-            loginStatusEl.textContent = 'Please enter your email address to recover your PAC.';
-            loginStatusEl.style.color = 'red';
-            return;
-        }
-
-        loginBtn.disabled = true;
-        loginStatusEl.textContent = 'Sending PAC to your email...';
-        loginStatusEl.style.color = 'blue';
-
-        try {
-            const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=forgotPAC&email=${encodeURIComponent(email)}`);
-            const result = await response.json();
-
-            if (result.status === 'success') {
-                // EmailJS for sending PAC
-                const serviceID = 'YOUR_EMAILJS_SERVICE_ID_FOR_PAC_RECOVERY'; // e.g., 'service_abc123'
-                const templateID = 'YOUR_EMAILJS_TEMPLATE_ID_FOR_PAC_RECOVERY'; // e.g., 'template_xyz789'
-                const userID = 'YOUR_EMAILJS_PUBLIC_KEY'; // Your EmailJS Public Key
-
-                if (serviceID === 'YOUR_EMAILJS_SERVICE_ID_FOR_PAC_RECOVERY' || templateID === 'YOUR_EMAILJS_TEMPLATE_ID_FOR_PAC_RECOVERY' || userID === 'YOUR_EMAILJS_PUBLIC_KEY') {
-                    loginStatusEl.textContent = 'Email service not configured for PAC recovery. Please contact support.';
-                    loginStatusEl.style.color = 'orange';
-                    console.error('EmailJS credentials not set for PAC recovery.');
-                    return;
-                }
-
-                const templateParams = {
-                    to_email: email,
-                    customer_name: result.customerName,
-                    personal_access_code: result.pac
-                };
-
-                await emailjs.send(serviceID, templateID, templateParams, userID);
-                loginStatusEl.textContent = 'Your Personal Access Code has been sent to your email!';
-                loginStatusEl.style.color = 'green';
-
-            } else {
-                loginStatusEl.textContent = result.message || 'Failed to send PAC. Email not found.';
-                loginStatusEl.style.color = 'red';
-            }
-        } catch (error) {
-            console.error('Forgot PAC error:', error);
-            loginStatusEl.textContent = 'An error occurred. Please try again.';
-            loginStatusEl.style.color = 'red';
-        } finally {
-            loginBtn.disabled = false;
-        }
-    }
-
-
-    // --- Initialization ---
+    // Initialize the page
     document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
       
@@ -1537,14 +1231,9 @@
       renderProducts();
       
       if (sessionStorage.getItem('pendingOrder')) {
-          toggleCart(); // Show verification if there's a pending order
-      } else if (sessionStorage.getItem('currentCustomer')) {
-          // If customer was already logged in, restore session and show dashboard
-          currentCustomer = JSON.parse(sessionStorage.getItem('currentCustomer'));
-          showTab('rewards-portal'); // Directly go to rewards portal
-          displayDashboard(currentCustomer);
+          toggleCart();
       } else {
-          showTab('products'); // Default to products tab
+          showTab('products');
       }
     });
   </script>
