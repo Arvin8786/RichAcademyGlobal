@@ -200,7 +200,7 @@
     /* --- Rewards Section --- */
     .rewards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
     .reward-item { 
-        background: var(--light-gray); 
+        background: var(--light-text); /* Changed to white for better visibility with overlay */
         border: 1px solid #ddd; 
         border-radius: var(--border-radius); 
         padding: 20px; 
@@ -208,6 +208,7 @@
         display: flex; 
         flex-direction: column;
         position: relative; /* Needed for the overlay */
+        overflow: hidden; /* Ensure overlay stays within bounds */
     }
     .reward-item img { max-width: 100%; height: 100px; object-fit: contain; margin-bottom: 15px; border-radius: 8px; }
     .reward-item h4 { margin: 10px 0 5px; }
@@ -218,15 +219,28 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: rgba(255, 255, 255, 0.8);
+        background-color: rgba(255, 255, 255, 0.9); /* More opaque for "Coming Soon" */
         color: var(--primary-color);
         display: flex;
+        flex-direction: column; /* To stack text and potentially an icon */
         align-items: center;
         justify-content: center;
-        font-size: 1.5rem;
+        font-size: 1.4rem; /* Slightly smaller for text */
         font-weight: bold;
         border-radius: var(--border-radius);
         backdrop-filter: blur(2px);
+        text-align: center;
+        padding: 10px;
+        cursor: not-allowed;
+    }
+    .coming-soon-overlay span {
+        display: block;
+        margin-top: 5px;
+    }
+    .coming-soon-overlay .fa-solid {
+        font-size: 2rem; /* Icon size */
+        margin-bottom: 5px;
+        color: var(--secondary-color); /* Highlight icon */
     }
 
     /* --- Floating Cart Button --- */
@@ -340,7 +354,11 @@
         font-size: 0.9rem;
         margin-top: -5px;
         margin-bottom: 15px;
+        color: var(--primary-color);
         cursor: pointer;
+    }
+    .forgot-pac-link:hover {
+        text-decoration: underline;
     }
     .dashboard-header {
         display: flex;
@@ -357,11 +375,39 @@
         border-radius: 50px;
         font-size: 1.2rem;
         font-weight: bold;
+        display: inline-block; /* Ensure padding works */
     }
-    .history-table-container { overflow-x: auto; }
-    .history-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    .history-table th, .history-table td { padding: 12px; border: 1px solid #ddd; text-align: left; }
-    .history-table th { background-color: var(--primary-color); color: white; }
+    .history-table-container { 
+        max-height: 250px; /* Limit height for scrolling */
+        overflow-y: auto; 
+        margin-bottom: 20px;
+    }
+    .history-table { 
+        width: 100%; 
+        border-collapse: collapse; 
+        margin-top: 10px; /* Adjust margin here */
+        font-size: 0.9rem;
+    }
+    .history-table th, .history-table td { 
+        padding: 8px 12px; /* Adjusted padding */
+        border: 1px solid #ddd; 
+        text-align: left; 
+        white-space: nowrap; /* Prevent wrapping in cells */
+    }
+    .history-table th { 
+        background-color: var(--primary-color); 
+        color: white; 
+        position: sticky; /* Keep headers visible on scroll */
+        top: 0;
+        z-index: 10; /* Ensure header stays above content */
+    }
+    .reward-item .redeem-btn-container {
+        margin-top: 15px; /* Space between points and button */
+    }
+    .reward-item .redeem-btn-container button {
+        width: auto; /* Allow button to size itself */
+        padding: 8px 15px;
+    }
 
     /* --- Footer & Disclaimer --- */
     footer { background: var(--primary-color); color: var(--light-text); padding: 40px 20px; text-align: center; margin-top: 30px; }
@@ -461,19 +507,19 @@
                     <img src="aloe-vera-gel.jpg" alt="Aloe Vera Gel">
                     <h4>ALOE VERA GEL</h4>
                     <p class="points-cost"><span style="text-decoration: line-through; color: #999; font-weight: normal;">11700</span> 10000 Points</p>
-                    <div class="coming-soon-overlay"><span>Coming Soon</span></div>
+                    <div class="coming-soon-overlay"><i class="fa-solid fa-hourglass-half"></i><span>Coming Soon</span></div>
                 </div>
                 <div class="reward-item">
                     <img src="aloe-berry-nectar.jpg" alt="Aloe Berry Nectar">
                     <h4>ALOE BERRY NECTAR</h4>
                     <p class="points-cost"><span style="text-decoration: line-through; color: #999; font-weight: normal;">11700</span> 10000 Points</p>
-                    <div class="coming-soon-overlay"><span>Coming Soon</span></div>
+                    <div class="coming-soon-overlay"><i class="fa-solid fa-hourglass-half"></i><span>Coming Soon</span></div>
                 </div>
                 <div class="reward-item">
                     <img src="aloe-peaches.jpg" alt="Aloe Bits N' Peaches">
                     <h4>ALOE BITS N' PEACHES</h4>
                     <p class="points-cost"><span style="text-decoration: line-through; color: #999; font-weight: normal;">11700</span> 10000 Points</p>
-                    <div class="coming-soon-overlay"><span>Coming Soon</span></div>
+                    <div class="coming-soon-overlay"><i class="fa-solid fa-hourglass-half"></i><span>Coming Soon</span></div>
                 </div>
             </div>
         </section>
@@ -609,15 +655,15 @@
   </div>
 
   <script>
-    // --- DATA ---
+    // --- Global Data / Rewards Configuration ---
     // Defined Rewards for redemption
     const rewards = [
-        { id: 'RWD01', name: 'RM 5 Voucher', cost: 500, image: 'rm5.jpg', fallbackImage: 'https://i.imgur.com/O9yP2aH.png', type: 'voucher', redemptionValue: 'RM 5' },
-        { id: 'RWD02', name: 'RM 10 Voucher', cost: 1000, image: 'rm10.jpg', fallbackImage: 'https://i.imgur.com/sY2a2qG.png', type: 'voucher', redemptionValue: 'RM 10' },
-        { id: 'RWD03', name: 'RM 20 Voucher', cost: 2000, image: 'rm20.jpg', fallbackImage: 'https://i.imgur.com/Jz4Y8fW.png', type: 'voucher', redemptionValue: 'RM 20' },
-        { id: 'RWD04', name: 'ALOE VERA GEL', cost: 10000, image: 'aloe-vera-gel.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Vera Gel', available: false }, // Coming Soon
-        { id: 'RWD05', name: 'ALOE BERRY NECTAR', cost: 10000, image: 'aloe-berry-nectar.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Berry Nectar', available: false }, // Coming Soon
-        { id: 'RWD06', name: 'ALOE BITS N\' PEACHES', cost: 10000, image: 'aloe-peaches.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Bits N\' Peaches', available: false }, // Coming Soon
+        { id: 'RWD01', name: 'RM 5 Voucher', cost: 500, image: 'rm5.jpg', fallbackImage: 'https://i.imgur.com/O9yP2aH.png', type: 'voucher', redemptionValue: 'RM 5', available: true },
+        { id: 'RWD02', name: 'RM 10 Voucher', cost: 1000, image: 'rm10.jpg', fallbackImage: 'https://i.imgur.com/sY2a2qG.png', type: 'voucher', redemptionValue: 'RM 10', available: true },
+        { id: 'RWD03', name: 'RM 20 Voucher', cost: 2000, image: 'rm20.jpg', fallbackImage: 'https://i.imgur.com/Jz4Y8fW.png', type: 'voucher', redemptionValue: 'RM 20', available: true },
+        { id: 'RWD04', name: 'ALOE VERA GEL', cost: 10000, image: 'aloe-vera-gel.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Vera Gel', available: false }, 
+        { id: 'RWD05', name: 'ALOE BERRY NECTAR', cost: 10000, image: 'aloe-berry-nectar.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Berry Nectar', available: false },
+        { id: 'RWD06', name: 'ALOE BITS N\' PEACHES', cost: 10000, image: 'aloe-peaches.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Bits N\' Peaches', available: false },
     ];
     
     // Product data (kept for displaying main product list)
@@ -676,11 +722,20 @@
         { id: 52, name: "REPLENISHING SKIN OIL", price: 132.00, promoPrice: 97.02, image: "skin-oil.jpg", benefits: "Nourishes with a blend of oils for skin.", consumption: "Apply a few drops to face." },
         { id: 53, name: "PROTECTING DAY LOTION", price: 167.99, promoPrice: 123.47, image: "day-lotion.jpg", benefits: "Moisturizes and protects skin with SPF.", consumption: "Apply in the morning." },
     ];
+    const rewards = [
+        { id: 'RWD01', name: 'RM 5 Voucher', cost: 500, image: 'rm5.jpg', fallbackImage: 'https://i.imgur.com/O9yP2aH.png', type: 'voucher', redemptionValue: 'RM 5', available: true },
+        { id: 'RWD02', name: 'RM 10 Voucher', cost: 1000, image: 'rm10.jpg', fallbackImage: 'https://i.imgur.com/sY2a2qG.png', type: 'voucher', redemptionValue: 'RM 10', available: true },
+        { id: 'RWD03', name: 'RM 20 Voucher', cost: 2000, image: 'rm20.jpg', fallbackImage: 'https://i.imgur.com/Jz4Y8fW.png', type: 'voucher', redemptionValue: 'RM 20', available: true },
+        { id: 'RWD04', name: 'ALOE VERA GEL', cost: 10000, image: 'aloe-vera-gel.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Vera Gel', available: false }, // Coming Soon
+        { id: 'RWD05', name: 'ALOE BERRY NECTAR', cost: 10000, image: 'aloe-berry-nectar.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Berry Nectar', available: false }, // Coming Soon
+        { id: 'RWD06', name: 'ALOE BITS N\' PEACHES', cost: 10000, image: 'aloe-peaches.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Bits N\' Peaches', available: false }, // Coming Soon
+    ];
     let cart = [];
     let currentCustomer = null; // Stores logged-in customer data
     const promoEndDate = new Date("August 2, 2025 23:59:59").getTime();
     
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpYs7pXlvoc0sb1RURk_vvF7eH8KbFeG7TmMVlot6mi3alhOCWgk3jjj6jNf3_nIxiZsWbR/exec'; // Your new Web App URL
+    // --- GOOGLE SHEETS API URL ---
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwWjUDAmtCcUswFlLa6FAWd-CjGmT39s6OfY-QcGe6sIEkaFXba71MtiqbnVuh1yzQ/exec'; 
 
     // --- Core Functions ---
     function isPromoActive() {
@@ -688,33 +743,33 @@
     }
 
     function renderProducts() {
-        const productList = document.getElementById('product-list');
-        if (!productList) return;
-        const promoActive = isPromoActive();
+      const productList = document.getElementById('product-list');
+      if (!productList) return;
+      const promoActive = isPromoActive();
+      
+      productList.innerHTML = products.map(product => {
+        const finalPrice = promoActive && product.promoPrice ? product.promoPrice : product.price;
+        const hasDiscount = promoActive && product.promoPrice;
+        const points = Math.floor(finalPrice);
         
-        productList.innerHTML = products.map(product => {
-            const finalPrice = promoActive && product.promoPrice ? product.promoPrice : product.price;
-            const hasDiscount = promoActive && product.promoPrice;
-            const points = Math.floor(finalPrice);
-            
-            return `
-            <div class="product ${hasDiscount ? 'promo-highlight' : ''}">
-                ${hasDiscount ? '<div class="featured-badge">Promo!</div>' : ''}
-                <div class="product-image-container"><img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/200x200?text=Image+Not+Found'"></div>
-                <div class="product-info">
-                    <h3>${product.name}</h3>
-                    <div class="price-section">
-                        ${hasDiscount ? `<span class="original-price">RM ${product.price.toFixed(2)}</span><span class="new-price">RM ${finalPrice.toFixed(2)}</span>` : `<span class="new-price">RM ${finalPrice.toFixed(2)}</span>`}
-                    </div>
-                    <div class="benefits"><strong>Benefits:</strong> ${product.benefits}</div>
-                    <div class="consumption"><strong>Usage:</strong> ${product.consumption}</div>
-                    <div class="product-points"><i class="fa-solid fa-star"></i> Earn ${points} Points</div>
-                    <div class="product-actions">
-                        <button class="btn btn-primary" onclick="addToCart(${product.id})"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
-                    </div>
+        return `
+          <div class="product ${hasDiscount ? 'promo-highlight' : ''}">
+            ${hasDiscount ? '<div class="featured-badge">Promo!</div>' : ''}
+            <div class="product-image-container"><img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/200x200?text=Image+Not+Found'"></div>
+            <div class="product-info">
+                <h3>${product.name}</h3>
+                <div class="price-section">
+                    ${hasDiscount ? `<span class="original-price">RM ${product.price.toFixed(2)}</span><span class="new-price">RM ${finalPrice.toFixed(2)}</span>` : `<span class="new-price">RM ${finalPrice.toFixed(2)}</span>`}
                 </div>
-            </div>`;
-        }).join('');
+                <div class="benefits"><strong>Benefits:</strong> ${product.benefits}</div>
+                <div class="consumption"><strong>Usage:</strong> ${product.consumption}</div>
+                <div class="product-points"><i class="fa-solid fa-star"></i> Earn ${points} Points</div>
+                <div class="product-actions">
+                    <button class="btn btn-primary" onclick="addToCart(${product.id})"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+                </div>
+            </div>
+          </div>`;
+      }).join('');
     }
 
     function filterProducts() {
@@ -761,7 +816,7 @@
             if (symptom.includes(key)) {
                 keywords[key].forEach(id => suggestedIds.add(id));
             }
-        }
+        });
         
         products.forEach(p => {
             if (p.benefits.toLowerCase().includes(symptom)) {
@@ -797,8 +852,8 @@
           if (tabId === 'rewards-portal') {
             // Check if customer is already logged in for rewards portal
             if (sessionStorage.getItem('currentCustomer')) {
-                const customerData = JSON.parse(sessionStorage.getItem('currentCustomer'));
-                displayDashboard(customerData);
+                currentCustomer = JSON.parse(sessionStorage.getItem('currentCustomer'));
+                displayDashboard(currentCustomer);
             } else {
                 showLoginView();
             }
@@ -994,11 +1049,8 @@
         statusEl.textContent = 'Verifying...';
         statusEl.style.color = 'blue';
 
-        // --- GOOGLE SHEETS API URL ---
-        const googleScriptURL = 'https://script.google.com/macros/s/AKfycbxpYs7pXlvoc0sb1RURk_v5KbFeG7TmMVlot6mi3alhOCWgk3jjj6jNf3_nIxiZsWbR/exec';
-
         try {
-            const validationResponse = await fetch(`${googleScriptURL}?action=validateCode&code=${codeInput}`);
+            const validationResponse = await fetch(`${GOOGLE_SCRIPT_URL}?action=validateCode&code=${codeInput}`);
             const validationResult = await validationResponse.json();
 
             if (validationResult.status === 'success' && validationResult.isValid) {
@@ -1020,7 +1072,7 @@
                     usedCode: codeInput
                 };
 
-                const recordResponse = await fetch(googleScriptURL, {
+                const recordResponse = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     body: JSON.stringify(orderData)
                 });
@@ -1052,19 +1104,19 @@
             }
         } catch (error) {
             console.error('Verification Error:', error);
-            statusEl.textContent = 'An error occurred. Please try again.';
+            statusEl.textContent = 'An error occurred during verification. Please check console for details.';
             statusEl.style.color = 'red';
             verifyBtn.disabled = false;
         }
     }
 
     function sendReceiptByEmail(record, orderDetails, newPAC, totalPoints) {
-        const serviceID = 'YOUR_SERVICE_ID'; // Replace with your EmailJS Service ID
-        const templateID = 'YOUR_TEMPLATE_ID'; // Replace with your EmailJS Template ID for Admin Receipt
-        const userID = 'YOUR_USER_ID'; // Replace with your EmailJS Public Key
+        const serviceID = 'YOUR_EMAILJS_SERVICE_ID'; // Replace with your EmailJS Service ID
+        const templateID = 'YOUR_EMAILJS_TEMPLATE_ID'; // Replace with your EmailJS Template ID for Admin Receipt
+        const userID = 'YOUR_EMAILJS_PUBLIC_KEY'; // Replace with your EmailJS Public Key
 
-        if (serviceID === 'YOUR_SERVICE_ID' || templateID === 'YOUR_TEMPLATE_ID' || userID === 'YOUR_USER_ID') {
-            console.log("EmailJS credentials not set. Skipping email.");
+        if (serviceID === 'YOUR_EMAILJS_SERVICE_ID' || templateID === 'YOUR_EMAILJS_TEMPLATE_ID' || userID === 'YOUR_EMAILJS_PUBLIC_KEY') {
+            console.warn("EmailJS credentials not set. Skipping email notification.");
             return;
         }
 
@@ -1179,7 +1231,7 @@
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(10);
             doc.text("IMPORTANT: Your Personal Access Code is:", 14, finalY + 75);
-            doc.setFont('courier', 'normal');
+            doc.setFont('courier', 'normal'); // Monospace font for code
             doc.text(newPAC, 14, finalY + 82);
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(8);
@@ -1231,8 +1283,7 @@
     }
 
     // --- Rewards Portal Functions ---
-    // Store customer data in session for persistence
-    let loggedInCustomer = null; 
+    let currentCustomer = null; // Stores logged-in customer data
 
     async function login() {
         const email = document.getElementById('login-email').value.trim();
@@ -1255,13 +1306,13 @@
             const result = await response.json();
 
             if (result.status === 'success') {
-                loggedInCustomer = result.customer;
-                loggedInCustomer.purchaseHistory = result.purchaseHistory; // Attach history
-                loggedInCustomer.redemptionHistory = result.redemptionHistory; // Attach history
-                sessionStorage.setItem('currentCustomer', JSON.stringify(loggedInCustomer));
-                displayDashboard(loggedInCustomer);
+                currentCustomer = result.customer; // Store customer data
+                currentCustomer.purchaseHistory = result.purchaseHistory; // Attach history
+                currentCustomer.redemptionHistory = result.redemptionHistory; // Attach history
+                sessionStorage.setItem('currentCustomer', JSON.stringify(currentCustomer)); // Persist login
+                displayDashboard(currentCustomer);
             } else {
-                loginStatusEl.textContent = result.message || 'Login failed.';
+                loginStatusEl.textContent = result.message || 'Login failed. Please check your email and PAC.';
                 loginStatusEl.style.color = 'red';
             }
         } catch (error) {
@@ -1274,7 +1325,7 @@
     }
 
     function logout() {
-        loggedInCustomer = null;
+        currentCustomer = null;
         sessionStorage.removeItem('currentCustomer');
         showLoginView();
         document.getElementById('login-status').textContent = 'Logged out successfully.';
@@ -1307,7 +1358,7 @@
             const btnClass = canAfford ? 'btn-primary' : 'btn-secondary';
             const btnDisabled = canAfford ? '' : 'disabled';
             const redeemFunction = canAfford ? `onclick="redeemReward('${reward.id}', '${reward.name}', ${reward.cost})"` : '';
-            const overlay = reward.available ? '' : `<div class="coming-soon-overlay"><span>Coming Soon</span></div>`;
+            const overlay = reward.available ? '' : `<div class="coming-soon-overlay"><i class="fa-solid fa-hourglass-half"></i><span>Coming Soon</span></div>`;
             const imageSrc = reward.image || 'https://via.placeholder.com/100x100?text=Reward';
             const fallbackImg = reward.fallbackImage ? `onerror="this.src='${reward.fallbackImage}'"` : '';
 
@@ -1316,10 +1367,12 @@
                     <img src="${imageSrc}" alt="${reward.name}" ${fallbackImg}>
                     <h4>${reward.name}</h4>
                     <p class="points-cost">
-                        ${reward.id.startsWith('RWD0') && reward.cost === 10000 && !reward.available ? '<span style="text-decoration: line-through; color: #999; font-weight: normal;">11700</span> ' : ''}
+                        ${(reward.id === 'RWD04' || reward.id === 'RWD05' || reward.id === 'RWD06') && reward.cost === 10000 ? '<span style="text-decoration: line-through; color: #999; font-weight: normal;">11700</span> ' : ''}
                         ${reward.cost} Points
                     </p>
-                    <button class="btn ${btnClass}" ${btnDisabled} ${redeemFunction}>Redeem</button>
+                    <div class="redeem-btn-container">
+                        <button class="btn ${btnClass}" ${btnDisabled} ${redeemFunction}>Redeem</button>
+                    </div>
                     ${overlay}
                 </div>
             `;
@@ -1364,7 +1417,7 @@
     }
 
     async function redeemReward(rewardId, rewardName, rewardCost) {
-        if (!loggedInCustomer) {
+        if (!currentCustomer) {
             alert('Please log in to redeem rewards.');
             return;
         }
@@ -1372,8 +1425,8 @@
         const confirmRedeem = confirm(`Are you sure you want to redeem ${rewardName} for ${rewardCost} points?`);
         if (!confirmRedeem) return;
 
-        const customerEmail = loggedInCustomer.email;
-        const customerPAC = loggedInCustomer.pac; // Assuming PAC is stored on login for subsequent calls
+        const customerEmail = currentCustomer.email;
+        const customerPAC = currentCustomer.pac; // PAC is stored on login session
 
         // Disable all redeem buttons to prevent multiple clicks
         document.querySelectorAll('#redeemable-rewards-grid .btn').forEach(btn => btn.disabled = true);
@@ -1392,14 +1445,14 @@
 
             if (result.status === 'success') {
                 alert(result.message + ` Your remaining points: ${result.newPoints}`);
-                loggedInCustomer.points = result.newPoints; // Update local points
-                loggedInCustomer.redemptionHistory.unshift({ // Add new redemption to local history
+                currentCustomer.points = result.newPoints; // Update local points
+                currentCustomer.redemptionHistory.unshift({ // Add new redemption to local history
                     date: new Date().toLocaleDateString('en-GB'),
                     reward: rewardName,
                     cost: rewardCost
                 });
-                sessionStorage.setItem('currentCustomer', JSON.stringify(loggedInCustomer)); // Update session storage
-                displayDashboard(loggedInCustomer); // Re-render dashboard
+                sessionStorage.setItem('currentCustomer', JSON.stringify(currentCustomer)); // Update session storage
+                displayDashboard(currentCustomer); // Re-render dashboard
             } else {
                 alert(result.message || 'Redemption failed.');
             }
@@ -1409,14 +1462,14 @@
         } finally {
             // Re-enable redeem buttons after operation (renderRedeemableRewards will handle disabling based on points)
             document.querySelectorAll('#redeemable-rewards-grid .btn').forEach(btn => btn.disabled = false);
-            renderRedeemableRewards(loggedInCustomer.points); // Ensure buttons are correctly enabled/disabled
+            renderRedeemableRewards(currentCustomer.points); // Ensure buttons are correctly enabled/disabled
         }
     }
 
     async function forgotPAC() {
         const email = document.getElementById('login-email').value.trim();
         const loginStatusEl = document.getElementById('login-status');
-        const loginBtn = document.getElementById('login-btn'); // Use the login button to disable it
+        const loginBtn = document.getElementById('login-btn'); 
 
         if (!email) {
             loginStatusEl.textContent = 'Please enter your email address to recover your PAC.';
@@ -1436,9 +1489,9 @@
                 // EmailJS for sending PAC
                 const serviceID = 'YOUR_EMAILJS_SERVICE_ID_FOR_PAC_RECOVERY'; // e.g., 'service_abc123'
                 const templateID = 'YOUR_EMAILJS_TEMPLATE_ID_FOR_PAC_RECOVERY'; // e.g., 'template_xyz789'
-                const userID = 'YOUR_EMAILJS_USER_ID'; // Your EmailJS Public Key
+                const userID = 'YOUR_EMAILJS_PUBLIC_KEY'; // Your EmailJS Public Key
 
-                if (serviceID === 'YOUR_EMAILJS_SERVICE_ID_FOR_PAC_RECOVERY' || templateID === 'YOUR_EMAILJS_TEMPLATE_ID_FOR_PAC_RECOVERY' || userID === 'YOUR_EMAILJS_USER_ID') {
+                if (serviceID === 'YOUR_EMAILJS_SERVICE_ID_FOR_PAC_RECOVERY' || templateID === 'YOUR_EMAILJS_TEMPLATE_ID_FOR_PAC_RECOVERY' || userID === 'YOUR_EMAILJS_PUBLIC_KEY') {
                     loginStatusEl.textContent = 'Email service not configured for PAC recovery. Please contact support.';
                     loginStatusEl.style.color = 'orange';
                     console.error('EmailJS credentials not set for PAC recovery.');
@@ -1483,14 +1536,13 @@
 
       renderProducts();
       
-      // Check if there is a pending order or a logged-in customer on page load
       if (sessionStorage.getItem('pendingOrder')) {
           toggleCart(); // Show verification if there's a pending order
       } else if (sessionStorage.getItem('currentCustomer')) {
           // If customer was already logged in, restore session and show dashboard
-          loggedInCustomer = JSON.parse(sessionStorage.getItem('currentCustomer'));
+          currentCustomer = JSON.parse(sessionStorage.getItem('currentCustomer'));
           showTab('rewards-portal'); // Directly go to rewards portal
-          displayDashboard(loggedInCustomer);
+          displayDashboard(currentCustomer);
       } else {
           showTab('products'); // Default to products tab
       }
