@@ -497,7 +497,7 @@
                 <div class="dashboard-header">
                     <div>
                         <h2 style="margin: 0;">Welcome Back!</h2>
-                        <span id="customer-email-display"></span>
+                        <span id="customer-name-display"></span>
                     </div>
                     <button class="btn btn-secondary" onclick="logout()">Logout</button>
                 </div>
@@ -610,6 +610,17 @@
 
   <script>
     // --- DATA ---
+    // Defined Rewards for redemption
+    const rewards = [
+        { id: 'RWD01', name: 'RM 5 Voucher', cost: 500, image: 'rm5.jpg', fallbackImage: 'https://i.imgur.com/O9yP2aH.png', type: 'voucher', redemptionValue: 'RM 5' },
+        { id: 'RWD02', name: 'RM 10 Voucher', cost: 1000, image: 'rm10.jpg', fallbackImage: 'https://i.imgur.com/sY2a2qG.png', type: 'voucher', redemptionValue: 'RM 10' },
+        { id: 'RWD03', name: 'RM 20 Voucher', cost: 2000, image: 'rm20.jpg', fallbackImage: 'https://i.imgur.com/Jz4Y8fW.png', type: 'voucher', redemptionValue: 'RM 20' },
+        { id: 'RWD04', name: 'ALOE VERA GEL', cost: 10000, image: 'aloe-vera-gel.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Vera Gel', available: false }, // Coming Soon
+        { id: 'RWD05', name: 'ALOE BERRY NECTAR', cost: 10000, image: 'aloe-berry-nectar.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Berry Nectar', available: false }, // Coming Soon
+        { id: 'RWD06', name: 'ALOE BITS N\' PEACHES', cost: 10000, image: 'aloe-peaches.jpg', fallbackImage: '', type: 'product', redemptionValue: '1x Aloe Bits N\' Peaches', available: false }, // Coming Soon
+    ];
+    
+    // Product data (kept for displaying main product list)
     const products = [
         { id: 1, name: "ALOE VERA GEL", price: 116.79, promoPrice: 85.84, image: "aloe-vera-gel.jpg", benefits: "Supports digestion, boosts immunity.", consumption: "Take 30-60ml daily." },
         { id: 2, name: "ALOE BERRY NECTAR", price: 116.79, promoPrice: 85.84, image: "aloe-berry-nectar.jpg", benefits: "Antioxidant support, immune system booster.", consumption: "30-60ml daily." },
@@ -665,51 +676,45 @@
         { id: 52, name: "REPLENISHING SKIN OIL", price: 132.00, promoPrice: 97.02, image: "skin-oil.jpg", benefits: "Nourishes with a blend of oils for skin.", consumption: "Apply a few drops to face." },
         { id: 53, name: "PROTECTING DAY LOTION", price: 167.99, promoPrice: 123.47, image: "day-lotion.jpg", benefits: "Moisturizes and protects skin with SPF.", consumption: "Apply in the morning." },
     ];
-    const rewards = [
-        { id: 'RWD01', name: 'RM 5 Voucher', cost: 500, image: 'rm5.jpg', fallbackImage: 'https://i.imgur.com/O9yP2aH.png', available: true },
-        { id: 'RWD02', name: 'RM 10 Voucher', cost: 1000, image: 'rm10.jpg', fallbackImage: 'https://i.imgur.com/sY2a2qG.png', available: true },
-        { id: 'RWD03', name: 'RM 20 Voucher', cost: 2000, image: 'rm20.jpg', fallbackImage: 'https://i.imgur.com/Jz4Y8fW.png', available: true },
-        { id: 'RWD04', name: 'ALOE VERA GEL', cost: 10000, image: 'aloe-vera-gel.jpg', fallbackImage: '', available: false },
-        { id: 'RWD05', name: 'ALOE BERRY NECTAR', cost: 10000, image: 'aloe-berry-nectar.jpg', fallbackImage: '', available: false },
-        { id: 'RWD06', name: 'ALOE BITS N\' PEACHES', cost: 10000, image: 'aloe-peaches.jpg', fallbackImage: '', available: false },
-    ];
     let cart = [];
+    let currentCustomer = null; // Stores logged-in customer data
     const promoEndDate = new Date("August 2, 2025 23:59:59").getTime();
+    
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpYs7pXlvoc0sb1RURk_vvF7eH8KbFeG7TmMVlot6mi3alhOCWgk3jjj6jNf3_nIxiZsWbR/exec'; // Your new Web App URL
 
-    // --- LOGIC ---
-
+    // --- Core Functions ---
     function isPromoActive() {
         return new Date().getTime() < promoEndDate;
     }
 
     function renderProducts() {
-      const productList = document.getElementById('product-list');
-      if (!productList) return;
-      const promoActive = isPromoActive();
-      
-      productList.innerHTML = products.map(product => {
-        const finalPrice = promoActive && product.promoPrice ? product.promoPrice : product.price;
-        const hasDiscount = promoActive && product.promoPrice;
-        const points = Math.floor(finalPrice);
+        const productList = document.getElementById('product-list');
+        if (!productList) return;
+        const promoActive = isPromoActive();
         
-        return `
-          <div class="product ${hasDiscount ? 'promo-highlight' : ''}">
-            ${hasDiscount ? '<div class="featured-badge">Promo!</div>' : ''}
-            <div class="product-image-container"><img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/200x200?text=Image+Not+Found'"></div>
-            <div class="product-info">
-                <h3>${product.name}</h3>
-                <div class="price-section">
-                    ${hasDiscount ? `<span class="original-price">RM ${product.price.toFixed(2)}</span><span class="new-price">RM ${finalPrice.toFixed(2)}</span>` : `<span class="new-price">RM ${finalPrice.toFixed(2)}</span>`}
+        productList.innerHTML = products.map(product => {
+            const finalPrice = promoActive && product.promoPrice ? product.promoPrice : product.price;
+            const hasDiscount = promoActive && product.promoPrice;
+            const points = Math.floor(finalPrice);
+            
+            return `
+            <div class="product ${hasDiscount ? 'promo-highlight' : ''}">
+                ${hasDiscount ? '<div class="featured-badge">Promo!</div>' : ''}
+                <div class="product-image-container"><img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/200x200?text=Image+Not+Found'"></div>
+                <div class="product-info">
+                    <h3>${product.name}</h3>
+                    <div class="price-section">
+                        ${hasDiscount ? `<span class="original-price">RM ${product.price.toFixed(2)}</span><span class="new-price">RM ${finalPrice.toFixed(2)}</span>` : `<span class="new-price">RM ${finalPrice.toFixed(2)}</span>`}
+                    </div>
+                    <div class="benefits"><strong>Benefits:</strong> ${product.benefits}</div>
+                    <div class="consumption"><strong>Usage:</strong> ${product.consumption}</div>
+                    <div class="product-points"><i class="fa-solid fa-star"></i> Earn ${points} Points</div>
+                    <div class="product-actions">
+                        <button class="btn btn-primary" onclick="addToCart(${product.id})"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+                    </div>
                 </div>
-                <div class="benefits"><strong>Benefits:</strong> ${product.benefits}</div>
-                <div class="consumption"><strong>Usage:</strong> ${product.consumption}</div>
-                <div class="product-points"><i class="fa-solid fa-star"></i> Earn ${points} Points</div>
-                <div class="product-actions">
-                    <button class="btn btn-primary" onclick="addToCart(${product.id})"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
-                </div>
-            </div>
-          </div>`;
-      }).join('');
+            </div>`;
+        }).join('');
     }
 
     function filterProducts() {
@@ -789,6 +794,15 @@
       const activeTab = document.getElementById(tabId);
       if(activeTab) {
           activeTab.classList.add('active');
+          if (tabId === 'rewards-portal') {
+            // Check if customer is already logged in for rewards portal
+            if (sessionStorage.getItem('currentCustomer')) {
+                const customerData = JSON.parse(sessionStorage.getItem('currentCustomer'));
+                displayDashboard(customerData);
+            } else {
+                showLoginView();
+            }
+          }
       }
     }
 
@@ -866,7 +880,7 @@
       const pointsEl = document.getElementById('points-earned-display');
       
       if (cart.length === 0) {
-        cartItemsEl.innerHTML = '<p>Your cart is empty</p>';
+        cartItemsEl.innerHTML = '<p>Your cart is empty.</p>';
         subtotalEl.textContent = 'RM 0.00';
         shippingEl.textContent = 'RM 0.00';
         totalEl.textContent = 'RM 0.00';
@@ -981,7 +995,7 @@
         statusEl.style.color = 'blue';
 
         // --- GOOGLE SHEETS API URL ---
-        const googleScriptURL = 'https://script.google.com/macros/s/AKfycbyB3dphvqxJrqe3PEBjgEe7AaAdCiUyvAS4yJO410EvWXoTk6eXwcE9a1Qphc6YyIq6/exec';
+        const googleScriptURL = 'https://script.google.com/macros/s/AKfycbxpYs7pXlvoc0sb1RURk_v5KbFeG7TmMVlot6mi3alhOCWgk3jjj6jNf3_nIxiZsWbR/exec';
 
         try {
             const validationResponse = await fetch(`${googleScriptURL}?action=validateCode&code=${codeInput}`);
@@ -1045,9 +1059,9 @@
     }
 
     function sendReceiptByEmail(record, orderDetails, newPAC, totalPoints) {
-        const serviceID = 'YOUR_SERVICE_ID';
-        const templateID = 'YOUR_TEMPLATE_ID';
-        const userID = 'YOUR_USER_ID';
+        const serviceID = 'YOUR_SERVICE_ID'; // Replace with your EmailJS Service ID
+        const templateID = 'YOUR_TEMPLATE_ID'; // Replace with your EmailJS Template ID for Admin Receipt
+        const userID = 'YOUR_USER_ID'; // Replace with your EmailJS Public Key
 
         if (serviceID === 'YOUR_SERVICE_ID' || templateID === 'YOUR_TEMPLATE_ID' || userID === 'YOUR_USER_ID') {
             console.log("EmailJS credentials not set. Skipping email.");
@@ -1064,7 +1078,7 @@
         ).join('');
 
         const templateParams = {
-            to_email: 'arvin8786@gmail.com',
+            to_email: 'arvin8786@gmail.com', // Your email
             order_number: record.orderNumber,
             customer_name: orderDetails.customerName,
             customer_phone: orderDetails.customerPhone,
@@ -1098,7 +1112,7 @@
 
         if (logo && logo.complete && logo.naturalHeight !== 0) {
             try {
-                doc.addImage(logo, 'JPEG', 14, 12, 30, 30);
+                doc.addImage(logo, 'JPEG', 14, 12, 30, 30); // Larger logo: 30x30 units
             } catch (e) {
                 console.error("Error adding logo to PDF:", e);
             }
@@ -1107,7 +1121,7 @@
         doc.setFontSize(20);
         doc.text("Purchase Receipt", 105, 20, { align: 'center' });
         
-        doc.setFontSize(11);
+        doc.setFontSize(11); // Standardized size
         doc.text("Forever Living by Mohd Arvind Isa", 105, 30, { align: 'center' });
         doc.text("WhatsApp: 601111033154", 105, 35, { align: 'center' });
 
@@ -1216,7 +1230,246 @@
         }
     }
 
-    // Initialize the page
+    // --- Rewards Portal Functions ---
+    // Store customer data in session for persistence
+    let loggedInCustomer = null; 
+
+    async function login() {
+        const email = document.getElementById('login-email').value.trim();
+        const pac = document.getElementById('login-pac').value.trim();
+        const loginStatusEl = document.getElementById('login-status');
+        const loginBtn = document.getElementById('login-btn');
+
+        if (!email || !pac) {
+            loginStatusEl.textContent = 'Please enter both email and Personal Access Code.';
+            loginStatusEl.style.color = 'red';
+            return;
+        }
+
+        loginBtn.disabled = true;
+        loginStatusEl.textContent = 'Logging in...';
+        loginStatusEl.style.color = 'blue';
+
+        try {
+            const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=login&email=${encodeURIComponent(email)}&pac=${encodeURIComponent(pac)}`);
+            const result = await response.json();
+
+            if (result.status === 'success') {
+                loggedInCustomer = result.customer;
+                loggedInCustomer.purchaseHistory = result.purchaseHistory; // Attach history
+                loggedInCustomer.redemptionHistory = result.redemptionHistory; // Attach history
+                sessionStorage.setItem('currentCustomer', JSON.stringify(loggedInCustomer));
+                displayDashboard(loggedInCustomer);
+            } else {
+                loginStatusEl.textContent = result.message || 'Login failed.';
+                loginStatusEl.style.color = 'red';
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            loginStatusEl.textContent = 'An error occurred during login. Please try again.';
+            loginStatusEl.style.color = 'red';
+        } finally {
+            loginBtn.disabled = false;
+        }
+    }
+
+    function logout() {
+        loggedInCustomer = null;
+        sessionStorage.removeItem('currentCustomer');
+        showLoginView();
+        document.getElementById('login-status').textContent = 'Logged out successfully.';
+        document.getElementById('login-status').style.color = 'green';
+    }
+
+    function showLoginView() {
+        document.getElementById('login-view').style.display = 'block';
+        document.getElementById('dashboard-view').style.display = 'none';
+        document.getElementById('login-email').value = '';
+        document.getElementById('login-pac').value = '';
+        document.getElementById('login-status').textContent = '';
+    }
+
+    function displayDashboard(customerData) {
+        document.getElementById('login-view').style.display = 'none';
+        document.getElementById('dashboard-view').style.display = 'block';
+        document.getElementById('customer-name-display').textContent = customerData.name;
+        document.getElementById('customer-points-display').textContent = `${customerData.points} Points`;
+
+        renderRedeemableRewards(customerData.points);
+        renderPurchaseHistory(customerData.purchaseHistory);
+        renderRedemptionHistory(customerData.redemptionHistory);
+    }
+
+    function renderRedeemableRewards(customerPoints) {
+        const redeemableGrid = document.getElementById('redeemable-rewards-grid');
+        redeemableGrid.innerHTML = rewards.map(reward => {
+            const canAfford = customerPoints >= reward.cost && reward.available;
+            const btnClass = canAfford ? 'btn-primary' : 'btn-secondary';
+            const btnDisabled = canAfford ? '' : 'disabled';
+            const redeemFunction = canAfford ? `onclick="redeemReward('${reward.id}', '${reward.name}', ${reward.cost})"` : '';
+            const overlay = reward.available ? '' : `<div class="coming-soon-overlay"><span>Coming Soon</span></div>`;
+            const imageSrc = reward.image || 'https://via.placeholder.com/100x100?text=Reward';
+            const fallbackImg = reward.fallbackImage ? `onerror="this.src='${reward.fallbackImage}'"` : '';
+
+            return `
+                <div class="reward-item">
+                    <img src="${imageSrc}" alt="${reward.name}" ${fallbackImg}>
+                    <h4>${reward.name}</h4>
+                    <p class="points-cost">
+                        ${reward.id.startsWith('RWD0') && reward.cost === 10000 && !reward.available ? '<span style="text-decoration: line-through; color: #999; font-weight: normal;">11700</span> ' : ''}
+                        ${reward.cost} Points
+                    </p>
+                    <button class="btn ${btnClass}" ${btnDisabled} ${redeemFunction}>Redeem</button>
+                    ${overlay}
+                </div>
+            `;
+        }).join('');
+    }
+
+    function renderPurchaseHistory(history) {
+        const historyBody = document.getElementById('purchase-history-body');
+        if (!historyBody) return;
+        
+        if (!history || history.length === 0) {
+            historyBody.innerHTML = '<tr><td colspan="4">No purchase history found.</td></tr>';
+            return;
+        }
+
+        historyBody.innerHTML = history.map(record => `
+            <tr>
+                <td>${record.orderNumber}</td>
+                <td>${record.date}</td>
+                <td>${record.items}</td>
+                <td>${record.points}</td>
+            </tr>
+        `).join('');
+    }
+
+    function renderRedemptionHistory(history) {
+        const historyBody = document.getElementById('redemption-history-body');
+        if (!historyBody) return;
+
+        if (!history || history.length === 0) {
+            historyBody.innerHTML = '<tr><td colspan="3">No redemption history found.</td></tr>';
+            return;
+        }
+
+        historyBody.innerHTML = history.map(record => `
+            <tr>
+                <td>${record.date}</td>
+                <td>${record.reward}</td>
+                <td>${record.cost}</td>
+            </tr>
+        `).join('');
+    }
+
+    async function redeemReward(rewardId, rewardName, rewardCost) {
+        if (!loggedInCustomer) {
+            alert('Please log in to redeem rewards.');
+            return;
+        }
+
+        const confirmRedeem = confirm(`Are you sure you want to redeem ${rewardName} for ${rewardCost} points?`);
+        if (!confirmRedeem) return;
+
+        const customerEmail = loggedInCustomer.email;
+        const customerPAC = loggedInCustomer.pac; // Assuming PAC is stored on login for subsequent calls
+
+        // Disable all redeem buttons to prevent multiple clicks
+        document.querySelectorAll('#redeemable-rewards-grid .btn').forEach(btn => btn.disabled = true);
+
+        try {
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    action: 'redeemReward',
+                    email: customerEmail,
+                    pac: customerPAC,
+                    reward: { id: rewardId, name: rewardName, cost: rewardCost }
+                })
+            });
+            const result = await response.json();
+
+            if (result.status === 'success') {
+                alert(result.message + ` Your remaining points: ${result.newPoints}`);
+                loggedInCustomer.points = result.newPoints; // Update local points
+                loggedInCustomer.redemptionHistory.unshift({ // Add new redemption to local history
+                    date: new Date().toLocaleDateString('en-GB'),
+                    reward: rewardName,
+                    cost: rewardCost
+                });
+                sessionStorage.setItem('currentCustomer', JSON.stringify(loggedInCustomer)); // Update session storage
+                displayDashboard(loggedInCustomer); // Re-render dashboard
+            } else {
+                alert(result.message || 'Redemption failed.');
+            }
+        } catch (error) {
+            console.error('Redemption error:', error);
+            alert('An error occurred during redemption. Please try again.');
+        } finally {
+            // Re-enable redeem buttons after operation (renderRedeemableRewards will handle disabling based on points)
+            document.querySelectorAll('#redeemable-rewards-grid .btn').forEach(btn => btn.disabled = false);
+            renderRedeemableRewards(loggedInCustomer.points); // Ensure buttons are correctly enabled/disabled
+        }
+    }
+
+    async function forgotPAC() {
+        const email = document.getElementById('login-email').value.trim();
+        const loginStatusEl = document.getElementById('login-status');
+        const loginBtn = document.getElementById('login-btn'); // Use the login button to disable it
+
+        if (!email) {
+            loginStatusEl.textContent = 'Please enter your email address to recover your PAC.';
+            loginStatusEl.style.color = 'red';
+            return;
+        }
+
+        loginBtn.disabled = true;
+        loginStatusEl.textContent = 'Sending PAC to your email...';
+        loginStatusEl.style.color = 'blue';
+
+        try {
+            const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=forgotPAC&email=${encodeURIComponent(email)}`);
+            const result = await response.json();
+
+            if (result.status === 'success') {
+                // EmailJS for sending PAC
+                const serviceID = 'YOUR_EMAILJS_SERVICE_ID_FOR_PAC_RECOVERY'; // e.g., 'service_abc123'
+                const templateID = 'YOUR_EMAILJS_TEMPLATE_ID_FOR_PAC_RECOVERY'; // e.g., 'template_xyz789'
+                const userID = 'YOUR_EMAILJS_USER_ID'; // Your EmailJS Public Key
+
+                if (serviceID === 'YOUR_EMAILJS_SERVICE_ID_FOR_PAC_RECOVERY' || templateID === 'YOUR_EMAILJS_TEMPLATE_ID_FOR_PAC_RECOVERY' || userID === 'YOUR_EMAILJS_USER_ID') {
+                    loginStatusEl.textContent = 'Email service not configured for PAC recovery. Please contact support.';
+                    loginStatusEl.style.color = 'orange';
+                    console.error('EmailJS credentials not set for PAC recovery.');
+                    return;
+                }
+
+                const templateParams = {
+                    to_email: email,
+                    customer_name: result.customerName,
+                    personal_access_code: result.pac
+                };
+
+                await emailjs.send(serviceID, templateID, templateParams, userID);
+                loginStatusEl.textContent = 'Your Personal Access Code has been sent to your email!';
+                loginStatusEl.style.color = 'green';
+
+            } else {
+                loginStatusEl.textContent = result.message || 'Failed to send PAC. Email not found.';
+                loginStatusEl.style.color = 'red';
+            }
+        } catch (error) {
+            console.error('Forgot PAC error:', error);
+            loginStatusEl.textContent = 'An error occurred. Please try again.';
+            loginStatusEl.style.color = 'red';
+        } finally {
+            loginBtn.disabled = false;
+        }
+    }
+
+
+    // --- Initialization ---
     document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
       
@@ -1230,10 +1483,16 @@
 
       renderProducts();
       
+      // Check if there is a pending order or a logged-in customer on page load
       if (sessionStorage.getItem('pendingOrder')) {
-          toggleCart();
+          toggleCart(); // Show verification if there's a pending order
+      } else if (sessionStorage.getItem('currentCustomer')) {
+          // If customer was already logged in, restore session and show dashboard
+          loggedInCustomer = JSON.parse(sessionStorage.getItem('currentCustomer'));
+          showTab('rewards-portal'); // Directly go to rewards portal
+          displayDashboard(loggedInCustomer);
       } else {
-          showTab('products');
+          showTab('products'); // Default to products tab
       }
     });
   </script>
