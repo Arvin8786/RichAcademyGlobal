@@ -58,6 +58,7 @@
       color: var(--dark-text);
       overflow-x: hidden;
       line-height: 1.6;
+      /* Adjusted: Add padding-top to account for the fixed running banner */
       padding-top: 45px; /* Estimated height of the running banner */
     }
     .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
@@ -1094,7 +1095,7 @@
         otherItemsInCart.forEach(item => {
             const productData = products.find(p => p.id === item.id);
             const originalPrice = productData.price;
-            const itemPrice = isPromoActive() && productData.promoPrice ? productData.promoPrice : productData.price;
+            const itemPrice = isPromoActive() && productData.promoPrice ? productData.promoPrice : originalPrice;
             const itemSavings = originalPrice - itemPrice;
 
             if (itemSavings > 0) {
@@ -1168,13 +1169,15 @@
         const googleScriptURL = 'https://script.google.com/macros/s/AKfycbxpYs7pXlvoc0sb1RURk_v5KbFeG7TmMVlot6mi3alhOCWgk3jjj6jNf3_nIxiZsWbR/exec';
 
         try {
+            console.log('Sending code for validation:', codeInput); // Debugging log
             const validationResponse = await fetch(`${googleScriptURL}?action=validateCode&code=${codeInput}`);
             const validationResult = await validationResponse.json();
+            console.log('Validation API response:', validationResult); // Debugging log
 
             if (validationResult.status === 'success' && validationResult.isValid) {
                 const orderNumber = `FL-${Date.now().toString().slice(-6)}`;
                 
-                // Construct items string for Google Sheet
+                // Construct items string for Google Sheet (includes pricing breakdown)
                 const aloeDrinkIds = [1, 2, 3];
                 let itemsListForSheet = [];
 
@@ -1184,7 +1187,7 @@
                     const itemPrice = isPromoActive() && productData.promoPrice && !productData.specialPromo ? productData.promoPrice : originalPrice;
                     const savings = originalPrice - itemPrice;
 
-                    itemsListForSheet.push(`${item.name} (x${item.quantity}) - Original RM${originalPrice.toFixed(2)}, Applied RM${itemPrice.toFixed(2)}, Savings RM${savings.toFixed(2)}`);
+                    itemsListForSheet.push(`${item.name} (x${item.quantity}) - Orig: RM${originalPrice.toFixed(2)}, Disc: RM${itemPrice.toFixed(2)}, Savings: RM${savings.toFixed(2)}`);
                 });
 
                 // Add Aloe Trio bundle summary for sheet if applicable
@@ -1198,8 +1201,10 @@
                     const appliedBundleCost = (numPairs * 200) + (remainingSingles * aloeRetailPrice);
                     const bundleSavings = originalBundleValue - appliedBundleCost;
                     
+                    let bundleItemsNames = aloeDrinkItemsInCart.map(item => `${item.name} x${item.quantity}`).join(', ');
+
                     if (numPairs > 0) {
-                        itemsListForSheet.push(`Aloe Trio Combo Offer: ${numPairs * 2} items for RM ${numPairs * 200}.00 (Total Savings: RM ${bundleSavings.toFixed(2)})`);
+                        itemsListForSheet.push(`Aloe Trio Combo Offer: (${bundleItemsNames}) ${numPairs * 2} items for RM ${numPairs * 200}.00 (Total Savings: RM ${bundleSavings.toFixed(2)})`);
                     }
                 }
                 
@@ -1216,8 +1221,9 @@
                     customerAddress: pendingOrder.customerAddress,
                     items: itemsStringForSheet, // Use the detailed string for the sheet
                     totalAmount: pendingOrder.totalAmount,
-                    totalPoints: pendingOrder.totalPointsForThisPurchase, // This will be updated by script to total accumulated
-                    usedCode: codeInput
+                    totalPoints: pendingOrder.totalPointsForThisPurchase, // This will be handled by script to calculate total accumulated
+                    usedCode: codeInput,
+                    customerPAC: pendingOrder.customerPAC || '' // Pass existing PAC if available, else empty. Google Script should handle.
                 };
 
                 const recordResponse = await fetch(googleScriptURL, {
@@ -1225,11 +1231,12 @@
                     body: JSON.stringify(orderData)
                 });
                 const recordResult = await recordResponse.json();
+                console.log('Record API response:', recordResult); // Debugging log
 
                 if (recordResult.status === 'success') {
                     // Pass current points earned and total accumulated points to PDF/Email generation
-                    generatePDF(orderData, pendingOrder, recordResult.newPAC, recordResult.totalPoints, pendingOrder.totalPointsForThisPurchase);
-                    sendReceiptByEmail(orderData, pendingOrder, recordResult.newPAC, recordResult.totalPoints, pendingOrder.totalPointsForThisPurchase);
+                    generatePDF(orderData, pendingOrder, recordResult.customerPAC, recordResult.totalPoints, pendingOrder.totalPointsForThisPurchase);
+                    sendReceiptByEmail(orderData, pendingOrder, recordResult.customerPAC, recordResult.totalPoints, pendingOrder.totalPointsForThisPurchase);
 
                     statusEl.textContent = 'Purchase verified! Your receipt is downloading...';
                     statusEl.style.color = 'green';
