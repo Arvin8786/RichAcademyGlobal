@@ -1097,6 +1097,7 @@
             const originalPrice = productData.price;
             const itemPrice = isPromoActive() && productData.promoPrice ? productData.promoPrice : originalPrice;
             const itemSavings = originalPrice - itemPrice;
+            otherItemsCost += itemPrice * item.quantity; // Accumulate cost here
 
             if (itemSavings > 0) {
                 whatsappOtherItemsDetails += `- ${item.name} (x${item.quantity}) @ RM ${itemPrice.toFixed(2)}/pc (Original: RM ${originalPrice.toFixed(2)}, Save RM ${itemSavings.toFixed(2)})\n`;
@@ -1144,6 +1145,7 @@
         document.getElementById('verification-view').style.display = 'block';
     }
 
+    //=========== FIXED FUNCTION =================================================================
     async function verifyPurchase() {
         const codeInput = document.getElementById('verification-code').value.trim();
         const statusEl = document.getElementById('verification-status');
@@ -1169,47 +1171,37 @@
         const googleScriptURL = 'https://script.google.com/macros/s/AKfycbxpYs7pXlvoc0sb1RURk_v5KbFeG7TmMVlot6mi3alhOCWgk3jjj6jNf3_nIxiZsWbR/exec';
 
         try {
-            console.log('Sending code for validation:', codeInput); // Debugging log
+            // Step 1: Validate the code
             const validationResponse = await fetch(`${googleScriptURL}?action=validateCode&code=${codeInput}`);
+            if (!validationResponse.ok) {
+                // This catches network errors or server errors (like 500, 404)
+                throw new Error(`Validation server error: ${validationResponse.statusText}`);
+            }
             const validationResult = await validationResponse.json();
-            console.log('Validation API response:', validationResult); // Debugging log
 
             if (validationResult.status === 'success' && validationResult.isValid) {
+                // Step 2: Code is valid, proceed to record the order
                 const orderNumber = `FL-${Date.now().toString().slice(-6)}`;
                 
-                // Construct items string for Google Sheet (includes pricing breakdown)
+                const itemsListForSheet = [];
                 const aloeDrinkIds = [1, 2, 3];
-                let itemsListForSheet = [];
-
                 pendingOrder.cart.forEach(item => {
                     const productData = products.find(p => p.id === item.id);
-                    const originalPrice = productData.price;
-                    const itemPrice = isPromoActive() && productData.promoPrice && !productData.specialPromo ? productData.promoPrice : originalPrice;
-                    const savings = originalPrice - itemPrice;
-
-                    itemsListForSheet.push(`${item.name} (x${item.quantity}) - Orig: RM${originalPrice.toFixed(2)}, Disc: RM${itemPrice.toFixed(2)}, Savings: RM${savings.toFixed(2)}`);
+                    const isAloeDrink = aloeDrinkIds.includes(item.id);
+                    // For non-aloe drinks, apply 5% promo. For aloe-drinks, this will be handled in a summary line.
+                    const itemPrice = (isPromoActive() && productData.promoPrice && !isAloeDrink) ? productData.promoPrice : productData.price;
+                    itemsListForSheet.push(`${item.name} (x${item.quantity}) @ RM ${itemPrice.toFixed(2)}`);
                 });
 
-                // Add Aloe Trio bundle summary for sheet if applicable
+                // Add a summary line for the special Aloe Trio promo if it was applied
                 const aloeDrinkItemsInCart = pendingOrder.cart.filter(item => aloeDrinkIds.includes(item.id));
                 const aloeDrinkCount = aloeDrinkItemsInCart.reduce((sum, item) => sum + item.quantity, 0);
-                if (aloeDrinkCount > 0 && isPromoActive()) {
+                if (aloeDrinkCount > 0 && isPromoActive() && Math.floor(aloeDrinkCount / 2) > 0) {
                     const numPairs = Math.floor(aloeDrinkCount / 2);
-                    const remainingSingles = aloeDrinkCount % 2;
-                    const aloeRetailPrice = products.find(p => p.id === 1).price;
-                    const originalBundleValue = (numPairs * 2 * aloeRetailPrice) + (remainingSingles * aloeRetailPrice);
-                    const appliedBundleCost = (numPairs * 200) + (remainingSingles * aloeRetailPrice);
-                    const bundleSavings = originalBundleValue - appliedBundleCost;
-                    
-                    let bundleItemsNames = aloeDrinkItemsInCart.map(item => `${item.name} x${item.quantity}`).join(', ');
-
-                    if (numPairs > 0) {
-                        itemsListForSheet.push(`Aloe Trio Combo Offer: (${bundleItemsNames}) ${numPairs * 2} items for RM ${numPairs * 200}.00 (Total Savings: RM ${bundleSavings.toFixed(2)})`);
-                    }
+                    itemsListForSheet.push(`PROMO: Aloe Trio Combo Applied (${numPairs} pairs for RM ${numPairs * 200})`);
                 }
-                
-                const itemsStringForSheet = itemsListForSheet.join('; ');
 
+                const itemsStringForSheet = itemsListForSheet.join('; ');
 
                 const orderData = {
                     action: 'addOrder',
@@ -1219,22 +1211,31 @@
                     customerPhone: pendingOrder.customerPhone,
                     customerEmail: pendingOrder.customerEmail,
                     customerAddress: pendingOrder.customerAddress,
-                    items: itemsStringForSheet, // Use the detailed string for the sheet
+                    items: itemsStringForSheet,
                     totalAmount: pendingOrder.totalAmount,
-                    totalPoints: pendingOrder.totalPointsForThisPurchase, // This will be handled by script to calculate total accumulated
+                    totalPoints: pendingOrder.totalPointsForThisPurchase,
                     usedCode: codeInput,
-                    customerPAC: pendingOrder.customerPAC || '' // Pass existing PAC if available, else empty. Google Script should handle.
+                    customerPAC: pendingOrder.customerPAC || ''
                 };
+                
+                // Use FormData to avoid certain CORS issues with POST requests
+                const formData = new FormData();
+                for (const key in orderData) {
+                    formData.append(key, orderData[key]);
+                }
 
                 const recordResponse = await fetch(googleScriptURL, {
                     method: 'POST',
-                    body: JSON.stringify(orderData)
+                    body: formData // Sending as FormData
                 });
+
+                if (!recordResponse.ok) {
+                    throw new Error(`Recording server error: ${recordResponse.statusText}`);
+                }
                 const recordResult = await recordResponse.json();
-                console.log('Record API response:', recordResult); // Debugging log
 
                 if (recordResult.status === 'success') {
-                    // Pass current points earned and total accumulated points to PDF/Email generation
+                    // Step 3: Success! Generate receipts and clean up.
                     generatePDF(orderData, pendingOrder, recordResult.customerPAC, recordResult.totalPoints, pendingOrder.totalPointsForThisPurchase);
                     sendReceiptByEmail(orderData, pendingOrder, recordResult.customerPAC, recordResult.totalPoints, pendingOrder.totalPointsForThisPurchase);
 
@@ -1249,22 +1250,28 @@
                         toggleCart(true);
                         verifyBtn.disabled = false;
                     }, 2500);
+
                 } else {
-                    throw new Error(recordResult.message || 'Failed to record order.');
+                    // The script ran but reported a failure (e.g., couldn't write to sheet)
+                    throw new Error(recordResult.message || 'Failed to record order in spreadsheet.');
                 }
 
             } else {
+                // The code was invalid or already used
                 statusEl.textContent = validationResult.message || 'Invalid or already used verification code.';
                 statusEl.style.color = 'red';
                 verifyBtn.disabled = false;
             }
         } catch (error) {
-            console.error('Verification Error:', error);
-            statusEl.textContent = 'An error occurred. Please try again.';
+            console.error('Verification Process Error:', error);
+            // This single catch block will handle network errors, JSON parsing errors, and thrown errors
+            statusEl.textContent = `An error occurred: ${error.message}. Please check console or contact owner.`;
             statusEl.style.color = 'red';
             verifyBtn.disabled = false;
         }
     }
+    //=============================================================================================
+
 
     // Added two new parameters for point display
     function sendReceiptByEmail(record, orderDetails, customerPAC, totalAccumulatedPoints, currentPurchasePoints) {
