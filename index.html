@@ -43,6 +43,10 @@
         0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
         100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
     }
+    @keyframes marquee {
+        0%   { transform: translateX(0%); }
+        100% { transform: translateX(-100%); }
+    }
 
     /* --- Base Styles --- */
     *, *::before, *::after { box-sizing: border-box; }
@@ -105,10 +109,32 @@
         height: 80px;
     }
 
+    /* New: Promo Running Banner */
+    #promo-running-banner {
+      background-color: var(--secondary-color); /* Orange/Yellow */
+      color: var(--light-text);
+      padding: 10px 0;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+      overflow: hidden; /* Crucial for marquee effect */
+      white-space: nowrap; /* Keep text on one line */
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: sticky; /* Make it sticky below header */
+      top: 81px; /* Header is 80px + 1px border */
+      z-index: 99; /* Below nav but above main content */
+    }
+    #promo-running-banner .marquee-content {
+        display: inline-block;
+        padding-left: 100%; /* Start off-screen */
+        animation: marquee 20s linear infinite; /* Adjust duration as needed */
+    }
+
     nav {
       background-color: var(--primary-color);
       position: sticky;
-      top: 0;
+      /* Adjust top to be below header (80px + 1px) and banner (~43px) */
+      top: calc(81px + 43px); 
       z-index: 100;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
@@ -160,7 +186,7 @@
       flex-direction: column;
       position: relative;
       transition: all 0.3s ease;
-      overflow: hidden;
+      overflow: hidden; /* Important for containing the image, but badge needs careful positioning */
     }
     .product:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0,0,0,0.12); }
     .product.promo-highlight { animation: promoGlow 2.5s infinite ease-in-out; }
@@ -185,10 +211,21 @@
     .btn-primary:hover { background: #123e5a; transform: scale(1.05); }
     .btn-secondary { background: var(--light-gray); color: var(--primary-color); border: 1px solid var(--primary-color); }
     .btn-secondary:hover { background: #e0e0e0; }
+    
+    /* Adjusted Featured Badge CSS */
     .featured-badge {
-      position: absolute; top: 15px; right: -40px; background: var(--secondary-color);
-      color: white; padding: 5px 40px; transform: rotate(45deg);
-      font-weight: bold; font-size: 0.9rem; box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      position: absolute; 
+      top: 10px; /* Adjusted: was 15px */
+      right: -25px; /* Adjusted: was -25px, keeping it to fine-tune visibility */
+      background: var(--secondary-color);
+      color: white; 
+      padding: 5px 30px; /* Adjusted: was 5px 30px, keeping for consistency with right */
+      transform: rotate(45deg);
+      transform-origin: 100% 0; /* Rotate from the top-right corner of the badge's own box */
+      font-weight: bold; 
+      font-size: 0.9rem; 
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      z-index: 10; /* Ensure it stays on top of content */
     }
 
     /* --- Program & Business Sections --- */
@@ -386,6 +423,14 @@
     </div>
   </header>
 
+  <!-- New: Promo Running Banner -->
+  <div id="promo-running-banner">
+      <div class="marquee-content">
+          ✨ Limited Time Offer on Aloe Vera Gel, Aloe Berry Nectar, Aloe Bits N' Peaches! Buy Any 2 for RM 200 + FREE Shipping! ✨ 
+          🎉 Plus, enjoy 5% off on ALL other products! 🎉
+      </div>
+  </div>
+
   <nav>
     <div class="container">
         <ul id="main-nav">
@@ -558,6 +603,14 @@
     </div>
   </div>
 
+  <!-- New: Promo Pop-up Modal -->
+  <div id="promo-popup-modal" class="modal">
+    <div class="modal-content" style="max-width: 800px; padding: 15px;">
+      <span class="close" onclick="closePromoPopup()">×</span>
+      <img src="promo.jpg" alt="Special Aloe Trio Offer" style="max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 8px;">
+    </div>
+  </div>
+
   <script>
     // --- DATA ---
     const products = [
@@ -652,7 +705,7 @@
                 <span class="new-price" style="font-size: 1.2rem; color: var(--primary-color); display: block; margin-top: 5px;">Buy any 2 for RM 200.00</span>
                 <div style="font-size: 0.9rem; color: var(--accent-color); font-weight: bold; margin-top: 5px;"><i class="fa-solid fa-truck-fast"></i> FREE Shipping!</div>
             `;
-            // Points for these will be calculated in cart based on promo, so display 0 here for clarity
+            // Points are based on actual spend, calculated in cart, so display 0 here for these specific products on the product card.
             points = 0; 
             productClasses += ' promo-highlight'; // Keep the glowing effect
         } else if (promoActive && product.promoPrice) {
@@ -835,17 +888,12 @@
         if (subtotal >= 250) return { fee: 0, message: "FREE" };
         if (cart.length === 0) return { fee: 0, message: "RM 0.00" };
         const baseShipping = 14.00;
-        // Check if there are multiple items for the reduction logic
-        if (cart.length > 1) {
-            const reductionPerItem = 0.30;
-            // The logic implies a reduction FOR EACH ADDITIONAL item after the first.
-            // So, for 2 items, it's baseShipping * (1 - 0.30)
-            // For 3 items, it's baseShipping * (1 - (0.30 * 2)) = baseShipping * 0.40
-            // etc.
-            const calculatedFee = baseShipping * (1 - (reductionPerItem * (cart.length - 1)));
-            return { fee: Math.max(0, calculatedFee), message: `RM ${Math.max(0, calculatedFee).toFixed(2)}` };
-        }
-        return { fee: baseShipping, message: `RM ${baseShipping.toFixed(2)}` };
+        // The logic implies a reduction FOR EACH ADDITIONAL item after the first.
+        // So, for 2 items, it's baseShipping * (1 - 0.30)
+        // For 3 items, it's baseShipping * (1 - (0.30 * 2)) = baseShipping * 0.40
+        // etc.
+        const calculatedFee = baseShipping * (1 - (0.30 * (cart.length - 1)));
+        return { fee: Math.max(0, calculatedFee), message: `RM ${Math.max(0, calculatedFee).toFixed(2)}` };
     }
     
     function updateCartDisplay() {
@@ -868,13 +916,11 @@
       let calculatedSubtotal = 0;
       let totalPoints = 0;
 
-      // Identify Aloe Vera Gel, Aloe Berry Nectar, Aloe Bits N' Peaches IDs
       const aloeDrinkIds = [1, 2, 3];
       let aloeDrinkCount = 0;
       let otherItemsCost = 0;
       let hasSpecialAloePromo = false; 
 
-      // Group cart items to handle special aloe promo calculation
       const aloeDrinkItemsInCart = cart.filter(item => aloeDrinkIds.includes(item.id));
       const otherItemsInCart = cart.filter(item => !aloeDrinkIds.includes(item.id));
 
@@ -915,8 +961,8 @@
           const aloeRetailPrice = products.find(p => p.id === 1).price; // Use any of the 3 aloe drinks' retail price
           
           aloeDrinksAppliedCost = (numPairs * 200) + (remainingSingles * aloeRetailPrice);
-          if (numPairs >= 1) {
-              hasSpecialAloePromo = true; // Flag for free shipping
+          if (numPairs >= 1) { // If at least one pair is bought, trigger free shipping
+              hasSpecialAloePromo = true; 
           }
       } else if (aloeDrinkCount > 0) {
           // If promo not active, charge all at retail
@@ -1403,6 +1449,20 @@
         }
     }
 
+    // New: Functions for the Promo Pop-up
+    function showPromoPopup() {
+        const promoPopupModal = document.getElementById('promo-popup-modal');
+        // Check sessionStorage to only show once per session
+        if (!sessionStorage.getItem('promoPopupShown')) {
+            promoPopupModal.style.display = 'flex';
+            sessionStorage.setItem('promoPopupShown', 'true');
+        }
+    }
+
+    function closePromoPopup() {
+        document.getElementById('promo-popup-modal').style.display = 'none';
+    }
+
     // Initialize the page
     document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -1411,8 +1471,11 @@
           document.body.classList.add('grand-opening-active');
           startCountdown();
           createConfetti();
+          showPromoPopup(); // Call the function to display the pop-up
       } else {
           document.getElementById('promo-details').innerHTML = '<div class="promo-period">Our Grand Opening promotion has ended.</div>';
+          // Hide banner if promo is not active
+          document.getElementById('promo-running-banner').style.display = 'none';
       }
 
       renderProducts();
