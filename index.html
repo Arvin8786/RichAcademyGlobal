@@ -43,10 +43,6 @@
         0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
         100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
     }
-    @keyframes marquee {
-        0%   { transform: translateX(0%); }
-        100% { transform: translateX(-100%); }
-    }
 
     /* --- Base Styles --- */
     *, *::before, *::after { box-sizing: border-box; }
@@ -58,6 +54,8 @@
       color: var(--dark-text);
       overflow-x: hidden;
       line-height: 1.6;
+      /* Adjusted: Add padding-top to account for the fixed running banner */
+      padding-top: 45px; /* Estimated height of the running banner */
     }
     .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
     h1, h2, h3, h4 { color: var(--primary-color); font-weight: 600; }
@@ -109,32 +107,33 @@
         height: 80px;
     }
 
-    /* New: Promo Running Banner */
+    /* Updated: Promo Running Banner */
     #promo-running-banner {
       background-color: var(--secondary-color); /* Orange/Yellow */
       color: var(--light-text);
       padding: 10px 0;
-      text-align: center;
+      text-align: center; /* Center content */
       font-weight: 700;
       font-size: 1.1rem;
-      overflow: hidden; /* Crucial for marquee effect */
-      white-space: nowrap; /* Keep text on one line */
+      position: fixed; /* Changed to fixed */
+      top: 0;
+      left: 0;
+      width: 100%;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      position: sticky; /* Make it sticky below header */
-      top: 81px; /* Header is 80px + 1px border */
-      z-index: 99; /* Below nav but above main content */
+      z-index: 101; /* Ensure it's on top of everything */
     }
-    #promo-running-banner .marquee-content {
-        display: inline-block;
-        padding-left: 100%; /* Start off-screen */
-        animation: marquee 20s linear infinite; /* Adjust duration as needed */
+    #promo-running-banner .marquee-content { 
+        /* Removed marquee specific styles (animation, white-space, padding-left) */
+        display: block; /* Ensure it behaves like a normal block element */
+        animation: none; /* Disable animation */
+        padding-left: 0;
     }
 
     nav {
       background-color: var(--primary-color);
       position: sticky;
-      /* Adjust top to be below header (80px + 1px) and banner (~43px) */
-      top: calc(81px + 43px); 
+      /* Adjusted top to be below the fixed banner's height */
+      top: 45px; /* Based on estimated height of #promo-running-banner */
       z-index: 100;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
@@ -212,20 +211,21 @@
     .btn-secondary { background: var(--light-gray); color: var(--primary-color); border: 1px solid var(--primary-color); }
     .btn-secondary:hover { background: #e0e0e0; }
     
-    /* Adjusted Featured Badge CSS */
+    /* Adjusted Featured Badge CSS for better visibility */
     .featured-badge {
       position: absolute; 
-      top: 10px; /* Adjusted: was 15px */
-      right: -25px; /* Adjusted: was -25px, keeping it to fine-tune visibility */
+      top: 10px; /* Adjusted: slightly more inside from the top */
+      right: -10px; /* Adjusted: more inside from the right */
       background: var(--secondary-color);
       color: white; 
-      padding: 5px 30px; /* Adjusted: was 5px 30px, keeping for consistency with right */
+      padding: 5px 25px; /* Adjusted: slightly less padding to fit better */
       transform: rotate(45deg);
       transform-origin: 100% 0; /* Rotate from the top-right corner of the badge's own box */
       font-weight: bold; 
       font-size: 0.9rem; 
       box-shadow: 0 3px 10px rgba(0,0,0,0.2);
       z-index: 10; /* Ensure it stays on top of content */
+      white-space: nowrap; /* Prevent text wrapping inside the badge */
     }
 
     /* --- Program & Business Sections --- */
@@ -307,9 +307,15 @@
     }
     .modal-content {
       background-color: #fefefe; padding: 30px; border-radius: var(--border-radius);
-      width: 90%; max-width: 600px; animation: slideIn 0.4s ease;
+      width: 90%; max-width: 600px; /* Default max-width for modals */
+      animation: slideIn 0.4s ease;
       max-height: 90vh; /* Set max height */
       overflow-y: auto; /* Enable scrolling */
+    }
+    /* Specific adjustment for the promo pop-up modal content */
+    #promo-popup-modal .modal-content {
+      max-width: 550px; /* Adjusted to make it smaller */
+      padding: 15px; /* Keep padding light for image */
     }
     .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; transition: color 0.3s; }
     .close:hover { color: black; }
@@ -423,7 +429,7 @@
     </div>
   </header>
 
-  <!-- New: Promo Running Banner -->
+  <!-- Updated: Promo Running Banner -->
   <div id="promo-running-banner">
       <div class="marquee-content">
           ✨ Limited Time Offer on Aloe Vera Gel, Aloe Berry Nectar, Aloe Bits N' Peaches! Buy Any 2 for RM 200 + FREE Shipping! ✨ 
@@ -605,7 +611,7 @@
 
   <!-- New: Promo Pop-up Modal -->
   <div id="promo-popup-modal" class="modal">
-    <div class="modal-content" style="max-width: 800px; padding: 15px;">
+    <div class="modal-content" style="max-width: 550px; padding: 15px;">
       <span class="close" onclick="closePromoPopup()">×</span>
       <img src="promo.jpg" alt="Special Aloe Trio Offer" style="max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 8px;">
     </div>
@@ -929,11 +935,11 @@
         const productData = products.find(p => p.id === item.id);
         let displayPrice = productData.price; // Default to retail price for display
         
+        // If it's not one of the aloe drinks and there's a promoPrice, apply it for display
         if (!aloeDrinkIds.includes(item.id) && isPromoActive() && productData.promoPrice) {
-            displayPrice = productData.promoPrice; // Apply 5% promo for others
+            displayPrice = productData.promoPrice; 
         }
         // Special aloe promo price is applied in summary, not per item here
-
         itemsHTML += `
           <div class="cart-item">
             <div class="cart-item-details">
