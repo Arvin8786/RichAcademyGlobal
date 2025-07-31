@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Forever Living by Muhd Arvind Isa - Grand Opening Special</title>
+  <title>Forever Living by Mohd Arvind Isa - Grand Opening Special</title>
   
   <!-- Google Fonts & Font Awesome Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -101,17 +101,18 @@
       position: relative;
     }
     .header-content {
-        /* Removed flex properties to allow text-align: center on parent header to work */
-        /* display: block; is default but good for clarity sometimes */
+        display: flex; /* Re-added flex for centering children */
+        align-items: center; /* Vertically align items */
+        justify-content: center; /* Horizontally center items */
+        gap: 20px; /* Space between logo and h1 */
     }
     .header-logo {
         width: 80px;
         height: 80px;
-        display: block; /* Ensure it's a block element to be centered by text-align */
-        margin: 0 auto 10px; /* Center and add some bottom margin */
+        /* Removed display: block; margin: 0 auto; as flex container handles centering */
     }
     .header-content h1 {
-        text-align: center; /* Ensures the headline and tagline are centered */
+        /* Removed text-align: center as flex container handles centering */
         margin: 0; /* Remove default margin for better control */
     }
     .header-content h1 span {
@@ -123,7 +124,7 @@
       background-color: var(--secondary-color); /* Orange/Yellow */
       color: var(--light-text);
       padding: 10px 0;
-      text-align: center; /* Center content when not running, but marquee takes precedence */
+      text-align: center; 
       font-weight: 700;
       font-size: 1.1rem;
       position: fixed; /* Fixed at the top */
@@ -231,7 +232,7 @@
       background: var(--secondary-color);
       color: white; 
       padding: 5px 25px; /* Padding for text inside the badge */
-      transform: rotate(45deg) translate(15%, -65%); /* Rotates 45deg, then moves by percentage of its own size to position outside the corner */
+      transform: rotate(45deg) translate(25%, -65%); /* Rotates 45deg, then moves by percentage of its own size to position outside the corner */
       transform-origin: 0% 0%; /* Rotate around top-left of the badge's transformed box */
       font-weight: bold; 
       font-size: 0.9rem; 
@@ -435,7 +436,7 @@
             <!-- Logo and H1 are now centered by text-align: center on the header -->
             <img src="FL.jpg" alt="Business Logo" class="header-logo" onerror="this.style.display='none'">
             <h1>
-              FOREVER LIVING by Muhd Arvind Isa
+              FOREVER LIVING by Mohd Arvind Isa
               <span style="font-size: 1rem; color: #555; display: block; font-weight: 400;">Quality Wellness Products</span>
             </h1>
         </div>
@@ -563,7 +564,7 @@
 
   <footer>
     <div class="container">
-      <p>© 2025 Forever Living by Muhd Arvind Isa. All rights reserved.</p>
+      <p>© 2025 Forever Living by Mohd Arvind Isa. All rights reserved.</p>
       <div class="timestamp">Last updated: <span id="current-date"></span></div>
       <section class="disclaimer">
         <strong>Disclaimer:</strong> This website is operated by an independent Forever Business Owner. The products shown are not intended to diagnose, treat, cure, or prevent any specific disease or class of diseases. You should consult your family physician if you are experiencing a medical problem. Statements and information provided on this site are for informational purposes only and are not intended to substitute for advice from your physician or other health care professional.
@@ -980,9 +981,14 @@
 
           if (numPairs >= 1) { // If at least one pair is bought, trigger free shipping
               hasSpecialAloePromo = true; 
+              
+              // List specific items in the bundle message
+              let bundleItemsList = aloeDrinkItemsInCart.map(item => `${item.name} x${item.quantity}`).join(', ');
+
               aloePromoMessageHtml = `<div style="background-color: #e0f8f0; padding: 10px; border-radius: 8px; margin-top: 10px; text-align: center; border: 1px dashed var(--accent-color);">
-                <strong>Aloe Trio Special Applied:</strong> ${numPairs * 2} items for RM ${numPairs * 200}.00
-                <br><em>(Individual items: RM ${aloeRetailPrice.toFixed(2)})</em>
+                <strong>Aloe Trio Combo Offer Applied!</strong>
+                <br><em>(${bundleItemsList})</em>
+                <br>Your ${numPairs * 2} items for RM ${numPairs * 200}.00!
                 <br><i class="fa-solid fa-truck-fast"></i> FREE Shipping on this bundle!
                 </div>`;
           } 
@@ -1115,8 +1121,11 @@
             const numPairs = Math.floor(aloeDrinkCount / 2);
             const remainingSingles = aloeDrinkCount % 2;
             const aloeRetailPrice = products.find(p => p.id === 1).price;
+            
+            let bundleItemsList = aloeDrinkItemsInCart.map(item => `${item.name} x${item.quantity}`).join(', ');
+
             if (numPairs > 0) {
-                message += `\n*Aloe Drinks Special:* ${numPairs * 2} items for RM ${numPairs * 200}.00\n`;
+                message += `\n*Aloe Trio Combo Offer:* (${bundleItemsList}) - ${numPairs * 2} items for RM ${numPairs * 200}.00\n`;
             }
             if (remainingSingles > 0) {
                 message += `*Remaining Aloe Drinks (Retail):* ${remainingSingles} items @ RM ${aloeRetailPrice.toFixed(2)}/pc\n`;
@@ -1184,8 +1193,10 @@
                     const remainingSingles = aloeDrinkCount % 2;
                     const aloeRetailPrice = products.find(p => p.id === 1).price;
                     
+                    let bundleItemsNames = aloeDrinkItemsInCart.map(item => `${item.name} x${item.quantity}`).join(', ');
+
                     if (numPairs > 0) {
-                        itemsList.push(`Aloe Drinks Special: ${numPairs * 2} items (any combination of Aloe Vera Gel, Berry Nectar, Peaches) for RM ${numPairs * 200}.00`);
+                        itemsList.push(`Aloe Trio Combo Offer: (${bundleItemsNames}) ${numPairs * 2} items for RM ${numPairs * 200}.00`);
                     }
                     if (remainingSingles > 0) {
                         itemsList.push(`Remaining Aloe Drinks: ${remainingSingles} items @ RM ${aloeRetailPrice.toFixed(2)}/pc`);
@@ -1282,8 +1293,10 @@
             const remainingSingles = aloeDrinkCount % 2;
             const aloeRetailPrice = products.find(p => p.id === 1).price;
 
+            let bundleItemsNames = aloeDrinkItemsInCart.map(item => `${item.name} x${item.quantity}`).join(', ');
+
             if (numPairs > 0) {
-                emailItemsHtml += `<tr><td><em>Aloe Drinks Special (Any 2 for RM 200.00)</em></td><td style="text-align: center;">${numPairs * 2}</td><td style="text-align: right;">100.00 (avg)</td><td style="text-align: right;">${(numPairs * 200).toFixed(2)}</td></tr>`;
+                emailItemsHtml += `<tr><td><em>Aloe Trio Combo Offer (${bundleItemsNames})</em></td><td style="text-align: center;">${numPairs * 2}</td><td style="text-align: right;">100.00 (avg)</td><td style="text-align: right;">${(numPairs * 200).toFixed(2)}</td></tr>`;
             }
             if (remainingSingles > 0) {
                 emailItemsHtml += `<tr><td><em>Remaining Aloe Drinks (Retail)</em></td><td style="text-align: center;">${remainingSingles}</td><td style="text-align: right;">${aloeRetailPrice.toFixed(2)}</td><td style="text-align: right;">${(remainingSingles * aloeRetailPrice).toFixed(2)}</td></tr>`;
@@ -1341,7 +1354,7 @@
         doc.text("Purchase Receipt", 105, 20, { align: 'center' });
         
         doc.setFontSize(11);
-        doc.text("Forever Living by Muhd Arvind Isa", 105, 30, { align: 'center' });
+        doc.text("Forever Living by Mohd Arvind Isa", 105, 30, { align: 'center' });
         doc.text("WhatsApp: 601111033154", 105, 35, { align: 'center' });
 
         doc.setFontSize(12);
@@ -1375,8 +1388,10 @@
             const remainingSingles = aloeDrinkCount % 2;
             const aloeRetailPrice = products.find(p => p.id === 1).price;
 
+            let bundleItemsNames = aloeDrinkItemsInCart.map(item => `${item.name} x${item.quantity}`).join(', ');
+
             if (numPairs > 0) {
-                tableRows.push([`Aloe Drinks Special (Any 2 for RM 200.00)`, numPairs * 2, `100.00 (avg)`, (numPairs * 200).toFixed(2)]);
+                tableRows.push([`Aloe Trio Combo Offer (${bundleItemsNames})`, numPairs * 2, `100.00 (avg)`, (numPairs * 200).toFixed(2)]);
             }
             if (remainingSingles > 0) {
                 // For PDF, it's simpler to just add a generic line for remaining singles
