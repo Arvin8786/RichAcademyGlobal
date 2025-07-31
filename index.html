@@ -58,7 +58,6 @@
       color: var(--dark-text);
       overflow-x: hidden;
       line-height: 1.6;
-      /* Adjusted: Add padding-top to account for the fixed running banner */
       padding-top: 45px; /* Estimated height of the running banner */
     }
     .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
@@ -109,10 +108,8 @@
     .header-logo {
         width: 80px;
         height: 80px;
-        /* Removed display: block; margin: 0 auto; as flex container handles centering */
     }
     .header-content h1 {
-        /* Removed text-align: center as flex container handles centering */
         margin: 0; /* Remove default margin for better control */
     }
     .header-content h1 span {
@@ -145,7 +142,6 @@
     nav {
       background-color: var(--primary-color);
       position: sticky;
-      /* Adjusted top to be below the fixed banner's height */
       top: 45px; /* Based on estimated height of #promo-running-banner */
       z-index: 100;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -433,7 +429,6 @@
   <header>
     <div class="container">
         <div class="header-content">
-            <!-- Logo and H1 are now centered by text-align: center on the header -->
             <img src="FL.jpg" alt="Business Logo" class="header-logo" onerror="this.style.display='none'">
             <h1>
               FOREVER LIVING by Mohd Arvind Isa
@@ -682,13 +677,12 @@
         { id: 46, name: "HYDRATING SERUM", price: 156.56, promoPrice: 148.73, image: "hydrating-serum.jpg", benefits: "Boosts skin hydration.", consumption: "Apply to face." },
         { id: 47, name: "S.REFRESHING G.CLEANSER", price: 115.61, promoPrice: 109.83, image: "refreshing-cleanser.jpg", benefits: "Gentle gel skin cleanser.", consumption: "Use morning and night." },
         { id: 48, name: "S. IILUMINATING GEL", price: 107.35, promoPrice: 102.00, image: "illuminating-gel.jpg", benefits: "Brightens skin appearance.", consumption: "Apply to face." },
-        { id: 49, name: "S. REFINING GEL MASK", price: 115.61, promoPrice: 109.83, image: "refining-mask.jpg", benefits: "Refines pores and moisturizes skin.", consumption: "Use 2-3 times a week." },
+        { id: 49, "name": "S. REFINING GEL MASK", price: 115.61, promoPrice: 109.83, image: "refining-mask.jpg", benefits: "Refines pores and moisturizes skin.", consumption: "Use 2-3 times a week." },
         { id: 50, name: "S.SMOOTHING GEL MOISTURIZER", price: 115.76, promoPrice: 109.97, image: "smoothing-moisturizer.jpg", benefits: "Lightweight gel moisturizer for skin.", consumption: "Apply to face." },
         { id: 51, name: "ALOE BIO-CELLULOSE MASK", price: 146.00, promoPrice: 138.70, image: "bio-cellulose-mask.jpg", benefits: "Deeply hydrates and conditions skin.", consumption: "Use once a week." },
         { id: 52, name: "REPLENISHING SKIN OIL", price: 132.00, promoPrice: 125.40, image: "skin-oil.jpg", benefits: "Nourishes with a blend of oils for skin.", consumption: "Apply a few drops to face." },
         { id: 53, name: "PROTECTING DAY LOTION", price: 167.99, promoPrice: 159.59, image: "day-lotion.jpg", benefits: "Moisturizes and protects skin with SPF.", consumption: "Apply in the morning." },
     ];
-    // Rewards data is still used by the 'Rewards' tab
     const rewards = [
         { id: 'RWD01', name: 'RM 5 Voucher', cost: 500, image: 'rm5.jpg', fallbackImage: 'https://i.imgur.com/O9yP2aH.png', available: true },
         { id: 'RWD02', name: 'RM 10 Voucher', cost: 1000, image: 'rm10.jpg', fallbackImage: 'https://i.imgur.com/sY2a2qG.png', available: true },
@@ -908,10 +902,6 @@
         if (subtotal >= 250) return { fee: 0, message: "FREE" };
         if (cart.length === 0) return { fee: 0, message: "RM 0.00" };
         const baseShipping = 14.00;
-        // The logic implies a reduction FOR EACH ADDITIONAL item after the first.
-        // So, for 2 items, it's baseShipping * (1 - 0.30)
-        // For 3 items, it's baseShipping * (1 - (0.30 * 2)) = baseShipping * 0.40
-        // etc.
         const calculatedFee = baseShipping * (1 - (0.30 * (cart.length - 1)));
         return { fee: Math.max(0, calculatedFee), message: `RM ${Math.max(0, calculatedFee).toFixed(2)}` };
     }
@@ -934,7 +924,6 @@
       
       let itemsHTML = '';
       let calculatedSubtotal = 0;
-      let totalPoints = 0;
 
       const aloeDrinkIds = [1, 2, 3];
       let aloeDrinkCount = 0;
@@ -983,11 +972,14 @@
               hasSpecialAloePromo = true; 
               
               // List specific items in the bundle message
-              let bundleItemsList = aloeDrinkItemsInCart.map(item => `${item.name} x${item.quantity}`).join(', ');
+              let bundleItemsListNames = [];
+              aloeDrinkItemsInCart.forEach(item => {
+                  bundleItemsListNames.push(`${item.name} x${item.quantity}`);
+              });
 
               aloePromoMessageHtml = `<div style="background-color: #e0f8f0; padding: 10px; border-radius: 8px; margin-top: 10px; text-align: center; border: 1px dashed var(--accent-color);">
                 <strong>Aloe Trio Combo Offer Applied!</strong>
-                <br><em>(${bundleItemsList})</em>
+                <br><em>(${bundleItemsListNames.join(', ')})</em>
                 <br>Your ${numPairs * 2} items for RM ${numPairs * 200}.00!
                 <br><i class="fa-solid fa-truck-fast"></i> FREE Shipping on this bundle!
                 </div>`;
@@ -1013,7 +1005,7 @@
       });
 
       calculatedSubtotal = otherItemsCost + aloeDrinksAppliedCost;
-      totalPoints = Math.floor(calculatedSubtotal); // Points based on final subtotal after all promos
+      const totalPoints = Math.floor(calculatedSubtotal); // Points based on final subtotal after all promos
 
       const shipping = calculateShipping(cart, calculatedSubtotal, hasSpecialAloePromo);
       const total = calculatedSubtotal + shipping.fee;
@@ -1051,7 +1043,7 @@
       
         // Re-calculate based on cart items for WhatsApp message and PDF
         let calculatedSubtotal = 0;
-        let totalPoints = 0;
+        let totalPointsForThisPurchase = 0; // Points specifically for THIS purchase
         const aloeDrinkIds = [1, 2, 3];
         let aloeDrinkCount = 0;
         let otherItemsCost = 0;
@@ -1063,6 +1055,7 @@
         aloeDrinkItemsInCart.forEach(item => aloeDrinkCount += item.quantity);
 
         let aloeDrinksAppliedCost = 0;
+        let whatsappAloeSummary = '';
         if (aloeDrinkCount > 0 && isPromoActive()) {
             const numPairs = Math.floor(aloeDrinkCount / 2);
             const remainingSingles = aloeDrinkCount % 2;
@@ -1072,24 +1065,54 @@
             if (numPairs >= 1) {
                 hasSpecialAloePromo = true;
             }
+            
+            let bundleItemsListNames = [];
+            aloeDrinkItemsInCart.forEach(item => {
+                bundleItemsListNames.push(`${item.name} x${item.quantity}`);
+            });
+
+            const originalBundleValue = (numPairs * 2 * aloeRetailPrice) + (remainingSingles * aloeRetailPrice);
+            const bundleSavings = originalBundleValue - aloeDrinksAppliedCost;
+            
+            if (numPairs > 0) {
+                whatsappAloeSummary += `\n*Aloe Trio Combo Offer:* (${bundleItemsListNames.join(', ')}) - ${numPairs * 2} items for RM ${numPairs * 200}.00 (Save RM ${bundleSavings.toFixed(2)})`;
+            }
+            if (remainingSingles > 0) {
+                whatsappAloeSummary += `\n*Remaining Aloe Drinks (Retail):* ${remainingSingles} items @ RM ${aloeRetailPrice.toFixed(2)}/pc`;
+            }
+            whatsappAloeSummary += `\n(Includes FREE Shipping on this bundle!)`;
         } else if (aloeDrinkCount > 0) {
             const aloeRetailPrice = products.find(p => p.id === 1).price;
             aloeDrinksAppliedCost = aloeDrinkCount * aloeRetailPrice;
+            whatsappAloeSummary += `\n*Aloe Drinks (Retail Price):*`;
+            aloeDrinkItemsInCart.forEach(item => {
+                whatsappAloeSummary += `\n- ${item.name} (x${item.quantity}) @ RM ${item.price.toFixed(2)}/pc`;
+            });
         }
         
+        let whatsappOtherItemsDetails = '';
         otherItemsInCart.forEach(item => {
             const productData = products.find(p => p.id === item.id);
+            const originalPrice = productData.price;
             const itemPrice = isPromoActive() && productData.promoPrice ? productData.promoPrice : productData.price;
-            otherItemsCost += itemPrice * item.quantity;
+            const itemSavings = originalPrice - itemPrice;
+
+            if (itemSavings > 0) {
+                whatsappOtherItemsDetails += `- ${item.name} (x${item.quantity}) @ RM ${itemPrice.toFixed(2)}/pc (Original: RM ${originalPrice.toFixed(2)}, Save RM ${itemSavings.toFixed(2)})\n`;
+            } else {
+                whatsappOtherItemsDetails += `- ${item.name} (x${item.quantity}) @ RM ${itemPrice.toFixed(2)}/pc\n`;
+            }
         });
 
         calculatedSubtotal = otherItemsCost + aloeDrinksAppliedCost;
-        totalPoints = Math.floor(calculatedSubtotal);
+        totalPointsForThisPurchase = Math.floor(calculatedSubtotal); // This is points from current purchase
 
         const shipping = calculateShipping(cart, calculatedSubtotal, hasSpecialAloePromo);
         const total = calculatedSubtotal + shipping.fee;
         const fullAddress = `${address1}, ${address2 ? address2 + ', ' : ''}${city}, ${postcode} ${state}`;
       
+        // The pendingOrder will only store the CURRENT purchase points.
+        // Total accumulated points will come from Google Sheet API response.
         const pendingOrder = {
             customerName: name,
             customerPhone: phone,
@@ -1099,40 +1122,19 @@
             calculatedSubtotal: calculatedSubtotal, // Store calculated values
             shipping: shipping,
             totalAmount: total.toFixed(2),
-            totalPoints: totalPoints
+            totalPointsForThisPurchase: totalPointsForThisPurchase // Points for this specific order
         };
 
         sessionStorage.setItem('pendingOrder', JSON.stringify(pendingOrder));
 
         let message = `Hi, I would like to place an order:\n\n*Customer Details:*\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nAddress: ${fullAddress}\n\n--- ORDER DETAILS ---\n`;
         
-        // This part needs to reconstruct the item details for the WhatsApp message clearly
-        // Show how the promo was applied if applicable
-        aloeDrinkItemsInCart.forEach(item => {
-            message += `- ${item.name} (x${item.quantity}) @ RM ${products.find(p => p.id === item.id).price.toFixed(2)}/pc\n`;
-        });
-        otherItemsInCart.forEach(item => {
-            const productData = products.find(p => p.id === item.id);
-            const itemPrice = isPromoActive() && productData.promoPrice ? productData.promoPrice : productData.price;
-            message += `- ${item.name} (x${item.quantity}) @ RM ${itemPrice.toFixed(2)}/pc\n`;
-        });
-        
-        if (aloeDrinkCount > 0 && isPromoActive()) {
-            const numPairs = Math.floor(aloeDrinkCount / 2);
-            const remainingSingles = aloeDrinkCount % 2;
-            const aloeRetailPrice = products.find(p => p.id === 1).price;
-            
-            let bundleItemsList = aloeDrinkItemsInCart.map(item => `${item.name} x${item.quantity}`).join(', ');
-
-            if (numPairs > 0) {
-                message += `\n*Aloe Trio Combo Offer:* (${bundleItemsList}) - ${numPairs * 2} items for RM ${numPairs * 200}.00\n`;
-            }
-            if (remainingSingles > 0) {
-                message += `*Remaining Aloe Drinks (Retail):* ${remainingSingles} items @ RM ${aloeRetailPrice.toFixed(2)}/pc\n`;
-            }
+        if (whatsappOtherItemsDetails) {
+            message += `*Other Products:*\n${whatsappOtherItemsDetails}`;
         }
+        message += whatsappAloeSummary;
         
-        message += `\n--- SUMMARY ---\nSubtotal: RM ${calculatedSubtotal.toFixed(2)}\nShipping: ${shipping.message}\n*TOTAL: RM ${total.toFixed(2)}*\n`;
+        message += `\n\n--- SUMMARY ---\nSubtotal: RM ${calculatedSubtotal.toFixed(2)}\nShipping: ${shipping.message}\n*TOTAL: RM ${total.toFixed(2)}*\n`;
         message += `\nPlease confirm my order. Thank you!`;
       
         window.open(`https://wa.me/601111033154?text=${encodeURIComponent(message)}`, '_blank');
@@ -1172,43 +1174,36 @@
             if (validationResult.status === 'success' && validationResult.isValid) {
                 const orderNumber = `FL-${Date.now().toString().slice(-6)}`;
                 
-                // Construct items string with actual prices applied for recording
+                // Construct items string for Google Sheet
                 const aloeDrinkIds = [1, 2, 3];
-                let aloeDrinkCount = 0;
-                let itemsList = [];
-                const aloeDrinkItemsInCart = pendingOrder.cart.filter(item => aloeDrinkIds.includes(item.id));
-                const otherItemsInCart = pendingOrder.cart.filter(item => !aloeDrinkIds.includes(item.id));
+                let itemsListForSheet = [];
 
-                // Process other items first
-                otherItemsInCart.forEach(item => {
+                pendingOrder.cart.forEach(item => {
                     const productData = products.find(p => p.id === item.id);
-                    const itemPrice = isPromoActive() && productData.promoPrice ? productData.promoPrice : productData.price;
-                    itemsList.push(`${item.name} (x${item.quantity}) @ RM ${itemPrice.toFixed(2)}`);
+                    const originalPrice = productData.price;
+                    const itemPrice = isPromoActive() && productData.promoPrice && !productData.specialPromo ? productData.promoPrice : originalPrice;
+                    const savings = originalPrice - itemPrice;
+
+                    itemsListForSheet.push(`${item.name} (x${item.quantity}) - Original RM${originalPrice.toFixed(2)}, Applied RM${itemPrice.toFixed(2)}, Savings RM${savings.toFixed(2)}`);
                 });
 
-                // Process aloe drinks
-                aloeDrinkItemsInCart.forEach(item => aloeDrinkCount += item.quantity);
+                // Add Aloe Trio bundle summary for sheet if applicable
+                const aloeDrinkItemsInCart = pendingOrder.cart.filter(item => aloeDrinkIds.includes(item.id));
+                const aloeDrinkCount = aloeDrinkItemsInCart.reduce((sum, item) => sum + item.quantity, 0);
                 if (aloeDrinkCount > 0 && isPromoActive()) {
                     const numPairs = Math.floor(aloeDrinkCount / 2);
                     const remainingSingles = aloeDrinkCount % 2;
                     const aloeRetailPrice = products.find(p => p.id === 1).price;
+                    const originalBundleValue = (numPairs * 2 * aloeRetailPrice) + (remainingSingles * aloeRetailPrice);
+                    const appliedBundleCost = (numPairs * 200) + (remainingSingles * aloeRetailPrice);
+                    const bundleSavings = originalBundleValue - appliedBundleCost;
                     
-                    let bundleItemsNames = aloeDrinkItemsInCart.map(item => `${item.name} x${item.quantity}`).join(', ');
-
                     if (numPairs > 0) {
-                        itemsList.push(`Aloe Trio Combo Offer: (${bundleItemsNames}) ${numPairs * 2} items for RM ${numPairs * 200}.00`);
+                        itemsListForSheet.push(`Aloe Trio Combo Offer: ${numPairs * 2} items for RM ${numPairs * 200}.00 (Total Savings: RM ${bundleSavings.toFixed(2)})`);
                     }
-                    if (remainingSingles > 0) {
-                        itemsList.push(`Remaining Aloe Drinks: ${remainingSingles} items @ RM ${aloeRetailPrice.toFixed(2)}/pc`);
-                    }
-                } else {
-                    aloeDrinkItemsInCart.forEach(item => {
-                        const productData = products.find(p => p.id === item.id);
-                        itemsList.push(`${item.name} (x${item.quantity}) @ RM ${productData.price.toFixed(2)}/pc`);
-                    });
                 }
                 
-                const itemsString = itemsList.join('; ');
+                const itemsStringForSheet = itemsListForSheet.join('; ');
 
 
                 const orderData = {
@@ -1219,9 +1214,9 @@
                     customerPhone: pendingOrder.customerPhone,
                     customerEmail: pendingOrder.customerEmail,
                     customerAddress: pendingOrder.customerAddress,
-                    items: itemsString,
+                    items: itemsStringForSheet, // Use the detailed string for the sheet
                     totalAmount: pendingOrder.totalAmount,
-                    totalPoints: pendingOrder.totalPoints,
+                    totalPoints: pendingOrder.totalPointsForThisPurchase, // This will be updated by script to total accumulated
                     usedCode: codeInput
                 };
 
@@ -1232,8 +1227,9 @@
                 const recordResult = await recordResponse.json();
 
                 if (recordResult.status === 'success') {
-                    generatePDF(orderData, pendingOrder, recordResult.newPAC, recordResult.totalPoints);
-                    sendReceiptByEmail(orderData, pendingOrder, recordResult.newPAC, recordResult.totalPoints);
+                    // Pass current points earned and total accumulated points to PDF/Email generation
+                    generatePDF(orderData, pendingOrder, recordResult.newPAC, recordResult.totalPoints, pendingOrder.totalPointsForThisPurchase);
+                    sendReceiptByEmail(orderData, pendingOrder, recordResult.newPAC, recordResult.totalPoints, pendingOrder.totalPointsForThisPurchase);
 
                     statusEl.textContent = 'Purchase verified! Your receipt is downloading...';
                     statusEl.style.color = 'green';
@@ -1263,7 +1259,8 @@
         }
     }
 
-    function sendReceiptByEmail(record, orderDetails, newPAC, totalPoints) {
+    // Added two new parameters for point display
+    function sendReceiptByEmail(record, orderDetails, customerPAC, totalAccumulatedPoints, currentPurchasePoints) {
         // NOTE: Replace with your actual EmailJS credentials
         const serviceID = 'YOUR_SERVICE_ID'; // e.g., 'service_xxxxxx'
         const templateID = 'YOUR_TEMPLATE_ID'; // e.g., 'template_xxxxxx'
@@ -1274,37 +1271,69 @@
             return;
         }
 
-        // Reconstruct items HTML for email, similar to WhatsApp message logic
         const aloeDrinkIds = [1, 2, 3];
         let emailItemsHtml = '';
-        let aloeDrinkCount = 0;
         const aloeDrinkItemsInCart = orderDetails.cart.filter(item => aloeDrinkIds.includes(item.id));
         const otherItemsInCart = orderDetails.cart.filter(item => !aloeDrinkIds.includes(item.id));
 
+        // Add regular items first with price breakdown
         otherItemsInCart.forEach(item => {
             const productData = products.find(p => p.id === item.id);
-            const itemPrice = isPromoActive() && productData.promoPrice ? productData.promoPrice : productData.price;
-            emailItemsHtml += `<tr><td>${item.name}</td><td style="text-align: center;">${item.quantity}</td><td style="text-align: right;">${itemPrice.toFixed(2)}</td><td style="text-align: right;">${(itemPrice * item.quantity).toFixed(2)}</td></tr>`;
+            const originalPrice = productData.price;
+            const itemPrice = isPromoActive() && productData.promoPrice ? productData.promoPrice : originalPrice;
+            const savings = originalPrice - itemPrice;
+            emailItemsHtml += `<tr>
+                <td>${item.name}</td>
+                <td style="text-align: center;">${item.quantity}</td>
+                <td style="text-align: right;">${originalPrice.toFixed(2)}</td>
+                <td style="text-align: right;">${itemPrice.toFixed(2)}</td>
+                <td style="text-align: right;">${savings.toFixed(2)}</td>
+                <td style="text-align: right;">${(itemPrice * item.quantity).toFixed(2)}</td>
+            </tr>`;
         });
 
-        aloeDrinkItemsInCart.forEach(item => aloeDrinkCount += item.quantity);
+        // Add Aloe Trio bundle summary if applicable
+        const aloeDrinkCount = aloeDrinkItemsInCart.reduce((sum, item) => sum + item.quantity, 0);
         if (aloeDrinkCount > 0 && isPromoActive()) {
             const numPairs = Math.floor(aloeDrinkCount / 2);
             const remainingSingles = aloeDrinkCount % 2;
             const aloeRetailPrice = products.find(p => p.id === 1).price;
 
             let bundleItemsNames = aloeDrinkItemsInCart.map(item => `${item.name} x${item.quantity}`).join(', ');
+            const originalBundleValue = (numPairs * 2 * aloeRetailPrice) + (remainingSingles * aloeRetailPrice);
+            const appliedBundleCost = (numPairs * 200) + (remainingSingles * aloeRetailPrice);
+            const bundleSavings = originalBundleValue - appliedBundleCost;
 
             if (numPairs > 0) {
-                emailItemsHtml += `<tr><td><em>Aloe Trio Combo Offer (${bundleItemsNames})</em></td><td style="text-align: center;">${numPairs * 2}</td><td style="text-align: right;">100.00 (avg)</td><td style="text-align: right;">${(numPairs * 200).toFixed(2)}</td></tr>`;
+                emailItemsHtml += `<tr>
+                    <td colspan="2"><em>Aloe Trio Combo Offer (${bundleItemsNames})</em></td>
+                    <td style="text-align: right;">${originalBundleValue.toFixed(2)}</td>
+                    <td style="text-align: right;">${appliedBundleCost.toFixed(2)}</td>
+                    <td style="text-align: right;">${bundleSavings.toFixed(2)}</td>
+                    <td style="text-align: right;">${appliedBundleCost.toFixed(2)}</td>
+                </tr>`;
             }
             if (remainingSingles > 0) {
-                emailItemsHtml += `<tr><td><em>Remaining Aloe Drinks (Retail)</em></td><td style="text-align: center;">${remainingSingles}</td><td style="text-align: right;">${aloeRetailPrice.toFixed(2)}</td><td style="text-align: right;">${(remainingSingles * aloeRetailPrice).toFixed(2)}</td></tr>`;
+                emailItemsHtml += `<tr>
+                    <td colspan="2"><em>Remaining Aloe Drinks (Retail)</em></td>
+                    <td style="text-align: right;">${aloeRetailPrice.toFixed(2)}</td>
+                    <td style="text-align: right;">${aloeRetailPrice.toFixed(2)}</td>
+                    <td style="text-align: right;">0.00</td>
+                    <td style="text-align: right;">${aloeRetailPrice.toFixed(2)}</td>
+                </tr>`;
             }
-        } else {
+        } else if (aloeDrinkCount > 0) { // If promo not active, list at retail
             aloeDrinkItemsInCart.forEach(item => {
                 const productData = products.find(p => p.id === item.id);
-                emailItemsHtml += `<tr><td>${item.name}</td><td style="text-align: center;">${item.quantity}</td><td style="text-align: right;">${productData.price.toFixed(2)}</td><td style="text-align: right;">${(productData.price * item.quantity).toFixed(2)}</td></tr>`;
+                const originalPrice = productData.price;
+                emailItemsHtml += `<tr>
+                    <td>${item.name}</td>
+                    <td style="text-align: center;">${item.quantity}</td>
+                    <td style="text-align: right;">${originalPrice.toFixed(2)}</td>
+                    <td style="text-align: right;">${originalPrice.toFixed(2)}</td>
+                    <td style="text-align: right;">0.00</td>
+                    <td style="text-align: right;">${(originalPrice * item.quantity).toFixed(2)}</td>
+                </tr>`;
             });
         }
 
@@ -1317,11 +1346,12 @@
             customer_email: orderDetails.customerEmail,
             customer_address: orderDetails.customerAddress,
             items_html: emailItemsHtml,
-            subtotal: orderDetails.calculatedSubtotal.toFixed(2), // Use calculated subtotal
+            subtotal: orderDetails.calculatedSubtotal.toFixed(2),
             shipping: orderDetails.shipping.message,
             total_amount: orderDetails.totalAmount,
-            total_points: orderDetails.totalPoints,
-            personal_access_code: newPAC ? `Your new Personal Access Code is: ${newPAC}` : 'Your Personal Access Code remains the same.'
+            current_purchase_points: currentPurchasePoints, // Points from this order
+            total_accumulated_points: totalAccumulatedPoints, // Total points including this order
+            personal_access_code: customerPAC // The actual PAC from Google Sheets
         };
 
         emailjs.send(serviceID, templateID, templateParams, userID)
@@ -1329,7 +1359,8 @@
             .catch(error => console.log('Failed to send email.', error));
     }
 
-    function generatePDF(record, orderDetails, newPAC, totalPoints) {
+    // Added two new parameters for point display
+    function generatePDF(record, orderDetails, customerPAC, totalAccumulatedPoints, currentPurchasePoints) {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         const logo = document.querySelector('.header-logo');
@@ -1367,40 +1398,74 @@
         doc.text(orderDetails.customerEmail, 14, 88);
         doc.text(orderDetails.customerAddress, 14, 95);
 
-        const tableColumn = ["Item Description", "Quantity", "Unit Price (RM)", "Total (RM)"];
+        // Updated table headers for detailed pricing
+        const tableColumn = ["Item Description", "Qty", "Orig. Price (RM)", "Disc. Price (RM)", "Savings (RM)", "Total (RM)"];
         const tableRows = [];
 
-        // Logic to format table rows based on promo applied
         const aloeDrinkIds = [1, 2, 3];
-        let aloeDrinkCount = 0;
         const aloeDrinkItemsInCart = orderDetails.cart.filter(item => aloeDrinkIds.includes(item.id));
         const otherItemsInCart = orderDetails.cart.filter(item => !aloeDrinkIds.includes(item.id));
 
+        // Add regular items first with price breakdown
         otherItemsInCart.forEach(item => {
             const productData = products.find(p => p.id === item.id);
-            const itemPrice = isPromoActive() && productData.promoPrice ? productData.promoPrice : productData.price;
-            tableRows.push([ item.name, item.quantity, itemPrice.toFixed(2), (itemPrice * item.quantity).toFixed(2) ]);
+            const originalPrice = productData.price;
+            const itemPrice = isPromoActive() && productData.promoPrice ? productData.promoPrice : originalPrice;
+            const savings = originalPrice - itemPrice;
+            tableRows.push([ 
+                item.name, 
+                item.quantity, 
+                originalPrice.toFixed(2), 
+                itemPrice.toFixed(2), 
+                savings.toFixed(2), 
+                (itemPrice * item.quantity).toFixed(2) 
+            ]);
         });
 
-        aloeDrinkItemsInCart.forEach(item => aloeDrinkCount += item.quantity);
+        // Add Aloe Trio bundle summary if applicable
+        const aloeDrinkCount = aloeDrinkItemsInCart.reduce((sum, item) => sum + item.quantity, 0);
         if (aloeDrinkCount > 0 && isPromoActive()) {
             const numPairs = Math.floor(aloeDrinkCount / 2);
             const remainingSingles = aloeDrinkCount % 2;
             const aloeRetailPrice = products.find(p => p.id === 1).price;
 
             let bundleItemsNames = aloeDrinkItemsInCart.map(item => `${item.name} x${item.quantity}`).join(', ');
+            const originalBundleValue = (numPairs * 2 * aloeRetailPrice) + (remainingSingles * aloeRetailPrice);
+            const appliedBundleCost = (numPairs * 200) + (remainingSingles * aloeRetailPrice);
+            const bundleSavings = originalBundleValue - appliedBundleCost;
 
             if (numPairs > 0) {
-                tableRows.push([`Aloe Trio Combo Offer (${bundleItemsNames})`, numPairs * 2, `100.00 (avg)`, (numPairs * 200).toFixed(2)]);
+                tableRows.push([
+                    `Aloe Trio Combo Offer (${bundleItemsNames})`,
+                    numPairs * 2,
+                    originalBundleValue.toFixed(2),
+                    appliedBundleCost.toFixed(2),
+                    bundleSavings.toFixed(2),
+                    appliedBundleCost.toFixed(2)
+                ]);
             }
             if (remainingSingles > 0) {
-                // For PDF, it's simpler to just add a generic line for remaining singles
-                tableRows.push([`Remaining Aloe Drinks (Retail)`, remainingSingles, aloeRetailPrice.toFixed(2), (remainingSingles * aloeRetailPrice).toFixed(2)]);
+                tableRows.push([
+                    `Remaining Aloe Drinks (Retail)`,
+                    remainingSingles,
+                    aloeRetailPrice.toFixed(2),
+                    aloeRetailPrice.toFixed(2),
+                    `0.00`,
+                    aloeRetailPrice.toFixed(2)
+                ]);
             }
-        } else {
+        } else if (aloeDrinkCount > 0) { // If promo not active, list at retail
             aloeDrinkItemsInCart.forEach(item => {
                 const productData = products.find(p => p.id === item.id);
-                tableRows.push([ item.name, item.quantity, productData.price.toFixed(2), (productData.price * item.quantity).toFixed(2) ]);
+                const originalPrice = productData.price;
+                tableRows.push([ 
+                    item.name, 
+                    item.quantity, 
+                    originalPrice.toFixed(2), 
+                    originalPrice.toFixed(2), 
+                    `0.00`, 
+                    (originalPrice * item.quantity).toFixed(2) 
+                ]);
             });
         }
 
@@ -1422,32 +1487,34 @@
         doc.setFontSize(14);
         doc.setFont(undefined, 'bold');
         doc.text(`Total Amount: RM ${orderDetails.totalAmount}`, 14, finalY + 27);
-        doc.text(`Total Accumulated Points: ${orderDetails.totalPoints}`, 14, finalY + 34);
         
+        // Display both current and accumulated points
+        doc.text(`Current Purchase Points: ${currentPurchasePoints}`, 14, finalY + 34);
+        doc.text(`Total Accumulated Points: ${totalAccumulatedPoints}`, 14, finalY + 41);
+
         doc.setFont(undefined, 'normal');
         doc.setFontSize(10);
-        doc.text("Customer Signature:", 14, finalY + 50);
+        doc.text("Customer Signature:", 14, finalY + 57); /* Adjusted Y-position */
         
         try {
             doc.setFont('times', 'italic');
             doc.setFontSize(14);
-            doc.text(customerNameSignature, 14, finalY + 60);
+            doc.text(customerNameSignature, 14, finalY + 67); /* Adjusted Y-position */
         } catch (e) {
             doc.setFont(undefined, 'italic');
             doc.setFontSize(14);
-            doc.text(customerNameSignature, 14, finalY + 60);
+            doc.text(customerNameSignature, 14, finalY + 67); /* Adjusted Y-position */
         }
 
-        if (newPAC) {
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(10);
-            doc.text("IMPORTANT: Your Personal Access Code is:", 14, finalY + 75);
-            doc.setFont('courier', 'normal');
-            doc.text(newPAC, 14, finalY + 82);
-            doc.setFont('helvetica', 'normal');
-            doc.setFontSize(8);
-            doc.text("Keep this code safe. Use it with your email to log in to the 'My Rewards' portal.", 14, finalY + 87);
-        }
+        /* Updated PAC message */
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10);
+        doc.text("IMPORTANT: Your Personal Access Code for rewards is:", 14, finalY + 82); /* Adjusted Y-position */
+        doc.setFont('courier', 'normal');
+        doc.text(customerPAC, 14, finalY + 89); /* Adjusted Y-position */
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.text("Keep this code safe. Use it with your email to log in to the 'My Rewards' portal.", 14, finalY + 94); /* Adjusted Y-position */
 
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(9);
