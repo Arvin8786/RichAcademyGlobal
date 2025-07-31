@@ -59,7 +59,7 @@
       overflow-x: hidden;
       line-height: 1.6;
       /* Adjusted: Add padding-top to account for the fixed running banner */
-      padding-top: 45px; /* Estimated height of the running banner (approx 1.1rem + 20px padding) */
+      padding-top: 45px; /* Estimated height of the running banner */
     }
     .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
     h1, h2, h3, h4 { color: var(--primary-color); font-weight: 600; }
@@ -92,12 +92,38 @@
         border: 2px solid #fff;
     }
 
+    /* --- Header & Navigation --- */
+    header {
+      background-color: var(--light-text);
+      padding: 20px 0;
+      text-align: center; /* Ensures the content inside is centered */
+      border-bottom: 1px solid #e0e0e0;
+      position: relative;
+    }
+    .header-content {
+        /* Removed flex properties to allow text-align: center on parent header to work */
+        /* display: block; is default but good for clarity sometimes */
+    }
+    .header-logo {
+        width: 80px;
+        height: 80px;
+        display: block; /* Ensure it's a block element to be centered by text-align */
+        margin: 0 auto 10px; /* Center and add some bottom margin */
+    }
+    .header-content h1 {
+        text-align: center; /* Ensures the headline and tagline are centered */
+        margin: 0; /* Remove default margin for better control */
+    }
+    .header-content h1 span {
+        display: block; /* Ensure tagline is on its own line */
+    }
+
     /* Updated: Promo Running Banner */
     #promo-running-banner {
       background-color: var(--secondary-color); /* Orange/Yellow */
       color: var(--light-text);
       padding: 10px 0;
-      text-align: center; /* Center content when not running */
+      text-align: center; /* Center content when not running, but marquee takes precedence */
       font-weight: 700;
       font-size: 1.1rem;
       position: fixed; /* Fixed at the top */
@@ -406,6 +432,7 @@
   <header>
     <div class="container">
         <div class="header-content">
+            <!-- Logo and H1 are now centered by text-align: center on the header -->
             <img src="FL.jpg" alt="Business Logo" class="header-logo" onerror="this.style.display='none'">
             <h1>
               FOREVER LIVING by Mohd Arvind Isa
@@ -896,7 +923,7 @@
       const pointsEl = document.getElementById('points-earned-display');
       
       if (cart.length === 0) {
-        cartItemsEl.innerHTML = '<p>Your cart is empty.</p>';
+        cartItemsEl.innerHTML = '<p>Your cart is currently empty.</p>';
         subtotalEl.textContent = 'RM 0.00';
         shippingEl.textContent = 'RM 0.00';
         totalEl.textContent = 'RM 0.00';
@@ -941,25 +968,30 @@
       // Calculate cost for special aloe drinks and add specific promo message
       aloeDrinkItemsInCart.forEach(item => aloeDrinkCount += item.quantity);
 
-      let aloeDrinksAppliedCost = 0;
       let aloePromoMessageHtml = '';
+      let aloeDrinksAppliedCost = 0;
+
       if (aloeDrinkCount > 0 && isPromoActive()) {
           const numPairs = Math.floor(aloeDrinkCount / 2);
           const remainingSingles = aloeDrinkCount % 2;
-          const aloeRetailPrice = products.find(p => p.id === 1).price; // Use any of the 3 aloe drinks' retail price
+          const aloeRetailPrice = products.find(p => p.id === 1).price; 
           
           aloeDrinksAppliedCost = (numPairs * 200) + (remainingSingles * aloeRetailPrice);
+
           if (numPairs >= 1) { // If at least one pair is bought, trigger free shipping
               hasSpecialAloePromo = true; 
-              aloePromoMessageHtml = `<div style="background-color: #f0f8ff; padding: 10px; border-radius: 8px; margin-top: 10px; text-align: center; border: 1px dashed var(--primary-color);">
-                <strong>Aloe Trio Special Applied:</strong> Buy any 2 for RM 200.00
+              aloePromoMessageHtml = `<div style="background-color: #e0f8f0; padding: 10px; border-radius: 8px; margin-top: 10px; text-align: center; border: 1px dashed var(--accent-color);">
+                <strong>Aloe Trio Special Applied:</strong> ${numPairs * 2} items for RM ${numPairs * 200}.00
+                <br><em>(Individual items: RM ${aloeRetailPrice.toFixed(2)})</em>
                 <br><i class="fa-solid fa-truck-fast"></i> FREE Shipping on this bundle!
                 </div>`;
-          } else if (aloeDrinkCount === 1) {
-              aloeDrinksAppliedCost = aloeRetailPrice;
-              aloePromoMessageHtml = `<div style="background-color: #f0f8ff; padding: 10px; border-radius: 8px; margin-top: 10px; text-align: center; border: 1px dashed var(--primary-color);">
-                Add one more Aloe Trio product to get Buy 2 for RM 200.00 & FREE Shipping!
-                </div>`;
+          } 
+          if (remainingSingles === 1) { // If there's an odd one out after pairs, or just one item
+             if (numPairs === 0) { // Only show "add one more" if no pairs were formed
+                 aloePromoMessageHtml = `<div style="background-color: #f8f0e0; padding: 10px; border-radius: 8px; margin-top: 10px; text-align: center; border: 1px dashed var(--secondary-color);">
+                 <i class="fa-solid fa-lightbulb"></i> Add one more Aloe Trio product to get Buy 2 for RM 200.00 & FREE Shipping!
+                 </div>`;
+             }
           }
       } else if (aloeDrinkCount > 0) {
           // If promo not active, charge all at retail
