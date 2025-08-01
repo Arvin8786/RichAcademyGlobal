@@ -58,7 +58,6 @@
       color: var(--dark-text);
       overflow-x: hidden;
       line-height: 1.6;
-      /* Adjusted: Add padding-top to account for the fixed running banner */
       padding-top: 45px; /* Estimated height of the running banner */
     }
     .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
@@ -1097,7 +1096,6 @@
             const originalPrice = productData.price;
             const itemPrice = isPromoActive() && productData.promoPrice ? productData.promoPrice : originalPrice;
             const itemSavings = originalPrice - itemPrice;
-            otherItemsCost += itemPrice * item.quantity; // Accumulate cost here
 
             if (itemSavings > 0) {
                 whatsappOtherItemsDetails += `- ${item.name} (x${item.quantity}) @ RM ${itemPrice.toFixed(2)}/pc (Original: RM ${originalPrice.toFixed(2)}, Save RM ${itemSavings.toFixed(2)})\n`;
@@ -1145,7 +1143,6 @@
         document.getElementById('verification-view').style.display = 'block';
     }
 
-    //=========== FIXED FUNCTION =================================================================
     async function verifyPurchase() {
         const codeInput = document.getElementById('verification-code').value.trim();
         const statusEl = document.getElementById('verification-status');
@@ -1168,40 +1165,56 @@
         statusEl.style.color = 'blue';
 
         // --- GOOGLE SHEETS API URL ---
+        // *** IMPORTANT: PASTE YOUR DEPLOYED WEB APP URL HERE ***
         const googleScriptURL = 'https://script.google.com/macros/s/AKfycbxpYs7pXlvoc0sb1RURk_v5KbFeG7TmMVlot6mi3alhOCWgk3jjj6jNf3_nIxiZsWbR/exec';
 
         try {
-            // Step 1: Validate the code
+            console.log('--- Verification Process Start ---');
+            console.log('1. Sending code for validation:', codeInput); // Debugging log
             const validationResponse = await fetch(`${googleScriptURL}?action=validateCode&code=${codeInput}`);
-            if (!validationResponse.ok) {
-                // This catches network errors or server errors (like 500, 404)
-                throw new Error(`Validation server error: ${validationResponse.statusText}`);
-            }
             const validationResult = await validationResponse.json();
+            console.log('   Validation API response:', validationResult); // Debugging log
 
             if (validationResult.status === 'success' && validationResult.isValid) {
-                // Step 2: Code is valid, proceed to record the order
                 const orderNumber = `FL-${Date.now().toString().slice(-6)}`;
                 
-                const itemsListForSheet = [];
+                // Construct items string for Google Sheet (includes pricing breakdown)
                 const aloeDrinkIds = [1, 2, 3];
+                let itemsListForSheet = [];
+
                 pendingOrder.cart.forEach(item => {
                     const productData = products.find(p => p.id === item.id);
-                    const isAloeDrink = aloeDrinkIds.includes(item.id);
-                    // For non-aloe drinks, apply 5% promo. For aloe-drinks, this will be handled in a summary line.
-                    const itemPrice = (isPromoActive() && productData.promoPrice && !isAloeDrink) ? productData.promoPrice : productData.price;
-                    itemsListForSheet.push(`${item.name} (x${item.quantity}) @ RM ${itemPrice.toFixed(2)}`);
+                    const originalPrice = productData.price;
+                    // If it's a non-aloe item and promo is active, use promoPrice, else use original
+                    const itemPrice = (isPromoActive() && productData.promoPrice && !productData.specialPromo) ? productData.promoPrice : originalPrice;
+                    const savings = originalPrice - itemPrice;
+
+                    itemsListForSheet.push(`${item.name} (x${item.quantity}) - Orig: RM${originalPrice.toFixed(2)}, Disc: RM${itemPrice.toFixed(2)}, Savings: RM${savings.toFixed(2)}`);
                 });
 
-                // Add a summary line for the special Aloe Trio promo if it was applied
+                // Add Aloe Trio bundle summary for sheet if applicable
                 const aloeDrinkItemsInCart = pendingOrder.cart.filter(item => aloeDrinkIds.includes(item.id));
                 const aloeDrinkCount = aloeDrinkItemsInCart.reduce((sum, item) => sum + item.quantity, 0);
-                if (aloeDrinkCount > 0 && isPromoActive() && Math.floor(aloeDrinkCount / 2) > 0) {
+                if (aloeDrinkCount > 0 && isPromoActive()) {
                     const numPairs = Math.floor(aloeDrinkCount / 2);
-                    itemsListForSheet.push(`PROMO: Aloe Trio Combo Applied (${numPairs} pairs for RM ${numPairs * 200})`);
-                }
+                    const remainingSingles = aloeDrinkCount % 2;
+                    const aloeRetailPrice = products.find(p => p.id === 1).price;
+                    const originalBundleValue = (numPairs * 2 * aloeRetailPrice) + (remainingSingles * aloeRetailPrice);
+                    const appliedBundleCost = (numPairs * 200) + (remainingSingles * aloeRetailPrice);
+                    const bundleSavings = originalBundleValue - appliedBundleCost;
+                    
+                    let bundleItemsNames = aloeDrinkItemsInCart.map(item => `${item.name} x${item.quantity}`).join(', ');
 
+                    if (numPairs > 0) {
+                        itemsListForSheet.push(`Aloe Trio Combo Offer: (${bundleItemsNames}) ${numPairs * 2} items for RM ${numPairs * 200}.00 (Total Savings: RM ${bundleSavings.toFixed(2)})`);
+                    }
+                    if (remainingSingles > 0) {
+                        itemsListForSheet.push(`Remaining Aloe Drinks: ${remainingSingles} items @ RM ${aloeRetailPrice.toFixed(2)}/pc`);
+                    }
+                }
+                
                 const itemsStringForSheet = itemsListForSheet.join('; ');
+
 
                 const orderData = {
                     action: 'addOrder',
@@ -1211,31 +1224,23 @@
                     customerPhone: pendingOrder.customerPhone,
                     customerEmail: pendingOrder.customerEmail,
                     customerAddress: pendingOrder.customerAddress,
-                    items: itemsStringForSheet,
+                    items: itemsStringForSheet, // Use the detailed string for the sheet
                     totalAmount: pendingOrder.totalAmount,
-                    totalPoints: pendingOrder.totalPointsForThisPurchase,
-                    usedCode: codeInput,
-                    customerPAC: pendingOrder.customerPAC || ''
+                    totalPointsForThisPurchase: pendingOrder.totalPointsForThisPurchase, // Points for this current purchase
+                    usedCode: codeInput
+                    // We don't send customerPAC from frontend because Apps Script generates/retrieves it
                 };
-                
-                // Use FormData to avoid certain CORS issues with POST requests
-                const formData = new FormData();
-                for (const key in orderData) {
-                    formData.append(key, orderData[key]);
-                }
 
+                console.log('2. Sending order data to record:', orderData); // Debugging log
                 const recordResponse = await fetch(googleScriptURL, {
                     method: 'POST',
-                    body: formData // Sending as FormData
+                    body: JSON.stringify(orderData)
                 });
-
-                if (!recordResponse.ok) {
-                    throw new Error(`Recording server error: ${recordResponse.statusText}`);
-                }
                 const recordResult = await recordResponse.json();
+                console.log('   Record API response:', recordResult); // Debugging log
 
                 if (recordResult.status === 'success') {
-                    // Step 3: Success! Generate receipts and clean up.
+                    // Pass current points earned and total accumulated points to PDF/Email generation
                     generatePDF(orderData, pendingOrder, recordResult.customerPAC, recordResult.totalPoints, pendingOrder.totalPointsForThisPurchase);
                     sendReceiptByEmail(orderData, pendingOrder, recordResult.customerPAC, recordResult.totalPoints, pendingOrder.totalPointsForThisPurchase);
 
@@ -1250,28 +1255,29 @@
                         toggleCart(true);
                         verifyBtn.disabled = false;
                     }, 2500);
-
                 } else {
-                    // The script ran but reported a failure (e.g., couldn't write to sheet)
-                    throw new Error(recordResult.message || 'Failed to record order in spreadsheet.');
+                    // This means Apps Script successfully received request but returned a business logic error
+                    console.error('Error from Apps Script during record:', recordResult.message);
+                    statusEl.textContent = recordResult.message || 'Failed to record order on server side.';
+                    statusEl.style.color = 'red';
+                    verifyBtn.disabled = false;
                 }
 
             } else {
-                // The code was invalid or already used
+                // This means validation API returned isValid: false or status: error
+                console.error('Code validation failed:', validationResult.message);
                 statusEl.textContent = validationResult.message || 'Invalid or already used verification code.';
                 statusEl.style.color = 'red';
                 verifyBtn.disabled = false;
             }
         } catch (error) {
-            console.error('Verification Process Error:', error);
-            // This single catch block will handle network errors, JSON parsing errors, and thrown errors
-            statusEl.textContent = `An error occurred: ${error.message}. Please check console or contact owner.`;
+            console.error('Verification Process Error:', error); // Log full error object
+            statusEl.textContent = 'An unexpected error occurred: ' + error.message + '. Please check console or contact owner.';
             statusEl.style.color = 'red';
             verifyBtn.disabled = false;
         }
+        console.log('--- Verification Process End ---');
     }
-    //=============================================================================================
-
 
     // Added two new parameters for point display
     function sendReceiptByEmail(record, orderDetails, customerPAC, totalAccumulatedPoints, currentPurchasePoints) {
@@ -1290,6 +1296,21 @@
         const aloeDrinkItemsInCart = orderDetails.cart.filter(item => aloeDrinkIds.includes(item.id));
         const otherItemsInCart = orderDetails.cart.filter(item => !aloeDrinkIds.includes(item.id));
 
+        // Add table header
+        emailItemsHtml += `
+            <table style="width:100%; border-collapse: collapse; margin-bottom: 20px;">
+            <thead>
+                <tr style="background-color: #f2f2f2;">
+                    <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Item Description</th>
+                    <th style="padding: 8px; border: 1px solid #ddd; text-align: center;">Qty</th>
+                    <th style="padding: 8px; border: 1px solid #ddd; text-align: right;">Orig. Price (RM)</th>
+                    <th style="padding: 8px; border: 1px solid #ddd; text-align: right;">Disc. Price (RM)</th>
+                    <th style="padding: 8px; border: 1px solid #ddd; text-align: right;">Savings (RM)</th>
+                    <th style="padding: 8px; border: 1px solid #ddd; text-align: right;">Total (RM)</th>
+                </tr>
+            </thead>
+            <tbody>`;
+
         // Add regular items first with price breakdown
         otherItemsInCart.forEach(item => {
             const productData = products.find(p => p.id === item.id);
@@ -1297,12 +1318,12 @@
             const itemPrice = isPromoActive() && productData.promoPrice ? productData.promoPrice : originalPrice;
             const savings = originalPrice - itemPrice;
             emailItemsHtml += `<tr>
-                <td>${item.name}</td>
-                <td style="text-align: center;">${item.quantity}</td>
-                <td style="text-align: right;">${originalPrice.toFixed(2)}</td>
-                <td style="text-align: right;">${itemPrice.toFixed(2)}</td>
-                <td style="text-align: right;">${savings.toFixed(2)}</td>
-                <td style="text-align: right;">${(itemPrice * item.quantity).toFixed(2)}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${item.name}</td>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${item.quantity}</td>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${originalPrice.toFixed(2)}</td>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${itemPrice.toFixed(2)}</td>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${savings.toFixed(2)}</td>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${(itemPrice * item.quantity).toFixed(2)}</td>
             </tr>`;
         });
 
@@ -1320,20 +1341,20 @@
 
             if (numPairs > 0) {
                 emailItemsHtml += `<tr>
-                    <td colspan="2"><em>Aloe Trio Combo Offer (${bundleItemsNames})</em></td>
-                    <td style="text-align: right;">${originalBundleValue.toFixed(2)}</td>
-                    <td style="text-align: right;">${appliedBundleCost.toFixed(2)}</td>
-                    <td style="text-align: right;">${bundleSavings.toFixed(2)}</td>
-                    <td style="text-align: right;">${appliedBundleCost.toFixed(2)}</td>
+                    <td colspan="2" style="padding: 8px; border: 1px solid #ddd;"><em>Aloe Trio Combo Offer (${bundleItemsNames})</em></td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${originalBundleValue.toFixed(2)}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${appliedBundleCost.toFixed(2)}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${bundleSavings.toFixed(2)}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${appliedBundleCost.toFixed(2)}</td>
                 </tr>`;
             }
             if (remainingSingles > 0) {
                 emailItemsHtml += `<tr>
-                    <td colspan="2"><em>Remaining Aloe Drinks (Retail)</em></td>
-                    <td style="text-align: right;">${aloeRetailPrice.toFixed(2)}</td>
-                    <td style="text-align: right;">${aloeRetailPrice.toFixed(2)}</td>
-                    <td style="text-align: right;">0.00</td>
-                    <td style="text-align: right;">${aloeRetailPrice.toFixed(2)}</td>
+                    <td colspan="2" style="padding: 8px; border: 1px solid #ddd;"><em>Remaining Aloe Drinks (Retail)</em></td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${aloeRetailPrice.toFixed(2)}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${aloeRetailPrice.toFixed(2)}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">0.00</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${aloeRetailPrice.toFixed(2)}</td>
                 </tr>`;
             }
         } else if (aloeDrinkCount > 0) { // If promo not active, list at retail
@@ -1341,16 +1362,16 @@
                 const productData = products.find(p => p.id === item.id);
                 const originalPrice = productData.price;
                 emailItemsHtml += `<tr>
-                    <td>${item.name}</td>
-                    <td style="text-align: center;">${item.quantity}</td>
-                    <td style="text-align: right;">${originalPrice.toFixed(2)}</td>
-                    <td style="text-align: right;">${originalPrice.toFixed(2)}</td>
-                    <td style="text-align: right;">0.00</td>
-                    <td style="text-align: right;">${(originalPrice * item.quantity).toFixed(2)}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">${item.name}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${item.quantity}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${originalPrice.toFixed(2)}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${originalPrice.toFixed(2)}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">0.00</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${(originalPrice * item.quantity).toFixed(2)}</td>
                 </tr>`;
             });
         }
-
+        emailItemsHtml += `</tbody></table>`; // Close table body and table
 
         const templateParams = {
             to_email: 'arvin8786@gmail.com', // This should likely be the owner's email
@@ -1359,7 +1380,7 @@
             customer_phone: orderDetails.customerPhone,
             customer_email: orderDetails.customerEmail,
             customer_address: orderDetails.customerAddress,
-            items_html: emailItemsHtml,
+            items_html: emailItemsHtml, // Pass the entire table HTML
             subtotal: orderDetails.calculatedSubtotal.toFixed(2),
             shipping: orderDetails.shipping.message,
             total_amount: orderDetails.totalAmount,
