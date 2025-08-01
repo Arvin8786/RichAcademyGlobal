@@ -562,7 +562,7 @@
       <p>© 2025 Forever Living by Mohd Arvind Isa. All rights reserved.</p>
       <div class="timestamp">Last updated: <span id="current-date"></span></div>
       <section class="disclaimer">
-        <strong>Disclaimer:</strong> This website is operated by an independent Forever Business Owner. The products shown are not intended to diagnose, treat, cure, or prevent any specific disease or class of diseases. You should consult your family physician if you are experiencing a medical problem. Statements and information provided on this site are for informational purposes only and are not intended to substitute for advice from your physician or other health care professional.
+        <strong>Disclaimer:</strong> This website is operated by an independent Forever Business Owner. The products shown are not intended to diagnose, treat, cure, or prevent any specific disease or class of diseases. You should consult your family physician if you are experiencing a medical problem. Statements and information provided on this site are for informational purposes only and are not not intended to substitute for advice from your physician or other health care professional.
       </section>
     </div>
   </footer>
@@ -1228,7 +1228,6 @@
                     totalAmount: pendingOrder.totalAmount,
                     totalPointsForThisPurchase: pendingOrder.totalPointsForThisPurchase, // Points for this current purchase
                     usedCode: codeInput
-                    // We don't send customerPAC from frontend because Apps Script generates/retrieves it
                 };
 
                 console.log('2. Sending order data to record:', orderData); // Debugging log
@@ -1351,10 +1350,10 @@
             if (remainingSingles > 0) {
                 emailItemsHtml += `<tr>
                     <td colspan="2" style="padding: 8px; border: 1px solid #ddd;"><em>Remaining Aloe Drinks (Retail)</em></td>
-                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${aloeRetailPrice.toFixed(2)}</td>
-                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${aloeRetailPrice.toFixed(2)}</td>
-                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">0.00</td>
-                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${aloeRetailPrice.toFixed(2)}</td>
+                    <td style="text-align: right; padding: 8px; border: 1px solid #ddd;">${aloeRetailPrice.toFixed(2)}</td>
+                    <td style="text-align: right; padding: 8px; border: 1px solid #ddd;">${aloeRetailPrice.toFixed(2)}</td>
+                    <td style="text-align: right; padding: 8px; border: 1px solid #ddd;">0.00</td>
+                    <td style="text-align: right; padding: 8px; border: 1px solid #ddd;">${aloeRetailPrice.toFixed(2)}</td>
                 </tr>`;
             }
         } else if (aloeDrinkCount > 0) { // If promo not active, list at retail
@@ -1363,11 +1362,11 @@
                 const originalPrice = productData.price;
                 emailItemsHtml += `<tr>
                     <td style="padding: 8px; border: 1px solid #ddd;">${item.name}</td>
-                    <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${item.quantity}</td>
-                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${originalPrice.toFixed(2)}</td>
-                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${originalPrice.toFixed(2)}</td>
-                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">0.00</td>
-                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${(originalPrice * item.quantity).toFixed(2)}</td>
+                    <td style="text-align: center; padding: 8px; border: 1px solid #ddd;">${item.quantity}</td>
+                    <td style="text-align: right; padding: 8px; border: 1px solid #ddd;">${originalPrice.toFixed(2)}</td>
+                    <td style="text-align: right; padding: 8px; border: 1px solid #ddd;">${originalPrice.toFixed(2)}</td>
+                    <td style="text-align: right; padding: 8px; border: 1px solid #ddd;">0.00</td>
+                    <td style="text-align: right; padding: 8px; border: 1px solid #ddd;">${(originalPrice * item.quantity).toFixed(2)}</td>
                 </tr>`;
             });
         }
@@ -1384,9 +1383,9 @@
             subtotal: orderDetails.calculatedSubtotal.toFixed(2),
             shipping: orderDetails.shipping.message,
             total_amount: orderDetails.totalAmount,
-            current_purchase_points: currentPurchasePoints, // Points from this order
-            total_accumulated_points: totalAccumulatedPoints, // Total points including this order
-            personal_access_code: customerPAC // The actual PAC from Google Sheets
+            current_purchase_points: String(currentPurchasePoints), // Convert to string
+            total_accumulated_points: String(totalAccumulatedPoints), // Convert to string
+            personal_access_code: customerPAC ? String(customerPAC) : 'N/A' // Convert to string, handle null/undefined
         };
 
         emailjs.send(serviceID, templateID, templateParams, userID)
@@ -1524,8 +1523,8 @@
         doc.text(`Total Amount: RM ${orderDetails.totalAmount}`, 14, finalY + 27);
         
         // Display both current and accumulated points
-        doc.text(`Current Purchase Points: ${currentPurchasePoints}`, 14, finalY + 34);
-        doc.text(`Total Accumulated Points: ${totalAccumulatedPoints}`, 14, finalY + 41);
+        doc.text(`Current Purchase Points: ${String(currentPurchasePoints)}`, 14, finalY + 34); // Convert to string
+        doc.text(`Total Accumulated Points: ${String(totalAccumulatedPoints)}`, 14, finalY + 41); // Convert to string
 
         doc.setFont(undefined, 'normal');
         doc.setFontSize(10);
@@ -1546,7 +1545,7 @@
         doc.setFontSize(10);
         doc.text("IMPORTANT: Your Personal Access Code for rewards is:", 14, finalY + 82); /* Adjusted Y-position */
         doc.setFont('courier', 'normal');
-        doc.text(customerPAC, 14, finalY + 89); /* Adjusted Y-position */
+        doc.text(customerPAC ? String(customerPAC) : 'N/A', 14, finalY + 89); /* Convert to string, handle null/undefined */
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(8);
         doc.text("Keep this code safe. Use it with your email to log in to the 'My Rewards' portal.", 14, finalY + 94); /* Adjusted Y-position */
