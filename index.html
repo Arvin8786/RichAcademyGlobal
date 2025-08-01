@@ -986,10 +986,8 @@
           } 
           if (remainingSingles === 1) { // If there's an odd one out after pairs, or just one item
              if (numPairs === 0) { // Only show "add one more" if no pairs were formed
-                 // Find the specific item name for the message
-                 const singleAloeItem = aloeDrinkItemsInCart[0]; // Assuming there's only one if remainingSingles is 1 and numPairs is 0
                  aloePromoMessageHtml = `<div style="background-color: #f8f0e0; padding: 10px; border-radius: 8px; margin-top: 10px; text-align: center; border: 1px dashed var(--secondary-color);">
-                 <i class="fa-solid fa-lightbulb"></i> Add one more Aloe Trio product (e.g., another ${singleAloeItem.name}) to get Buy 2 for RM 200.00 & FREE Shipping!
+                 <i class="fa-solid fa-lightbulb"></i> Add one more Aloe Trio product to get Buy 2 for RM 200.00 & FREE Shipping!
                  </div>`;
              }
           }
@@ -1080,9 +1078,7 @@
                 whatsappAloeSummary += `\n*Aloe Trio Combo Offer:* (${bundleItemsListNames.join(', ')}) - ${numPairs * 2} items for RM ${numPairs * 200}.00 (Save RM ${bundleSavings.toFixed(2)})`;
             }
             if (remainingSingles > 0) {
-                // Find the specific item name for the WhatsApp message
-                const singleAloeItem = aloeDrinkItemsInCart.find(item => item.quantity === remainingSingles); // Simplified for single remaining
-                whatsappAloeSummary += `\n*Remaining ${singleAloeItem.name} (Retail):* ${remainingSingles} item(s) @ RM ${aloeRetailPrice.toFixed(2)}/pc`;
+                whatsappAloeSummary += `\n*Remaining Aloe Drinks (Retail):* ${remainingSingles} items @ RM ${aloeRetailPrice.toFixed(2)}/pc`;
             }
             whatsappAloeSummary += `\n(Includes FREE Shipping on this bundle!)`;
         } else if (aloeDrinkCount > 0) {
@@ -1170,7 +1166,7 @@
 
         // --- GOOGLE SHEETS API URL ---
         // *** IMPORTANT: PASTE YOUR DEPLOYED WEB APP URL HERE ***
-        const googleScriptURL = 'https://script.google.com/macros/s/AKfycbwmBq03seCFxBlqI_4WKrf3yq58jkEHwuk5q0_3YbaXAtXgBmHYAgnNQ_TDe-FbPYI/exec';
+        const googleScriptURL = 'https://script.google.com/macros/s/AKfycbxpYs7pXlvoc0sb1RURk_v5KbFeG7TmMVlot6mi3alhOCWgk3jjj6jNf3_nIxiZsWbR/exec';
 
         try {
             console.log('--- Verification Process Start ---');
@@ -1352,9 +1348,8 @@
                 </tr>`;
             }
             if (remainingSingles > 0) {
-                const singleAloeItem = aloeDrinkItemsInCart.find(item => item.quantity === remainingSingles); // Assuming there's only one if remainingSingles is 1
                 emailItemsHtml += `<tr>
-                    <td colspan="2" style="padding: 8px; border: 1px solid #ddd;"><em>Remaining ${singleAloeItem.name} (Retail)</em></td>
+                    <td colspan="2" style="padding: 8px; border: 1px solid #ddd;"><em>Remaining Aloe Drinks (Retail)</em></td>
                     <td style="text-align: right; padding: 8px; border: 1px solid #ddd;">${aloeRetailPrice.toFixed(2)}</td>
                     <td style="text-align: right; padding: 8px; border: 1px solid #ddd;">${aloeRetailPrice.toFixed(2)}</td>
                     <td style="text-align: right; padding: 8px; border: 1px solid #ddd;">0.00</td>
@@ -1421,7 +1416,7 @@
         }
 
         doc.setFontSize(20);
-        doc.text("Sales Order", 105, 20, { align: 'center' }); /* Changed to Sales Order */
+        doc.text("Purchase Receipt", 105, 20, { align: 'center' });
         
         doc.setFontSize(11);
         doc.text("Forever Living by Mohd Arvind Isa", 105, 30, { align: 'center' });
@@ -1484,9 +1479,8 @@
                 ]);
             }
             if (remainingSingles > 0) {
-                const singleAloeItem = aloeDrinkItemsInCart.find(item => item.quantity === remainingSingles); // Assuming there's only one if remainingSingles is 1
                 tableRows.push([
-                    `Remaining ${singleAloeItem.name} (Retail)`, /* Specific item name */
+                    `Remaining Aloe Drinks (Retail)`,
                     remainingSingles,
                     aloeRetailPrice.toFixed(2),
                     aloeRetailPrice.toFixed(2),
@@ -1558,10 +1552,9 @@
 
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(9);
-        doc.text("Goods sold are not returnable unless for specific reasons.", 105, doc.internal.pageSize.height - 15, { align: 'center' }); /* New disclaimer */
-        doc.text("This is a computer-generated document. No signature is required.", 105, doc.internal.pageSize.height - 10, { align: 'center' }); /* Adjusted text */
+        doc.text("This is a computer-generated receipt. No signature is required.", 105, doc.internal.pageSize.height - 10, { align: 'center' });
 
-        doc.save(`Sales_Order-${record.orderNumber}.pdf`); /* Changed filename */
+        doc.save(`Receipt-Order-${record.orderNumber}.pdf`);
     }
 
     function startCountdown() {
