@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Forever Living by Muhd Arvind Isa - Grand Opening Special</title>
+  <title>Forever Living by Mohd Arvind Isa - Grand Opening Special</title>
   
   <!-- Google Fonts & Font Awesome Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -431,7 +431,7 @@
         <div class="header-content">
             <img src="FL.jpg" alt="Business Logo" class="header-logo" onerror="this.style.display='none'">
             <h1>
-              FOREVER LIVING by Muhd Arvind Isa
+              FOREVER LIVING by Mohd Arvind Isa
               <span style="font-size: 1rem; color: #555; display: block; font-weight: 400;">Quality Wellness Products</span>
             </h1>
         </div>
@@ -559,7 +559,7 @@
 
   <footer>
     <div class="container">
-      <p>© 2025 Forever Living by Muhd Arvind Isa. All rights reserved.</p>
+      <p>© 2025 Forever Living by Mohd Arvind Isa. All rights reserved.</p>
       <div class="timestamp">Last updated: <span id="current-date"></span></div>
       <section class="disclaimer">
         <strong>Disclaimer:</strong> This website is operated by an independent Forever Business Owner. The products shown are not intended to diagnose, treat, cure, or prevent any specific disease or class of diseases. You should consult your family physician if you are experiencing a medical problem. Statements and information provided on this site are for informational purposes only and are not not intended to substitute for advice from your physician or other health care professional.
@@ -803,7 +803,7 @@
             if (symptom.includes(key)) {
                 keywords[key].forEach(id => suggestedIds.add(id));
             }
-        }
+        });
         
         products.forEach(p => {
             if (p.benefits.toLowerCase().includes(symptom)) {
@@ -1310,9 +1310,9 @@
     // Added two new parameters for point display
     function sendReceiptByEmail(record, orderDetails, customerPAC, totalAccumulatedPoints, currentPurchasePoints) {
         // NOTE: Replace with your actual EmailJS credentials
-        const serviceID = 'YOUR_EMAILJS_SERVICE_ID'; // <<< === EDIT THIS LINE === >>>
-        const templateID = 'YOUR_EMAILJS_TEMPLATE_ID'; // <<< === EDIT THIS LINE === >>>
-        const userID = 'YOUR_EMAILJS_USER_ID'; // <<< === EDIT THIS LINE === >>>
+        const serviceID = 'YOUR_EMAILJS_SERVICE_ID'; 
+        const templateID = 'YOUR_EMAILJS_TEMPLATE_ID'; 
+        const userID = 'YOUR_EMAILJS_USER_ID'; 
 
         if (serviceID === 'YOUR_EMAILJS_SERVICE_ID' || templateID === 'YOUR_EMAILJS_TEMPLATE_ID' || userID === 'YOUR_EMAILJS_USER_ID') {
             console.log("EmailJS credentials not set. Skipping email.");
@@ -1434,7 +1434,7 @@
         doc.text("Purchase Receipt", 105, 20, { align: 'center' });
         
         doc.setFontSize(11);
-        doc.text("Forever Living by Muhd Arvind Isa", 105, 30, { align: 'center' });
+        doc.text("Forever Living by Mohd Arvind Isa", 105, 30, { align: 'center' });
         doc.text("WhatsApp: 601111033154", 105, 35, { align: 'center' });
 
         doc.setFontSize(12);
