@@ -1167,8 +1167,8 @@
         statusEl.style.color = 'blue';
 
         // --- GOOGLE SHEETS API URL ---
-        // *** IMPORTANT: YOUR DEPLOYED WEB APP URL GOES HERE ***
-        const googleScriptURL = 'https://script.google.com/macros/s/AKfycbxZyIrpr83KRv7yfpaAeUXUf8ljisiWpJ3SviWQCBApcgeiU8Fzj6Amo5Mt6H-fBe7l/exec';
+        // *** IMPORTANT: REPLACE THIS WITH YOUR DEPLOYED WEB APP URL ***
+        const googleScriptURL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE'; // <<< === EDIT THIS LINE === >>>
 
         try {
             console.log('--- Verification Process Start ---');
@@ -1305,11 +1305,11 @@
     // Added two new parameters for point display
     function sendReceiptByEmail(record, orderDetails, customerPAC, totalAccumulatedPoints, currentPurchasePoints) {
         // NOTE: Replace with your actual EmailJS credentials
-        const serviceID = 'YOUR_SERVICE_ID'; // e.g., 'service_xxxxxx'
-        const templateID = 'YOUR_TEMPLATE_ID'; // e.g., 'template_xxxxxx'
-        const userID = 'YOUR_USER_ID'; // e.g., 'user_xxxxxx'
+        const serviceID = 'YOUR_EMAILJS_SERVICE_ID'; // <<< === EDIT THIS LINE === >>>
+        const templateID = 'YOUR_EMAILJS_TEMPLATE_ID'; // <<< === EDIT THIS LINE === >>>
+        const userID = 'YOUR_EMAILJS_USER_ID'; // <<< === EDIT THIS LINE === >>>
 
-        if (serviceID === 'YOUR_SERVICE_ID' || templateID === 'YOUR_TEMPLATE_ID' || userID === 'YOUR_USER_ID') {
+        if (serviceID === 'YOUR_EMAILJS_SERVICE_ID' || templateID === 'YOUR_EMAILJS_TEMPLATE_ID' || userID === 'YOUR_EMAILJS_USER_ID') {
             console.log("EmailJS credentials not set. Skipping email.");
             return;
         }
