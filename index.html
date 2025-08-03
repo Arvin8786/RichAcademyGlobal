@@ -464,7 +464,7 @@
         <p>Enjoy special promotional prices on all our products!</p>
         <div id="promo-details">
             <div class="promo-period">
-                Promotion Ends: 2 August 2025
+                Promotion Ends: <span id="promo-end-date-display"></span>
             </div>
             <div id="countdown-timer"></div>
         </div>
@@ -692,7 +692,9 @@
         { id: 'RWD06', name: 'ALOE BITS N\' PEACHES', cost: 10000, image: 'aloe-peaches.jpg', fallbackImage: '', available: false },
     ];
     let cart = [];
-    const promoEndDate = new Date("August 2, 2025 23:59:59").getTime();
+    
+    // Set promo end date to 1 week from now
+    const promoEndDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).getTime();
 
     // --- LOGIC ---
 
@@ -1344,7 +1346,7 @@
                 <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${originalPrice.toFixed(2)}</td>
                 <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${itemPrice.toFixed(2)}</td>
                 <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${savings.toFixed(2)}</td>
-                <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${(itemPrice * item.quantity).toFixed(2)}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${(itemPrice * item.quantity).toFixed(2)}</td>
             </tr>`;
         });
 
@@ -1582,6 +1584,11 @@
     function startCountdown() {
         const countdownEl = document.getElementById('countdown-timer');
         const promoDetailsEl = document.getElementById('promo-details');
+        const promoEndDateDisplayEl = document.getElementById('promo-end-date-display');
+
+        // Display the actual end date
+        const endDateObj = new Date(promoEndDate);
+        promoEndDateDisplayEl.textContent = endDateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
 
         const interval = setInterval(() => {
             const now = new Date().getTime();
@@ -1591,7 +1598,7 @@
                 clearInterval(interval);
                 promoDetailsEl.innerHTML = '<div class="promo-period">Our Grand Opening promotion has ended.</div>';
                 document.body.classList.remove('grand-opening-active');
-                renderProducts();
+                renderProducts(); // Re-render products to show normal prices if promo ends while page is open
                 return;
             }
 
@@ -1640,9 +1647,16 @@
           createConfetti();
           showPromoPopup(); // Call the function to display the pop-up
       } else {
-          document.getElementById('promo-details').innerHTML = '<div class="promo-period">Our Grand Opening promotion has ended.</div>';
+          const promoDetailsEl = document.getElementById('promo-details');
+          if (promoDetailsEl) { // Ensure element exists before modifying
+              promoDetailsEl.innerHTML = '<div class="promo-period">Our Grand Opening promotion has ended.</div>';
+          }
+          document.body.classList.remove('grand-opening-active');
           // Hide banner if promo is not active
-          document.getElementById('promo-running-banner').style.display = 'none';
+          const promoBanner = document.getElementById('promo-running-banner');
+          if (promoBanner) {
+              promoBanner.style.display = 'none';
+          }
       }
 
       renderProducts();
