@@ -704,10 +704,17 @@
 
     function renderProducts() {
       const productList = document.getElementById('product-list');
-      if (!productList) return;
-      const promoActive = isPromoActive(); // Check if overall grand opening promo is active
+      // --- DEBUGGING LOGS ADDED ---
+      console.log('Attempting to render products. Target element:', productList); 
+      if (!productList) {
+          console.error('Product list element #product-list not found! Cannot render products.');
+          return;
+      }
+      // --- END DEBUGGING LOGS ---
+
+      const promoActive = isPromoActive(); 
       
-      productList.innerHTML = products.map(product => {
+      const productHTML = products.map(product => { // Renamed variable for clarity
         let priceHTML = '';
         let badgeHTML = '';
         let productClasses = 'product';
@@ -757,6 +764,9 @@
             </div>
           </div>`;
       }).join('');
+
+      productList.innerHTML = productHTML; // Set the innerHTML
+      console.log('Products rendered successfully. Number of products:', products.length); // Added debug
     }
 
     function filterProducts() {
@@ -1383,7 +1393,7 @@
                     <td style="text-align: right; padding: 8px; border: 1px solid #ddd;">0.00</td>
                     <td style="text-align: right; padding: 8px; border: 1px solid #ddd;">${aloeRetailPrice.toFixed(2)}</td>
                 </tr>`;
-            });
+            }
         }
         emailItemsHtml += `</tbody></table>`; // Close table body and table
 
@@ -1649,12 +1659,12 @@
           }
       }
 
-      renderProducts();
+      renderProducts(); // This is correctly called here.
       
       if (sessionStorage.getItem('pendingOrder')) {
           toggleCart();
       } else {
-          showTab('products');
+          showTab('products'); // Ensures the products tab is explicitly set to active.
       }
     });
   </script>
