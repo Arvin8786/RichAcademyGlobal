@@ -241,7 +241,7 @@
     .program-section { background: var(--light-text); padding: 40px; border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 30px; }
     .program-section h2 { font-size: 2.5rem; text-align: center; }
     .cta-button { display: block; width: fit-content; margin: 30px auto; background: linear-gradient(135deg, var(--secondary-color), #e67e22); color: var(--light-text); text-align: center; padding: 15px 40px; border-radius: 50px; font-weight: bold; text-decoration: none; font-size: 1.2rem; transition: all 0.3s; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-    .cta-button:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.3); }
+    .cta-button:hover { transform: translateY(-3px); box-shadow: 6px 12px rgba(0,0,0,0.3); }
 
     /* --- Rewards Section --- */
     .rewards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
@@ -411,7 +411,6 @@
         align-items: center;
     }
 
-
     /* --- Footer & Disclaimer --- */
     footer { background: var(--primary-color); color: var(--light-text); padding: 40px 20px; text-align: center; margin-top: 30px; }
     .disclaimer {
@@ -438,7 +437,7 @@
     </div>
   </header>
 
-  <!-- Updated: Promo Running Banner -->
+  <!-- Updated: Promo Running Banner (Restored) -->
   <div id="promo-running-banner">
       <div class="marquee-content">
           ✨ Hot Promo on Aloe Vera Gel, Aloe Berry Nectar, Aloe Bits N' Peaches! Buy Any 2 for RM 200 + FREE Shipping! ✨ 
@@ -452,7 +451,7 @@
           <li><a onclick="showTab('products')">Products</a></li>
           <li><a onclick="showTab('business')">Business Opportunity</a></li>
           <li><a onclick="showTab('rewards')">Rewards</a></li>
-          <li><a onclick="showTab('rewards-portal')">My Forever Living</a></li><!-- Renamed link -->
+          <li><a onclick="showTab('rewards-portal')">My Forever Living</a></li><!-- Restored link -->
         </ul>
     </div>
   </nav>
@@ -464,7 +463,7 @@
         <p>Enjoy special promotional prices on all our products!</p>
         <div id="promo-details">
             <div class="promo-period">
-                Promotion Ends: <span id="promo-end-date-display"></span>
+                Promotion Ends: <span id="promo-end-date-display"></span> <!-- Let JS fill this -->
             </div>
             <div id="countdown-timer"></div>
         </div>
@@ -537,7 +536,7 @@
     </div>
 
     <div id="rewards-portal" class="tab-content">
-        <!-- New content for "My Forever Living" -->
+        <!-- New content for "My Forever Living" (Restored) -->
         <div class="my-forever-living-container">
             <h2><i class="fa-solid fa-star"></i> My Forever Living <i class="fa-solid fa-heart-pulse"></i></h2>
             <p>
@@ -618,7 +617,7 @@
     </div>
   </div>
 
-  <!-- New: Promo Pop-up Modal -->
+  <!-- New: Promo Pop-up Modal (Restored) -->
   <div id="promo-popup-modal" class="modal">
     <div class="modal-content" style="max-width: 550px; padding: 15px;">
       <span class="close" onclick="closePromoPopup()">×</span>
@@ -629,9 +628,11 @@
   <script>
     // --- DATA ---
     const products = [
+        // Special Promo for these 3 products (Buy 2 for RM 200)
         { id: 1, name: "ALOE VERA GEL", price: 116.79, specialPromo: 'buy2for200', image: "aloe-vera-gel.jpg", benefits: "Supports digestion, boosts immunity.", consumption: "Take 30-60ml daily." },
         { id: 2, name: "ALOE BERRY NECTAR", price: 116.79, specialPromo: 'buy2for200', image: "aloe-berry-nectar.jpg", benefits: "Antioxidant support, immune system booster.", consumption: "30-60ml daily." },
         { id: 3, name: "ALOE BITS N' PEACHES", price: 116.79, specialPromo: 'buy2for200', image: "aloe-peaches.jpg", benefits: "Digestive health, vitamin C source.", consumption: "30-60ml daily." },
+        // Other products with standard 5% off promoPrice
         { id: 4, name: "LITE VANILLA", price: 155.72, promoPrice: 147.93, image: "lite-vanilla.jpg", benefits: "Meal replacement for weight management.", consumption: "Mix with milk or water." },
         { id: 5, name: "LITE CHOCO", price: 155.72, promoPrice: 147.93, image: "lite-choco.jpg", benefits: "Meal replacement for weight management.", consumption: "Mix with milk or water." },
         { id: 6, name: "SUPERGREENS", price: 214.71, promoPrice: 203.97, image: "supergreens.jpg", benefits: "Rich in antioxidants and nutrients. Detoxification.", consumption: "Mix with water or juice." },
@@ -704,17 +705,10 @@
 
     function renderProducts() {
       const productList = document.getElementById('product-list');
-      // --- DEBUGGING LOGS ADDED ---
-      console.log('Attempting to render products. Target element:', productList); 
-      if (!productList) {
-          console.error('Product list element #product-list not found! Cannot render products.');
-          return;
-      }
-      // --- END DEBUGGING LOGS ---
-
-      const promoActive = isPromoActive(); 
+      if (!productList) return;
+      const promoActive = isPromoActive(); // Check if overall grand opening promo is active
       
-      const productHTML = products.map(product => { // Renamed variable for clarity
+      productList.innerHTML = products.map(product => {
         let priceHTML = '';
         let badgeHTML = '';
         let productClasses = 'product';
@@ -764,9 +758,6 @@
             </div>
           </div>`;
       }).join('');
-
-      productList.innerHTML = productHTML; // Set the innerHTML
-      console.log('Products rendered successfully. Number of products:', products.length); // Added debug
     }
 
     function filterProducts() {
@@ -1659,12 +1650,12 @@
           }
       }
 
-      renderProducts(); // This is correctly called here.
+      renderProducts();
       
       if (sessionStorage.getItem('pendingOrder')) {
           toggleCart();
       } else {
-          showTab('products'); // Ensures the products tab is explicitly set to active.
+          showTab('products');
       }
     });
   </script>
