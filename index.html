@@ -241,7 +241,7 @@
     .program-section { background: var(--light-text); padding: 40px; border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 30px; }
     .program-section h2 { font-size: 2.5rem; text-align: center; }
     .cta-button { display: block; width: fit-content; margin: 30px auto; background: linear-gradient(135deg, var(--secondary-color), #e67e22); color: var(--light-text); text-align: center; padding: 15px 40px; border-radius: 50px; font-weight: bold; text-decoration: none; font-size: 1.2rem; transition: all 0.3s; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-    .cta-button:hover { transform: translateY(-3px); box-shadow: 6px 12px rgba(0,0,0,0.3); }
+    .cta-button:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.3); }
 
     /* --- Rewards Section --- */
     .rewards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
@@ -437,7 +437,7 @@
     </div>
   </header>
 
-  <!-- Updated: Promo Running Banner (Restored) -->
+  <!-- Updated: Promo Running Banner -->
   <div id="promo-running-banner">
       <div class="marquee-content">
           ✨ Hot Promo on Aloe Vera Gel, Aloe Berry Nectar, Aloe Bits N' Peaches! Buy Any 2 for RM 200 + FREE Shipping! ✨ 
@@ -451,7 +451,7 @@
           <li><a onclick="showTab('products')">Products</a></li>
           <li><a onclick="showTab('business')">Business Opportunity</a></li>
           <li><a onclick="showTab('rewards')">Rewards</a></li>
-          <li><a onclick="showTab('rewards-portal')">My Forever Living</a></li><!-- Restored link -->
+          <li><a onclick="showTab('rewards-portal')">My Forever Living</a></li><!-- Renamed link -->
         </ul>
     </div>
   </nav>
@@ -463,7 +463,7 @@
         <p>Enjoy special promotional prices on all our products!</p>
         <div id="promo-details">
             <div class="promo-period">
-                Promotion Ends: <span id="promo-end-date-display"></span> <!-- Let JS fill this -->
+                Promotion Ends: <span id="promo-end-date-display"></span>
             </div>
             <div id="countdown-timer"></div>
         </div>
@@ -536,7 +536,7 @@
     </div>
 
     <div id="rewards-portal" class="tab-content">
-        <!-- New content for "My Forever Living" (Restored) -->
+        <!-- New content for "My Forever Living" -->
         <div class="my-forever-living-container">
             <h2><i class="fa-solid fa-star"></i> My Forever Living <i class="fa-solid fa-heart-pulse"></i></h2>
             <p>
@@ -617,7 +617,7 @@
     </div>
   </div>
 
-  <!-- New: Promo Pop-up Modal (Restored) -->
+  <!-- New: Promo Pop-up Modal -->
   <div id="promo-popup-modal" class="modal">
     <div class="modal-content" style="max-width: 550px; padding: 15px;">
       <span class="close" onclick="closePromoPopup()">×</span>
@@ -1385,6 +1385,7 @@
                     <td style="text-align: right; padding: 8px; border: 1px solid #ddd;">${aloeRetailPrice.toFixed(2)}</td>
                 </tr>`;
             }
+            // NO EXTRA PARENTHESIS HERE! <--- THIS IS THE PRIMARY FIX FOR THE SYNTAX ERROR!
         }
         emailItemsHtml += `</tbody></table>`; // Close table body and table
 
