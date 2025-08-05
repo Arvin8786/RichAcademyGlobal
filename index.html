@@ -692,7 +692,7 @@
         { id: 'RWD05', name: 'ALOE BERRY NECTAR', cost: 10000, image: 'aloe-berry-nectar.jpg', fallbackImage: '', available: false },
         { id: 'RWD06', name: 'ALOE BITS N\' PEACHES', cost: 10000, image: 'aloe-peaches.jpg', fallbackImage: '', available: false },
     ];
-    // This productSuggestions mapping is based on the latest version you provided, which is more comprehensive.
+    // This productSuggestions mapping uses product IDs from your products array
     const productSuggestions = {
         'digestion': [1, 2, 3, 7, 11, 18], 'constipation': [1, 7, 18], 'bloated': [1, 7, 11],
         'immune': [1, 2, 14, 15, 17], 'flu': [14, 17], 'cough': [12, 14], 'cold': [14, 17],
@@ -713,6 +713,20 @@
 
     let cart = [];
     const promoEndDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).getTime(); // 1 week from now
+
+    // --- VERIFICATION CODES (100 unique codes) ---
+    const validVerificationCodes = [
+        "CODE001", "CODE002", "CODE003", "CODE004", "CODE005", "CODE006", "CODE007", "CODE008", "CODE009", "CODE010",
+        "CODE011", "CODE012", "CODE013", "CODE014", "CODE015", "CODE016", "CODE017", "CODE018", "CODE019", "CODE020",
+        "CODE021", "CODE022", "CODE023", "CODE024", "CODE025", "CODE026", "CODE027", "CODE028", "CODE029", "CODE030",
+        "CODE031", "CODE032", "CODE033", "CODE034", "CODE035", "CODE036", "CODE037", "CODE038", "CODE039", "CODE040",
+        "CODE041", "CODE042", "CODE043", "CODE044", "CODE045", "CODE046", "CODE047", "CODE048", "CODE049", "CODE050",
+        "CODE051", "CODE052", "CODE053", "CODE054", "CODE055", "CODE056", "CODE057", "CODE058", "CODE059", "CODE060",
+        "CODE061", "CODE062", "CODE063", "CODE064", "CODE065", "CODE066", "CODE067", "CODE068", "CODE069", "CODE070",
+        "CODE071", "CODE072", "CODE073", "CODE074", "CODE075", "CODE076", "CODE077", "CODE078", "CODE079", "CODE080",
+        "CODE081", "CODE082", "CODE083", "CODE084", "CODE085", "CODE086", "CODE087", "CODE088", "CODE089", "CODE090",
+        "CODE091", "CODE092", "CODE093", "CODE094", "CODE095", "CODE096", "CODE097", "CODE098", "CODE099", "CODE100"
+    ];
 
     // --- LOGIC ---
 
@@ -1148,7 +1162,7 @@
     }
 
     async function verifyPurchase() {
-        const codeInput = document.getElementById('verification-code').value.trim();
+        const codeInput = document.getElementById('verification-code').value.trim().toUpperCase(); // Ensure uppercase
         const statusEl = document.getElementById('verification-status');
         const verifyBtn = document.getElementById('verify-btn');
         let pendingOrder = JSON.parse(sessionStorage.getItem('pendingOrder'));
@@ -1159,152 +1173,152 @@
             return;
         }
         if (!codeInput) {
-            statusEl.textContent = 'Please enter a code.';
+            statusEl.textContent = 'Please enter a verification code.';
             statusEl.style.color = 'red';
             return;
         }
 
         verifyBtn.disabled = true;
-        statusEl.textContent = 'Verifying...';
+        statusEl.textContent = 'Verifying code and recording order...';
         statusEl.style.color = 'blue';
 
-        // --- GOOGLE SHEETS API URL ---
-        // Your Apps Script Web App URL is inserted here:
-        const googleScriptURL = 'https://script.google.com/macros/s/AKfycbzgJOQPE6gwjq5eV8sUQs-8XleeXR3gWosWcqSsvnATYJzn2rpQ9vKQzawJf_CJCO3/exec'; 
+        // --- Client-Side Verification ---
+        if (!validVerificationCodes.includes(codeInput)) {
+            statusEl.textContent = 'Invalid verification code. Please check your code and try again.';
+            statusEl.style.color = 'red';
+            verifyBtn.disabled = false;
+            return;
+        }
+        // If code is in `validVerificationCodes`, proceed to send to Apps Script for recording AND marking as used.
+
+        // --- GOOGLE SHEETS APPS SCRIPT URL ---
+        // YOUR APPS SCRIPT WEB APP URL IS INCLUDED HERE:
+        const googleScriptURL = 'https://script.google.com/macros/s/AKfycbzMl0agbyvkm3Yaz6DrEg8QrujaS_I9RSsgNfCwWmrTqmxAW439-J5C7OPi1lTRRW6y/exec'; 
+
+        if (googleScriptURL === 'YOUR_APP_SCRIPT_WEB_APP_URL') { // Check if placeholder is still there (shouldn't be now)
+            statusEl.textContent = 'Error: Google Apps Script URL not configured. Cannot record order.';
+            statusEl.style.color = 'red';
+            verifyBtn.disabled = false;
+            console.error('Google Apps Script URL is not set. Please update googleScriptURL in script.');
+            return;
+        }
 
         try {
-            console.log('--- Verification Process Start ---');
-            console.log('1. Sending code for validation to server:', codeInput); // Debugging log
+            console.log('--- Order Recording Process Start ---');
+            console.log('Sending order data to Apps Script:', pendingOrder);
             
-            // Step 1: Validate code with the Apps Script (server-side check)
-            const validationResponse = await fetch(`${googleScriptURL}?action=validateCode&code=${codeInput}`);
-            const validationResult = await validationResponse.json();
-            console.log('   Validation API response:', validationResult); // Debugging log
+            const orderNumber = `FL-${Date.now().toString().slice(-6)}`;
+            
+            // Construct items string for Google Sheet (includes pricing breakdown)
+            const aloeDrinkIds = [1, 2, 3];
+            let itemsListForSheet = [];
+            let totalOriginalValue = 0;
+            let totalDiscountValue = 0;
+            let totalSavings = 0;
 
-            if (validationResult.status === 'success' && validationResult.isValid) {
-                const orderNumber = `FL-${Date.now().toString().slice(-6)}`;
+            // Process other items
+            pendingOrder.cart.filter(item => !aloeDrinkIds.includes(item.id)).forEach(item => {
+                const productData = products.find(p => p.id === item.id);
+                const originalPrice = productData.price;
+                const itemPrice = isPromoActive() && productData.promoPrice ? productData.promoPrice : originalPrice;
+                const savings = originalPrice - itemPrice;
                 
-                // Construct items string for Google Sheet (includes pricing breakdown)
-                const aloeDrinkIds = [1, 2, 3];
-                let itemsListForSheet = [];
-                let totalOriginalValue = 0;
-                let totalDiscountValue = 0;
-                let totalSavings = 0;
+                itemsListForSheet.push(`${item.name} (x${item.quantity}) - Orig: RM${originalPrice.toFixed(2)}, Disc: RM${itemPrice.toFixed(2)}, Savings: RM${savings.toFixed(2)}`);
+                totalOriginalValue += originalPrice * item.quantity;
+                totalDiscountValue += itemPrice * item.quantity;
+                totalSavings += savings * item.quantity;
+            });
 
-                // Process other items
-                pendingOrder.cart.filter(item => !aloeDrinkIds.includes(item.id)).forEach(item => {
+            // Add Aloe Trio bundle summary for sheet if applicable
+            const aloeDrinkItemsInCart = pendingOrder.cart.filter(item => aloeDrinkIds.includes(item.id));
+            const aloeDrinkCount = aloeDrinkItemsInCart.reduce((sum, item) => sum + item.quantity, 0);
+            if (aloeDrinkCount > 0 && isPromoActive()) {
+                const numPairs = Math.floor(aloeDrinkCount / 2);
+                const remainingSingles = aloeDrinkCount % 2;
+                const aloeRetailPrice = products.find(p => p.id === 1).price;
+                
+                let bundleItemsNames = aloeDrinkItemsInCart.map(item => `${item.name} x${item.quantity}`).join(', ');
+                const originalBundleValue = (numPairs * 2 * aloeRetailPrice) + (remainingSingles * aloeRetailPrice);
+                const appliedBundleCost = (numPairs * 200) + (remainingSingles * aloeRetailPrice);
+                const bundleSavings = originalBundleValue - appliedBundleCost;
+                
+                if (numPairs > 0) {
+                    itemsListForSheet.push(`Aloe Trio Combo Offer: (${bundleItemsNames}) ${numPairs * 2} items for RM ${numPairs * 200}.00 (Total Savings: RM ${bundleSavings.toFixed(2)})`);
+                }
+                if (remainingSingles > 0) {
+                    itemsListForSheet.push(`Remaining Aloe Drinks: ${remainingSingles} items @ RM ${aloeRetailPrice.toFixed(2)}/pc`);
+                }
+                totalOriginalValue += originalBundleValue;
+                totalDiscountValue += appliedBundleCost;
+                totalSavings += bundleSavings; // Sum up bundle savings as well
+            } else if (aloeDrinkCount > 0) { // If promo not active, list at retail
+                aloeDrinkItemsInCart.forEach(item => {
                     const productData = products.find(p => p.id === item.id);
                     const originalPrice = productData.price;
-                    const itemPrice = isPromoActive() && productData.promoPrice ? productData.promoPrice : originalPrice;
-                    const savings = originalPrice - itemPrice;
-                    
-                    itemsListForSheet.push(`${item.name} (x${item.quantity}) - Orig: RM${originalPrice.toFixed(2)}, Disc: RM${itemPrice.toFixed(2)}, Savings: RM${savings.toFixed(2)}`);
+                    itemsListForSheet.push(`${item.name} (x${item.quantity}) - Orig: RM${originalPrice.toFixed(2)}, Disc: RM${originalPrice.toFixed(2)}, Savings: RM0.00`);
                     totalOriginalValue += originalPrice * item.quantity;
-                    totalDiscountValue += itemPrice * item.quantity;
-                    totalSavings += savings * item.quantity;
+                    totalDiscountValue += originalPrice * item.quantity;
                 });
+            }
+            
+            const itemsStringForSheet = itemsListForSheet.join('; ');
 
-                // Add Aloe Trio bundle summary for sheet if applicable
-                const aloeDrinkItemsInCart = pendingOrder.cart.filter(item => aloeDrinkIds.includes(item.id));
-                const aloeDrinkCount = aloeDrinkItemsInCart.reduce((sum, item) => sum + item.quantity, 0);
-                if (aloeDrinkCount > 0 && isPromoActive()) {
-                    const numPairs = Math.floor(aloeDrinkCount / 2);
-                    const remainingSingles = aloeDrinkCount % 2;
-                    const aloeRetailPrice = products.find(p => p.id === 1).price;
-                    
-                    let bundleItemsNames = aloeDrinkItemsInCart.map(item => `${item.name} x${item.quantity}`).join(', ');
-                    const originalBundleValue = (numPairs * 2 * aloeRetailPrice) + (remainingSingles * aloeRetailPrice);
-                    const appliedBundleCost = (numPairs * 200) + (remainingSingles * aloeRetailPrice);
-                    const bundleSavings = originalBundleValue - appliedBundleCost;
-                    
-                    if (numPairs > 0) {
-                        itemsListForSheet.push(`Aloe Trio Combo Offer: (${bundleItemsNames}) ${numPairs * 2} items for RM ${numPairs * 200}.00 (Total Savings: RM ${bundleSavings.toFixed(2)})`);
-                    }
-                    if (remainingSingles > 0) {
-                        itemsListForSheet.push(`Remaining Aloe Drinks: ${remainingSingles} items @ RM ${aloeRetailPrice.toFixed(2)}/pc`);
-                    }
-                    totalOriginalValue += originalBundleValue;
-                    totalDiscountValue += appliedBundleCost;
-                    totalSavings += bundleSavings; // Sum up bundle savings as well
-                } else if (aloeDrinkCount > 0) { // If promo not active, list at retail
-                    aloeDrinkItemsInCart.forEach(item => {
-                        const productData = products.find(p => p.id === item.id);
-                        const originalPrice = productData.price;
-                        itemsListForSheet.push(`${item.name} (x${item.quantity}) - Orig: RM${originalPrice.toFixed(2)}, Disc: RM${originalPrice.toFixed(2)}, Savings: RM0.00`);
-                        totalOriginalValue += originalPrice * item.quantity;
-                        totalDiscountValue += originalPrice * item.quantity;
-                    });
-                }
+            const orderDataForAppsScript = {
+                orderNumber: orderNumber,
+                date: new Date().toLocaleString('en-GB'),
+                customerName: pendingOrder.customerName,
+                customerPhone: pendingOrder.customerPhone,
+                customerEmail: pendingOrder.customerEmail,
+                customerAddress: pendingOrder.customerAddress,
+                items: itemsStringForSheet, // Use the detailed string for the sheet
+                subtotalOriginal: totalOriginalValue.toFixed(2), // New: Send original subtotal
+                subtotalDiscounted: totalDiscountValue.toFixed(2), // New: Send discounted subtotal
+                totalSavings: totalSavings.toFixed(2), // New: Send total savings
+                shipping: pendingOrder.shipping, // Pass the shipping object as is
+                totalAmount: pendingOrder.totalAmount, // This includes shipping
+                totalPointsForThisPurchase: pendingOrder.totalPointsForThisPurchase, // Points for this current purchase
+                usedCode: codeInput // Send the code to Apps Script for marking as used
+            };
+
+            const recordResponse = await fetch(googleScriptURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Important for doPost(e).postData.contents
+                },
+                body: JSON.stringify(orderDataForAppsScript)
+            });
+            const recordResult = await recordResponse.json();
+            console.log('Apps Script record response:', recordResult);
+
+            if (recordResult.status === 'success') {
+                // Apps Script handled marking code as used and returned PAC/points
+                generatePDF(orderDataForAppsScript, pendingOrder, recordResult.customerPAC, recordResult.totalPoints, pendingOrder.totalPointsForThisPurchase);
+                sendReceiptByEmail(orderDataForAppsScript, pendingOrder, recordResult.customerPAC, recordResult.totalPoints, pendingOrder.totalPointsForThisPurchase);
+
+                statusEl.textContent = 'Purchase verified! Your receipt is downloading...';
+                statusEl.style.color = 'green';
+
+                cart = [];
+                sessionStorage.removeItem('pendingOrder');
+                updateCartCount();
                 
-                const itemsStringForSheet = itemsListForSheet.join('; ');
-
-                const orderData = {
-                    action: 'addOrder',
-                    orderNumber: orderNumber,
-                    date: new Date().toLocaleString('en-GB'),
-                    customerName: pendingOrder.customerName,
-                    customerPhone: pendingOrder.customerPhone,
-                    customerEmail: pendingOrder.customerEmail,
-                    customerAddress: pendingOrder.customerAddress,
-                    items: itemsStringForSheet, // Use the detailed string for the sheet
-                    subtotalOriginal: totalOriginalValue.toFixed(2), // New: Send original subtotal
-                    subtotalDiscounted: totalDiscountValue.toFixed(2), // New: Send discounted subtotal
-                    totalSavings: totalSavings.toFixed(2), // New: Send total savings
-                    shipping: pendingOrder.shipping, // Pass the shipping object as is
-                    totalAmount: pendingOrder.totalAmount, // This includes shipping
-                    totalPointsForThisPurchase: pendingOrder.totalPointsForThisPurchase, // Points for this current purchase
-                    usedCode: codeInput
-                };
-
-                console.log('2. Sending order data to record:', orderData); // Debugging log
-                const recordResponse = await fetch(googleScriptURL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json', // Important for doPost(e).postData.contents
-                    },
-                    body: JSON.stringify(orderData)
-                });
-                const recordResult = await recordResponse.json();
-                console.log('   Record API response:', recordResult); // Debugging log
-
-                if (recordResult.status === 'success') {
-                    // Pass current points earned and total accumulated points to PDF/Email generation
-                    generatePDF(orderData, pendingOrder, recordResult.customerPAC, recordResult.totalPoints, pendingOrder.totalPointsForThisPurchase);
-                    sendReceiptByEmail(orderData, pendingOrder, recordResult.customerPAC, recordResult.totalPoints, pendingOrder.totalPointsForThisPurchase);
-
-                    statusEl.textContent = 'Purchase verified! Your receipt is downloading...';
-                    statusEl.style.color = 'green';
-
-                    cart = [];
-                    sessionStorage.removeItem('pendingOrder');
-                    updateCartCount();
-                    
-                    setTimeout(() => {
-                        toggleCart(true);
-                        verifyBtn.disabled = false;
-                    }, 2500);
-                } else {
-                    // This means Apps Script successfully received request but returned a business logic error
-                    console.error('Error from Apps Script during record:', recordResult.message);
-                    statusEl.textContent = recordResult.message || 'Failed to record order on server side.';
-                    statusEl.style.color = 'red';
+                setTimeout(() => {
+                    toggleCart(true);
                     verifyBtn.disabled = false;
-                }
-
+                }, 2500);
             } else {
-                // This means validation API returned isValid: false or status: error
-                console.error('Code validation failed:', validationResult.message);
-                statusEl.textContent = validationResult.message || 'Invalid or already used verification code.';
+                console.error('Error from Apps Script during record:', recordResult.message);
+                statusEl.textContent = recordResult.message || 'Failed to record order on server side. Please contact support.';
                 statusEl.style.color = 'red';
                 verifyBtn.disabled = false;
             }
+
         } catch (error) {
-            console.error('Verification Process Error:', error); // Log full error object
+            console.error('Verification Process Error:', error);
             statusEl.textContent = 'An unexpected error occurred: ' + error.message + '. Please check console or contact owner.';
             statusEl.style.color = 'red';
             verifyBtn.disabled = false;
         }
-        console.log('--- Verification Process End ---');
     }
 
     // Added two new parameters for point display
@@ -1395,7 +1409,7 @@
             customer_email: orderDetails.customerEmail,
             customer_address: orderDetails.customerAddress,
             items_html: emailItemsHtml, // Pass the entire table HTML
-            subtotal: orderDetails.calculatedSubtotal.toFixed(2),
+            subtotal: record.subtotalDiscounted, // Use discounted subtotal from record
             shipping: orderDetails.shipping.message,
             total_amount: orderDetails.totalAmount,
             current_purchase_points: String(currentPurchasePoints), // Convert to string
@@ -1530,7 +1544,7 @@
         
         doc.setFontSize(12);
         // Use the calculated values from pendingOrder which already accounted for promos
-        doc.text(`Subtotal: RM ${orderDetails.calculatedSubtotal.toFixed(2)}`, 14, finalY + 10);
+        doc.text(`Subtotal: RM ${record.subtotalDiscounted}`, 14, finalY + 10); // Changed to use record.subtotalDiscounted
         doc.text(`Shipping: ${orderDetails.shipping.message}`, 14, finalY + 17);
         doc.setFontSize(14);
         doc.setFont(undefined, 'bold');
