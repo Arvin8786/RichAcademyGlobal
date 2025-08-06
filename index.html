@@ -716,17 +716,16 @@
 
     // --- VERIFICATION CODES (100 unique codes) ---
     const validVerificationCodes = [
-        "CODE001", "CODE002", "CODE003", "CODE004", "CODE005", "CODE006", "CODE007", "CODE008", "CODE009", "CODE010",
-        "CODE011", "CODE012", "CODE013", "CODE014", "CODE015", "CODE016", "CODE017", "CODE018", "CODE019", "CODE020",
-        "CODE021", "CODE022", "CODE023", "CODE024", "CODE025", "CODE026", "CODE027", "CODE028", "CODE029", "CODE030",
-        "CODE031", "CODE032", "CODE033", "CODE034", "CODE035", "CODE036", "CODE037", "CODE038", "CODE039", "CODE040",
-        "CODE041", "CODE042", "CODE043", "CODE044", "CODE045", "CODE046", "CODE047", "CODE048", "CODE049", "CODE050",
-        "CODE051", "CODE052", "CODE053", "CODE054", "CODE055", "CODE056", "CODE057", "CODE058", "CODE059", "CODE060",
-        "CODE061", "CODE062", "CODE063", "CODE064", "CODE065", "CODE066", "CODE067", "CODE068", "CODE069", "CODE070",
-        "CODE071", "CODE072", "CODE073", "CODE074", "CODE075", "CODE076", "CODE077", "CODE078", "CODE079", "CODE080",
-        "CODE081", "CODE082", "CODE083", "CODE084", "CODE085", "CODE086", "CODE087", "CODE088", "CODE089", "CODE090",
-        "CODE091", "CODE092", "CODE093", "CODE094", "CODE095", "CODE096", "CODE097", "CODE098", "CODE099", "CODE100"
-    ];
+    "pL7Z3xJ9mW", "aR2G8hK4cX", "qW5D0bN1fV", "tY9F6sL3zQ", "uI0E7rM2pA", "vJ8X1wC6dY", "bN3Z4kQ7gF", "cD1S9tV5jH", "eF6G2aR8uI", "hK0X3cZ9wM",
+    "fL7J4sP1vD", "gM2W8dE5fB", "iN5R1tG0hC", "jQ9S6zX3kY", "kU0V7eW2pL", "lC8B1nD6fA", "mD3F4gG7jH", "nE1A9oK5qJ", "oP6B2iC8tU", "pR0L3fV9xM",
+    "qS7C4kQ1wZ", "rT2H8lR5eX", "sU5I1mS0nG", "tV9J6nU3oH", "uW0K7pR2qL", "vX8L1qD6sE", "wY3M4rN7tF", "xC1Z9sP5uJ", "yD6A2tV8wR", "zF0B3uW9yS",
+    "A1B2C3D4E5", "F6G7H8I9J0", "K1L2M3N4O5", "P6Q7R8S9T0", "U1V2W3X4Y5", "Z6a7b8c9d0", "e1f2g3h4i5", "j6k7l8m9n0", "o1p2q3r4s5", "t6u7v8w9x0",
+    "y1z2A3B4C5", "D6E7F8G9H0", "I1J2K3L4M5", "N6O7P8Q9R0", "S1T2U3V4W5", "X6Y7Z8a9b0", "c1d2e3f4g5", "h6i7j8k9l0", "m1n2o3p4q5", "r6s7t8u9v0",
+    "VBHG65TY78", "CDFR23ED45", "IJOL98HY67", "MNBV12RF54", "QWERT09TYU", "ZXCVB45FGT", "ASDFG67HJU", "LKJHG34ERT", "POIUY90QWE", "NBVCX21WSD",
+    "MKOI87TREW", "PLKM09NJUH", "OKJN65BGRF", "IJHBV87CFR", "UHYT98MNHG", "TGFR54WSXC", "RFVF43EDSW", "DEWS21QAZX", "UYTR76VCXZ", "GBNH76ERTY",
+    "EDCV54RFGT", "ZXC45RTG23", "ASW23FGT67", "DFR45GYH78", "GTY78UJI90", "HJU90IKL34", "KLO56MNB78", "VBN90GFD12", "REW34CVB56", "QAZX78PLKO",
+    "QWE45YUI67", "ASD87FGH90", "ZXC12VBN34", "RTY56UOP78", "FGH90JKL12", "VBN34MKO56", "ERT56CVB78", "YUI90GHJ12", "IOP34DFG56", "HJK89LMN01"
+];
 
     // --- LOGIC ---
 
@@ -750,7 +749,7 @@
             badgeHTML = '<div class="featured-badge" style="background-color: #e74c3c;">Hot Promo!</div>'; /* Changed text */
             priceHTML = `
                 <span class="original-price">RM ${product.price.toFixed(2)}</span>
-                <span class="new-price" style="font-size: 1.2rem; color: var(--primary-color); display: block; margin-top: 5px;">Buy any 2 for RM 200.00</span>
+                <span class="new-price" style="font-size: 1.2rem; color: var(--primary-color); display: block; margin-top: 5px;">Buy Any 2 for RM 200.00</span>
                 <div style="font-size: 0.9rem; color: var(--accent-color); font-weight: bold; margin-top: 5px;"><i class="fa-solid fa-truck-fast"></i> FREE Shipping!</div>
             `;
             // Points are based on actual spend, calculated in cart, so display 0 here for these specific products on the product card.
