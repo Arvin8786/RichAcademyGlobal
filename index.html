@@ -3,443 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Forever Living by Muhd Arvind Isa - Grand Opening Special</title>
+  <title>Forever Living by Muhd Arvind Isa</title>
   
-  <!-- Google Fonts & Font Awesome Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- jsPDF Library for PDF Generation -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
-
-  <!-- EmailJS Library for Sending Emails -->
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-
   <style>
-    :root {
-      --primary-color: #1a5276;
-      --secondary-color: #f39c12;
-      --accent-color: #27ae60;
-      --light-gray: #f4f6f8;
-      --dark-text: #333;
-      --light-text: #fff;
-      --border-radius: 12px;
-      --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-      --font-family: 'Poppins', sans-serif;
-    }
-
-    /* --- Keyframes for Animations --- */
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes slideIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes promoGlow {
-      0% { box-shadow: 0 0 5px rgba(243, 156, 18, 0.6); }
-      50% { box-shadow: 0 0 20px rgba(243, 156, 18, 0.9); }
-      100% { box-shadow: 0 0 5px rgba(243, 156, 18, 0.6); }
-    }
-    @keyframes confetti-fall {
-        0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
-        100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-    }
-    @keyframes marquee {
-        0%   { transform: translateX(0%); }
-        100% { transform: translateX(-100%); }
-    }
-
-    /* --- Base Styles --- */
-    *, *::before, *::after { box-sizing: border-box; }
-    body {
-      font-family: var(--font-family);
-      margin: 0;
-      padding: 0;
-      background-color: var(--light-gray);
-      color: var(--dark-text);
-      overflow-x: hidden;
-      line-height: 1.6;
-      padding-top: 45px; /* Estimated height of the running banner */
-    }
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-    h1, h2, h3, h4 { color: var(--primary-color); font-weight: 600; }
-
-    /* --- Grand Opening Theme --- */
-    body.grand-opening-active {
-        background: linear-gradient(45deg, #fff1e7, #e6f7ff);
-    }
-    .grand-opening-active .hero-section {
-        border: 4px dashed var(--secondary-color);
-    }
-    .confetti {
-        position: fixed;
-        width: 10px;
-        height: 15px;
-        opacity: 0.8;
-        animation: confetti-fall 5s linear infinite;
-        z-index: 9999;
-        pointer-events: none;
-    }
-    #countdown-timer {
-        background-color: rgba(0,0,0,0.2);
-        padding: 15px 30px;
-        border-radius: 50px;
-        margin-top: 20px;
-        display: inline-block;
-        font-size: 1.8rem;
-        font-weight: 700;
-        color: #fff;
-        border: 2px solid #fff;
-    }
-
-    /* --- Header & Navigation --- */
-    header {
-      background-color: var(--light-text);
-      padding: 20px 0;
-      text-align: center; /* Ensures the content inside is centered */
-      border-bottom: 1px solid #e0e0e0;
-      position: relative;
-    }
-    .header-content {
-        display: flex; /* Re-added flex for centering children */
-        align-items: center; /* Vertically align items */
-        justify-content: center; /* Horizontally center items */
-        gap: 20px; /* Space between logo and h1 */
-    }
-    .header-logo {
-        width: 80px;
-        height: 80px;
-    }
-    .header-content h1 {
-        margin: 0; /* Remove default margin for better control */
-    }
-    .header-content h1 span {
-        display: block; /* Ensure tagline is on its own line */
-    }
-
-    /* Updated: Promo Running Banner */
-    #promo-running-banner {
-      background-color: var(--secondary-color); /* Orange/Yellow */
-      color: var(--light-text);
-      padding: 10px 0;
-      text-align: center; 
-      font-weight: 700;
-      font-size: 1.1rem;
-      position: fixed; /* Fixed at the top */
-      top: 0;
-      left: 0;
-      width: 100%;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      z-index: 101; /* Ensure it's on top of everything */
-      overflow: hidden; /* Crucial for marquee effect */
-      white-space: nowrap; /* Keep text on one line */
-    }
-    #promo-running-banner .marquee-content {
-        display: inline-block;
-        padding-left: 100%; /* Start off-screen */
-        animation: marquee 20s linear infinite; /* Re-enabled marquee effect */
-    }
-
-    nav {
-      background-color: var(--primary-color);
-      position: sticky;
-      top: 45px; /* Based on estimated height of #promo-running-banner */
-      z-index: 100;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    nav ul { display: flex; list-style: none; padding: 10px 0; margin: 0; justify-content: center; flex-wrap: wrap; }
-    nav a { color: var(--light-text); text-decoration: none; font-weight: 600; padding: 10px 20px; display: inline-block; position: relative; transition: color 0.3s; cursor: pointer; }
-    nav a::after { content: ''; position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); width: 0; height: 2px; background-color: var(--secondary-color); transition: width 0.3s; }
-    nav a:hover { color: #f1c40f; }
-    nav a:hover::after { width: 60%; }
-
-    /* --- Tab Content & Hero --- */
-    .tab-content { display: none; padding: 20px 0; }
-    .tab-content.active { display: block; animation: fadeIn 0.5s; }
-    .hero-section {
-      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-      color: var(--light-text);
-      padding: 60px 20px;
-      text-align: center;
-      border-radius: var(--border-radius);
-      margin-bottom: 30px;
-    }
-    .hero-section h2 { color: var(--light-text); }
-    .hero-section .promo-period {
-        background-color: rgba(255, 255, 255, 0.15);
-        padding: 10px 20px;
-        border-radius: 50px;
-        display: inline-block;
-        font-weight: 600;
-    }
-
-    /* --- Search & AI Suggestion --- */
-    .search-container { margin-bottom: 30px; position: relative; }
-    #product-search { width: 100%; padding: 15px 50px 15px 25px; border: 2px solid #ddd; border-radius: 50px; font-size: 1rem; outline: none; transition: all 0.3s; }
-    #product-search:focus { border-color: var(--primary-color); box-shadow: 0 0 10px rgba(26, 82, 118, 0.2); }
-    .search-icon { position: absolute; right: 25px; top: 50%; transform: translateY(-50%); color: var(--primary-color); font-size: 1.2rem; }
-    .ai-suggestion-box { background: var(--light-text); padding: 30px; border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 30px; text-align: center; }
-    #symptom-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin: 10px 0; }
-    #suggest-btn { background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: var(--light-text); border: none; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: all 0.3s; margin-top: 10px; }
-    #suggest-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-    #suggestion-result { margin-top: 20px; text-align: left; }
-    .suggestion-product { background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--accent-color); }
-
-    /* --- Product List & Cards --- */
-    .product-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
-    .product {
-      background: var(--light-text);
-      border-radius: var(--border-radius);
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      transition: all 0.3s ease;
-      overflow: hidden; /* Important for containing the image, but badge needs careful positioning */
-    }
-    .product:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0,0,0,0.12); }
-    .product.promo-highlight { animation: promoGlow 2.5s infinite ease-in-out; }
-    .product-image-container { height: 220px; padding: 15px; display: flex; align-items: center; justify-content: center; }
-    .product img { max-width: 100%; max-height: 100%; object-fit: contain; }
-    .product-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; text-align: left; }
-    .product h3 { margin: 0 0 10px; font-size: 1.25rem; height: 3.75rem; overflow: hidden; }
-    .product .benefits { font-size: 0.85rem; color: #555; margin: 10px 0; flex-grow: 1; }
-    .product .consumption { font-size: 0.85rem; color: var(--primary-color); font-style: italic; margin: 10px 0; }
-    .price-section { margin: 15px 0; text-align: center; }
-    .original-price { text-decoration: line-through; color: #999; font-size: 1rem; margin-right: 10px; }
-    .new-price { color: var(--secondary-color); font-weight: bold; font-size: 1.5rem; }
-    .product-points { font-size: 0.9rem; font-weight: 600; color: var(--accent-color); text-align: center; margin-top: 10px; }
-    .product-actions { margin-top: auto; display: flex; flex-direction: column; gap: 10px; }
-    .btn {
-        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-        width: 100%; padding: 12px 15px; border-radius: 50px; text-decoration: none;
-        font-weight: bold; border: none; cursor: pointer; transition: all 0.3s;
-    }
-    .btn:disabled { background-color: #ccc; cursor: not-allowed; }
-    .btn-primary { background: var(--primary-color); color: var(--light-text); }
-    .btn-primary:hover { background: #123e5a; transform: scale(1.05); }
-    .btn-secondary { background: var(--light-gray); color: var(--primary-color); border: 1px solid var(--primary-color); }
-    .btn-secondary:hover { background: #e0e0e0; }
-    
-    /* Adjusted Featured Badge CSS for better visibility */
-    .featured-badge {
-      position: absolute; 
-      top: 0; /* Position from top edge */
-      right: 0; /* Position from right edge */
-      background: var(--secondary-color);
-      color: white; 
-      padding: 5px 25px; /* Padding for text inside the badge */
-      transform: rotate(45deg) translate(25%, -65%); /* Rotates 45deg, then moves by percentage of its own size to position outside the corner */
-      transform-origin: 0% 0%; /* Rotate around top-left of the badge's transformed box */
-      font-weight: bold; 
-      font-size: 0.9rem; 
-      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-      z-index: 10; /* Ensure it stays on top of content */
-      white-space: nowrap; /* Prevent text wrapping inside the badge */
-    }
-
-    /* --- Program & Business Sections --- */
-    .program-section { background: var(--light-text); padding: 40px; border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 30px; }
-    .program-section h2 { font-size: 2.5rem; text-align: center; }
-    .cta-button { display: block; width: fit-content; margin: 30px auto; background: linear-gradient(135deg, var(--secondary-color), #e67e22); color: var(--light-text); text-align: center; padding: 15px 40px; border-radius: 50px; font-weight: bold; text-decoration: none; font-size: 1.2rem; transition: all 0.3s; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-    .cta-button:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.3); }
-
-    /* --- Rewards Section --- */
-    .rewards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-    .reward-item { 
-        background: var(--light-gray); 
-        border: 1px solid #ddd; 
-        border-radius: var(--border-radius); 
-        padding: 20px; 
-        text-align: center; 
-        display: flex; 
-        flex-direction: column;
-        position: relative; /* Needed for the overlay */
-    }
-    .reward-item img { max-width: 100%; height: 100px; object-fit: contain; margin-bottom: 15px; border-radius: 8px; }
-    .reward-item h4 { margin: 10px 0 5px; }
-    .reward-item .points-cost { font-weight: bold; color: var(--accent-color); margin-bottom: 15px; }
-    .coming-soon-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(255, 255, 255, 0.8);
-        color: var(--primary-color);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-        font-weight: bold;
-        border-radius: var(--border-radius);
-        backdrop-filter: blur(2px);
-    }
-
-    /* --- Floating Cart Button --- */
-    .floating-cart-btn {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        width: 60px;
-        height: 60px;
-        background-color: var(--primary-color);
-        color: var(--light-text);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.8rem;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-        cursor: pointer;
-        z-index: 1000;
-        transition: transform 0.3s ease;
-    }
-    .floating-cart-btn:hover { transform: scale(1.1); }
-    #cart-count {
-        position: absolute;
-        top: -2px;
-        right: -2px;
-        background-color: var(--secondary-color);
-        color: var(--light-text);
-        border-radius: 50%;
-        padding: 3px 8px;
-        font-size: 0.8rem;
-        font-weight: bold;
-        border: 2px solid var(--light-text);
-    }
-
-    /* --- Modal & Cart Styles --- */
-    .modal {
-      display: none; position: fixed; z-index: 1001; left: 0; top: 0;
-      width: 100%; height: 100%; background-color: rgba(0,0,0,0.6);
-      align-items: center; justify-content: center; animation: fadeIn 0.4s ease;
-    }
-    .modal-content {
-      background-color: #fefefe; padding: 30px; border-radius: var(--border-radius);
-      width: 90%; max-width: 600px; /* Default max-width for modals */
-      animation: slideIn 0.4s ease;
-      max-height: 90vh; /* Set max height */
-      overflow-y: auto; /* Enable scrolling */
-    }
-    /* Specific adjustment for the promo pop-up modal content */
-    #promo-popup-modal .modal-content {
-      max-width: 550px; /* Adjusted to make it smaller */
-      padding: 15px; /* Keep padding light for image */
-    }
-    .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; transition: color 0.3s; }
-    .close:hover { color: black; }
-    #cart-items { max-height: 250px; overflow-y: auto; padding-right: 10px; border-bottom: 1px solid #eee; margin-bottom: 15px; }
-    .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; }
-    .cart-item-details { flex-grow: 1; }
-    .quantity-controls { display: flex; align-items: center; gap: 8px; margin-top: 5px; }
-    .quantity-btn {
-        width: 28px; height: 28px; background: var(--light-gray); border: 1px solid #ccc;
-        border-radius: 50%; cursor: pointer; font-weight: bold;
-    }
-    .quantity-display { font-weight: 600; min-width: 20px; text-align: center; }
-    .remove-item-btn { font-size: 1.2rem; color: #cc0000; cursor: pointer; margin-left: 15px; }
-    .cart-summary { margin-top: 20px; font-size: 1.1rem; }
-    .summary-line { display: flex; justify-content: space-between; padding: 8px 0; }
-    .summary-line.total { font-weight: bold; font-size: 1.3rem; border-top: 2px solid #333; margin-top: 10px; }
-    .points-earned {
-        background-color: #e0f2f1; color: var(--accent-color); padding: 10px;
-        border-radius: 8px; text-align: center; margin-top: 15px; font-weight: bold;
-    }
-    .free-shipping-promo {
-        background-color: #e0f2f1; color: var(--accent-color); padding: 10px;
-        border-radius: 8px; text-align: center; margin-top: 20px; font-weight: bold;
-    }
-    .checkout-btn { width: 100%; margin-top: 15px; }
-    
-    /* UPDATED Verification View Styles */
-    .verification-step {
-        margin-top: 20px;
-        padding: 20px;
-        background-color: var(--light-gray);
-        border-radius: var(--border-radius);
-        text-align: center;
-        border: 2px dashed #ddd;
-    }
-    .verification-step.active {
-        border-color: var(--primary-color);
-        background-color: #eaf2f8;
-    }
-    .verification-step.completed {
-        border-color: var(--accent-color);
-        background-color: #e8f8f5;
-        opacity: 0.7;
-    }
-    .verification-step h4 { margin-top: 0; }
-    .verification-step input[type="text"],
-    .verification-step input[type="file"] {
-        width: 100%;
-        padding: 12px;
-        margin: 15px 0 10px 0;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-    }
-    #upload-status, #verification-status {
-        margin-top: 10px;
-        font-weight: bold;
-        min-height: 20px;
-    }
-
-    .customer-info-form input {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-    
-    /* --- My Forever Living Section Styles --- */
-    .my-forever-living-container {
-        background: white;
-        padding: 50px; /* Increased padding for more space */
-        border-radius: var(--border-radius);
-        box-shadow: var(--shadow);
-        text-align: center;
-        min-height: 400px; /* Ensure it takes up some space */
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-    .my-forever-living-container h2 {
-        font-size: 3rem;
-        margin-bottom: 20px;
-        color: var(--primary-color);
-    }
-    .my-forever-living-container p {
-        font-size: 1.2rem;
-        color: #555;
-        max-width: 600px;
-        margin: 0 auto 30px;
-    }
-    .my-forever-living-container .fa-star,
-    .my-forever-living-container .fa-gears,
-    .my-forever-living-container .fa-heart-pulse {
-        font-size: 4rem; /* Larger icons */
-        color: var(--secondary-color);
-        margin: 15px;
-    }
-    .my-forever-living-container .icon-row {
-        margin-top: 30px;
-        display: flex;
-        gap: 40px;
-        justify-content: center;
-        align-items: center;
-    }
-
-    /* --- Footer & Disclaimer --- */
-    footer { background: var(--primary-color); color: var(--light-text); padding: 40px 20px; text-align: center; margin-top: 30px; }
-    .disclaimer {
-        margin-top: 10px;
-        background-color: #fff3cd;
-        color: #856404;
-        padding: 15px;
-        border-top: 1px solid #ffeeba;
-    }
+    :root{--primary-color:#1a5276;--secondary-color:#f39c12;--accent-color:#27ae60;--light-gray:#f4f6f8;--dark-text:#333;--light-text:#fff;--border-radius:12px;--shadow:0 4px 15px rgba(0,0,0,.08);--font-family:'Poppins',sans-serif}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes slideIn{from{opacity:0;transform:translateY(-30px)}to{opacity:1;transform:translateY(0)}}@keyframes promoGlow{0%{box-shadow:0 0 5px rgba(243,156,18,.6)}50%{box-shadow:0 0 20px rgba(243,156,18,.9)}100%{box-shadow:0 0 5px rgba(243,156,18,.6)}}@keyframes marquee{0%{transform:translateX(0%)}100%{transform:translateX(-100%)}}*,::after,::before{box-sizing:border-box}body{font-family:var(--font-family);margin:0;padding:0;background-color:var(--light-gray);color:var(--dark-text);overflow-x:hidden;line-height:1.6;padding-top:45px}.container{max-width:1200px;margin:0 auto;padding:0 20px}h1,h2,h3,h4{color:var(--primary-color);font-weight:600}body.grand-opening-active{background:linear-gradient(45deg,#fff1e7,#e6f7ff)}.grand-opening-active .hero-section{border:4px dashed var(--secondary-color)}header{background-color:var(--light-text);padding:20px 0;text-align:center;border-bottom:1px solid #e0e0e0;position:relative}.header-content{display:flex;align-items:center;justify-content:center;gap:20px}.header-logo{width:80px;height:80px}.header-content h1{margin:0}.header-content h1 span{display:block}#promo-running-banner{background-color:var(--secondary-color);color:var(--light-text);padding:10px 0;text-align:center;font-weight:700;font-size:1.1rem;position:fixed;top:0;left:0;width:100%;box-shadow:0 2px 5px rgba(0,0,0,.1);z-index:101;overflow:hidden;white-space:nowrap;display:none}#promo-running-banner .marquee-content{display:inline-block;padding-left:100%;animation:marquee 20s linear infinite}nav{background-color:var(--primary-color);position:sticky;top:45px;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.1)}nav ul{display:flex;list-style:none;padding:10px 0;margin:0;justify-content:center;flex-wrap:wrap}nav a{color:var(--light-text);text-decoration:none;font-weight:600;padding:10px 20px;display:inline-block;position:relative;transition:color .3s;cursor:pointer}nav a::after{content:'';position:absolute;bottom:5px;left:50%;transform:translateX(-50%);width:0;height:2px;background-color:var(--secondary-color);transition:width .3s}nav a:hover{color:#f1c40f}nav a:hover::after{width:60%}.tab-content{display:none;padding:20px 0}.tab-content.active{display:block;animation:fadeIn .5s}.hero-section{background:linear-gradient(135deg,#6c7a89,#34495e);color:var(--light-text);padding:60px 20px;text-align:center;border-radius:var(--border-radius);margin-bottom:30px;transition: all 0.5s ease;}.hero-section h2{color:var(--light-text)}.ai-suggestion-box{background:var(--light-text);padding:30px;border-radius:var(--border-radius);box-shadow:var(--shadow);margin-bottom:30px;text-align:center}#symptom-input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin:10px 0}#suggest-btn{background:linear-gradient(135deg,var(--primary-color),var(--accent-color));color:var(--light-text);border:none;padding:12px 30px;border-radius:50px;cursor:pointer;font-weight:700;transition:all .3s;margin-top:10px}#suggest-btn:hover{transform:translateY(-3px);box-shadow:0 5px 15px rgba(0,0,0,.2)}#suggestion-result{margin-top:20px;text-align:left}.suggestion-product{background:#f8f9fa;padding:15px;border-radius:8px;margin:10px 0;display:flex;justify-content:space-between;align-items:center;border-left:4px solid var(--accent-color)}.product-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:30px}.product{background:var(--light-text);border-radius:var(--border-radius);box-shadow:var(--shadow);display:flex;flex-direction:column;position:relative;transition:all .3s ease;overflow:hidden}.product:hover{transform:translateY(-8px);box-shadow:0 10px 25px rgba(0,0,0,.12)}.product.promo-highlight{animation:promoGlow 2.5s infinite ease-in-out}.product-image-container{height:220px;padding:15px;display:flex;align-items:center;justify-content:center}.product img{max-width:100%;max-height:100%;object-fit:contain}.product-info{padding:20px;flex-grow:1;display:flex;flex-direction:column;text-align:left;position:relative}.product h3{margin:0 0 10px;font-size:1.25rem;height:3.75rem;overflow:hidden}.product .benefits{font-size:.85rem;color:#555;margin:10px 0;flex-grow:1}.product .consumption{font-size:.85rem;color:var(--primary-color);font-style:italic;margin:10px 0}.price-section{margin:15px 0;text-align:center}.original-price{text-decoration:line-through;color:#999;font-size:1rem;margin-right:10px}.new-price{color:var(--secondary-color);font-weight:700;font-size:1.5rem}.product-points{font-size:.9rem;font-weight:600;color:var(--accent-color);text-align:center;margin-top:10px}.product-actions{margin-top:auto;display:flex;flex-direction:column;gap:10px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px 15px;border-radius:50px;text-decoration:none;font-weight:700;border:none;cursor:pointer;transition:all .3s}.btn:disabled{background-color:#ccc;cursor:not-allowed}.btn-primary{background:var(--primary-color);color:var(--light-text)}.btn-primary:hover{background:#123e5a;transform:scale(1.05)}.btn-secondary{background:var(--light-gray);color:var(--primary-color);border:1px solid var(--primary-color)}.btn-secondary:hover{background:#e0e0e0}.featured-badge{position:absolute;top:0;right:0;background:var(--secondary-color);color:#fff;padding:5px 25px;transform:rotate(45deg) translate(25%,-65%);transform-origin:0 0;font-weight:700;font-size:.9rem;box-shadow:0 3px 10px rgba(0,0,0,.2);z-index:10;white-space:nowrap}.halal-logo-tag{position:absolute;top:10px;left:10px;width:40px;height:40px;z-index:5}.floating-cart-btn{position:fixed;bottom:20px;right:20px;width:60px;height:60px;background-color:var(--primary-color);color:var(--light-text);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;box-shadow:0 4px 12px rgba(0,0,0,.25);cursor:pointer;z-index:1000;transition:transform .3s ease}.floating-cart-btn:hover{transform:scale(1.1)}#cart-count{position:absolute;top:-2px;right:-2px;background-color:var(--secondary-color);color:var(--light-text);border-radius:50%;padding:3px 8px;font-size:.8rem;font-weight:700;border:2px solid var(--light-text)}.modal{display:none;position:fixed;z-index:1001;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,.6);align-items:center;justify-content:center;animation:fadeIn .4s ease}.modal-content{background-color:#fefefe;padding:30px;border-radius:var(--border-radius);width:90%;max-width:600px;animation:slideIn .4s ease;max-height:90vh;overflow-y:auto}#promo-popup-modal .modal-content{max-width:550px;padding:15px}.close{color:#aaa;float:right;font-size:28px;font-weight:700;cursor:pointer;transition:color .3s}.close:hover{color:#000}#cart-items{max-height:250px;overflow-y:auto;padding-right:10px;border-bottom:1px solid #eee;margin-bottom:15px}.cart-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0}.cart-item-details{flex-grow:1}.quantity-controls{display:flex;align-items:center;gap:8px;margin-top:5px}.quantity-btn{width:28px;height:28px;background:var(--light-gray);border:1px solid #ccc;border-radius:50%;cursor:pointer;font-weight:700}.quantity-display{font-weight:600;min-width:20px;text-align:center}.remove-item-btn{font-size:1.2rem;color:#c00;cursor:pointer;margin-left:15px}.cart-summary{margin-top:20px;font-size:1.1rem}.summary-line{display:flex;justify-content:space-between;padding:8px 0}.summary-line.total{font-weight:700;font-size:1.3rem;border-top:2px solid #333;margin-top:10px}.points-earned,.free-shipping-promo{background-color:#e0f2f1;color:var(--accent-color);padding:10px;border-radius:8px;text-align:center;margin-top:20px;font-weight:700}.customer-info-form input{width:100%;padding:10px;margin-bottom:10px;border:1px solid #ccc;border-radius:5px}.discount-section{display:flex;gap:10px;margin-top:15px}.discount-section input{flex-grow:1;padding:10px;border:1px solid #ccc;border-radius:5px}.discount-section button{width:auto;padding:10px 15px;flex-shrink:0}#discount-status{font-size:.9rem;font-weight:600;margin-top:8px;min-height:18px;text-align:center}#consent-form{margin-top:20px;padding:15px;background-color:#f8f9fa;border:1px solid #dee2e6;border-radius:8px;font-size:.9rem}#consent-form label{display:flex;align-items:flex-start;gap:10px}#consent-form input[type=checkbox]{margin-top:3px}#consent-form a{color:var(--primary-color);font-weight:600}.checkout-btn{width:100%;margin-top:15px}.verification-step{margin-top:20px;padding:20px;background-color:var(--light-gray);border-radius:var(--border-radius);text-align:center;border:2px dashed #ddd}.verification-step.active{border-color:var(--primary-color);background-color:#eaf2f8}.verification-step.completed{border-color:var(--accent-color);background-color:#e8f8f5;opacity:.7}.verification-step h4{margin-top:0}.verification-step input[type=file],.verification-step input[type=text]{width:100%;padding:12px;margin:15px 0 10px;border:1px solid #ddd;border-radius:8px}#upload-status,#verification-status{margin-top:10px;font-weight:700;min-height:20px}footer{background:var(--primary-color);color:var(--light-text);padding:40px 20px;text-align:center;margin-top:30px}.disclaimer{margin-top:10px;background-color:#fff3cd;color:#856404;padding:15px;border-top:1px solid #ffeeba}.rewards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}.reward-item{background:var(--light-gray);border:1px solid #ddd;border-radius:var(--border-radius);padding:20px;text-align:center;display:flex;flex-direction:column;position:relative}.reward-item img{max-width:100%;height:100px;object-fit:contain;margin-bottom:15px;border-radius:8px}.reward-item h4{margin:10px 0 5px}.reward-item .points-cost{font-weight:700;color:var(--accent-color);margin-bottom:15px}.coming-soon-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background-color:rgba(255,255,255,.8);color:var(--primary-color);display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:700;border-radius:var(--border-radius);backdrop-filter:blur(2px)}.program-section{background:var(--light-text);padding:40px;border-radius:var(--border-radius);box-shadow:var(--shadow);margin-bottom:30px}.program-section h2{font-size:2.5rem;text-align:center}.cta-button{display:block;width:fit-content;margin:30px auto;background:linear-gradient(135deg,var(--secondary-color),#e67e22);color:var(--light-text);text-align:center;padding:15px 40px;border-radius:50px;font-weight:700;text-decoration:none;font-size:1.2rem;transition:all .3s;box-shadow:0 4px 8px rgba(0,0,0,.2)}.cta-button:hover{transform:translateY(-3px);box-shadow:0 6px 12px rgba(0,0,0,.3)}.my-forever-living-container{background:#fff;padding:50px;border-radius:var(--border-radius);box-shadow:var(--shadow);text-align:center;min-height:400px;display:flex;flex-direction:column;justify-content:center;align-items:center}.my-forever-living-container h2{font-size:3rem;margin-bottom:20px;color:var(--primary-color)}.my-forever-living-container p{font-size:1.2rem;color:#555;max-width:600px;margin:0 auto 30px}.my-forever-living-container .fa-gears,.my-forever-living-container .fa-heart-pulse,.my-forever-living-container .fa-star{font-size:4rem;color:var(--secondary-color);margin:15px}.my-forever-living-container .icon-row{margin-top:30px;display:flex;gap:40px;justify-content:center;align-items:center}
   </style>
 </head>
 <body>
@@ -456,13 +28,9 @@
         </div>
     </div>
   </header>
-
-  <!-- Updated: Promo Running Banner -->
+  
   <div id="promo-running-banner">
-      <div class="marquee-content">
-          ✨ Hot Promo on Aloe Vera Gel, Aloe Berry Nectar, Aloe Bits N' Peaches! Buy Any 2 for RM 200 + FREE Shipping! ✨ 
-          🎉 Plus, enjoy 5% off on ALL other products! 🎉
-      </div>
+      <div class="marquee-content" id="promo-banner-text"></div>
   </div>
 
   <nav>
@@ -471,38 +39,22 @@
           <li><a onclick="showTab('products')">Products</a></li>
           <li><a onclick="showTab('business')">Business Opportunity</a></li>
           <li><a onclick="showTab('rewards')">Rewards</a></li>
-          <li><a onclick="showTab('rewards-portal')">My Forever Living</a></li><!-- Renamed link -->
+          <li><a onclick="showTab('rewards-portal')">My Forever Living</a></li>
         </ul>
     </div>
   </nav>
 
   <main id="main-content" class="container">
     <div id="products" class="tab-content active">
-      <section class="hero-section">
-        <h2><i class="fa-solid fa-gift"></i> GRAND OPENING SPECIAL</h2>
-        <p>Enjoy special promotional prices on all our products!</p>
-        <div id="promo-details">
-            <div class="promo-period">
-                Promotion Ends: <span id="promo-end-date-display"></span>
-            </div>
-            <div id="countdown-timer"></div>
-        </div>
+      <section class="hero-section" id="hero-section">
+        <h2 id="hero-title"><i class="fa-solid fa-store"></i> Welcome to Our Store</h2>
+        <p id="hero-subtitle">Enjoy high-quality wellness products for a healthier lifestyle.</p>
+        <div id="countdown-timer" style="display:none;"></div>
       </section>
 
-      <section class="ai-suggestion-box">
-        <h3><i class="fa-solid fa-robot"></i> AI Product Suggester</h3>
-        <p>Describe your health concern (e.g., "dry skin", "low energy", "joint pain") and our AI will suggest a product for you.</p>
-        <input type="text" id="symptom-input" placeholder="Enter your symptom or concern...">
-        <button id="suggest-btn" onclick="suggestProduct()">Get Suggestion</button>
-        <div id="suggestion-result"></div>
-      </section>
-
-      <div class="search-container">
-        <input type="text" id="product-search" onkeyup="filterProducts()" placeholder="Search for products by name...">
-        <i class="fa-solid fa-search search-icon"></i>
+      <div id="product-list" class="product-list">
+          <p>Loading products...</p>
       </div>
-
-      <div id="product-list" class="product-list"></div>
     </div>
 
     <div id="business" class="tab-content">
@@ -516,39 +68,42 @@
     <div id="rewards" class="tab-content">
         <section class="program-section">
             <h2><i class="fa-solid fa-award"></i> Redeem Your Points</h2>
-            <p style="text-align: center;">Log in to the "My Forever Living" portal to view your points balance and redeem rewards.</p>
+            <p style="text-align: center;">This feature is currently under development. Stay tuned for exciting rewards!</p>
             <div class="rewards-grid">
                 <div class="reward-item">
                     <img src="rm5.jpg" alt="RM 5 Voucher" onerror="this.src='https://i.imgur.com/O9yP2aH.png'">
                     <h4>RM 5 Voucher</h4>
                     <p class="points-cost">500 Points</p>
+                    <div class="coming-soon-overlay"><span>Coming Soon</span></div>
                 </div>
                 <div class="reward-item">
                     <img src="rm10.jpg" alt="RM 10 Voucher" onerror="this.src='https://i.imgur.com/sY2a2qG.png'">
                     <h4>RM 10 Voucher</h4>
                     <p class="points-cost">1000 Points</p>
+                    <div class="coming-soon-overlay"><span>Coming Soon</span></div>
                 </div>
                 <div class="reward-item">
                     <img src="rm20.jpg" alt="RM 20 Voucher" onerror="this.src='https://i.imgur.com/Jz4Y8fW.png'">
                     <h4>RM 20 Voucher</h4>
                     <p class="points-cost">2000 Points</p>
+                    <div class="coming-soon-overlay"><span>Coming Soon</span></div>
                 </div>
                 <div class="reward-item">
                     <img src="aloe-vera-gel.jpg" alt="Aloe Vera Gel">
                     <h4>ALOE VERA GEL</h4>
-                    <p class="points-cost"><span style="text-decoration: line-through; color: #999; font-weight: normal;">11700</span> 10000 Points</p>
+                    <p class="points-cost">10000 Points</p>
                     <div class="coming-soon-overlay"><span>Coming Soon</span></div>
                 </div>
-                <div class="reward-item">
+                 <div class="reward-item">
                     <img src="aloe-berry-nectar.jpg" alt="Aloe Berry Nectar">
                     <h4>ALOE BERRY NECTAR</h4>
-                    <p class="points-cost"><span style="text-decoration: line-through; color: #999; font-weight: normal;">11700</span> 10000 Points</p>
+                    <p class="points-cost">10000 Points</p>
                     <div class="coming-soon-overlay"><span>Coming Soon</span></div>
                 </div>
                 <div class="reward-item">
                     <img src="aloe-peaches.jpg" alt="Aloe Bits N' Peaches">
                     <h4>ALOE BITS N' PEACHES</h4>
-                    <p class="points-cost"><span style="text-decoration: line-through; color: #999; font-weight: normal;">11700</span> 10000 Points</p>
+                    <p class="points-cost">10000 Points</p>
                     <div class="coming-soon-overlay"><span>Coming Soon</span></div>
                 </div>
             </div>
@@ -556,44 +111,26 @@
     </div>
 
     <div id="rewards-portal" class="tab-content">
-        <!-- New content for "My Forever Living" -->
-        <div class="my-forever-living-container">
-            <h2><i class="fa-solid fa-star"></i> My Forever Living <i class="fa-solid fa-heart-pulse"></i></h2>
-            <p>
-                Get ready for an enhanced experience! We are working tirelessly to bring you exciting new features
-                to help you manage your wellness journey and Forever Living business.
-            </p>
-            <div class="icon-row">
-                <i class="fa-solid fa-calendar-alt"></i> <!-- Calendar for events/webinars -->
-                <i class="fa-solid fa-chart-line"></i> <!-- Chart for business analytics -->
-                <i class="fa-solid fa-users"></i> <!-- Users for community features -->
-                <i class="fa-solid fa-book-open"></i> <!-- Book for learning resources -->
-            </div>
-            <p style="margin-top: 30px; font-weight: bold; color: var(--accent-color);">
-                Stay tuned for updates! Exciting features are coming soon.
-            </p>
-        </div>
+        <div class="my-forever-living-container"><h2><i class="fa-solid fa-star"></i> My Forever Living <i class="fa-solid fa-heart-pulse"></i></h2><p>Get ready for an enhanced experience! We are working tirelessly to bring you exciting new features to help you manage your wellness journey and Forever Living business.</p><div class="icon-row"><i class="fa-solid fa-calendar-alt"></i><i class="fa-solid fa-chart-line"></i><i class="fa-solid fa-users"></i><i class="fa-solid fa-book-open"></i></div><p style="margin-top: 30px; font-weight: bold; color: var(--accent-color);">Stay tuned for updates! Exciting features are coming soon.</p></div>
     </div>
   </main>
 
-  <footer>
-    <div class="container">
-      <p>© 2025 Forever Living by Muhd Arvind Isa. All rights reserved.</p>
-      <div class="timestamp">Last updated: <span id="current-date"></span></div>
-      <section class="disclaimer">
-        <strong>Disclaimer:</strong> This website is operated by an independent Registered Forever Business Owner (FBO) under Rich Academy Global and is not the official site of Forever Living Products. Product names, trademarks, and registered trademarks are property of Forever Living Products International, Inc.
-      </section>
-    </div>
+  <footer class="footer">
+      <div class="container">
+        <p>© 2025 Forever Living by Muhd Arvind Isa. All rights reserved.</p>
+        <div class="timestamp">Last updated: <span id="current-date"></span></div>
+        <section class="disclaimer">
+          <strong>Disclaimer:</strong> This website is operated by an independent Registered Forever Business Owner (FBO) and is not the official site of Forever Living Products.
+        </section>
+      </div>
   </footer>
 </div>
 
-  <!-- Floating Cart Button -->
   <div id="floating-cart" class="floating-cart-btn" onclick="toggleCart()">
     <i class="fa-solid fa-cart-shopping"></i>
     <span id="cart-count">0</span>
   </div>
 
-  <!-- Cart Modal -->
   <div id="cart-modal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="toggleCart(true)">×</span>
@@ -603,31 +140,44 @@
         <div id="cart-items"><p>Your cart is currently empty.</p></div>
         <div class="cart-summary">
           <div class="summary-line"><span>Subtotal</span><span id="cart-subtotal">RM 0.00</span></div>
+          <div class="summary-line" id="discount-line" style="display:none;"><span>Discount</span><span id="cart-discount">RM 0.00</span></div>
           <div class="summary-line"><span>Shipping</span><span id="cart-shipping">RM 0.00</span></div>
           <div class="summary-line total"><span>Total</span><span id="cart-total">RM 0.00</span></div>
           <div id="points-earned-display"></div>
         </div>
+        
+        <div class="discount-section">
+            <input type="text" id="discount-code-input" placeholder="Enter Discount Code">
+            <button class="btn btn-secondary" onclick="applyDiscount()">Apply</button>
+        </div>
+        <p id="discount-status"></p>
+
         <div class="customer-info-form">
           <h3 style="margin-top: 20px;">Customer & Shipping Information</h3>
           <input type="text" id="customer-name" placeholder="Your Full Name" required>
-          <input type="tel" id="customer-phone" placeholder="Your WhatsApp Number" required>
+          <input type="tel" id="customer-phone" placeholder="Your WhatsApp Number (e.g., 60123456789)" required>
           <input type="email" id="customer-email" placeholder="Your Email Address (for receipt)" required>
           <input type="text" id="customer-address1" placeholder="Address Line 1" required>
           <input type="text" id="customer-address2" placeholder="Address Line 2 (Optional)">
           <input type="text" id="customer-city" placeholder="City" required>
           <input type="text" id="customer-state" placeholder="State" required>
           <input type="text" id="customer-postcode" placeholder="Postcode" required>
-          <button class="btn btn-primary checkout-btn" onclick="initiateCheckout()">Complete Order via WhatsApp</button>
         </div>
+
+        <div id="consent-form">
+            <label for="consent-checkbox">
+                <input type="checkbox" id="consent-checkbox" onchange="toggleCheckoutButton()">
+                <span>I consent to the collection and use of my personal data for the sole purpose of processing this transaction. You can request data deletion at any time via <a href="https://wa.me/601111033154?text=Hi,%20I%20would%20like%20to%20request%20my%20personal%20data%20to%20be%20deleted." target="_blank">WhatsApp</a> or <a href="mailto:arvin8786@gmail.com?subject=Request%20for%20Data%20Deletion">Email</a>.</span>
+            </label>
+        </div>
+        
+        <button class="btn btn-primary checkout-btn" id="checkout-btn" onclick="initiateCheckout()" disabled>Agree & Complete Order via WhatsApp</button>
         <div class="free-shipping-promo">🚚 FREE NATIONWIDE DELIVERY for orders RM 250 and above!</div>
       </div>
 
-      <!-- NEW: 2-Step Verification View -->
       <div id="verification-view" style="display: none;">
         <h2>Order Verification</h2>
         <p>Please complete the following steps to finalize your order.</p>
-
-        <!-- STEP 1: UPLOAD PROOF -->
         <div id="proof-upload-step" class="verification-step active">
             <h4><i class="fa-solid fa-arrow-up-from-bracket"></i> Step 1: Upload Payment Proof</h4>
             <p style="font-size: 0.9rem; color: #555;">Upload a screenshot of your transaction receipt.</p>
@@ -635,8 +185,6 @@
             <button class="btn btn-primary" id="upload-proof-btn" onclick="uploadProof()">Upload and Proceed</button>
             <p id="upload-status"></p>
         </div>
-
-        <!-- STEP 2: ENTER VERIFICATION CODE -->
         <div id="code-verification-step" class="verification-step">
             <h4><i class="fa-solid fa-key"></i> Step 2: Finalize with Code</h4>
             <p style="font-size: 0.9rem; color: #555;">Enter the verification code provided to you by the owner.</p>
@@ -644,506 +192,283 @@
             <button class="btn btn-primary" id="finalize-order-btn" onclick="finalizeOrder()" disabled>Finalize Order & Get Receipt</button>
             <p id="verification-status"></p>
         </div>
-
         <button class="btn btn-secondary" style="margin-top: 20px;" onclick="cancelVerification()">Cancel Entire Order</button>
       </div>
 
     </div>
   </div>
 
-  <!-- New: Promo Pop-up Modal -->
-  <div id="promo-popup-modal" class="modal">
-    <div class="modal-content" style="max-width: 550px; padding: 15px;">
-      <span class="close" onclick="closePromoPopup()">×</span>
-      <img src="promo.jpg" alt="Special Aloe Trio Offer" style="max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 8px;">
-    </div>
-  </div>
-
-  <script>
+<script>
+    // --- CONFIGURATION ---
+    const googleScriptURL = 'https://script.google.com/macros/s/AKfycbxjxRFD5fJg5NZrf65KbtQ-hhkIcyE6CWruEvHLDYcFgEGjyMIZ4i_Bo3FXCQJK19Pzcw/exec';
+    
     // --- DATA ---
     const products = [
-        // Special Promo for these 3 products (Buy 2 for RM 200)
-        { id: 1, name: "ALOE VERA GEL", price: 116.79, specialPromo: 'buy2for200', image: "aloe-vera-gel.jpg", benefits: "Supports digestion, boosts immunity.", consumption: "Take 30-60ml daily." },
-        { id: 2, name: "ALOE BERRY NECTAR", price: 116.79, specialPromo: 'buy2for200', image: "aloe-berry-nectar.jpg", benefits: "Antioxidant support, immune system booster.", consumption: "30-60ml daily." },
-        { id: 3, name: "ALOE BITS N' PEACHES", price: 116.79, specialPromo: 'buy2for200', image: "aloe-peaches.jpg", benefits: "Digestive health, vitamin C source.", consumption: "30-60ml daily." },
-        // Other products with standard 5% off promoPrice
-        { id: 4, name: "LITE VANILLA", price: 155.72, promoPrice: 147.93, image: "lite-vanilla.jpg", benefits: "Meal replacement for weight management.", consumption: "Mix with milk or water." },
-        { id: 5, name: "LITE CHOCO", price: 155.72, promoPrice: 147.93, image: "lite-choco.jpg", benefits: "Meal replacement for weight management.", consumption: "Mix with milk or water." },
-        { id: 6, name: "SUPERGREENS", price: 214.71, promoPrice: 203.97, image: "supergreens.jpg", benefits: "Rich in antioxidants and nutrients. Detoxification.", consumption: "Mix with water or juice." },
-        { id: 7, name: "FIBER", price: 124.44, promoPrice: 118.22, image: "fiber.jpg", benefits: "Supports digestive health.", consumption: "Mix with water." },
-        { id: 8, name: "TONGKAT ALI", price: 19.90, promoPrice: 19.57, image: "tongkat-ali.jpg", benefits: "Supports men's health and vitality.", consumption: "As per packaging." },
-        { id: 9, name: "WHITE COFFEE", price: 15.99, promoPrice: 15.72, image: "white-coffee.jpg", benefits: "Rich and aromatic coffee.", consumption: "Mix with hot water." },
-        { id: 10, name: "CHOCOLATE MALT DRINK", price: 27.90, promoPrice: 27.20, image: "choco-malt.jpg", benefits: "Nutritious chocolate malt drink.", consumption: "Mix with hot water or milk." },
-        { id: 11, name: "TEH TARIK HALIA", price: 25.90, promoPrice: 25.25, image: "teh-tarik.jpg", benefits: "Ginger tea for warmth and digestion.", consumption: "Mix with hot water." },
-        { id: 12, name: "BEE HONEY", price: 132.57, promoPrice: 125.94, image: "bee-honey.jpg", benefits: "Natural energy and soothes throat.", consumption: "1-2 teaspoons daily." },
-        { id: 13, name: "BEE POLLEN", price: 75.50, promoPrice: 71.73, image: "bee-pollen.jpg", benefits: "Natural multivitamin and energy booster.", consumption: "1 tablet 3 times daily." },
-        { id: 14, name: "BEE PROPOLIS", price: 139.21, promoPrice: 132.25, image: "bee-propolis.jpg", benefits: "Immune support, natural antibiotic.", consumption: "1 tablet daily." },
-        { id: 15, name: "ROYAL GELLY", price: 139.21, promoPrice: 132.25, image: "royal-jelly.jpg", benefits: "Energy booster, supports immune system.", consumption: "1 tablet daily." },
-        { id: 16, name: "OMEGA 3 PLUS", price: 130.10, promoPrice: 123.60, image: "arctic-sea.jpg", benefits: "Supports heart and brain health.", consumption: "2 softgels twice daily." },
-        { id: 17, name: "ABSORBENT-C", price: 75.50, promoPrice: 71.73, image: "absorbent-c.jpg", benefits: "Immune support, antioxidant.", consumption: "1-2 tablets daily." },
-        { id: 18, name: "FIELDS OF GREENS", price: 86.10, promoPrice: 81.80, image: "fields-of-greens.jpg", benefits: "Detoxification and digestion support.", consumption: "1 tablet 3 times daily." },
-        { id: 19, name: "CALCIUM PLUS TABLET", price: 132.15, promoPrice: 125.54, image: "calcium-plus.jpg", benefits: "Supports bone health.", consumption: "2 tablets daily." },
-        { id: 20, name: "ALOE LIPS", price: 20.33, promoPrice: 19.31, image: "aloe-lips.jpg", benefits: "Moisturizes and protects lips.", consumption: "Apply as needed." },
-        { id: 21, name: "BRIGHT TOOTHGEL", price: 41.29, promoPrice: 39.23, image: "bright-toothgel.jpg", benefits: "Fluoride-free, gentle on gums.", consumption: "Brush teeth twice daily." },
-        { id: 22, name: "ALOE FIRST", price: 90.83, promoPrice: 86.29, image: "aloe-first.jpg", benefits: "Soothes skin irritations.", consumption: "Spray on skin as needed." },
-        { id: 23, name: "DEODORANT STICK", price: 50.73, promoPrice: 48.19, image: "forever-deodorant.jpg", benefits: "Long-lasting protection.", consumption: "Apply daily." },
-        { id: 24, name: "AVOCADO SOAP", price: 30.68, promoPrice: 29.15, image: "avocado-soap.jpg", benefits: "Gentle cleansing for face and body skin.", consumption: "Use daily." },
-        { id: 25, name: "ALOE LIQUID SOAP", price: 120.91, promoPrice: 114.86, image: "aloe-liquid-soap.jpg", benefits: "Moisturizing hand and face skin wash.", consumption: "Use daily." },
-        { id: 26, name: "JOJOBA SHAMPOO", price: 105.93, promoPrice: 100.63, image: "aloe-jojoba-shampoo.jpg", benefits: "Nourishes hair and scalp.", consumption: "Massage into wet hair." },
-        { id: 27, name: "JOJOBA CONDITIONER", price: 117.70, promoPrice: 111.82, image: "aloe-jojoba-conditioner.jpg", benefits: "Moisturizes and strengthens hair.", consumption: "Apply after shampoo." },
-        { id: 28, name: "ALOE BODY WASH", price: 120.91, promoPrice: 114.86, image: "aloe-body-wash.jpg", benefits: "Gentle, moisturizing body skin wash.", consumption: "Use daily in shower." },
-        { id: 29, name: "ALOE BODY LOTION", price: 112.35, promoPrice: 106.73, image: "aloe-body-lotion.jpg", benefits: "Hydrates and softens skin.", consumption: "Apply to body as needed." },
-        { id: 30, name: "ALOE PROPOLIS CREME", price: 90.83, promoPrice: 86.29, image: "aloe-propolis-creme.jpg", benefits: "Soothes and moisturizes dry skin.", consumption: "Apply generously." },
-        { id: 31, name: "ALOE VERA GELLY", price: 70.78, promoPrice: 67.24, image: "aloe-vera-gelly.jpg", benefits: "Soothes minor skin irritations.", consumption: "Apply to affected area." },
-        { id: 32, name: "ALOE MOISTURIZING", price: 70.78, promoPrice: 67.24, image: "aloe-moisturizing.jpg", benefits: "Hydrates face and body skin.", consumption: "Apply as needed." },
-        { id: 33, name: "ALOE MASSAGE LOTION", price: 70.78, promoPrice: 67.24, image: "aloe-massage-lotion.jpg", benefits: "Soothing lotion for massage.", consumption: "Massage into skin." },
-        { id: 34, name: "ALOE MSM GEL", price: 86.00, promoPrice: 81.70, image: "aloe-msm-gel.jpg", benefits: "Soothes joints and muscles.", consumption: "Apply to affected areas." },
-        { id: 35, name: "ALOE SUNSCREEN", price: 89.07, promoPrice: 84.62, image: "aloe-sunscreen.jpg", benefits: "UV protection with aloe for skin.", consumption: "Apply before sun exposure." },
-        { id: 36, name: "ALOE SCRUB", price: 77.86, promoPrice: 73.97, image: "aloe-scrub.jpg", benefits: "Gently exfoliates skin.", consumption: "Use 2-3 times a week." },
-        { id: 37, name: "MASK POWDER", price: 102.90, promoPrice: 97.76, image: "mask-powder.jpg", benefits: "Cleanses and tightens pores.", consumption: "Mix with Aloe Activator." },
-        { id: 38, name: "R3 FACTOR-SKIN DEFENSE", price: 160.97, promoPrice: 152.92, image: "r3-factor.jpg", benefits: "Helps skin retain moisture.", consumption: "Apply to face and neck." },
-        { id: 39, name: "FOREVER ALPHA-E FACTOR", price: 144.90, promoPrice: 137.66, image: "alpha-e-factor.jpg", benefits: "Nourishes and restores skin.", consumption: "Apply a few drops to face." },
-        { id: 40, name: "INFINITE HYDRATING CLEANSER", price: 131.20, promoPrice: 124.64, image: "infinite-cleanser.jpg", benefits: "Gentle, hydrating skin cleanser.", consumption: "Use morning and night." },
-        { id: 41, name: "INFINITE FIRMING SERUM", price: 190.47, promoPrice: 180.95, image: "infinite-serum.jpg", benefits: "Reduces appearance of fine lines.", consumption: "Apply to face." },
-        { id: 42, name: "INFINITE RESTORING CREME", price: 221.56, promoPrice: 210.48, image: "infinite-creme.jpg", benefits: "Deeply moisturizes and restores skin.", consumption: "Apply to face and neck." },
-        { id: 43, name: "BALANCING TONER", price: 106.18, promoPrice: 100.87, image: "balancing-toner.jpg", benefits: "Refreshes and balances skin.", consumption: "Apply after cleansing." },
-        { id: 44, name: "AWAKENING EYE CREAM", price: 89.66, promoPrice: 85.18, image: "eye-cream.jpg", benefits: "Reduces puffiness and dark circles.", consumption: "Pat gently around eyes." },
-        { id: 45, name: "ALOE ACTIVATOR", price: 80.59, promoPrice: 76.56, image: "aloe-activator.jpg", benefits: "Cleanses, soothes and refreshes skin.", consumption: "Use with Mask Powder." },
-        { id: 46, name: "HYDRATING SERUM", price: 156.56, promoPrice: 148.73, image: "hydrating-serum.jpg", benefits: "Boosts skin hydration.", consumption: "Apply to face." },
-        { id: 47, name: "S.REFRESHING G.CLEANSER", price: 115.61, promoPrice: 109.83, image: "refreshing-cleanser.jpg", benefits: "Gentle gel skin cleanser.", consumption: "Use morning and night." },
-        { id: 48, name: "S. IILUMINATING GEL", price: 107.35, promoPrice: 102.00, image: "illuminating-gel.jpg", benefits: "Brightens skin appearance.", consumption: "Apply to face." },
-        { id: 49, "name": "S. REFINING GEL MASK", price: 115.61, promoPrice: 109.83, image: "refining-mask.jpg", benefits: "Refines pores and moisturizes skin.", consumption: "Use 2-3 times a week." },
-        { id: 50, name: "S.SMOOTHING GEL MOISTURIZER", price: 115.76, promoPrice: 109.97, image: "smoothing-moisturizer.jpg", benefits: "Lightweight gel moisturizer for skin.", consumption: "Apply to face." },
-        { id: 51, name: "ALOE BIO-CELLULOSE MASK", price: 146.00, promoPrice: 138.70, image: "bio-cellulose-mask.jpg", benefits: "Deeply hydrates and conditions skin.", consumption: "Use once a week." },
-        { id: 52, name: "REPLENISHING SKIN OIL", price: 132.00, promoPrice: 125.40, image: "skin-oil.jpg", benefits: "Nourishes with a blend of oils for skin.", consumption: "Apply a few drops to face." },
-        { id: 53, name: "PROTECTING DAY LOTION", price: 167.99, promoPrice: 159.59, image: "day-lotion.jpg", benefits: "Moisturizes and protects skin with SPF.", consumption: "Apply in the morning." },
+        { id: 1, name: "ALOE VERA GEL", price: 116.79, specialPromo: true, benefits: "Pure inner leaf aloe vera gel. Supports healthy digestion, promotes a healthy immune system, enhances nutrient absorption, and helps maintain natural energy levels. Contains 99.7% pure aloe.", consumption: "Take 30-60ml daily." },
+        { id: 2, name: "ALOE BERRY NECTAR", price: 116.79, specialPromo: true, benefits: "A burst of cranberries and sweet apples provides a sweet and tangy flavor. Supports urinary health, contains powerful antioxidants, and promotes a healthy immune system. A natural source of Vitamin C.", consumption: "30-60ml daily." },
+        { id: 3, name: "ALOE BITS N' PEACHES", price: 116.79, specialPromo: true, benefits: "Combines pure aloe vera with sun-ripened peaches. Great for kids and families. Aids in digestive health, supports the immune system, and provides valuable carotenoids and vitamins. Great taste.", consumption: "30-60ml daily." },
+        { id: 4, name: "LITE VANILLA", price: 155.72, promoPrice: 147.93, benefits: "Meal replacement for weight management.", consumption: "Mix with milk or water." },
+        { id: 5, name: "LITE CHOCO", price: 155.72, promoPrice: 147.93, benefits: "Meal replacement for weight management.", consumption: "Mix with milk or water." },
+        { id: 6, name: "SUPERGREENS", price: 214.71, promoPrice: 203.97, benefits: "Rich in antioxidants and nutrients. Detoxification.", consumption: "Mix with water or juice." },
+        { id: 7, name: "FIBER", price: 124.44, promoPrice: 118.22, benefits: "Supports digestive health.", consumption: "Mix with water." },
+        { id: 8, name: "TONGKAT ALI", price: 19.90, promoPrice: 19.57, benefits: "Supports men's health and vitality.", consumption: "As per packaging." },
+        { id: 9, name: "WHITE COFFEE", price: 15.99, promoPrice: 15.72, benefits: "Rich and aromatic coffee.", consumption: "Mix with hot water." },
+        { id: 10, name: "CHOCOLATE MALT DRINK", price: 27.90, promoPrice: 27.20, benefits: "Nutritious chocolate malt drink.", consumption: "Mix with hot water or milk." },
+        { id: 11, name: "TEH TARIK HALIA", price: 25.90, promoPrice: 25.25, benefits: "Ginger tea for warmth and digestion.", consumption: "Mix with hot water." },
+        { id: 12, name: "BEE HONEY", price: 132.57, promoPrice: 125.94, benefits: "Natural energy and soothes throat.", consumption: "1-2 teaspoons daily." },
+        { id: 13, name: "BEE POLLEN", price: 75.50, promoPrice: 71.73, benefits: "Natural multivitamin and energy booster.", consumption: "1 tablet 3 times daily." },
+        { id: 14, name: "BEE PROPOLIS", price: 139.21, promoPrice: 132.25, benefits: "Immune support, natural antibiotic.", consumption: "1 tablet daily." },
+        { id: 15, name: "ROYAL GELLY", price: 139.21, promoPrice: 132.25, benefits: "Energy booster, supports immune system.", consumption: "1 tablet daily." },
+        { id: 16, name: "OMEGA 3 PLUS", price: 130.10, promoPrice: 123.60, benefits: "Supports heart and brain health.", consumption: "2 softgels twice daily." },
+        { id: 17, name: "ABSORBENT-C", price: 75.50, promoPrice: 71.73, benefits: "Immune support, antioxidant.", consumption: "1-2 tablets daily." },
+        { id: 18, name: "FIELDS OF GREENS", price: 86.10, promoPrice: 81.80, benefits: "Detoxification and digestion support.", consumption: "1 tablet 3 times daily." },
+        { id: 19, name: "CALCIUM PLUS TABLET", price: 132.15, promoPrice: 125.54, benefits: "Supports bone health.", consumption: "2 tablets daily." },
+        { id: 20, name: "ALOE LIPS", price: 20.33, promoPrice: 19.31, benefits: "Moisturizes and protects lips.", consumption: "Apply as needed." },
+        { id: 21, name: "BRIGHT TOOTHGEL", price: 41.29, promoPrice: 39.23, benefits: "Fluoride-free, gentle on gums.", consumption: "Brush teeth twice daily." },
+        { id: 22, name: "ALOE FIRST", price: 90.83, promoPrice: 86.29, benefits: "Soothes skin irritations.", consumption: "Spray on skin as needed." },
+        { id: 23, name: "DEODORANT STICK", price: 50.73, promoPrice: 48.19, benefits: "Long-lasting protection.", consumption: "Apply daily." },
+        { id: 24, name: "AVOCADO SOAP", price: 30.68, promoPrice: 29.15, benefits: "Gentle cleansing for face and body skin.", consumption: "Use daily." },
+        { id: 25, name: "ALOE LIQUID SOAP", price: 120.91, promoPrice: 114.86, benefits: "Moisturizing hand and face skin wash.", consumption: "Use daily." },
+        { id: 26, name: "JOJOBA SHAMPOO", price: 105.93, promoPrice: 100.63, benefits: "Nourishes hair and scalp.", consumption: "Massage into wet hair." },
+        { id: 27, name: "JOJOBA CONDITIONER", price: 117.70, promoPrice: 111.82, benefits: "Moisturizes and strengthens hair.", consumption: "Apply after shampoo." },
+        { id: 28, name: "ALOE BODY WASH", price: 120.91, promoPrice: 114.86, benefits: "Gentle, moisturizing body skin wash.", consumption: "Use daily in shower." },
+        { id: 29, name: "ALOE BODY LOTION", price: 112.35, promoPrice: 106.73, benefits: "Hydrates and softens skin.", consumption: "Apply to body as needed." },
+        { id: 30, name: "ALOE PROPOLIS CREME", price: 90.83, promoPrice: 86.29, benefits: "Soothes and moisturizes dry skin.", consumption: "Apply generously." },
+        { id: 31, name: "ALOE VERA GELLY", price: 70.78, promoPrice: 67.24, benefits: "Soothes minor skin irritations.", consumption: "Apply to affected area." },
+        { id: 32, name: "ALOE MOISTURIZING", price: 70.78, promoPrice: 67.24, benefits: "Hydrates face and body skin.", consumption: "Apply as needed." },
+        { id: 33, name: "ALOE MASSAGE LOTION", price: 70.78, promoPrice: 67.24, benefits: "Soothing lotion for massage.", consumption: "Massage into skin." },
+        { id: 34, name: "ALOE MSM GEL", price: 86.00, promoPrice: 81.70, benefits: "Soothes joints and muscles.", consumption: "Apply to affected areas." },
+        { id: 35, name: "ALOE SUNSCREEN", price: 89.07, promoPrice: 84.62, benefits: "UV protection with aloe for skin.", consumption: "Apply before sun exposure." },
+        { id: 36, name: "ALOE SCRUB", price: 77.86, promoPrice: 73.97, benefits: "Gently exfoliates skin.", consumption: "Use 2-3 times a week." },
+        { id: 37, name: "MASK POWDER", price: 102.90, promoPrice: 97.76, benefits: "Cleanses and tightens pores.", consumption: "Mix with Aloe Activator." },
+        { id: 38, name: "R3 FACTOR-SKIN DEFENSE", price: 160.97, promoPrice: 152.92, benefits: "Helps skin retain moisture.", consumption: "Apply to face and neck." },
+        { id: 39, name: "FOREVER ALPHA-E FACTOR", price: 144.90, promoPrice: 137.66, benefits: "Nourishes and restores skin.", consumption: "Apply a few drops to face." },
+        { id: 40, name: "INFINITE HYDRATING CLEANSER", price: 131.20, promoPrice: 124.64, benefits: "Gentle, hydrating skin cleanser.", consumption: "Use morning and night." },
+        { id: 41, name: "INFINITE FIRMING SERUM", price: 190.47, promoPrice: 180.95, benefits: "Reduces appearance of fine lines.", consumption: "Apply to face." },
+        { id: 42, name: "INFINITE RESTORING CREME", price: 221.56, promoPrice: 210.48, benefits: "Deeply moisturizes and restores skin.", consumption: "Apply to face and neck." },
+        { id: 43, name: "BALANCING TONER", price: 106.18, promoPrice: 100.87, benefits: "Refreshes and balances skin.", consumption: "Apply after cleansing." },
+        { id: 44, name: "AWAKENING EYE CREAM", price: 89.66, promoPrice: 85.18, benefits: "Reduces puffiness and dark circles.", consumption: "Pat gently around eyes." },
+        { id: 45, name: "ALOE ACTIVATOR", price: 80.59, promoPrice: 76.56, benefits: "Cleanses, soothes and refreshes skin.", consumption: "Use with Mask Powder." },
+        { id: 46, name: "HYDRATING SERUM", price: 156.56, promoPrice: 148.73, benefits: "Boosts skin hydration.", consumption: "Apply to face." },
+        { id: 47, name: "S.REFRESHING G.CLEANSER", price: 115.61, promoPrice: 109.83, benefits: "Gentle gel skin cleanser.", consumption: "Use morning and night." },
+        { id: 48, name: "S. IILUMINATING GEL", price: 107.35, promoPrice: 102.00, benefits: "Brightens skin appearance.", consumption: "Apply to face." },
+        { id: 49, "name": "S. REFINING GEL MASK", price: 115.61, promoPrice: 109.83, benefits: "Refines pores and moisturizes skin.", consumption: "Use 2-3 times a week." },
+        { id: 50, name: "S.SMOOTHING GEL MOISTURIZER", price: 115.76, promoPrice: 109.97, benefits: "Lightweight gel moisturizer for skin.", consumption: "Apply to face." },
+        { id: 51, name: "ALOE BIO-CELLULOSE MASK", price: 146.00, promoPrice: 138.70, benefits: "Deeply hydrates and conditions skin.", consumption: "Use once a week." },
+        { id: 52, name: "REPLENISHING SKIN OIL", price: 132.00, promoPrice: 125.40, benefits: "Nourishes with a blend of oils for skin.", consumption: "Apply a few drops to face." },
+        { id: 53, name: "PROTECTING DAY LOTION", price: 167.99, promoPrice: 159.59, benefits: "Moisturizes and protects skin with SPF.", consumption: "Apply in the morning." },
     ];
     
-    // This array is now just for a quick client-side check, the final validation happens in Google Sheets
-    const validVerificationCodes = [
-        "XF7-9RJ-L4P", "B3N-G8V-H2K", "T5Y-A1C-M9Q", "Z8W-E6D-S7F", "R2G-K9H-V3B", "C4L-P1M-N8J", 
-        "Q9S-U7T-A2D", "F6H-V3K-B5N", "M1P-J8Q-R4G", "L7K-D2C-X9Z", "W8E-N4S-U6T", "Y1A-H5J-P3M", 
-        "V9B-G2K-C7L", "D4F-R8N-S1P", "J6M-Q3T-W5Y", "K2H-B7V-A9C", "P8N-S1D-F4G", "U3T-M6R-J9Q", 
-        "G5C-X2Z-L7K", "H9J-V4B-E1S", "A6D-P9M-N3T", "S1F-R5G-U8V", "N7K-C3L-W2E", "Q4G-J9P-Y6H", 
-        "T2B-M5N-X1Z", "V8C-A6D-K3J", "R9P-S4F-L7G", "W1E-U8T-H5M", "Y3N-B6V-Q2K", "Z7L-D9C-A4S", 
-        "F2G-P1M-R8N", "J4Q-W7E-T3Y", "K9H-V5B-C2L", "M6R-S8F-D1A", "N3T-G4K-U9P", "X1Z-B7V-H6J", 
-        "C8L-A2D-Q5S", "E9S-M4N-T1B", "G7K-R3P-W6H", "L2C-U5T-F8G", "P9M-X4Z-V1E", "S4F-J6Q-A7D", 
-        "T8Y-H1K-B3N", "U5V-C2L-N9P", "W6E-G7R-M4J", "Z1A-D8S-Q3T", "B4N-K2H-V9C", "D7F-L3G-R1P", 
-        "H5M-J8Q-T6W", "K9P-C4L-U2V", "N1B-E7S-Y8H", "Q6G-A3D-X5Z", "R2J-M9N-W4E", "T7V-P1B-K6L", 
-        "V3C-F5G-S8D", "X8Z-U4T-A9Q", "Y1P-H6J-N2B", "B9V-D7F-R3G", "C2L-K4H-S6P", "E5S-M1N-W8E", 
-        "G8R-T3Y-U7V", "J4Q-A9C-X2Z", "L7K-B1V-F6H", "N5P-G2K-D8S", "P3M-R9N-C4L", "S1F-H7J-V5B", 
-        "U6T-Q8W-E4R", "W2E-Y5H-A1D", "Z9C-X6Z-M7N", "A4S-L8K-J3Q", "D1A-P7M-G5C", "F8G-N2B-T9Y", 
-        "H6J-V3K-R4G", "K5L-C9S-U1V", "M2N-B8V-E7S", "Q7T-F3H-X4Z", "R1P-G6K-W9E", "T4Y-A5D-J2Q", 
-        "V8C-S6P-L3G", "X1Z-U9T-H8M", "Y5H-N4B-K7L", "Z3Q-M9R-A2D", "B6V-C1L-S8F", "E2S-D7F-P4M", 
-        "G9R-J5Q-W3E", "K4H-T6Y-N1B", "L8K-A7D-V5C", "N7P-X3Z-U2V", "P1B-F9H-M6R", "S2F-G4K-R8N", 
-        "U5T-C8L-Q7T", "W9E-J1Q-Y6H", "Z4A-V2B-K3J"
-    ];
-
+    // --- GLOBAL STATE ---
     let cart = [];
-    const promoEndDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 1 week from now
+    let activePromotion = null;
+    let availableDiscountCodes = {};
+    let appliedDiscount = null;
 
-    // --- LOGIC ---
-    // The Google Apps Script URL
-    const googleScriptURL = 'https://script.google.com/macros/s/AKfycbz8m4Sv_6iiNL5KnhnxrTxfOgDUfxluyEni_Yqh-KAJ9ncB6IWN0ncwNv6F6kQBgAB3fQ/exec'; // Replace with your actual new deployment URL
-
-    // Function to handle converting file to Base64
-    function getBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-        });
-    }
-
-    function isPromoActive() {
-        return new Date().getTime() < promoEndDate.getTime();
-    }
-
-    // This function runs when the user clicks the "Complete Order via WhatsApp" button.
-    // It saves the order details and switches the modal view.
-    function initiateCheckout() {
-        const name = document.getElementById('customer-name').value.trim();
-        const phone = document.getElementById('customer-phone').value.trim();
-        const email = document.getElementById('customer-email').value.trim();
-        const address1 = document.getElementById('customer-address1').value.trim();
-        const address2 = document.getElementById('customer-address2').value.trim();
-        const city = document.getElementById('customer-city').value.trim();
-        const state = document.getElementById('customer-state').value.trim();
-        const postcode = document.getElementById('customer-postcode').value.trim();
-
-        if (!name || !phone || !email || !address1 || !city || !state || !postcode) {
-            alert('Please fill in all required customer and shipping information fields.');
-            return;
-        }
-        if (cart.length === 0) {
-            alert('Your cart is empty');
-            return;
-        }
-      
-        // Perform final calculation for the pending order object
-        const { calculatedSubtotal, totalPoints, shipping, total } = calculateCartTotals();
-        const fullAddress = `${address1}, ${address2 ? address2 + ', ' : ''}${city}, ${postcode} ${state}`;
-      
-        const pendingOrder = {
-            customerName: name,
-            customerPhone: phone,
-            customerEmail: email,
-            customerAddress: fullAddress,
-            cart: [...cart], 
-            totalAmount: total.toFixed(2),
-            totalPointsForThisPurchase: totalPoints,
-            proofUploaded: false // New flag to track verification state
-        };
-        sessionStorage.setItem('pendingOrder', JSON.stringify(pendingOrder));
-
-        let message = `Hi, I would like to place an order:\n\n*Customer Details:*\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nAddress: ${fullAddress}\n\n--- ORDER SUMMARY ---\nSubtotal: RM ${calculatedSubtotal.toFixed(2)}\nShipping: ${shipping.message}\n*TOTAL: RM ${total.toFixed(2)}*\n\nPlease provide payment details. After payment, I will upload the proof and verification code on your website to finalize the order. Thank you!`;
-      
-        window.open(`https://wa.me/601111033154?text=${encodeURIComponent(message)}`, '_blank');
-      
-        // Switch to the verification view in the modal
-        document.getElementById('cart-view').style.display = 'none';
-        document.getElementById('verification-view').style.display = 'block';
-        updateVerificationUI();
-    }
-
-    // STEP 1 of 2: UPLOAD PAYMENT PROOF
-    async function uploadProof() {
-        const proofFile = document.getElementById('payment-proof-upload').files[0];
-        const uploadStatusEl = document.getElementById('upload-status');
-        const uploadBtn = document.getElementById('upload-proof-btn');
-        let pendingOrder = JSON.parse(sessionStorage.getItem('pendingOrder'));
-
-        if (!proofFile) {
-            uploadStatusEl.textContent = 'Please select a file to upload.';
-            uploadStatusEl.style.color = 'red';
-            return;
-        }
-        if (!pendingOrder) {
-            uploadStatusEl.textContent = 'Error: No pending order found.';
-            uploadStatusEl.style.color = 'red';
-            return;
-        }
-
-        uploadBtn.disabled = true;
-        uploadStatusEl.textContent = 'Uploading...';
-        uploadStatusEl.style.color = 'blue';
-
+    // --- INITIALIZATION ---
+    document.addEventListener('DOMContentLoaded', async function() {
+        document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        
         try {
-            const base64File = await getBase64(proofFile);
-            
-            const payload = {
-                action: 'logInitialOrderWithProof',
-                date: new Date().toLocaleString('en-GB'),
-                customerEmail: pendingOrder.customerEmail,
-                totalAmount: pendingOrder.totalAmount,
-                totalPointsForThisPurchase: pendingOrder.totalPointsForThisPurchase,
-                paymentProofFile: base64File.split(',')[1], // Send only the Base64 part
-                paymentProofMimeType: proofFile.type,
-                paymentProofFileName: `${pendingOrder.customerEmail.split('@')[0]}-${Date.now()}`
-            };
+            const response = await fetch(googleScriptURL);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
 
-            const response = await fetch(googleScriptURL, {
-                method: 'POST',
-                body: JSON.stringify(payload)
-            });
-            const result = await response.json();
-
-            if (result.status === 'success') {
-                uploadStatusEl.textContent = 'Proof uploaded successfully!';
-                uploadStatusEl.style.color = 'green';
-                
-                // Update session storage to reflect that proof is uploaded
-                pendingOrder.proofUploaded = true;
-                sessionStorage.setItem('pendingOrder', JSON.stringify(pendingOrder));
-                
-                // Update the UI to move to the next step
-                updateVerificationUI();
+            if (data.status === 'success') {
+                activePromotion = data.activePromotion;
+                availableDiscountCodes = data.discountCodes;
+                initializeUI();
             } else {
-                throw new Error(result.message);
+                throw new Error(data.message || 'Failed to fetch initial data from server.');
             }
-
         } catch (error) {
-            uploadStatusEl.textContent = `Error: ${error.message}`;
-            uploadStatusEl.style.color = 'red';
-            uploadBtn.disabled = false;
-        }
-    }
-
-    // STEP 2 of 2: FINALIZE WITH VERIFICATION CODE
-    async function finalizeOrder() {
-        const codeInput = document.getElementById('verification-code').value.trim();
-        const finalizeBtn = document.getElementById('finalize-order-btn');
-        const verificationStatusEl = document.getElementById('verification-status');
-        let pendingOrder = JSON.parse(sessionStorage.getItem('pendingOrder'));
-
-        if (!codeInput) {
-            verificationStatusEl.textContent = 'Please enter the verification code.';
-            verificationStatusEl.style.color = 'red';
-            return;
-        }
-         if (!pendingOrder) {
-            verificationStatusEl.textContent = 'Error: No pending order found.';
-            verificationStatusEl.style.color = 'red';
-            return;
+            console.error("Error fetching dynamic data:", error);
+            initializeUI(); 
         }
 
-        finalizeBtn.disabled = true;
-        verificationStatusEl.textContent = 'Verifying...';
-        verificationStatusEl.style.color = 'blue';
-
-        try {
-            const payload = {
-                action: 'finalizeOrder',
-                usedCode: codeInput,
-                customerEmail: pendingOrder.customerEmail,
-                customerName: pendingOrder.customerName,
-                totalPointsForThisPurchase: pendingOrder.totalPointsForThisPurchase
-            };
-            
-            const response = await fetch(googleScriptURL, {
-                method: 'POST',
-                body: JSON.stringify(payload)
-            });
-            const result = await response.json();
-
-            if (result.status === 'success') {
-                verificationStatusEl.textContent = 'Order Verified! Your receipt is generating...';
-                verificationStatusEl.style.color = 'green';
-                
-                // Generate PDF with the final data from the server
-                generatePDF(pendingOrder, result.customerPAC, result.totalPoints);
-                
-                // Clean up
-                cart = [];
-                sessionStorage.removeItem('pendingOrder');
-                updateCartCount();
-                
-                setTimeout(() => {
-                    toggleCart(true); // Close modal
-                    // Reset UI for next time
-                    updateVerificationUI(true); 
-                }, 4000);
-
-            } else {
-                throw new Error(result.message);
-            }
-
-        } catch (error) {
-            verificationStatusEl.textContent = `Error: ${error.message}`;
-            verificationStatusEl.style.color = 'red';
-            finalizeBtn.disabled = false;
+        if (sessionStorage.getItem('pendingOrder')) {
+            toggleCart();
+        } else {
+            showTab('products');
         }
+    });
+
+    function initializeUI() {
+        if (activePromotion) {
+            document.body.classList.add('grand-opening-active');
+            const hero = document.getElementById('hero-section');
+            hero.style.background = 'linear-gradient(135deg, var(--primary-color), var(--accent-color))';
+            hero.style.border = '4px dashed var(--secondary-color)';
+            document.getElementById('hero-title').innerHTML = `<i class="fa-solid fa-gift"></i> Limited Time Offer`;
+            document.getElementById('hero-subtitle').textContent = activePromotion.description;
+            const banner = document.getElementById('promo-running-banner');
+            document.getElementById('promo-banner-text').textContent = `✨ ${activePromotion.description} ✨`;
+            banner.style.display = 'block';
+            startCountdown(activePromotion.endDate);
+        }
+        renderProducts();
     }
     
-    // --- UI and State Management Functions ---
+    // --- DYNAMIC CONTENT RENDERING ---
+    function renderProducts(){
+        const productList=document.getElementById("product-list");
+        if(!productList)return;
+        const halalLogoSrc = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjMjdhZTYwIiBkPSJNMjU2IDBDMTE0LjYgMCAwIDExNC42IDAgMjU2czExNC42IDI1NiAyNTYgMjU2IDI1Ni0xMTQuNiAyNTYtMjU2UzM5Ny40IDAgMjU2IDBabTAgNDQ4QzE0MS4xIDQ0OCAzMiAzMzguOSAzMiAyNTZTMTQxLjEgNjQgMjU2IDY0czIyNCAxMDcuMSAyMjQgMTkyLTIyNCAxOTItMjI0IDE5MloiLz48cGF0aCBmaWxsPSIjMjdhZTYwIiBkPSJNMzYwLjIgMjg4SDE1MS44bC04LjUgMjdoMTE5LjVsOC41IDI3SDM2MS4zbC04LjYtMjdoLTkyLjVsLTQyLjctMTQ5LjVoNDYuN2wyNS42IDg0LjkgMjUuNi04NC45aDQ2LjdMMzYwLjIgMjg4eiIvPjwvc3ZnPg==';
+        
+        productList.innerHTML = products.map(product => {
+            let priceHTML = '';
+            let badgeHTML = '';
+            let productClasses = 'product';
 
-    // Controls the visibility and state of the 2-step verification modal
-    function updateVerificationUI(reset = false) {
-        const proofStepEl = document.getElementById('proof-upload-step');
-        const codeStepEl = document.getElementById('code-verification-step');
-        const uploadBtn = document.getElementById('upload-proof-btn');
-        const finalizeBtn = document.getElementById('finalize-order-btn');
-        const codeInput = document.getElementById('verification-code');
-        const uploadStatusEl = document.getElementById('upload-status');
-        const verificationStatusEl = document.getElementById('verification-status');
-
-        if (reset) {
-            proofStepEl.classList.add('active');
-            proofStepEl.classList.remove('completed');
-            codeStepEl.classList.remove('active');
-            uploadBtn.disabled = false;
-            finalizeBtn.disabled = true;
-            codeInput.disabled = true;
-            uploadStatusEl.textContent = '';
-            verificationStatusEl.textContent = '';
-            document.getElementById('payment-proof-upload').value = '';
-            codeInput.value = '';
-            return;
-        }
-
-        const pendingOrder = JSON.parse(sessionStorage.getItem('pendingOrder'));
-        if (!pendingOrder) return;
-
-        if (pendingOrder.proofUploaded) {
-            proofStepEl.classList.remove('active');
-            proofStepEl.classList.add('completed');
-            codeStepEl.classList.add('active');
-            uploadBtn.disabled = true;
-            finalizeBtn.disabled = false;
-            codeInput.disabled = false;
-            uploadStatusEl.textContent = 'Proof Uploaded Successfully!';
-            uploadStatusEl.style.color = 'green';
-        } else {
-            proofStepEl.classList.add('active');
-            proofStepEl.classList.remove('completed');
-            codeStepEl.classList.remove('active');
-            uploadBtn.disabled = false;
-            finalizeBtn.disabled = true;
-            codeInput.disabled = true;
-        }
-    }
-
-    // Handles cancelling the entire verification process
-    function cancelVerification() {
-        if(confirm("Are you sure you want to cancel? This will remove your pending order and you will have to start over.")) {
-            sessionStorage.removeItem('pendingOrder');
-            toggleCart(true); // Force close modal
-            updateVerificationUI(true); // Reset the UI to its initial state
-        }
-    }
-
-    function toggleCart(forceClose = false) {
-        const modal = document.getElementById('cart-modal');
-        const isModalOpen = modal.style.display === 'flex';
-      
-        if (forceClose) {
-            modal.style.display = 'none';
-            return;
-        }
-      
-        if (isModalOpen) {
-            modal.style.display = 'none';
-        } else {
-            modal.style.display = 'flex';
-            const pendingOrder = JSON.parse(sessionStorage.getItem('pendingOrder'));
-            if (pendingOrder) {
-                // If there's a pending order, show the verification view and update its UI state
-                document.getElementById('cart-view').style.display = 'none';
-                document.getElementById('verification-view').style.display = 'block';
-                updateVerificationUI();
+            if (activePromotion && product.specialPromo) {
+                badgeHTML = '<div class="featured-badge">Limited Time Offer</div>';
+                priceHTML = `<span class="original-price">RM ${product.price.toFixed(2)}</span><span class="new-price" style="font-size: 1.2rem; color: var(--primary-color); display: block; margin-top: 5px;">Buy Any 2 for RM 200.00</span><div style="font-size: 0.9rem; color: var(--accent-color); font-weight: bold; margin-top: 5px;"><i class="fa-solid fa-truck-fast"></i> FREE Shipping!</div>`;
+                productClasses += ' promo-highlight';
+            } else if (activePromotion && product.promoPrice) {
+                badgeHTML = '<div class="featured-badge">Promo!</div>';
+                priceHTML = `<span class="original-price">RM ${product.price.toFixed(2)}</span><span class="new-price">RM ${product.promoPrice.toFixed(2)}</span>`;
             } else {
-                // Otherwise, show the cart and reset the verification UI
-                document.getElementById('cart-view').style.display = 'block';
-                document.getElementById('verification-view').style.display = 'none';
-                updateCartDisplay();
-                updateVerificationUI(true); // Reset just in case
+                priceHTML = `<span class="new-price">RM ${product.price.toFixed(2)}</span>`;
             }
-        }
+
+            return `
+              <div class="${productClasses}">
+                <img src="${halalLogoSrc}" alt="Halal Certified" class="halal-logo-tag">
+                ${badgeHTML}
+                <div class="product-image-container"><img src="${product.image || 'https://via.placeholder.com/200'}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/200x200?text=Image+Not+Found'"></div>
+                <div class="product-info">
+                    <h3>${product.name}</h3>
+                    <div class="price-section">${priceHTML}</div>
+                    <div class="benefits"><strong>Benefits:</strong> ${product.benefits}</div>
+                    <div class="consumption"><strong>Usage:</strong> ${product.consumption}</div>
+                    <div class="product-actions">
+                        <button class="btn btn-primary" onclick="addToCart(${product.id})"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+                    </div>
+                </div>
+              </div>`;
+        }).join('');
+    }
+
+    function startCountdown(endDateString) {
+        const countdownEl = document.getElementById('countdown-timer');
+        if(!countdownEl || !endDateString) return;
+        
+        countdownEl.style.display = 'inline-block';
+        const promoEndDate = new Date(endDateString).getTime();
+
+        const interval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = promoEndDate - now;
+
+            if (distance < 0) {
+                clearInterval(interval);
+                countdownEl.innerHTML = "PROMOTION ENDED";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            countdownEl.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }, 1000);
     }
     
-    // --- Helper and Calculation Functions (No changes needed below this line) ---
+    // --- CART LOGIC ---
+    function addToCart(productId){const existingItem=cart.find(item=>item.id===productId);if(existingItem){existingItem.quantity++}else{const productData=products.find(p=>p.id===productId);cart.push({id:productData.id,name:productData.name,price:productData.price,quantity:1})}updateCartDisplay()}
+    function increaseQuantity(productId){const item=cart.find(p=>p.id===productId);if(item){item.quantity++;updateCartDisplay()}}
+    function decreaseQuantity(productId){const item=cart.find(p=>p.id===productId);if(item){item.quantity--;if(item.quantity<=0)removeItemFromCart(productId);else updateCartDisplay()}}
+    function removeItemFromCart(productId){appliedDiscount=null;document.getElementById('discount-code-input').value="";document.getElementById('discount-status').textContent="";cart=cart.filter(p=>p.id!==productId);updateCartDisplay()}
+    function updateCartCount(){document.getElementById("cart-count").textContent=cart.reduce((total,item)=>total+item.quantity,0)}
+    
+    function applyDiscount() {
+        const codeInput = document.getElementById('discount-code-input');
+        const statusEl = document.getElementById('discount-status');
+        const code = codeInput.value.trim().toUpperCase();
 
+        if (!code) {
+            statusEl.textContent = "Please enter a code.";
+            statusEl.style.color = 'orange';
+            return;
+        }
+
+        const discountData = availableDiscountCodes[code];
+        if (discountData) {
+            appliedDiscount = { code, ...discountData };
+            statusEl.textContent = `Code "${code}" applied successfully!`;
+            statusEl.style.color = 'green';
+        } else {
+            appliedDiscount = null;
+            statusEl.textContent = "Invalid or expired discount code.";
+            statusEl.style.color = 'red';
+        }
+        updateCartDisplay();
+    }
+    
     function calculateCartTotals() {
-      let calculatedSubtotal = 0;
-      const aloeDrinkIds = [1, 2, 3];
-      let aloeDrinkCount = 0;
-      let otherItemsCost = 0;
-      let hasSpecialAloePromo = false; 
-      const aloeDrinkItemsInCart = cart.filter(item => aloeDrinkIds.includes(item.id));
-      const otherItemsInCart = cart.filter(item => !aloeDrinkIds.includes(item.id));
-      aloeDrinkItemsInCart.forEach(item => aloeDrinkCount += item.quantity);
-      let aloeDrinksAppliedCost = 0;
-      if (aloeDrinkCount > 0 && isPromoActive()) {
-          const numPairs = Math.floor(aloeDrinkCount / 2);
-          const remainingSingles = aloeDrinkCount % 2;
-          const aloeRetailPrice = products.find(p => p.id === 1).price; 
-          aloeDrinksAppliedCost = (numPairs * 200) + (remainingSingles * aloeRetailPrice);
-          if (numPairs >= 1) hasSpecialAloePromo = true; 
-      } else if (aloeDrinkCount > 0) {
-          const aloeRetailPrice = products.find(p => p.id === 1).price;
-          aloeDrinksAppliedCost = aloeDrinkCount * aloeRetailPrice;
-      }
-      otherItemsInCart.forEach(item => {
-          const productData = products.find(p => p.id === item.id);
-          const itemPrice = isPromoActive() && productData.promoPrice ? productData.promoPrice : productData.price;
-          otherItemsCost += itemPrice * item.quantity;
-      });
-      calculatedSubtotal = otherItemsCost + aloeDrinksAppliedCost;
-      const totalPoints = Math.floor(calculatedSubtotal);
-      const shipping = calculateShipping(cart, calculatedSubtotal, hasSpecialAloePromo);
-      const total = calculatedSubtotal + shipping.fee;
-      return { calculatedSubtotal, totalPoints, shipping, total };
+        let subtotal = 0;
+        let hasSpecialAloePromo = false;
+        if (activePromotion) {
+            const aloeItemsInCart = cart.filter(item => products.find(p=>p.id===item.id).specialPromo);
+            const otherItemsInCart = cart.filter(item => !products.find(p=>p.id===item.id).specialPromo);
+            const aloeDrinkCount = aloeItemsInCart.reduce((sum, item) => sum + item.quantity, 0);
+
+            if (aloeDrinkCount > 0) {
+                const numPairs = Math.floor(aloeDrinkCount / 2);
+                const remainingSingles = aloeDrinkCount % 2;
+                subtotal += (numPairs * 200);
+                if (remainingSingles > 0) {
+                    const singleAloe = products.find(p=>p.id===aloeItemsInCart[0].id);
+                    subtotal += singleAloe.price * remainingSingles;
+                }
+                if (numPairs > 0) hasSpecialAloePromo = true;
+            }
+            otherItemsInCart.forEach(item => {
+                const productData = products.find(p => p.id === item.id);
+                subtotal += (productData.promoPrice || productData.price) * item.quantity;
+            });
+        } else {
+            cart.forEach(item => { 
+                const productData = products.find(p => p.id === item.id);
+                subtotal += productData.price * item.quantity; 
+            });
+        }
+        
+        let discountValue = 0;
+        if (appliedDiscount) {
+            if (appliedDiscount.type === 'Fixed') {
+                discountValue = parseFloat(appliedDiscount.value);
+            } else if (appliedDiscount.type === 'Percentage') {
+                discountValue = subtotal * (parseFloat(appliedDiscount.value) / 100);
+            }
+        }
+        
+        const subtotalAfterDiscount = subtotal - discountValue;
+        const shipping = calculateShipping(cart, subtotalAfterDiscount, hasSpecialAloePromo);
+        const total = subtotalAfterDiscount + shipping.fee;
+        const totalPoints = Math.floor(subtotalAfterDiscount);
+
+        return { subtotal, discountValue, shipping, total, totalPoints };
     }
 
-    function generatePDF(orderDetails, customerPAC, totalAccumulatedPoints) {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        
-        doc.setFontSize(20);
-        doc.text("Purchase Receipt", 105, 20, { align: 'center' });
-        doc.setFontSize(11);
-        doc.text("Forever Living by Muhd Arvind Isa", 105, 30, { align: 'center' });
-        doc.text("WhatsApp: 601111033154", 105, 35, { align: 'center' });
-
-        doc.setFontSize(12);
-        const orderNumber = `FL-${Date.now().toString().slice(-6)}`;
-        doc.text(`Order Number: ${orderNumber}`, 14, 50);
-        doc.text(`Date: ${new Date().toLocaleDateString('en-GB')}`, 14, 57);
-
-        doc.text("Bill To:", 14, 67);
-        doc.text(orderDetails.customerName, 14, 74);
-        doc.text(orderDetails.customerPhone, 14, 81);
-        doc.text(orderDetails.customerEmail, 14, 88);
-        doc.text(orderDetails.customerAddress, 14, 95);
-
-        const tableColumn = ["Item Description", "Qty", "Total (RM)"];
-        const tableRows = [];
-        orderDetails.cart.forEach(item => {
-            const productData = products.find(p => p.id === item.id);
-            const price = isPromoActive() && productData.promoPrice ? productData.promoPrice : productData.price;
-            // Simplified for PDF, full logic is in cart display
-            tableRows.push([item.name, item.quantity, (price * item.quantity).toFixed(2)]);
-        });
-
-        doc.autoTable({ head: [tableColumn], body: tableRows, startY: 105, theme: 'grid' });
-        let finalY = doc.lastAutoTable.finalY || 115;
-        
-        doc.setFontSize(12);
-        const { shipping, total } = calculateCartTotals(); // Recalculate for display
-        doc.text(`Subtotal: RM ${(total - shipping.fee).toFixed(2)}`, 14, finalY + 10);
-        doc.text(`Shipping: ${shipping.message}`, 14, finalY + 17);
-        doc.setFontSize(14);
-        doc.setFont(undefined, 'bold');
-        doc.text(`Total Amount Paid: RM ${orderDetails.totalAmount}`, 14, finalY + 27);
-        
-        doc.text(`Points Earned This Purchase: ${orderDetails.totalPointsForThisPurchase}`, 14, finalY + 34);
-        doc.text(`New Total Points: ${totalAccumulatedPoints}`, 14, finalY + 41);
-
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(10);
-        doc.text("IMPORTANT: Your Personal Access Code for rewards is:", 14, finalY + 55);
-        doc.setFont('courier', 'normal');
-        doc.text(customerPAC || 'N/A', 14, finalY + 62);
-        
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(9);
-        doc.text("This is a computer-generated receipt.", 105, doc.internal.pageSize.height - 10, { align: 'center' });
-
-        doc.save(`Receipt-Order-${orderNumber}.pdf`);
-    }
-
-    function updateCartDisplay() {
-      const cartItemsEl = document.getElementById('cart-items');
-      const subtotalEl = document.getElementById('cart-subtotal');
-      const shippingEl = document.getElementById('cart-shipping');
-      const totalEl = document.getElementById('cart-total');
-      const pointsEl = document.getElementById('points-earned-display');
-      if (cart.length === 0) {
-        cartItemsEl.innerHTML = '<p>Your cart is currently empty.</p>';
-        subtotalEl.textContent = 'RM 0.00';
-        shippingEl.textContent = 'RM 0.00';
-        totalEl.textContent = 'RM 0.00';
-        pointsEl.innerHTML = '';
-        return;
-      }
-      const { calculatedSubtotal, totalPoints, shipping, total } = calculateCartTotals();
-      let itemsHTML = '';
-      cart.forEach(item => {
-        const productData = products.find(p => p.id === item.id);
-        itemsHTML += `<div class="cart-item"><div class="cart-item-details"><strong>${item.name}</strong><div class="quantity-controls"><button class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button><span class="quantity-display">${item.quantity}</span><button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button></div></div><div style="display: flex; align-items: center; gap: 15px;"><span>RM ${productData.price.toFixed(2)}/pc</span><span class="remove-item-btn" onclick="removeItemFromCart(${item.id})">×</span></div></div>`;
-      });
-      cartItemsEl.innerHTML = itemsHTML;
-      subtotalEl.textContent = `RM ${calculatedSubtotal.toFixed(2)}`;
-      shippingEl.textContent = shipping.message;
-      totalEl.textContent = `RM ${total.toFixed(2)}`;
-      pointsEl.innerHTML = `<div class="points-earned"><i class="fa-solid fa-star"></i> Points to be Earned: ${totalPoints}</div>`;
-    }
+    function calculateShipping(cart,subtotal,hasSpecialAloePromo){if(hasSpecialAloePromo)return{fee:0,message:"FREE"};if(subtotal>=250)return{fee:0,message:"FREE"};if(cart.length===0)return{fee:0,message:"RM 0.00"};const baseShipping=14;const calculatedFee=baseShipping-(baseShipping*0.3*(cart.length-1));return{fee:Math.max(0,calculatedFee),message:`RM ${Math.max(0,calculatedFee).toFixed(2)}`}}
     
-    // Unchanged functions from here
-    function renderProducts(){const e=document.getElementById("product-list");if(!e)return;const t=isPromoActive();e.innerHTML=products.map(e=>{let o="",r="",l="product",a=0;return t&&"buy2for200"===e.specialPromo?(r='<div class="featured-badge" style="background-color: #e74c3c;">Hot Promo!</div>',o=`\n                <span class="original-price">RM ${e.price.toFixed(2)}</span>\n                <span class="new-price" style="font-size: 1.2rem; color: var(--primary-color); display: block; margin-top: 5px;">Buy Any 2 for RM 200.00</span>\n                <div style="font-size: 0.9rem; color: var(--accent-color); font-weight: bold; margin-top: 5px;"><i class="fa-solid fa-truck-fast"></i> FREE Shipping!</div>\n            `,a=0,l+=" promo-highlight"):t&&e.promoPrice?(r='<div class="featured-badge">Promo!</div>',o=`\n                <span class="original-price">RM ${e.price.toFixed(2)}</span>\n                <span class="new-price">RM ${e.promoPrice.toFixed(2)}</span>\n            `,a=Math.floor(e.promoPrice),l+=" promo-highlight"):(o=`<span class="new-price">RM ${e.price.toFixed(2)}</span>`,a=Math.floor(e.price)),`\n          <div class="${l}">\n            ${r}\n            <div class="product-image-container"><img src="${e.image}" alt="${e.name}" onerror="this.src='https://via.placeholder.com/200x200?text=Image+Not+Found'"></div>\n            <div class="product-info">\n                <h3>${e.name}</h3>\n                <div class="price-section">\n                    ${o}\n                </div>\n                <div class="benefits"><strong>Benefits:</strong> ${e.benefits}</div>\n                <div class="consumption"><strong>Usage:</strong> ${e.consumption}</div>\n                <div class="product-points">${a>0?`<i class="fa-solid fa-star"></i> Earn ${a} Points`:""}</div>\n                <div class="product-actions">\n                    <button class="btn btn-primary" onclick="addToCart(${e.id})"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>\n                </div>\n            </div>\n          </div>`}).join("")}function filterProducts(){const e=document.getElementById("product-search").value.toLowerCase();document.querySelectorAll("#product-list .product").forEach(t=>{t.querySelector("h3").textContent.toLowerCase().includes(e)?t.style.display="":t.style.display="none"})}function suggestProduct(){const e=document.getElementById("symptom-input").value.toLowerCase().trim(),t=document.getElementById("suggestion-result");if(!e)return void(t.innerHTML='<p style="color: red;">Please enter a symptom or health concern.</p>');let o=new Set;for(const r in productSuggestions)e.includes(r)&&productSuggestions[r].forEach(e=>o.add(e));products.forEach(e=>{e.benefits.toLowerCase().includes(symptom)&&o.add(e.id)});const r=Array.from(o);if(r.length>0){let e="<h4>Based on your concern, we suggest:</h4>";r.slice(0,3).forEach(o=>{const r=products.find(e=>e.id===o);r&&(e+=`\n                        <div class="suggestion-product">\n                            <span style="flex-grow: 1;"><strong>${r.name}</strong> - ${r.benefits}</span>\n                            <button class="btn btn-primary" style="width: auto; padding: 8px 15px; flex-shrink: 0;" onclick="addToCart(${r.id}); toggleCart();">Add</button>\n                        </div>`)
-}),t.innerHTML=e}else t.innerHTML='<p>We could not find a specific match. Try searching for products directly or use broader terms like "skin" or "energy".</p>'}function showTab(e){document.querySelectorAll("#main-content .tab-content").forEach(e=>e.classList.remove("active"));const t=document.getElementById(e);t&&t.classList.add("active")}function addToCart(e){const t=cart.find(t=>t.id===e);t?t.quantity++:cart.push({id:(o=e,products.find(e=>e.id===o)).id,name:o.name,price:o.price,quantity:1}),updateCartCount();var o}function increaseQuantity(e){const t=cart.find(t=>t.id===e);t&&(t.quantity++,updateCartDisplay(),updateCartCount())}function decreaseQuantity(e){const t=cart.find(t=>t.id===e);t&&(t.quantity--,t.quantity<=0?removeItemFromCart(e):(updateCartDisplay(),updateCartCount()))}function removeItemFromCart(e){cart=cart.filter(t=>t.id!==e),updateCartDisplay(),updateCartCount()}function calculateShipping(e,t,o){if(o)return{fee:0,message:"FREE"};if(t>=250)return{fee:0,message:"FREE"};if(0===e.length)return{fee:0,message:"RM 0.00"};const r=14*(1-.3*(e.length-1));return{fee:Math.max(0,r),message:`RM ${Math.max(0,r).toFixed(2)}`}}function updateCartCount(){const e=cart.reduce((e,t)=>e+t.quantity,0);document.getElementById("cart-count").textContent=e}function startCountdown(){const e=document.getElementById("countdown-timer"),t=document.getElementById("promo-details"),o=document.getElementById("promo-end-date-display");o.textContent=new Date(promoEndDate).toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit",hour12:!0});const r=setInterval(()=>{const l=new Date().getTime(),a=promoEndDate-l;if(a<0)return clearInterval(r),t.innerHTML='<div class="promo-period">Our Grand Opening promotion has ended.</div>',document.body.classList.remove("grand-opening-active"),void renderProducts();const n=Math.floor(a/864e5),s=Math.floor(a%864e5/36e5),i=Math.floor(a%36e5/6e4),c=Math.floor(a%6e4/1e3);e.innerHTML=`${n}d ${s}h ${i}m ${c}s`},1e3)}function createConfetti(){for(let e=0;e<50;e++){const t=document.createElement("div");t.className="confetti",t.style.left=100*Math.random()+"vw",t.style.animationDuration=3*Math.random()+2+"s",t.style.animationDelay=5*Math.random()+"s",t.style.backgroundColor=`hsl(${360*Math.random()}, 100%, 50%)`,document.body.appendChild(t)}}function showPromoPopup(){const e=document.getElementById("promo-popup-modal");sessionStorage.getItem("promoPopupShown")||(e.style.display="flex",sessionStorage.setItem("promoPopupShown","true"))}function closePromoPopup(){document.getElementById("promo-popup-modal").style.display="none"}document.addEventListener("DOMContentLoaded",function(){document.getElementById("current-date").textContent=new Date().toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"}),isPromoActive()?(document.body.classList.add("grand-opening-active"),startCountdown(),createConfetti(),showPromoPopup()):(document.getElementById("promo-details")&&(document.getElementById("promo-details").innerHTML='<div class="promo-period">Our Grand Opening promotion has ended.</div>'),document.body.classList.remove("grand-opening-active"),document.getElementById("promo-running-banner")&&(document.getElementById("promo-running-banner").style.display="none")),renderProducts(),sessionStorage.getItem("pendingOrder")?toggleCart():showTab("products")});
+    function updateCartDisplay(){const cartItemsEl=document.getElementById("cart-items"),subtotalEl=document.getElementById("cart-subtotal"),discountLine=document.getElementById("discount-line"),discountEl=document.getElementById("cart-discount"),shippingEl=document.getElementById("cart-shipping"),totalEl=document.getElementById("cart-total"),pointsEl=document.getElementById("points-earned-display");if(cart.length===0){cartItemsEl.innerHTML="<p>Your cart is currently empty.</p>";subtotalEl.textContent="RM 0.00";shippingEl.textContent="RM 0.00";totalEl.textContent="RM 0.00";pointsEl.innerHTML="";discountLine.style.display="none";updateCartCount();return}const{subtotal:calculatedSubtotal,discountValue:calculatedDiscount,shipping:shipping,total:total,totalPoints:totalPoints}=calculateCartTotals();let itemsHTML="";cart.forEach(item=>{const productData=products.find(p=>p.id===item.id);itemsHTML+=`<div class="cart-item"><div class="cart-item-details"><strong>${item.name}</strong><div class="quantity-controls"><button class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button><span class="quantity-display">${item.quantity}</span><button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button></div></div><div style="display:flex;align-items:center;gap:15px"><span>RM ${productData.price.toFixed(2)}/pc</span><span class="remove-item-btn" onclick="removeItemFromCart(${item.id})">×</span></div></div>`});cartItemsEl.innerHTML=itemsHTML;subtotalEl.textContent=`RM ${calculatedSubtotal.toFixed(2)}`;if(calculatedDiscount>0){discountEl.textContent=`- RM ${calculatedDiscount.toFixed(2)}`;discountLine.style.display="flex"}else{discountLine.style.display="none"}shipping.message==="FREE"?shippingEl.innerHTML='<span style="color:var(--accent-color);font-weight:700"><i class="fa-solid fa-truck-fast"></i> FREE!</span>':shippingEl.textContent=shipping.message;totalEl.textContent=`RM ${total.toFixed(2)}`;pointsEl.innerHTML=`<div class="points-earned"><i class="fa-solid fa-star"></i> Points to be Earned: ${totalPoints}</div>`;updateCartCount()}
 
-  </script>
+    // --- CHECKOUT AND VERIFICATION ---
+    function toggleCheckoutButton(){document.getElementById("checkout-btn").disabled=!document.getElementById("consent-checkbox").checked}
+    function initiateCheckout(){if(!document.getElementById("consent-checkbox").checked)return void alert("You must agree to the data collection consent before proceeding.");const name=document.getElementById("customer-name").value.trim(),phone=document.getElementById("customer-phone").value.trim(),email=document.getElementById("customer-email").value.trim(),address1=document.getElementById("customer-address1").value.trim(),address2=document.getElementById("customer-address2").value.trim(),city=document.getElementById("customer-city").value.trim(),state=document.getElementById("customer-state").value.trim(),postcode=document.getElementById("customer-postcode").value.trim();if(!name||!phone||!email||!address1||!city||!state||!postcode)return void alert("Please fill in all required customer and shipping information fields.");if(0===cart.length)return void alert("Your cart is empty.");const{subtotal:subtotal,discountValue:discount,shipping:shipping,total:total,totalPoints:totalPoints}=calculateCartTotals(),fullAddress=`${address1}, ${address2?address2+", ":""}${postcode} ${city}, ${state}.`,pendingOrder={customerName:name,customerPhone:phone,customerEmail:email,customerAddress:fullAddress,cart:cart.map(item=>{const p=products.find(p=>p.id===item.id);return{name:item.name,quantity:item.quantity,price:p.price}}),totalAmount:total.toFixed(2),shippingFee:shipping.fee.toFixed(2),discountApplied:appliedDiscount?`${appliedDiscount.code} - RM ${discount.toFixed(2)}`:"N/A",discountCodeUsed:appliedDiscount?appliedDiscount.code:"N/A",totalPointsForThisPurchase:totalPoints,proofUploaded:!1};sessionStorage.setItem("pendingOrder",JSON.stringify(pendingOrder));let message=`Hi, I would like to place an order:\n\n*Customer Details:*\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nAddress: ${fullAddress}\n\n--- ORDER SUMMARY ---\nSubtotal: RM ${subtotal.toFixed(2)}${discount>0?`\nDiscount: - RM ${discount.toFixed(2)}`:""}\nShipping: ${shipping.message}\n*TOTAL: RM ${total.toFixed(2)}*\n\nPlease provide payment details. After payment, I will upload the proof and verification code on your website to finalize the order. Thank you!`;window.open(`https://wa.me/601111033154?text=${encodeURIComponent(message)}`,"_blank"),document.getElementById("cart-view").style.display="none",document.getElementById("verification-view").style.display="block",updateVerificationUI()}
+    async function uploadProof(){const proofFile=document.getElementById("payment-proof-upload").files[0],uploadStatusEl=document.getElementById("upload-status"),uploadBtn=document.getElementById("upload-proof-btn");let pendingOrder=JSON.parse(sessionStorage.getItem("pendingOrder"));if(!proofFile)return uploadStatusEl.textContent="Please select a file to upload.",void(uploadStatusEl.style.color="red");if(!pendingOrder)return uploadStatusEl.textContent="Error: No pending order found.",void(uploadStatusEl.style.color="red");uploadBtn.disabled=!0,uploadStatusEl.textContent="Uploading...",uploadStatusEl.style.color="blue";try{const base64File=await getBase64(proofFile),payload={action:"logInitialOrderWithProof",date:(new Date).toLocaleString("en-GB"),customerName:pendingOrder.customerName,customerEmail:pendingOrder.customerEmail,customerPhone:pendingOrder.customerPhone,customerAddress:pendingOrder.customerAddress,itemsPurchased:pendingOrder.cart.map(item=>`${item.name} (x${item.quantity})`).join("; "),discountApplied:pendingOrder.discountApplied,totalAmount:pendingOrder.totalAmount,shippingFee:pendingOrder.shippingFee,totalPointsForThisPurchase:pendingOrder.totalPointsForThisPurchase,paymentProofFile:base64File.split(",")[1],paymentProofMimeType:proofFile.type,paymentProofFileName:`${pendingOrder.customerEmail.split("@")[0]}-${Date.now()}`},response=await fetch(googleScriptURL,{method:"POST",body:JSON.stringify(payload)}),result=await response.json();if("success"===result.status)uploadStatusEl.textContent="Proof uploaded successfully!",uploadStatusEl.style.color="green",pendingOrder.proofUploaded=!0,sessionStorage.setItem("pendingOrder",JSON.stringify(pendingOrder)),updateVerificationUI();else throw new Error(result.message)}catch(error){uploadStatusEl.textContent=`Error: ${error.message}`,uploadStatusEl.style.color="red",uploadBtn.disabled=!1}}
+    async function finalizeOrder(){const codeInput=document.getElementById("verification-code").value.trim().toUpperCase(),finalizeBtn=document.getElementById("finalize-order-btn"),verificationStatusEl=document.getElementById("verification-status");let pendingOrder=JSON.parse(sessionStorage.getItem("pendingOrder"));if(!codeInput)return verificationStatusEl.textContent="Please enter the verification code.",void(verificationStatusEl.style.color="red");if(!pendingOrder)return verificationStatusEl.textContent="Error: No pending order found.",void(verificationStatusEl.style.color="red");finalizeBtn.disabled=!0,verificationStatusEl.textContent="Verifying...",verificationStatusEl.style.color="blue";try{const payload={action:"finalizeOrder",usedCode:codeInput,customerName:pendingOrder.customerName,customerEmail:pendingOrder.customerEmail,customerPhone:pendingOrder.customerPhone,customerAddress:pendingOrder.customerAddress,cart:pendingOrder.cart,totalAmount:pendingOrder.totalAmount,shippingFee:pendingOrder.shippingFee,discountApplied:pendingOrder.discountApplied,discountCodeUsed:pendingOrder.discountCodeUsed,totalPointsForThisPurchase:pendingOrder.totalPointsForThisPurchase},response=await fetch(googleScriptURL,{method:"POST",body:JSON.stringify(payload)}),result=await response.json();if("success"===result.status){verificationStatusEl.textContent="Order Verified! Your receipt is downloading...";verificationStatusEl.style.color="green";const downloadLink=document.createElement("a");downloadLink.href=result.receiptUrl.replace("/file/d/","/uc?export=download&id=").replace("/view?usp=drivesdk",""),downloadLink.download=`Receipt-Order-${(new Date).getTime()}.pdf`,document.body.appendChild(downloadLink),downloadLink.click(),document.body.removeChild(downloadLink),cart=[],sessionStorage.removeItem("pendingOrder"),updateCartCount(),appliedDiscount=null,document.getElementById('discount-code-input').value="",document.getElementById('discount-status').textContent="",setTimeout(()=>{toggleCart(!0),updateVerificationUI(!0)},4e3)}else throw new Error(result.message)}catch(error){verificationStatusEl.textContent=`Error: ${error.message}`,verificationStatusEl.style.color="red",finalizeBtn.disabled=!1}}
+    
+    // --- UI STATE MANAGEMENT ---
+    function updateVerificationUI(reset=!1){const proofStepEl=document.getElementById("proof-upload-step"),codeStepEl=document.getElementById("code-verification-step"),uploadBtn=document.getElementById("upload-proof-btn"),finalizeBtn=document.getElementById("finalize-order-btn"),codeInput=document.getElementById("verification-code"),uploadStatusEl=document.getElementById("upload-status"),verificationStatusEl=document.getElementById("verification-status");if(reset)return proofStepEl.classList.add("active"),proofStepEl.classList.remove("completed"),codeStepEl.classList.remove("active"),uploadBtn.disabled=!1,finalizeBtn.disabled=!0,codeInput.disabled=!0,uploadStatusEl.textContent="",verificationStatusEl.textContent="",document.getElementById("payment-proof-upload").value="",void(codeInput.value="");const pendingOrder=JSON.parse(sessionStorage.getItem("pendingOrder"));pendingOrder&& (pendingOrder.proofUploaded?(proofStepEl.classList.remove("active"),proofStepEl.classList.add("completed"),codeStepEl.classList.add("active"),uploadBtn.disabled=!0,finalizeBtn.disabled=!1,codeInput.disabled=!1,uploadStatusEl.textContent="Proof Uploaded Successfully!",uploadStatusEl.style.color="green"):(proofStepEl.classList.add("active"),proofStepEl.classList.remove("completed"),codeStepEl.classList.remove("active"),uploadBtn.disabled=!1,finalizeBtn.disabled=!0,codeInput.disabled=!0))}
+    function cancelVerification(){confirm("Are you sure you want to cancel? This will remove your pending order and you will have to start over.")&&(sessionStorage.removeItem("pendingOrder"),toggleCart(!0),updateVerificationUI(!0))}
+    function toggleCart(forceClose=!1){const modal=document.getElementById("cart-modal");if(forceClose)return void(modal.style.display="none");if("flex"===modal.style.display)modal.style.display="none";else{modal.style.display="flex";const pendingOrder=JSON.parse(sessionStorage.getItem("pendingOrder"));pendingOrder?(document.getElementById("cart-view").style.display="none",document.getElementById("verification-view").style.display="block",updateVerificationUI()):(document.getElementById("cart-view").style.display="block",document.getElementById("verification-view").style.display="none",updateCartDisplay(),updateVerificationUI(!0))}}
+    function showTab(tabId){document.querySelectorAll(".tab-content").forEach(el=>el.classList.remove("active"));const activeTab=document.getElementById(tabId);activeTab&&activeTab.classList.add("active")}
+    function getBase64(file){return new Promise((resolve,reject)=>{const reader=new FileReader;reader.readAsDataURL(file),reader.onload=()=>resolve(reader.result),reader.onerror=error=>reject(error)})}
+
+</script>
 </body>
 </html>
