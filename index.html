@@ -297,7 +297,7 @@
     }
 
     function renderSingleProduct(product, isPromo) {
-        const halalLogoUrl = 'https://raw.githubusercontent.com/Arvind257/e-catalog/main/halal.png'; // **FIXED**: Using absolute URL
+        const <img src='halal.png';
         let priceHTML = `<span class="new-price">RM ${product.price.toFixed(2)}</span>`;
         if (isPromo && product.promoPrice) priceHTML = `<span class="original-price">RM ${product.price.toFixed(2)}</span><span class="new-price">RM ${product.promoPrice.toFixed(2)}</span>`;
         else if (isPromo && product.specialPromo) priceHTML = `<span class="original-price">RM ${product.price.toFixed(2)}</span><span class="new-price" style="font-size: 1.2rem; color: var(--primary-color); display: block; margin-top: 5px;">Buy Any 2 for RM 200.00</span><div style="font-size: 0.9rem; color: var(--accent-color); font-weight: bold; margin-top: 5px;"><i class="fa-solid fa-truck-fast"></i> FREE Shipping!</div>`;
