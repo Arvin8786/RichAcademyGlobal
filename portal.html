@@ -1,0 +1,102 @@
+// --- CONFIGURATION ---
+// IMPORTANT: This must be the SAME Apps Script URL as in your index.html file.
+const googleScriptURL = 'https://script.google.com/macros/s/AKfycbxjxRFD5fJg5NZrf65KbtQ-hhkIcyE6CWruEvHLDYcFgEGjyMIZ4i_Bo3FXCQJK19Pzcw/exec';
+
+// --- MAIN FUNCTION ---
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Get the PAC from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const pacCode = urlParams.get('pac');
+
+    const customerNameEl = document.getElementById('customer-name');
+    const customerEmailEl = document.getElementById('customer-email');
+    const customerPhoneEl = document.getElementById('customer-phone');
+    const customerAddressEl = document.getElementById('customer-address');
+    const pointsBalanceEl = document.getElementById('points-balance');
+    const transactionHistoryEl = document.getElementById('transaction-history');
+    const loadingSpinner = document.getElementById('loading-spinner');
+    const portalContent = document.getElementById('portal-content');
+    const errorContainer = document.getElementById('error-container');
+
+    if (!pacCode) {
+        // If no PAC is found in the URL, show an error
+        loadingSpinner.style.display = 'none';
+        errorContainer.textContent = 'Error: No Personal Access Code provided. Please scan your QR code again.';
+        errorContainer.style.display = 'block';
+        return;
+    }
+
+    // 2. Fetch the customer's data from the Google Apps Script
+    fetchCustomerData(pacCode);
+
+    async function fetchCustomerData(pac) {
+        try {
+            // Construct the full URL with the action and PAC parameter for a GET request
+            const fullUrl = `${googleScriptURL}?action=getCustomerData&pac=${encodeURIComponent(pac)}`;
+            
+            const response = await fetch(fullUrl);
+            if (!response.ok) {
+                throw new Error(`Network response was not ok. Status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+
+            if (data.status === 'success') {
+                // 3. Populate the dashboard with the received data
+                populateDashboard(data.customerData);
+            } else {
+                throw new Error(data.message || 'Could not retrieve customer data.');
+            }
+
+        } catch (error) {
+            console.error('Fetch error:', error);
+            loadingSpinner.style.display = 'none';
+            errorContainer.textContent = `Error: ${error.message}. This PAC may be invalid or there was a connection issue.`;
+            errorContainer.style.display = 'block';
+        }
+    }
+
+    function populateDashboard(data) {
+        if (!data || !data.details) {
+             loadingSpinner.style.display = 'none';
+             errorContainer.textContent = 'Error: Invalid customer data received.';
+             errorContainer.style.display = 'block';
+             return;
+        }
+        
+        // Populate personal details
+        customerNameEl.textContent = data.details.name || 'N/A';
+        customerEmailEl.textContent = data.details.email || 'N/A';
+        customerPhoneEl.textContent = data.details.phone || 'N/A';
+        customerAddressEl.textContent = data.details.address || 'N/A';
+        
+        // Populate points balance
+        pointsBalanceEl.textContent = data.details.totalPoints || '0';
+
+        // Populate transaction history
+        if (data.transactions && data.transactions.length > 0) {
+            let transactionsHtml = '';
+            data.transactions.forEach(tx => {
+                transactionsHtml += `
+                    <div class="transaction-item">
+                        <div class="transaction-header">
+                            <span class="transaction-date">${tx.date}</span>
+                            <span class="transaction-points">+${tx.pointsEarned} Points</span>
+                        </div>
+                        <div class="transaction-body">
+                            <p><strong>Total:</strong> RM ${tx.totalAmount}</p>
+                            <p><strong>Items:</strong> ${tx.itemsPurchased.replace(/; /g, ', ')}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            transactionHistoryEl.innerHTML = transactionsHtml;
+        } else {
+            transactionHistoryEl.innerHTML = '<p>No transaction history found.</p>';
+        }
+
+        // Hide the spinner and show the content
+        loadingSpinner.style.display = 'none';
+        portalContent.style.display = 'block';
+    }
+});
