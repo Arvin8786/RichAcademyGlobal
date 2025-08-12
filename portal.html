@@ -1,102 +1,293 @@
-// --- CONFIGURATION ---
-// IMPORTANT: This must be the SAME Apps Script URL as in your index.html file.
-const googleScriptURL = 'https://script.google.com/macros/s/AKfycbxtCYi-A1N8-r4Nq037gftRYm7H-nTsVZ2P0fJuSLFt6T2zgphBToxUcLCQz4CCkBBQAg/exec';
-
-// --- MAIN FUNCTION ---
-document.addEventListener('DOMContentLoaded', function() {
-    // 1. Get the PAC from the URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const pacCode = urlParams.get('pac');
-
-    const customerNameEl = document.getElementById('customer-name');
-    const customerEmailEl = document.getElementById('customer-email');
-    const customerPhoneEl = document.getElementById('customer-phone');
-    const customerAddressEl = document.getElementById('customer-address');
-    const pointsBalanceEl = document.getElementById('points-balance');
-    const transactionHistoryEl = document.getElementById('transaction-history');
-    const loadingSpinner = document.getElementById('loading-spinner');
-    const portalContent = document.getElementById('portal-content');
-    const errorContainer = document.getElementById('error-container');
-
-    if (!pacCode) {
-        // If no PAC is found in the URL, show an error
-        loadingSpinner.style.display = 'none';
-        errorContainer.textContent = 'Error: No Personal Access Code provided. Please scan your QR code again.';
-        errorContainer.style.display = 'block';
-        return;
-    }
-
-    // 2. Fetch the customer's data from the Google Apps Script
-    fetchCustomerData(pacCode);
-
-    async function fetchCustomerData(pac) {
-        try {
-            // Construct the full URL with the action and PAC parameter for a GET request
-            const fullUrl = `${googleScriptURL}?action=getCustomerData&pac=${encodeURIComponent(pac)}`;
-            
-            const response = await fetch(fullUrl);
-            if (!response.ok) {
-                throw new Error(`Network response was not ok. Status: ${response.status}`);
-            }
-            
-            const data = await response.json();
-
-            if (data.status === 'success') {
-                // 3. Populate the dashboard with the received data
-                populateDashboard(data.customerData);
-            } else {
-                throw new Error(data.message || 'Could not retrieve customer data.');
-            }
-
-        } catch (error) {
-            console.error('Fetch error:', error);
-            loadingSpinner.style.display = 'none';
-            errorContainer.textContent = `Error: ${error.message}. This PAC may be invalid or there was a connection issue.`;
-            errorContainer.style.display = 'block';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Forever Living Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1a5276;
+            --secondary-color: #f39c12;
+            --accent-color: #27ae60;
+            --light-gray: #f4f6f8;
+            --dark-text: #333;
+            --light-text: #fff;
+            --border-radius: 12px;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --font-family: 'Poppins', sans-serif;
         }
-    }
-
-    function populateDashboard(data) {
-        if (!data || !data.details) {
-             loadingSpinner.style.display = 'none';
-             errorContainer.textContent = 'Error: Invalid customer data received.';
-             errorContainer.style.display = 'block';
-             return;
+        body {
+            font-family: var(--font-family);
+            background-color: var(--light-gray);
+            color: var(--dark-text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
         }
-        
-        // Populate personal details
-        customerNameEl.textContent = data.details.name || 'N/A';
-        customerEmailEl.textContent = data.details.email || 'N/A';
-        customerPhoneEl.textContent = data.details.phone || 'N/A';
-        customerAddressEl.textContent = data.details.address || 'N/A';
-        
-        // Populate points balance
-        pointsBalanceEl.textContent = data.details.totalPoints || '0';
+        .portal-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+        }
+        .portal-header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .portal-header img {
+            width: 100px;
+            height: 100px;
+        }
+        .portal-header h1 {
+            color: var(--primary-color);
+            margin: 10px 0 0 0;
+        }
+        .portal-header p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+        .points-display {
+            background-color: var(--accent-color);
+            color: var(--light-text);
+            text-align: center;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+        }
+        .points-display h2 {
+            margin: 0;
+            font-size: 2.5rem;
+            color: var(--light-text);
+        }
+        .points-display p {
+            margin: 5px 0 0 0;
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        .portal-section {
+            margin-bottom: 30px;
+        }
+        .portal-section h3 {
+            color: var(--primary-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        .detail-item {
+            background-color: var(--light-gray);
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .detail-item strong {
+            display: block;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+        .transaction-item {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-left: 5px solid var(--secondary-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .transaction-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .transaction-date {
+            color: #555;
+        }
+        .transaction-points {
+            color: var(--accent-color);
+        }
+        .transaction-body p {
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+        #loading-spinner, #error-container {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        #error-container {
+            color: #c0392b;
+            display: none;
+        }
+        #portal-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="portal-container">
+        <div class="portal-header">
+            <img src="FL.jpg" alt="Business Logo" onerror="this.style.display='none'">
+            <h1>My Forever Living Portal</h1>
+            <p>Welcome, <span id="customer-name">...</span>!</p>
+        </div>
 
-        // Populate transaction history
-        if (data.transactions && data.transactions.length > 0) {
-            let transactionsHtml = '';
-            data.transactions.forEach(tx => {
-                transactionsHtml += `
-                    <div class="transaction-item">
-                        <div class="transaction-header">
-                            <span class="transaction-date">${tx.date}</span>
-                            <span class="transaction-points">+${tx.pointsEarned} Points</span>
-                        </div>
-                        <div class="transaction-body">
-                            <p><strong>Total:</strong> RM ${tx.totalAmount}</p>
-                            <p><strong>Items:</strong> ${tx.itemsPurchased.replace(/; /g, ', ')}</p>
-                        </div>
+        <div id="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i> Loading Your Details...
+        </div>
+
+        <div id="error-container"></div>
+
+        <div id="portal-content">
+            <div class="points-display">
+                <p>Current Points Balance</p>
+                <h2 id="points-balance">0</h2>
+            </div>
+
+            <div class="portal-section">
+                <h3><i class="fas fa-user-circle"></i> Your Details</h3>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <strong>Email:</strong>
+                        <span id="customer-email"></span>
                     </div>
-                `;
-            });
-            transactionHistoryEl.innerHTML = transactionsHtml;
-        } else {
-            transactionHistoryEl.innerHTML = '<p>No transaction history found.</p>';
-        }
+                    <div class="detail-item">
+                        <strong>Phone:</strong>
+                        <span id="customer-phone"></span>
+                    </div>
+                    <div class="detail-item detail-full">
+                        <strong>Shipping Address:</strong>
+                        <span id="customer-address"></span>
+                    </div>
+                </div>
+            </div>
 
-        // Hide the spinner and show the content
-        loadingSpinner.style.display = 'none';
-        portalContent.style.display = 'block';
-    }
-});
+            <div class="portal-section">
+                <h3><i class="fas fa-history"></i> Transaction History</h3>
+                <div id="transaction-history">
+                    <!-- Transactions will be loaded here by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        // IMPORTANT: This must be the SAME Apps Script URL as in your index.html file.
+        const googleScriptURL = 'https://script.google.com/macros/s/AKfycbxtCYi-A1N8-r4Nq037gftRYm7H-nTsVZ2P0fJuSLFt6T2zgphBToxUcLCQz4CCkBBQAg/exec';
+
+        // --- MAIN FUNCTION ---
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. Get the PAC from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const pacCode = urlParams.get('pac');
+
+            const customerNameEl = document.getElementById('customer-name');
+            const customerEmailEl = document.getElementById('customer-email');
+            const customerPhoneEl = document.getElementById('customer-phone');
+            const customerAddressEl = document.getElementById('customer-address');
+            const pointsBalanceEl = document.getElementById('points-balance');
+            const transactionHistoryEl = document.getElementById('transaction-history');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const portalContent = document.getElementById('portal-content');
+            const errorContainer = document.getElementById('error-container');
+
+            if (!pacCode) {
+                // If no PAC is found in the URL, show an error
+                loadingSpinner.style.display = 'none';
+                errorContainer.textContent = 'Error: No Personal Access Code provided. Please scan your QR code again.';
+                errorContainer.style.display = 'block';
+                return;
+            }
+
+            // 2. Fetch the customer's data from the Google Apps Script
+            fetchCustomerData(pacCode);
+
+            async function fetchCustomerData(pac) {
+                try {
+                    // Construct the full URL with the action and PAC parameter for a GET request
+                    const fullUrl = `${googleScriptURL}?action=getCustomerData&pac=${encodeURIComponent(pac)}`;
+                    
+                    const response = await fetch(fullUrl);
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok. Status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+
+                    if (data.status === 'success') {
+                        // 3. Populate the dashboard with the received data
+                        populateDashboard(data.customerData);
+                    } else {
+                        throw new Error(data.message || 'Could not retrieve customer data.');
+                    }
+
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                    loadingSpinner.style.display = 'none';
+                    errorContainer.textContent = `Error: ${error.message}. This PAC may be invalid or there was a connection issue.`;
+                    errorContainer.style.display = 'block';
+                }
+            }
+
+            function populateDashboard(data) {
+                if (!data || !data.details) {
+                     loadingSpinner.style.display = 'none';
+                     errorContainer.textContent = 'Error: Invalid customer data received.';
+                     errorContainer.style.display = 'block';
+                     return;
+                }
+                
+                // Populate personal details
+                customerNameEl.textContent = data.details.name || 'N/A';
+                customerEmailEl.textContent = data.details.email || 'N/A';
+                customerPhoneEl.textContent = data.details.phone || 'N/A';
+                customerAddressEl.textContent = data.details.address || 'N/A';
+                
+                // Populate points balance
+                pointsBalanceEl.textContent = data.details.totalPoints || '0';
+
+                // Populate transaction history
+                if (data.transactions && data.transactions.length > 0) {
+                    let transactionsHtml = '';
+                    data.transactions.forEach(tx => {
+                        transactionsHtml += `
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span class="transaction-date">${tx.date}</span>
+                                    <span class="transaction-points">+${tx.pointsEarned} Points</span>
+                                </div>
+                                <div class="transaction-body">
+                                    <p><strong>Total:</strong> RM ${tx.totalAmount}</p>
+                                    <p><strong>Items:</strong> ${tx.itemsPurchased.replace(/; /g, ', ')}</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    transactionHistoryEl.innerHTML = transactionsHtml;
+                } else {
+                    transactionHistoryEl.innerHTML = '<p>No transaction history found.</p>';
+                }
+
+                // Hide the spinner and show the content
+                loadingSpinner.style.display = 'none';
+                portalContent.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
