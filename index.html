@@ -491,7 +491,86 @@
 
     function calculateShipping(cart,subtotal,promoShippingRuleId){if(cart.length===0)return{fee:0,message:"RM 0.00"};let ruleToApply=null;if(promoShippingRuleId&&shippingRules[promoShippingRuleId]){ruleToApply=shippingRules[promoShippingRuleId];ruleToApply.reason="Promotional Shipping!"}else{const defaultRules=Object.values(shippingRules).filter(r=>r.isDefault&&"Tiered"===r.type).sort((a,b)=>a.minSpend-b.minSpend);for(const rule of defaultRules)if(subtotal>=rule.minSpend&&subtotal<=rule.maxSpend){ruleToApply=rule;ruleToApply.reason=`Spend over RM${rule.minSpend}`}}if(!ruleToApply)return{fee:14,message:"RM 14.00"};if(ruleToApply.type==='Free')return{fee:0,message:"FREE",reason:ruleToApply.reason||"Promotional Free Shipping!"};if(ruleToApply.type==='FlatRate')return{fee:parseFloat(ruleToApply.charge),message:`RM ${parseFloat(ruleToApply.charge).toFixed(2)}`};if(ruleToApply.type==='Tiered'){const fee=parseFloat(ruleToApply.charge);return{fee:fee,message:0===fee?"FREE":`RM ${fee.toFixed(2)}`,reason:0===fee?`Free shipping for orders over RM ${ruleToApply.minSpend}!`:"Standard Shipping"}}return{fee:14,message:"RM 14.00"}}
     
-    function updateCartDisplay(){const cartItemsEl=document.getElementById("cart-items"),subtotalEl=document.getElementById("cart-subtotal"),discountLine=document.getElementById("discount-line"),discountEl=document.getElementById("cart-discount"),shippingEl=document.getElementById("cart-shipping"),totalEl=document.getElementById("cart-total"),pointsEl=document.getElementById("points-earned-display"),savingsLine=document.getElementById("savings-line"),savingsEl=document.getElementById("cart-savings");if(cart.length===0){cartItemsEl.innerHTML="<p>Your cart is currently empty.</p>";subtotalEl.textContent="RM 0.00";shippingEl.textContent="RM 0.00";totalEl.textContent="RM 0.00";pointsEl.innerHTML="";discountLine.style.display="none";savingsLine.style.display="none";updateCartCount();return}const{subtotal:calculatedSubtotal,originalSubtotal:originalSubtotal,discountValue:calculatedDiscount,shipping:shipping,total:total,totalPoints:totalPoints,itemFinalPrices:itemFinalPrices}=calculateCartTotals();let itemsHTML="";cart.forEach(item=>{const productData=products.find(p=>p.id===item.id),finalPrice=itemFinalPrices[item.id]||productData.price;let priceDisplay=`<span class="final-cart-price">RM ${finalPrice.toFixed(2)}</span>`;finalPrice<productData.price&&(priceDisplay+=`<span class="original-cart-price">RM ${productData.price.toFixed(2)}</span>`);itemsHTML+=`<div class="cart-item"><div class="cart-item-details"><strong>${item.name}</strong><div class="quantity-controls"><button class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button><span class="quantity-display">${item.quantity}</span><button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button></div></div><div style="text-align:right">${priceDisplay}</div></div>`});const totalSavings=originalSubtotal-calculatedSubtotal+calculatedDiscount;cartItemsEl.innerHTML=itemsHTML;subtotalEl.textContent=`RM ${calculatedSubtotal.toFixed(2)}`;if(calculatedDiscount>0){discountEl.textContent=`- RM ${calculatedDiscount.toFixed(2)}`;discountLine.style.display="flex"}else{discountLine.style.display="none"}if(shipping.message==="FREE"){shippingEl.innerHTML=`<span style="color:var(--accent-color);font-weight:700"><i class="fa-solid fa-truck-fast"></i> FREE! <small>(${shipping.reason})</small></span>`}else{shippingEl.innerHTML=shipping.message}if(totalSavings>0){savingsEl.textContent=`RM ${totalSavings.toFixed(2)}`;savingsLine.style.display="flex"}else{savingsLine.style.display="none"}totalEl.textContent=`RM ${total.toFixed(2)}`;pointsEl.innerHTML=`<div class="points-earned"><i class="fa-solid fa-star"></i> Points to be Earned: ${totalPoints}</div>`;updateCartCount()}
+    function updateCartDisplay() {
+        const cartItemsEl = document.getElementById("cart-items");
+        const subtotalEl = document.getElementById("cart-subtotal");
+        const discountLine = document.getElementById("discount-line");
+        const discountEl = document.getElementById("cart-discount");
+        const shippingEl = document.getElementById("cart-shipping");
+        const totalEl = document.getElementById("cart-total");
+        const pointsEl = document.getElementById("points-earned-display");
+        const savingsLine = document.getElementById("savings-line");
+        const savingsEl = document.getElementById("cart-savings");
+    
+        if (cart.length === 0) {
+            cartItemsEl.innerHTML = "<p>Your cart is currently empty.</p>";
+            subtotalEl.textContent = "RM 0.00";
+            shippingEl.textContent = "RM 0.00";
+            totalEl.textContent = "RM 0.00";
+            pointsEl.innerHTML = "";
+            discountLine.style.display = "none";
+            savingsLine.style.display = "none";
+            updateCartCount();
+            return;
+        }
+    
+        const { subtotal: calculatedSubtotal, originalSubtotal: originalSubtotal, discountValue: calculatedDiscount, shipping: shipping, total: total, totalPoints: totalPoints, itemFinalPrices: itemFinalPrices } = calculateCartTotals();
+    
+        let itemsHTML = "";
+        cart.forEach(item => {
+            const productData = products.find(p => p.id === item.id);
+            const finalPrice = itemFinalPrices[item.id] || productData.price;
+            let priceDisplay;
+    
+            if (finalPrice < productData.price) {
+                // MODIFIED PART: Show discounted price on top of original price
+                priceDisplay = `<div class="final-cart-price">RM ${finalPrice.toFixed(2)}</div>` +
+                               `<div class="original-cart-price" style="margin-left: 0;">RM ${productData.price.toFixed(2)}</div>`;
+            } else {
+                priceDisplay = `<div class="final-cart-price">RM ${finalPrice.toFixed(2)}</div>`;
+            }
+    
+            itemsHTML += `<div class="cart-item">
+                            <div class="cart-item-details">
+                                <strong>${item.name}</strong>
+                                <div class="quantity-controls">
+                                    <button class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button>
+                                    <span class="quantity-display">${item.quantity}</span>
+                                    <button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button>
+                                </div>
+                            </div>
+                            <div style="text-align:right">${priceDisplay}</div>
+                        </div>`;
+        });
+    
+        const totalSavings = originalSubtotal - calculatedSubtotal + calculatedDiscount;
+        cartItemsEl.innerHTML = itemsHTML;
+        subtotalEl.textContent = `RM ${calculatedSubtotal.toFixed(2)}`;
+    
+        if (calculatedDiscount > 0) {
+            discountEl.textContent = `- RM ${calculatedDiscount.toFixed(2)}`;
+            discountLine.style.display = "flex";
+        } else {
+            discountLine.style.display = "none";
+        }
+    
+        if (shipping.message === "FREE") {
+            shippingEl.innerHTML = `<span style="color:var(--accent-color);font-weight:700"><i class="fa-solid fa-truck-fast"></i> FREE! <small>(${shipping.reason})</small></span>`;
+        } else {
+            shippingEl.innerHTML = shipping.message;
+        }
+    
+        if (totalSavings > 0) {
+            savingsEl.textContent = `RM ${totalSavings.toFixed(2)}`;
+            savingsLine.style.display = "flex";
+        } else {
+            savingsLine.style.display = "none";
+        }
+    
+        totalEl.textContent = `RM ${total.toFixed(2)}`;
+        pointsEl.innerHTML = `<div class="points-earned"><i class="fa-solid fa-star"></i> Points to be Earned: ${totalPoints}</div>`;
+        updateCartCount();
+    }
     
     function initiateCheckout(){if(!document.getElementById("consent-checkbox").checked)return void alert("You must agree to the data collection consent before proceeding.");const name=document.getElementById("customer-name").value.trim(),phone=document.getElementById("customer-phone").value.trim(),email=document.getElementById("customer-email").value.trim(),address1=document.getElementById("customer-address1").value.trim(),address2=document.getElementById("customer-address2").value.trim(),city=document.getElementById("customer-city").value.trim(),state=document.getElementById("customer-state").value.trim(),postcode=document.getElementById("customer-postcode").value.trim();if(!name||!phone||!email||!address1||!city||!state||!postcode)return void alert("Please fill in all required customer and shipping information fields.");if(0===cart.length)return void alert("Your cart is empty.");const{subtotal:subtotal,discountValue:discount,shipping:shipping,total:total,totalPoints:totalPoints,itemFinalPrices:itemFinalPrices}=calculateCartTotals(),fullAddress=`${address1}, ${address2?address2+", ":""}${postcode} ${city}, ${state}.`,pendingOrder={customerName:name,customerPhone:phone,customerEmail:email,customerAddress:fullAddress,cart:cart.map(item=>({id:item.id,name:item.name,quantity:item.quantity,finalPrice:itemFinalPrices[item.id]})),totalAmount:total.toFixed(2),shippingFee:shipping.fee.toFixed(2),discountApplied:appliedDiscount?`${appliedDiscount.code} - RM ${discount.toFixed(2)}`:"N/A",discountCodeUsed:appliedDiscount?appliedDiscount.code:"N/A",totalPointsForThisPurchase:totalPoints};sessionStorage.setItem("pendingOrder",JSON.stringify(pendingOrder));let message=`Hi, I would like to place an order:\n\n*Customer Details:*\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nAddress: ${fullAddress}\n\n--- ORDER SUMMARY ---\nSubtotal: RM ${subtotal.toFixed(2)}${discount>0?`\nDiscount: - RM ${discount.toFixed(2)}`:""}\nShipping: ${shipping.message}\n*TOTAL: RM ${total.toFixed(2)}*\n\nPlease provide payment details. After payment, I will upload the proof and verification code on your website to finalize the order. Thank you!`;window.open(`https://wa.me/601111033154?text=${encodeURIComponent(message)}`,"_blank"),document.getElementById("cart-view").style.display="none",document.getElementById("verification-view").style.display="block",updateVerificationUI()}
     
