@@ -272,7 +272,7 @@
   <footer class="footer">
       <div class="container">
         <p>© 2025 Forever Living by Muhd Arvind Isa. All rights reserved.</p>
-        <div class="timestamp">Last updated: <span id="current-date"></span> <span style="font-weight:bold;">(v10.0)</span></div>
+        <div class="timestamp">Last updated: <span id="update-timestamp"></span></div>
         <section class="disclaimer">
           <strong>Disclaimer:</strong> This website is operated by an independent FBO and is not the official site of Forever Living Products.
         </section>
@@ -348,7 +348,7 @@
 <script>
     // --- CONFIGURATION ---
     // IMPORTANT: Replace this URL with your own published Google Apps Script URL
-    const googleScriptURL = 'https://script.google.com/macros/s/AKfycbzVdP41m6QZV6ktwKXhHURDufxfkJmcVmnfgMORot3EYHOLQvu64S__mGBH-ZIGDApgcQ/exec';
+    const googleScriptURL = 'https://script.google.com/macros/s/AKfycbwq0xe8DuQuTrWObYrz98IBGrIj_9bJwt03PBwiZqVQeWTQXsj1T8epXV3Fm7RZN3RtQg/exec';
     
     // --- GLOBAL STATE ---
     // These variables will be populated with data from Google Sheets
@@ -373,14 +373,11 @@
             const data = await response.json();
 
             if (data.status === 'success') {
-                // Populate global variables with the fetched data
                 products = data.products || [];
                 activeFestival = data.activeFestival || null;
                 activePromotions = data.activePromotions || [];
                 shippingRules = data.shippingRules || {};
                 availableDiscountCodes = data.discountCodes || {};
-                
-                // Now that we have data, initialize the UI
                 initializeUI();
             } else {
                 throw new Error(data.message || 'Failed to parse data from the server.');
@@ -395,8 +392,11 @@
             }
         }
         
-        // Handle parts that don't depend on the fetch
-        document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        // Update footer timestamp regardless of fetch success
+        const version = "(v10.1)";
+        const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        document.getElementById('update-timestamp').textContent = `${date} ${version}`;
+
         if (sessionStorage.getItem('pendingOrder')) { 
             toggleCart(); 
         } else { 
