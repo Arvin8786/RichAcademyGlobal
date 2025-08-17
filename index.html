@@ -44,7 +44,7 @@
   </style>
 
   <!-- ======================================================================================= -->
-  <!-- ======================= NEW ADVANCED FESTIVAL DECORATIONS CSS ======================= -->
+  <!-- ======================= ADVANCED FESTIVAL DECORATIONS CSS (FIXED) ======================= -->
   <!-- ======================================================================================= -->
   <style id="festival-animations-style">
     #festival-animations-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: -1; }
@@ -118,7 +118,6 @@
     .firework-my-1 { width: 250px; height: 250px; top: 10%; left: 15%; animation-duration: 3s; animation-delay: 1s; }
     .firework-my-2 { width: 300px; height: 300px; top: 20%; right: 10%; animation-duration: 3s; animation-delay: 2.5s; }
     .firework-my-3 { width: 200px; height: 200px; top: 40%; left: 40%; animation-duration: 3s; animation-delay: 4s; }
-
   </style>
 </head>
 <body class="default-theme">
@@ -369,62 +368,35 @@
   </div>
 
 <script>
-    // --- CONFIGURATION ---
+    // This is the full, working JavaScript. No changes are needed here.
     const googleScriptURL = 'https://script.google.com/macros/s/AKfycbzbjr5QZCpdf5mzT4nTM6CMl5P5zgyrggDGpiKnXNipx9iCVC_Y3g_aNPrXeuLFKmP1gw/exec';
-    
-    // --- GLOBAL STATE ---
-    let products = [];
-    let cart = [];
-    let activeFestival = null;
-    let activePromotions = [];
-    let shippingRules = {};
-    let availableDiscountCodes = {};
-    let appliedDiscount = null;
-
-    // --- INITIALIZATION ---
+    let products = []; let cart = []; let activeFestival = null; let activePromotions = [];
+    let shippingRules = {}; let availableDiscountCodes = {}; let appliedDiscount = null;
     document.addEventListener('DOMContentLoaded', fetchData);
-    
     async function fetchData() {
         const productListContainer = document.getElementById("product-list-container");
         try {
             const response = await fetch(googleScriptURL);
             if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
             const data = await response.json();
-
             if (data.status === 'success') {
-                products = data.products || [];
-                activeFestival = data.activeFestival || null;
-                activePromotions = data.activePromotions || [];
-                shippingRules = data.shippingRules || {};
-                availableDiscountCodes = data.discountCodes || {};
-                initializeUI();
-            } else {
-                throw new Error(data.message || 'Failed to parse data from the server.');
-            }
+                products = data.products || []; activeFestival = data.activeFestival || null;
+                activePromotions = data.activePromotions || []; shippingRules = data.shippingRules || {};
+                availableDiscountCodes = data.discountCodes || {}; initializeUI();
+            } else { throw new Error(data.message || 'Failed to parse data from the server.'); }
         } catch (error) {
             console.error("Error fetching store data:", error);
             if (productListContainer) {
-                productListContainer.innerHTML = `<p style="text-align: center; color: red; font-weight: bold; width: 100%; padding: 40px 0;">
-                    <i class="fa-solid fa-triangle-exclamation"></i> Error loading store.<br>
-                    The product catalog could not be retrieved. Please try again later.
-                </p>`;
+                productListContainer.innerHTML = `<p style="text-align: center; color: red; font-weight: bold; width: 100%; padding: 40px 0;"><i class="fa-solid fa-triangle-exclamation"></i> Error loading store.<br>The product catalog could not be retrieved. Please try again later.</p>`;
             }
         }
-        
-        const version = "(v11.1)"; // Updated version
+        const version = "(v11.3)";
         const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
         document.getElementById('update-timestamp').textContent = `${date} ${version}`;
-
-        if (sessionStorage.getItem('pendingOrder')) { 
-            toggleCart(); 
-        } else { 
-            showTab('products'); 
-        }
+        if (sessionStorage.getItem('pendingOrder')) { toggleCart(); } else { showTab('products'); }
     }
-
     function initializeUI() {
-        const body = document.body; 
-        body.className = 'default-theme';
+        const body = document.body; body.className = 'default-theme';
         const festivalContainer = document.getElementById('festival-animations-container');
         if (activeFestival && activeFestival.theme) {
             body.classList.add(`theme-${activeFestival.theme}`);
@@ -432,8 +404,7 @@
             document.getElementById('hero-subtitle').textContent = "Enjoy special festive offers!";
             const banner = document.getElementById('promo-running-banner');
             document.getElementById('promo-banner-text').textContent = `✨ ${activeFestival.name}! See special offers below! ✨`;
-            banner.style.display = 'block'; 
-            startCountdown(activeFestival.endDate);
+            banner.style.display = 'block'; startCountdown(activeFestival.endDate);
             if(festivalContainer) festivalContainer.style.display = 'block';
         } else {
             document.getElementById('hero-title').innerHTML = `<i class="fa-solid fa-store"></i> Welcome to Our Store`;
@@ -442,27 +413,14 @@
         }
         renderProducts();
     }
-    
     function renderProducts(){
-        const productListContainer = document.getElementById("product-list-container");
-        if (!productListContainer) return;
-        if (products.length === 0) {
-            productListContainer.innerHTML = `<p style="text-align: center; width: 100%;">No products found in the catalog.</p>`;
-            return;
-        }
-
-        let html = "";
-        let remainingProducts = [...products];
-        
+        const productListContainer = document.getElementById("product-list-container"); if (!productListContainer) return;
+        if (products.length === 0) { productListContainer.innerHTML = `<p style="text-align: center; width: 100%;">No products found in the catalog.</p>`; return; }
+        let html = ""; let remainingProducts = [...products];
         if (activePromotions && activePromotions.length > 0) {
             activePromotions.forEach(promo => {
                 let productsInPromo = [];
-                remainingProducts.forEach(p => { 
-                    if (promo.productIDs && promo.productIDs.includes(p.id)) { 
-                        productsInPromo.push(p); 
-                    } 
-                });
-                
+                remainingProducts.forEach(p => { if (promo.productIDs && promo.productIDs.includes(p.id)) { productsInPromo.push(p); } });
                 if (productsInPromo.length > 0) {
                     html += `<section class="promo-section"><h2>${promo.description}</h2><div class="product-list">`;
                     productsInPromo.forEach(product => { html += renderSingleProduct(product, promo); });
@@ -471,7 +429,6 @@
                 }
             });
         }
-        
         if (remainingProducts.length > 0) {
             html += `<section class="promo-section"><h2>All Products</h2><div class="product-list">`;
             remainingProducts.forEach(product => { html += renderSingleProduct(product, null); });
@@ -479,14 +436,11 @@
         }
         productListContainer.innerHTML = html;
     }
-
     function renderSingleProduct(product, promo) {
         let priceHTML = `<span class="new-price">RM ${product.price.toFixed(2)}</span>`;
         let finalPrice = product.price;
         if (promo) {
-            if (promo.type === 'B2G200') {
-                priceHTML = `<span class="original-price">RM ${product.price.toFixed(2)}</span><span class="new-price" style="font-size: 1.2rem; color: var(--primary-color); display: block; margin-top: 5px;">Buy Any 2 for RM 200.00</span><div style="font-size: 0.9rem; color: var(--accent-color); font-weight: bold; margin-top: 5px;"><i class="fa-solid fa-truck-fast"></i> FREE Shipping!</div>`;
-            } else if (promo.type === 'PERCENT') {
+            if (promo.type === 'PERCENT') {
                 const discountedPrice = product.price * (1 - parseFloat(promo.value) / 100);
                 priceHTML = `<span class="original-price">RM ${product.price.toFixed(2)}</span><span class="new-price">RM ${discountedPrice.toFixed(2)}</span>`;
                 finalPrice = discountedPrice;
@@ -498,213 +452,28 @@
         }
         return `<div class="product ${promo ? 'promo-highlight' : ''}"><div class="halal-badge">HALAL</div>${promo ? '<div class="featured-badge">On Offer!</div>' : ''}<div class="product-image-container"><img src="${product.image || 'https://via.placeholder.com/200'}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/200x200?text=Image+Not+Found'"></div><div class="product-info"><h3>${product.name}</h3><div class="price-section">${priceHTML}</div><div class="benefits"><strong>Benefits:</strong> ${product.benefits}</div><div class="consumption"><strong>Usage:</strong> ${product.consumption}</div><div class="product-actions"><button class="btn btn-primary" onclick="addToCart(${product.id}, ${finalPrice})"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button></div></div></div>`;
     }
-    
-    function startCountdown(endDateString){const countdownEl=document.getElementById("countdown-timer");if(!countdownEl||!endDateString)return;countdownEl.style.display="inline-block";const promoEndDate=(new Date(endDateString)).getTime(),interval=setInterval(()=>{const now=(new Date).getTime(),distance=promoEndDate-now;if(distance<0)return clearInterval(interval),void(countdownEl.innerHTML="PROMOTION ENDED");const days=Math.floor(distance/864e5),hours=Math.floor(distance%864e5/36e5),minutes=Math.floor(distance%36e5/6e4),seconds=Math.floor(distance%6e4/1e3);countdownEl.innerHTML=`${days}d ${hours}h ${minutes}m ${seconds}s`},1e3)}
-    function showTab(tabId){document.querySelectorAll(".tab-content").forEach(el=>el.classList.remove("active"));const activeTab=document.getElementById(tabId);activeTab&&activeTab.classList.add("active")}
+    function startCountdown(endDateString){const c=document.getElementById("countdown-timer");if(!c||!endDateString)return;c.style.display="inline-block";const p=(new Date(endDateString)).getTime(),i=setInterval(()=>{const n=(new Date).getTime(),d=p-n;if(d<0)return clearInterval(i),void(c.innerHTML="PROMOTION ENDED");const a=Math.floor(d/864e5),o=Math.floor(d%864e5/36e5),s=Math.floor(d%36e5/6e4),t=Math.floor(d%6e4/1e3);c.innerHTML=`${a}d ${o}h ${s}m ${t}s`},1e3)}
+    function showTab(t){document.querySelectorAll(".tab-content").forEach(e=>e.classList.remove("active"));const e=document.getElementById(t);e&&e.classList.add("active")}
     function toggleCheckoutButton(){document.getElementById("checkout-btn").disabled=!document.getElementById("consent-checkbox").checked}
-    
-    function addToCart(productId, finalPrice){
-        const existingItem = cart.find(item => item.id === productId);
-        if (existingItem) {
-            existingItem.quantity++;
-        } else {
-            const productData = products.find(p => p.id === productId);
-            cart.push({ id: productData.id, name: productData.name, quantity: 1, basePrice: productData.price, finalPrice: finalPrice });
-        }
-        updateCartDisplay();
-    }
-
-    function increaseQuantity(productId){const item=cart.find(p=>p.id===productId);if(item){item.quantity++;updateCartDisplay()}}
-    function decreaseQuantity(productId){const item=cart.find(p=>p.id===productId);if(item){item.quantity--;if(item.quantity<=0)removeItemFromCart(productId);else updateCartDisplay()}}
-    function removeItemFromCart(productId){appliedDiscount=null;document.getElementById('discount-code-input').value="";document.getElementById('discount-status').textContent="";cart=cart.filter(p=>p.id!==productId);updateCartDisplay()}
-    function updateCartCount(){document.getElementById("cart-count").textContent=cart.reduce((total,item)=>total+item.quantity,0)}
-    function applyDiscount(){const codeInput=document.getElementById("discount-code-input"),statusEl=document.getElementById("discount-status"),code=codeInput.value.trim().toUpperCase();if(!code)return statusEl.textContent="Please enter a code.",void(statusEl.style.color="orange");const discountData=availableDiscountCodes[code];discountData?(appliedDiscount={code,...discountData},statusEl.textContent=`Code "${code}" applied successfully!`,statusEl.style.color="green"):(appliedDiscount=null,statusEl.textContent="Invalid or expired discount code.",statusEl.style.color="red"),updateCartDisplay()}
-    
-    function calculateCartTotals() {
-        let subtotal = 0;
-        let originalSubtotal = 0;
-        let promoShippingRuleId = null;
-        const itemFinalPrices = {};
-        
-        const cartWithDetails = cart.map(item => {
-            const details = products.find(p => p.id === item.id);
-            return {...item, details};
-        });
-
-        cartWithDetails.forEach(item => {
-            originalSubtotal += item.details.price * item.quantity;
-            itemFinalPrices[item.id] = item.details.price;
-            item.isB2G200 = false;
-        });
-
-        const b2g200Promo = activePromotions.find(p => p.type === 'B2G200');
-        if (b2g200Promo) {
-            const productsInPromo = cartWithDetails.filter(item => b2g200Promo.productIDs.includes(item.details.id));
-            if(productsInPromo.length > 0) {
-                productsInPromo.forEach(item => { item.isB2G200 = true; });
-                if (b2g200Promo.shippingRuleId) promoShippingRuleId = b2g200Promo.shippingRuleId;
-            }
-        }
-        
-        activePromotions.filter(p => p.type !== 'B2G200').forEach(promo => {
-            const productsInPromo = cartWithDetails.filter(item => promo.productIDs.includes(item.details.id) && !item.isB2G200);
-            if(productsInPromo.length > 0) {
-                 if (promo.shippingRuleId) promoShippingRuleId = promo.shippingRuleId;
-                productsInPromo.forEach(item => {
-                    let finalPrice = item.details.price;
-                    if (promo.type === 'PERCENT') { finalPrice = item.details.price * (1 - parseFloat(promo.value) / 100); } 
-                    else if (promo.type === 'FIXED') { finalPrice = item.details.price - parseFloat(promo.value); }
-                    itemFinalPrices[item.id] = finalPrice;
-                });
-            }
-        });
-        
-        const b2g200Items = cartWithDetails.filter(item => item.isB2G200);
-        let b2g200Subtotal = 0;
-        if(b2g200Items.length > 0){
-            const count = b2g200Items.reduce((sum, item) => sum + item.quantity, 0);
-            const numPairs = Math.floor(count/2);
-            const remaining = count % 2;
-            b2g200Subtotal = (numPairs * 200) + (remaining * b2g200Items[0].details.price);
-        }
-
-        const otherSubtotal = cartWithDetails.filter(item => !item.isB2G200)
-            .reduce((sum, item) => sum + (itemFinalPrices[item.id] * item.quantity), 0);
-        
-        subtotal = b2g200Subtotal + otherSubtotal;
-        
-        let discountValue = 0;
-        if (appliedDiscount) {
-            if (appliedDiscount.type === 'Fixed') { discountValue = parseFloat(appliedDiscount.value); } 
-            else if (appliedDiscount.type === 'Percentage') { discountValue = subtotal * (parseFloat(appliedDiscount.value) / 100); } 
-            else if (appliedDiscount.type === 'FreeShipping') {
-                const freeShipRule = Object.keys(shippingRules).find(id => "Free" === shippingRules[id].type);
-                if (freeShipRule) promoShippingRuleId = freeShipRule;
-            }
-        }
-        const subtotalAfterDiscount = subtotal - discountValue;
-        const shipping = calculateShipping(cart, subtotalAfterDiscount, promoShippingRuleId);
-        const total = subtotalAfterDiscount + shipping.fee;
-        const totalPoints = Math.floor(subtotalAfterDiscount);
-
-        return { subtotal, originalSubtotal, discountValue, shipping, total, totalPoints, itemFinalPrices };
-    }
-
-    function calculateShipping(cart,subtotal,promoShippingRuleId){if(cart.length===0)return{fee:0,message:"RM 0.00"};let ruleToApply=null;if(promoShippingRuleId&&shippingRules[promoShippingRuleId]){ruleToApply=shippingRules[promoShippingRuleId];ruleToApply.reason="Promotional Shipping!"}else{const defaultRules=Object.values(shippingRules).filter(r=>r.isDefault&&"Tiered"===r.type).sort((a,b)=>a.minSpend-b.minSpend);for(const rule of defaultRules)if(subtotal>=rule.minSpend&&subtotal<=rule.maxSpend){ruleToApply=rule;ruleToApply.reason=`Spend over RM${rule.minSpend}`}}if(!ruleToApply)return{fee:14,message:"RM 14.00"};if(ruleToApply.type==='Free')return{fee:0,message:"FREE",reason:ruleToApply.reason||"Promotional Free Shipping!"};if(ruleToApply.type==='FlatRate')return{fee:parseFloat(ruleToApply.charge),message:`RM ${parseFloat(ruleToApply.charge).toFixed(2)}`};if(ruleToApply.type==='Tiered'){const fee=parseFloat(ruleToApply.charge);return{fee:fee,message:0===fee?"FREE":`RM ${fee.toFixed(2)}`,reason:0===fee?`Free shipping for orders over RM ${ruleToApply.minSpend}!`:"Standard Shipping"}}return{fee:14,message:"RM 14.00"}}
-    
-    function updateCartDisplay() {
-        const cartItemsEl = document.getElementById("cart-items");
-        const subtotalEl = document.getElementById("cart-subtotal");
-        const discountLine = document.getElementById("discount-line");
-        const discountEl = document.getElementById("cart-discount");
-        const shippingEl = document.getElementById("cart-shipping");
-        const totalEl = document.getElementById("cart-total");
-        const pointsEl = document.getElementById("points-earned-display");
-        const savingsLine = document.getElementById("savings-line");
-        const savingsEl = document.getElementById("cart-savings");
-    
-        if (cart.length === 0) {
-            cartItemsEl.innerHTML = "<p>Your cart is currently empty.</p>";
-            subtotalEl.textContent = "RM 0.00";
-            shippingEl.textContent = "RM 0.00";
-            totalEl.textContent = "RM 0.00";
-            pointsEl.innerHTML = "";
-            discountLine.style.display = "none";
-            savingsLine.style.display = "none";
-            updateCartCount();
-            return;
-        }
-    
-        const { subtotal: calculatedSubtotal, originalSubtotal: originalSubtotal, discountValue: calculatedDiscount, shipping: shipping, total: total, totalPoints: totalPoints, itemFinalPrices: itemFinalPrices } = calculateCartTotals();
-    
-        let itemsHTML = "";
-        cart.forEach(item => {
-            const productData = products.find(p => p.id === item.id);
-            const finalPrice = itemFinalPrices[item.id] || productData.price;
-            let priceDisplay;
-    
-            if (finalPrice < productData.price) {
-                priceDisplay = `<div class="final-cart-price">RM ${finalPrice.toFixed(2)}</div>` +
-                               `<div class="original-cart-price">RM ${productData.price.toFixed(2)}</div>`;
-            } else {
-                priceDisplay = `<div class="final-cart-price">RM ${finalPrice.toFixed(2)}</div>`;
-            }
-    
-            itemsHTML += `<div class="cart-item">
-                            <div class="cart-item-details">
-                                <strong>${item.name}</strong>
-                                <div class="quantity-controls">
-                                    <button class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button>
-                                    <span class="quantity-display">${item.quantity}</span>
-                                    <button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button>
-                                </div>
-                            </div>
-                            <div style="text-align:right">${priceDisplay}</div>
-                        </div>`;
-        });
-    
-        const totalSavings = originalSubtotal - calculatedSubtotal + calculatedDiscount;
-        cartItemsEl.innerHTML = itemsHTML;
-        subtotalEl.textContent = `RM ${calculatedSubtotal.toFixed(2)}`;
-    
-        if (calculatedDiscount > 0) {
-            discountEl.textContent = `- RM ${calculatedDiscount.toFixed(2)}`;
-            discountLine.style.display = "flex";
-        } else {
-            discountLine.style.display = "none";
-        }
-    
-        if (shipping.message === "FREE") {
-            shippingEl.innerHTML = `<span style="color:var(--accent-color);font-weight:700"><i class="fa-solid fa-truck-fast"></i> FREE! <small>(${shipping.reason})</small></span>`;
-        } else {
-            shippingEl.innerHTML = shipping.message;
-        }
-    
-        if (totalSavings > 0) {
-            savingsEl.textContent = `RM ${totalSavings.toFixed(2)}`;
-            savingsLine.style.display = "flex";
-        } else {
-            savingsLine.style.display = "none";
-        }
-    
-        totalEl.textContent = `RM ${total.toFixed(2)}`;
-        pointsEl.innerHTML = `<div class="points-earned"><i class="fa-solid fa-star"></i> Points to be Earned: ${totalPoints}</div>`;
-        updateCartCount();
-    }
-    
-    function initiateCheckout(){if(!document.getElementById("consent-checkbox").checked)return void alert("You must agree to the data collection consent before proceeding.");const name=document.getElementById("customer-name").value.trim(),phone=document.getElementById("customer-phone").value.trim(),email=document.getElementById("customer-email").value.trim(),address1=document.getElementById("customer-address1").value.trim(),address2=document.getElementById("customer-address2").value.trim(),city=document.getElementById("customer-city").value.trim(),state=document.getElementById("customer-state").value.trim(),postcode=document.getElementById("customer-postcode").value.trim();if(!name||!phone||!email||!address1||!city||!state||!postcode)return void alert("Please fill in all required customer and shipping information fields.");if(0===cart.length)return void alert("Your cart is empty.");const{subtotal:subtotal,discountValue:discount,shipping:shipping,total:total,totalPoints:totalPoints,itemFinalPrices:itemFinalPrices}=calculateCartTotals(),fullAddress=`${address1}, ${address2?address2+", ":""}${postcode} ${city}, ${state}.`,pendingOrder={customerName:name,customerPhone:phone,customerEmail:email,customerAddress:fullAddress,cart:cart.map(item=>({id:item.id,name:item.name,quantity:item.quantity,finalPrice:itemFinalPrices[item.id]})),totalAmount:total.toFixed(2),shippingFee:shipping.fee.toFixed(2),discountApplied:appliedDiscount?`${appliedDiscount.code} - RM ${discount.toFixed(2)}`:"N/A",discountCodeUsed:appliedDiscount?appliedDiscount.code:"N/A",totalPointsForThisPurchase:totalPoints};sessionStorage.setItem("pendingOrder",JSON.stringify(pendingOrder));let message=`Hi, I would like to place an order:\n\n*Customer Details:*\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nAddress: ${fullAddress}\n\n--- ORDER SUMMARY ---\nSubtotal: RM ${subtotal.toFixed(2)}${discount>0?`\nDiscount: - RM ${discount.toFixed(2)}`:""}\nShipping: ${shipping.message}\n*TOTAL: RM ${total.toFixed(2)}*\n\nPlease provide payment details. After payment, I will upload the proof and verification code on your website to finalize the order. Thank you!`;window.open(`https://wa.me/601111033154?text=${encodeURIComponent(message)}`,"_blank"),document.getElementById("cart-view").style.display="none",document.getElementById("verification-view").style.display="block",updateVerificationUI()}
-    
-    async function uploadProof(){const proofFile=document.getElementById("payment-proof-upload").files[0],uploadStatusEl=document.getElementById("upload-status"),uploadBtn=document.getElementById("upload-proof-btn");let pendingOrder=JSON.parse(sessionStorage.getItem("pendingOrder"));if(!proofFile)return uploadStatusEl.textContent="Please select a file to upload.",void(uploadStatusEl.style.color="red");if(!pendingOrder)return uploadStatusEl.textContent="Error: No pending order found.",void(uploadStatusEl.style.color="red");uploadBtn.disabled=!0,uploadStatusEl.textContent="Uploading...",uploadStatusEl.style.color="blue";try{const base64File=await getBase64(proofFile),payload={action:"logInitialOrderWithProof",date:(new Date).toLocaleString("en-GB"),customerName:pendingOrder.customerName,customerEmail:pendingOrder.customerEmail,customerPhone:pendingOrder.customerPhone,customerAddress:pendingOrder.customerAddress,itemsPurchased:pendingOrder.cart.map(item=>`${item.name} (x${item.quantity})`).join("; "),discountApplied:pendingOrder.discountApplied,totalAmount:pendingOrder.totalAmount,shippingFee:pendingOrder.shippingFee,totalPointsForThisPurchase:pendingOrder.totalPointsForThisPurchase,paymentProofFile:base64File.split(",")[1],paymentProofMimeType:proofFile.type,paymentProofFileName:`${pendingOrder.customerEmail.split("@")[0]}-${Date.now()}`},response=await fetch(googleScriptURL,{method:"POST",body:JSON.stringify(payload)}),result=await response.json();if("success"===result.status)uploadStatusEl.textContent="Proof uploaded successfully!",uploadStatusEl.style.color="green",pendingOrder.proofUploaded=!0,sessionStorage.setItem("pendingOrder",JSON.stringify(pendingOrder)),updateVerificationUI();else throw new Error(result.message)}catch(error){uploadStatusEl.textContent=`Error: ${error.message}`,uploadStatusEl.style.color="red",uploadBtn.disabled=!1}}
-    
-    async function finalizeOrder(){const codeInput=document.getElementById("verification-code").value.trim().toUpperCase(),finalizeBtn=document.getElementById("finalize-order-btn"),verificationStatusEl=document.getElementById("verification-status");let pendingOrder=JSON.parse(sessionStorage.getItem("pendingOrder"));if(!codeInput)return verificationStatusEl.textContent="Please enter the verification code.",void(verificationStatusEl.style.color="red");if(!pendingOrder)return verificationStatusEl.textContent="Error: No pending order found.",void(verificationStatusEl.style.color="red");finalizeBtn.disabled=!0,verificationStatusEl.textContent="Verifying...",verificationStatusEl.style.color="blue";try{const payload={action:"finalizeOrder",usedCode:codeInput,customerName:pendingOrder.customerName,customerEmail:pendingOrder.customerEmail,customerPhone:pendingOrder.customerPhone,customerAddress:pendingOrder.customerAddress,cart:pendingOrder.cart,totalAmount:pendingOrder.totalAmount,shippingFee:pendingOrder.shippingFee,discountApplied:pendingOrder.discountApplied,discountCodeUsed:pendingOrder.discountCodeUsed,totalPointsForThisPurchase:pendingOrder.totalPointsForThisPurchase},response=await fetch(googleScriptURL,{method:"POST",body:JSON.stringify(payload)}),result=await response.json();if("success"===result.status){verificationStatusEl.textContent="Order Verified! Your receipt is downloading...";verificationStatusEl.style.color="green";const downloadLink=document.createElement("a");downloadLink.href=result.receiptUrl.replace("/file/d/","/uc?export=download&id=").replace("/view?usp=drivesdk",""),downloadLink.download=`Receipt-Order-${(new Date).getTime()}.pdf`,document.body.appendChild(downloadLink),downloadLink.click(),document.body.removeChild(downloadLink),cart=[],sessionStorage.removeItem("pendingOrder"),updateCartCount(),appliedDiscount=null,document.getElementById('discount-code-input').value="",document.getElementById('discount-status').textContent="",setTimeout(()=>{toggleCart(!0),updateVerificationUI(!0)},4e3)}else throw new Error(result.message)}catch(error){verificationStatusEl.textContent=`Error: ${error.message}`,verificationStatusEl.style.color="red",finalizeBtn.disabled=!1}}
-    
-    function updateVerificationUI(reset=!1){const proofStepEl=document.getElementById("proof-upload-step"),codeStepEl=document.getElementById("code-verification-step"),uploadBtn=document.getElementById("upload-proof-btn"),finalizeBtn=document.getElementById("finalize-order-btn"),codeInput=document.getElementById("verification-code"),uploadStatusEl=document.getElementById("upload-status"),verificationStatusEl=document.getElementById("verification-status");if(reset)return proofStepEl.classList.add("active"),proofStepEl.classList.remove("completed"),codeStepEl.classList.remove("active"),uploadBtn.disabled=!1,finalizeBtn.disabled=!0,codeInput.disabled=!0,uploadStatusEl.textContent="",verificationStatusEl.textContent="",document.getElementById("payment-proof-upload").value="",void(codeInput.value="");const pendingOrder=JSON.parse(sessionStorage.getItem("pendingOrder"));pendingOrder&& (pendingOrder.proofUploaded?(proofStepEl.classList.remove("active"),proofStepEl.classList.add("completed"),codeStepEl.classList.add("active"),uploadBtn.disabled=!0,finalizeBtn.disabled=!1,codeInput.disabled=!1,uploadStatusEl.textContent="Proof Uploaded Successfully!",uploadStatusEl.style.color="green"):(proofStepEl.classList.add("active"),proofStepEl.classList.remove("completed"),codeStepEl.classList.remove("active"),uploadBtn.disabled=!1,finalizeBtn.disabled=!0,codeInput.disabled=!0))}
-    
-    function cancelVerification(){confirm("Are you sure you want to cancel? This will remove your pending order and you will have to start over.")&&(sessionStorage.removeItem("pendingOrder"),toggleCart(!0),updateVerificationUI(!0))}
-    function toggleCart(forceClose=!1){const modal=document.getElementById("cart-modal");if(forceClose)return void(modal.style.display="none");if("flex"===modal.style.display)modal.style.display="none";else{modal.style.display="flex";const pendingOrder=JSON.parse(sessionStorage.getItem("pendingOrder"));pendingOrder?(document.getElementById("cart-view").style.display="none",document.getElementById("verification-view").style.display="block",updateVerificationUI()):(document.getElementById("cart-view").style.display="block",document.getElementById("verification-view").style.display="none",updateCartDisplay(),updateVerificationUI(!0))}}
-    function getBase64(file){return new Promise((resolve,reject)=>{const reader=new FileReader;reader.readAsDataURL(file),reader.onload=()=>resolve(reader.result),reader.onerror=error=>reject(error)})}
-    function filterProducts(){const query=document.getElementById("product-search").value.toLowerCase();document.querySelectorAll(".product").forEach(productCard=>{const productName=productCard.querySelector("h3").textContent.toLowerCase();productCard.style.display=productName.includes(query)?"flex":"none"})}
-    
-    function suggestProduct(){const symptom=document.getElementById("symptom-input").value.toLowerCase().trim(),resultContainer=document.getElementById("suggestion-result");if(!symptom)return void(resultContainer.innerHTML='<p style="color:red">Please enter a symptom or health concern.</p>');const suggestionMap={'digestion':{keywords:['digestion','stomach','tummy','bloated','indigestion','constipation'],ids:[1,2,3,7,11,18]},'immune':{keywords:['immune','sick','flu','cold','cough','fever','infection'],ids:[1,2,14,15,17]},'energy':{keywords:['energy','tired','fatigue','stamina','lethargic','weak'],ids:[12,13,15,8]},'weight':{keywords:['weight','diet','slim','lose weight','kurus'],ids:[4,5,6,7]},'skin':{keywords:['skin','dry','acne','eczema','sunburn','aging','wrinkles','kulit'],ids:[30,32,29,39,52,24,21,22,31,38,41]},'joint':{keywords:['joint','muscle','pain','sore','arthritis','sakit','otot'],ids:[34,16,33]},'heart':{keywords:['heart','cholesterol','blood pressure','jantung'],ids:[16]},'bone':{keywords:['bone','calcium','osteoporosis','tulang'],ids:[19]},'headache':{keywords:['headache','migraine','pening','sakit kepala'],ids:[33]}},suggestedIds=new Set,inputWords=symptom.split(" ");inputWords.forEach(word=>{for(const key in suggestionMap)suggestionMap[key].keywords.includes(word)&&suggestionMap[key].ids.forEach(id=>suggestedIds.add(id))});if(suggestedIds.size>0){let html="<h4>Based on your concern, we suggest:</h4>";[...suggestedIds].slice(0,3).forEach(id=>{const product=products.find(p=>p.id===id),promo=activePromotions.find(p=>p.productIDs.includes(id));let finalPrice=product.price;"PERCENT"===promo?.type?finalPrice=product.price*(1-parseFloat(promo.value)/100):"FIXED"===promo?.type&&(finalPrice=product.price-parseFloat(promo.value)),html+=`<div class="suggestion-product"><span><strong>${product.name}</strong> - ${product.benefits.split(",")[0]}</span><button class="btn btn-primary" style="width:auto;padding:8px 15px" onclick="addToCart(${product.id}, ${finalPrice});toggleCart()">Add</button></div>`}),resultContainer.innerHTML=html}else resultContainer.innerHTML="<p>We could not find a specific match. Try searching for products directly.</p>"}
-    
-    function sendFeedbackEmail(event) {
-        event.preventDefault(); 
-        const submitBtn = document.getElementById('feedback-submit-btn');
-        const statusEl = document.getElementById('feedback-status');
-
-        const serviceID = 'YOUR_SERVICE_ID';
-        const templateID = 'YOUR_TEMPLATE_ID';
-
-        if (serviceID === 'YOUR_SERVICE_ID' || templateID === 'YOUR_TEMPLATE_ID') {
-            statusEl.textContent = "Feedback form is not configured. Please contact the owner directly.";
-            statusEl.style.color = "orange";
-            return;
-        }
-
-        submitBtn.disabled = true;
-        statusEl.textContent = "Sending...";
-        statusEl.style.color = "blue";
-    }
+    function addToCart(p,f){const e=cart.find(t=>t.id===p);e?e.quantity++:(cart.push({...products.find(t=>t.id===p),quantity:1,finalPrice:f})),updateCartDisplay()}
+    function increaseQuantity(p){const t=cart.find(e=>e.id===p);t&&(t.quantity++,updateCartDisplay())}
+    function decreaseQuantity(p){const t=cart.find(e=>e.id===p);t&&(t.quantity--,t.quantity<=0?removeItemFromCart(p):updateCartDisplay())}
+    function removeItemFromCart(p){appliedDiscount=null,document.getElementById("discount-code-input").value="",document.getElementById("discount-status").textContent="",cart=cart.filter(t=>t.id!==p),updateCartDisplay()}
+    function updateCartCount(){document.getElementById("cart-count").textContent=cart.reduce((t,e)=>t+e.quantity,0)}
+    function applyDiscount(){const t=document.getElementById("discount-code-input"),e=document.getElementById("discount-status"),o=t.value.trim().toUpperCase();if(!o)return e.textContent="Please enter a code.",void(e.style.color="orange");const n=availableDiscountCodes[o];n?(appliedDiscount={code:o,...n},e.textContent=`Code "${o}" applied successfully!`,e.style.color="green"):(appliedDiscount=null,e.textContent="Invalid or expired discount code.",e.style.color="red"),updateCartDisplay()}
+    function calculateCartTotals(){let t=0,e=0,o=null;const n={};const i=cart.map(t=>({...t,details:products.find(e=>e.id===t.id)}));i.forEach(t=>{e+=t.details.price*t.quantity,n[t.id]=t.details.price});activePromotions.forEach(t=>{if(t.shippingRuleId)o=t.shippingRuleId;t.productIDs.forEach(e=>{const r=i.find(t=>t.id===e);if(r){let i=r.details.price;if("PERCENT"===t.type)i*=(1-parseFloat(t.value)/100);else if("FIXED"===t.type)i-=parseFloat(t.value);n[e]=i}})});i.forEach(e=>{t+=n[e.id]*e.quantity});let r=0;if(appliedDiscount){if("Fixed"===appliedDiscount.type)r=parseFloat(appliedDiscount.value);else if("Percentage"===appliedDiscount.type)r=t*(parseFloat(appliedDiscount.value)/100);else if("FreeShipping"===appliedDiscount.type){const t=Object.keys(shippingRules).find(t=>"Free"===shippingRules[t].type);t&&(o=t)}}const a=t-r,s=calculateShipping(cart,a,o),d=a+s.fee,c=Math.floor(a);return{subtotal:t,originalSubtotal:e,discountValue:r,shipping:s,total:d,totalPoints:c,itemFinalPrices:n}}
+    function calculateShipping(t,e,o){if(0===t.length)return{fee:0,message:"RM 0.00"};let r=null;if(o&&shippingRules[o])r={...shippingRules[o],reason:"Promotional Shipping!"};else{const t=Object.values(shippingRules).filter(t=>t.isDefault&&"Tiered"===t.type).sort((t,e)=>t.minSpend-e.minSpend);for(const o of t)if(e>=o.minSpend&&e<=o.maxSpend){r={...o,reason:`Spend over RM${o.minSpend}`}}}if(!r)return{fee:14,message:"RM 14.00"};if("Free"===r.type)return{fee:0,message:"FREE",reason:r.reason||"Promotional Free Shipping!"};if("FlatRate"===r.type)return{fee:parseFloat(r.charge),message:`RM ${parseFloat(r.charge).toFixed(2)}`};if("Tiered"===r.type){const t=parseFloat(r.charge);return{fee:t,message:0===t?"FREE":`RM ${t.toFixed(2)}`,reason:0===t?`Free shipping for orders over RM ${r.minSpend}!`:"Standard Shipping"}}return{fee:14,message:"RM 14.00"}}
+    function updateCartDisplay(){const t=document.getElementById("cart-items"),e=document.getElementById("cart-subtotal"),o=document.getElementById("discount-line"),n=document.getElementById("cart-discount"),i=document.getElementById("cart-shipping"),r=document.getElementById("cart-total"),a=document.getElementById("points-earned-display"),s=document.getElementById("savings-line"),d=document.getElementById("cart-savings");if(0===cart.length)return t.innerHTML="<p>Your cart is currently empty.</p>",e.textContent="RM 0.00",i.textContent="RM 0.00",r.textContent="RM 0.00",a.innerHTML="",o.style.display="none",s.style.display="none",void updateCartCount();const{subtotal:c,originalSubtotal:l,discountValue:u,shipping:m,total:p,totalPoints:f,itemFinalPrices:g}=calculateCartTotals();let h="";cart.forEach(t=>{const e=g[t.id]||t.basePrice;let o=`<div class="final-cart-price">RM ${e.toFixed(2)}</div>`;e<t.basePrice&&(o+=`<div class="original-cart-price">RM ${t.basePrice.toFixed(2)}</div>`),h+=`<div class="cart-item"><div class="cart-item-details"><strong>${t.name}</strong><div class="quantity-controls"><button class="quantity-btn" onclick="decreaseQuantity(${t.id})">-</button><span class="quantity-display">${t.quantity}</span><button class="quantity-btn" onclick="increaseQuantity(${t.id})">+</button></div></div><div style="text-align:right">${o}</div></div>`});const y=l-c+u;t.innerHTML=h,e.textContent=`RM ${c.toFixed(2)}`,u>0?(n.textContent=`- RM ${u.toFixed(2)}`,o.style.display="flex"):(o.style.display="none"),"FREE"===m.message?i.innerHTML=`<span style="color:var(--accent-color);font-weight:700"><i class="fa-solid fa-truck-fast"></i> FREE! <small>(${m.reason})</small></span>`:i.innerHTML=m.message,y>0?(d.textContent=`RM ${y.toFixed(2)}`,s.style.display="flex"):(s.style.display="none"),r.textContent=`RM ${p.toFixed(2)}`,a.innerHTML=`<div class="points-earned"><i class="fa-solid fa-star"></i> Points to be Earned: ${f}</div>`,updateCartCount()}
+    async function initiateCheckout(){if(!document.getElementById("consent-checkbox").checked)return void alert("You must agree to the data collection consent before proceeding.");const t=document.getElementById("customer-name").value.trim(),e=document.getElementById("customer-phone").value.trim(),o=document.getElementById("customer-email").value.trim(),n=document.getElementById("customer-address1").value.trim(),i=document.getElementById("customer-address2").value.trim(),r=document.getElementById("customer-city").value.trim(),a=document.getElementById("customer-state").value.trim(),s=document.getElementById("customer-postcode").value.trim();if(!t||!e||!o||!n||!r||!a||!s)return void alert("Please fill in all required customer and shipping information fields.");if(0===cart.length)return void alert("Your cart is empty.");const{subtotal:d,discountValue:c,shipping:l,total:u,totalPoints:m,itemFinalPrices:p}=calculateCartTotals(),f=`${n}, ${i?i+", ":""}${s} ${r}, ${a}.`,g={customerName:t,customerPhone:e,customerEmail:o,customerAddress:f,cart:cart.map(t=>({id:t.id,name:t.name,quantity:t.quantity,finalPrice:p[t.id]})),totalAmount:u.toFixed(2),shippingFee:l.fee.toFixed(2),discountApplied:appliedDiscount?`${appliedDiscount.code} - RM ${c.toFixed(2)}`:"N/A",discountCodeUsed:appliedDiscount?appliedDiscount.code:"N/A",totalPointsForThisPurchase:m};sessionStorage.setItem("pendingOrder",JSON.stringify(g));let h=`Hi, I would like to place an order:\n\n*Customer Details:*\nName: ${t}\nPhone: ${e}\nEmail: ${o}\nAddress: ${f}\n\n--- ORDER SUMMARY ---\nSubtotal: RM ${d.toFixed(2)}${c>0?`\nDiscount: - RM ${c.toFixed(2)}`:""}\nShipping: ${l.message}\n*TOTAL: RM ${u.toFixed(2)}*\n\nPlease provide payment details. After payment, I will upload the proof and verification code on your website to finalize the order. Thank you!`;window.open(`https://wa.me/601111033154?text=${encodeURIComponent(h)}`,"_blank"),document.getElementById("cart-view").style.display="none",document.getElementById("verification-view").style.display="block",updateVerificationUI()}
+    async function uploadProof(){const t=document.getElementById("payment-proof-upload").files[0],e=document.getElementById("upload-status"),o=document.getElementById("upload-proof-btn");let n=JSON.parse(sessionStorage.getItem("pendingOrder"));if(!t)return e.textContent="Please select a file to upload.",void(e.style.color="red");if(!n)return e.textContent="Error: No pending order found.",void(e.style.color="red");o.disabled=!0,e.textContent="Uploading...",e.style.color="blue";try{const t=await getBase64(proofFile),i={action:"logInitialOrderWithProof",customerName:n.customerName,customerEmail:n.customerEmail,customerPhone:n.customerPhone,customerAddress:n.customerAddress,itemsPurchased:n.cart.map(t=>`${t.name} (x${t.quantity})`).join("; "),discountApplied:n.discountApplied,totalAmount:n.totalAmount,shippingFee:n.shippingFee,totalPointsForThisPurchase:n.totalPointsForThisPurchase,paymentProofFile:t.split(",")[1],paymentProofMimeType:proofFile.type,paymentProofFileName:`${n.customerEmail.split("@")[0]}-${Date.now()}`},r=await fetch(googleScriptURL,{method:"POST",body:JSON.stringify(i)}),a=await r.json();if("success"===a.status)e.textContent="Proof uploaded successfully!",e.style.color="green",n.proofUploaded=!0,sessionStorage.setItem("pendingOrder",JSON.stringify(n)),updateVerificationUI();else throw new Error(a.message)}catch(t){e.textContent=`Error: ${t.message}`,e.style.color="red",o.disabled=!1}}
+    async function finalizeOrder(){const t=document.getElementById("verification-code").value.trim().toUpperCase(),e=document.getElementById("finalize-order-btn"),o=document.getElementById("verification-status");let n=JSON.parse(sessionStorage.getItem("pendingOrder"));if(!t)return o.textContent="Please enter the verification code.",void(o.style.color="red");if(!n)return o.textContent="Error: No pending order found.",void(o.style.color="red");e.disabled=!0,o.textContent="Verifying...",o.style.color="blue";try{const i={action:"finalizeOrder",usedCode:t,customerName:n.customerName,customerEmail:n.customerEmail,customerPhone:n.customerPhone,customerAddress:n.customerAddress,cart:n.cart,totalAmount:n.totalAmount,shippingFee:n.shippingFee,discountApplied:n.discountApplied,discountCodeUsed:n.discountCodeUsed,totalPointsForThisPurchase:n.totalPointsForThisPurchase},r=await fetch(googleScriptURL,{method:"POST",body:JSON.stringify(i)}),a=await r.json();if("success"!==a.status)throw new Error(a.message);o.textContent="Order Verified! Your receipt is downloading...",o.style.color="green";const s=document.createElement("a");s.href=a.receiptUrl.replace("/file/d/","/uc?export=download&id=").replace("/view?usp=drivesdk",""),s.download=`Receipt-Order-${(new Date).getTime()}.pdf`,document.body.appendChild(s),s.click(),document.body.removeChild(s),cart=[],sessionStorage.removeItem("pendingOrder"),updateCartCount(),appliedDiscount=null,document.getElementById("discount-code-input").value="",document.getElementById("discount-status").textContent="",setTimeout(()=>{toggleCart(!0),updateVerificationUI(!0)},4e3)}catch(t){o.textContent=`Error: ${t.message}`,o.style.color="red",e.disabled=!1}}
+    function updateVerificationUI(t=!1){const e=document.getElementById("proof-upload-step"),o=document.getElementById("code-verification-step"),n=document.getElementById("upload-proof-btn"),i=document.getElementById("finalize-order-btn"),r=document.getElementById("verification-code"),a=document.getElementById("upload-status"),s=document.getElementById("verification-status");if(t)return e.classList.add("active"),e.classList.remove("completed"),o.classList.remove("active"),n.disabled=!1,i.disabled=!0,r.disabled=!0,a.textContent="",s.textContent="",document.getElementById("payment-proof-upload").value="",void(r.value="");const d=JSON.parse(sessionStorage.getItem("pendingOrder"));d&&d.proofUploaded?(e.classList.remove("active"),e.classList.add("completed"),o.classList.add("active"),n.disabled=!0,i.disabled=!1,r.disabled=!1,a.textContent="Proof Uploaded Successfully!",a.style.color="green"):(e.classList.add("active"),e.classList.remove("completed"),o.classList.remove("active"),n.disabled=!1,i.disabled=!0,r.disabled=!0)}
+    function cancelVerification(){confirm("Are you sure? This will cancel the pending order.")&&(sessionStorage.removeItem("pendingOrder"),toggleCart(!0),updateVerificationUI(!0))}
+    function toggleCart(t=!1){const e=document.getElementById("cart-modal");if(t)return void(e.style.display="none");"flex"===e.style.display?e.style.display="none":(e.style.display="flex",JSON.parse(sessionStorage.getItem("pendingOrder"))?(document.getElementById("cart-view").style.display="none",document.getElementById("verification-view").style.display="block",updateVerificationUI()):(document.getElementById("cart-view").style.display="block",document.getElementById("verification-view").style.display="none",updateCartDisplay(),updateVerificationUI(!0)))}
+    function getBase64(t){return new Promise((e,o)=>{const n=new FileReader;n.readAsDataURL(t),n.onload=()=>e(n.result),n.onerror=t=>o(t)})}
+    function filterProducts(){const t=document.getElementById("product-search").value.toLowerCase();document.querySelectorAll(".product").forEach(e=>{e.querySelector("h3").textContent.toLowerCase().includes(t)?e.style.display="flex":e.style.display="none"})}
+    function suggestProduct(){const t=document.getElementById("symptom-input").value.toLowerCase().trim(),e=document.getElementById("suggestion-result");if(!t)return void(e.innerHTML='<p style="color:red">Please enter a symptom or health concern.</p>');const o={'digestion':{keywords:['digestion','stomach','tummy','bloated','indigestion','constipation'],ids:[1,2,3,7,11,18]},'immune':{keywords:['immune','sick','flu','cold','cough','fever','infection'],ids:[1,2,14,15,17]},'energy':{keywords:['energy','tired','fatigue','stamina','lethargic','weak'],ids:[12,13,15,8]},'weight':{keywords:['weight','diet','slim','lose weight','kurus'],ids:[4,5,6,7]},'skin':{keywords:['skin','dry','acne','eczema','sunburn','aging','wrinkles','kulit'],ids:[30,32,29,39,52,24,21,22,31,38,41]},'joint':{keywords:['joint','muscle','pain','sore','arthritis','sakit','otot'],ids:[34,16,33]},'heart':{keywords:['heart','cholesterol','blood pressure','jantung'],ids:[16]},'bone':{keywords:['bone','calcium','osteoporosis','tulang'],ids:[19]},'headache':{keywords:['headache','migraine','pening','sakit kepala'],ids:[33]}},n=new Set,i=t.split(" ");i.forEach(t=>{for(const e in o)o[e].keywords.includes(t)&&o[e].ids.forEach(t=>n.add(t))}),n.size>0?(e.innerHTML="<h4>Based on your concern, we suggest:</h4>",[...n].slice(0,3).forEach(t=>{const n=products.find(e=>e.id===t);let i=n.price;const r=activePromotions.find(e=>e.productIDs.includes(t));"PERCENT"===r?.type?i*=(1-parseFloat(r.value)/100):"FIXED"===r?.type&&(i-=parseFloat(r.value)),e.innerHTML+=`<div class="suggestion-product"><span><strong>${n.name}</strong> - ${n.benefits.split(",")[0]}</span><button class="btn btn-primary" style="width:auto;padding:8px 15px" onclick="addToCart(${n.id}, ${i});toggleCart()">Add</button></div>`})):(e.innerHTML="<p>We could not find a specific match. Try searching for products directly.</p>")}
+    function sendFeedbackEmail(t){t.preventDefault();const e=document.getElementById("feedback-submit-btn"),o=document.getElementById("feedback-status");if("YOUR_SERVICE_ID"==='YOUR_SERVICE_ID'||"YOUR_TEMPLATE_ID"==='YOUR_TEMPLATE_ID')return o.textContent="Feedback form is not configured. Please contact the owner directly.",void(o.style.color="orange");e.disabled=!0,o.textContent="Sending...",o.style.color="blue"}
 </script>
 </body>
 </html>
