@@ -39,72 +39,85 @@
     .product-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:30px}.product{background:var(--light-text);border-radius:var(--border-radius);box-shadow:var(--shadow);display:flex;flex-direction:column;position:relative;transition:all .3s ease;overflow:hidden}.product:hover{transform:translateY(-8px);box-shadow:0 10px 25px rgba(0,0,0,.12)}.product.promo-highlight{animation:promoGlow 2.5s infinite ease-in-out}.product-image-container{height:220px;padding:15px;display:flex;align-items:center;justify-content:center}.product img{max-width:100%;max-height:100%;object-fit:contain}.product-info{padding:20px;flex-grow:1;display:flex;flex-direction:column;text-align:left;position:relative}.product h3{margin:0 0 10px;font-size:1.25rem;height:3.75rem;overflow:hidden}.product .benefits{font-size:.85rem;color:#555;margin:10px 0;flex-grow:1}.product .consumption{font-size:.85rem;color:var(--primary-color);font-style:italic;margin:10px 0}.price-section{margin:15px 0;text-align:center}.original-price{text-decoration:line-through;color:#999;font-size:1rem;margin-right:10px}.new-price{color:var(--secondary-color);font-weight:700;font-size:1.5rem}.product-points{font-size:.9rem;font-weight:600;color:var(--accent-color);text-align:center;margin-top:10px}.product-actions{margin-top:auto;display:flex;flex-direction:column;gap:10px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px 15px;border-radius:50px;text-decoration:none;font-weight:700;border:none;cursor:pointer;transition:all .3s}.btn:disabled{background-color:#ccc;cursor:not-allowed}.btn-primary{background:var(--primary-color);color:var(--light-text)}.btn-primary:hover{background:#123e5a;transform:scale(1.05)}.btn-secondary{background:var(--light-gray);color:var(--primary-color);border:1px solid var(--primary-color)}.btn-secondary:hover{background:#e0e0e0}.featured-badge{position:absolute;top:0;right:0;background:var(--secondary-color);color:#fff;padding:5px 25px;transform:rotate(45deg) translate(25%,-65%);transform-origin:0 0;font-weight:700;font-size:.9rem;box-shadow:0 3px 10px rgba(0,0,0,.2);z-index:10;white-space:nowrap}.halal-badge{position:absolute;top:10px;left:10px;background-color:rgba(255,255,255,0.8);color:var(--accent-color);padding:3px 8px;border-radius:5px;font-size:.75rem;font-weight:700;border:1px solid rgba(39,174,96,0.3)}.floating-cart-btn{position:fixed;bottom:20px;right:20px;width:60px;height:60px;background-color:var(--primary-color);color:var(--light-text);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;box-shadow:0 4px 12px rgba(0,0,0,.25);cursor:pointer;z-index:1000;transition:transform .3s ease}.floating-cart-btn:hover{transform:scale(1.1)}#cart-count{position:absolute;top:-2px;right:-2px;background-color:var(--secondary-color);color:var(--light-text);border-radius:50%;padding:3px 8px;font-size:.8rem;font-weight:700;border:2px solid var(--light-text)}.modal{display:none;position:fixed;z-index:1001;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,.6);align-items:center;justify-content:center;animation:fadeIn .4s ease}.modal-content{background-color:#fefefe;padding:30px;border-radius:var(--border-radius);width:90%;max-width:600px;animation:slideIn .4s ease;max-height:90vh;overflow-y:auto}.close{color:#aaa;float:right;font-size:28px;font-weight:700;cursor:pointer;transition:color .3s}.close:hover{color:#000}#cart-items{max-height:250px;overflow-y:auto;padding-right:10px;border-bottom:1px solid #eee;margin-bottom:15px}.cart-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0}.cart-item-details{flex-grow:1}.quantity-controls{display:flex;align-items:center;gap:8px;margin-top:5px}.quantity-btn{width:28px;height:28px;background:var(--light-gray);border:1px solid #ccc;border-radius:50%;cursor:pointer;font-weight:700}.quantity-display{font-weight:600;min-width:20px;text-align:center}.remove-item-btn{font-size:1.2rem;color:#c00;cursor:pointer;margin-left:15px}.cart-summary{margin-top:20px;font-size:1.1rem}.summary-line{display:flex;justify-content:space-between;padding:8px 0}.summary-line.total{font-weight:700;font-size:1.3rem;border-top:2px solid #333;margin-top:10px}.points-earned,.free-shipping-promo{background-color:#e0f2f1;color:var(--accent-color);padding:10px;border-radius:8px;text-align:center;margin-top:20px;font-weight:700}.customer-info-form input{width:100%;padding:10px;margin-bottom:10px;border:1px solid #ccc;border-radius:5px}.discount-section{display:flex;gap:10px;margin-top:15px}.discount-section input{flex-grow:1;padding:10px;border:1px solid #ccc;border-radius:5px}.discount-section button{width:auto;padding:10px 15px;flex-shrink:0}#discount-status{font-size:.9rem;font-weight:600;margin-top:8px;min-height:18px;text-align:center}#consent-form{margin-top:20px;padding:15px;background-color:#f8f9fa;border:1px solid #dee2e6;border-radius:8px;font-size:.9rem}#consent-form label{display:flex;align-items:flex-start;gap:10px}#consent-form input[type=checkbox]{margin-top:3px}#consent-form a{color:var(--primary-color);font-weight:600}.checkout-btn{width:100%;margin-top:15px}.verification-step{margin-top:20px;padding:20px;background-color:var(--light-gray);border-radius:var(--border-radius);text-align:center;border:2px dashed #ddd}.verification-step.active{border-color:var(--primary-color);background-color:#eaf2f8}.verification-step.completed{border-color:var(--accent-color);background-color:#e8f8f5;opacity:.7}.verification-step h4{margin-top:0}.verification-step input[type=file],.verification-step input[type=text]{width:100%;padding:12px;margin:15px 0 10px;border:1px solid #ddd;border-radius:8px}#upload-status,#verification-status{margin-top:10px;font-weight:700;min-height:20px}footer{background:var(--primary-color);color:var(--light-text);padding:40px 20px;text-align:center;margin-top:30px}.disclaimer{margin-top:10px;background-color:#fff3cd;color:#856404;padding:15px;border-top:1px solid #ffeeba}
     .about-us-section{padding:40px;background-color:#fff;border-radius:var(--border-radius);box-shadow:var(--shadow)}.about-us-section .owner-profile{display:flex;align-items:center;gap:30px;flex-wrap:wrap}.about-us-section .owner-image{width:150px;height:150px;border-radius:50%;object-fit:cover;border:5px solid var(--primary-color)}.about-us-section .owner-details{flex:1;min-width:300px}.about-us-section ul {list-style: none; padding-left: 0;} .about-us-section ul li {margin-bottom: 10px;} .feedback-form select{width:100%;padding:10px;margin-bottom:10px;border:1px solid #ccc;border-radius:5px} .feedback-form textarea{width:100%;padding:10px;margin-bottom:10px;border:1px solid #ccc;border-radius:5px;min-height:120px} #feedback-status{font-weight:bold;margin-top:15px;}
     .program-section{background:var(--light-text);padding:40px;border-radius:var(--border-radius);box-shadow:var(--shadow);margin-bottom:30px}.program-section h2{font-size:2.5rem;text-align:center}.program-section ul {list-style: none; padding-left: 0; margin-top: 30px;}.program-section ul li {background: #f9f9f9; border-left: 5px solid var(--accent-color); padding: 15px; margin-bottom: 10px; border-radius: 5px; text-align: left;}.program-section ul li strong {color: var(--primary-color); display: block; margin-bottom: 5px;}
-    .cta-button{display:block;width:fit-content;margin:30px auto;background:linear-gradient(135deg,var(--secondary-color),#e67e22);color:var(--light-text);text-align:center;padding:15px 40px;border-radius:50px;font-weight:700;text-decoration:none;font-size:1.2rem;transition:all .3s;box-shadow:0 4px 8px rgba(0,0,0,.2)}.cta-button:hover{transform:translateY(-3px);box-shadow:0 6px 12px rgba(0,0,0,.3)}.rewards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}.reward-item{background:var(--light-gray);border:1px solid #ddd;border-radius:var(--border-radius);padding:20px;text-align:center;display:flex;flex-direction:column;position:relative}.reward-item img{max-width:100%;height:100px;object-fit:contain;margin-bottom:15px;border-radius:8px}.reward-item h4{margin:10px 0 5px}.reward-item .points-cost{font-weight:700;color:var(--accent-color);margin-bottom:15px}.coming-soon-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background-color:rgba(255,255,255,.8);color:var(--primary-color);display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:700;border-radius:var(--border-radius);backdrop-filter:blur(2px)}
+    .cta-button{display:block;width:fit-content;margin:30px auto;background:linear-gradient(135deg,var(--secondary-color),#e67e22);color:var(--light-text);text-align:center;padding:15px 40px;border-radius:50px;font-weight:700;text-decoration:none;font-size:1.2rem;transition:all .3s;box-shadow:0 4px 8px rgba(0,0,0,.2)}.cta-button:hover{transform:translateY(-3px);box-shadow:0 6px 12px rgba(0,0,0,.3)}.rewards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}.reward-item{background:var(--light-gray);border:1px solid #ddd;border-radius:var(--border-radius);padding:20px;text-align:center;display:flex;flex-direction:column;position:relative}.reward-item img{max-width:100%;max-height:100px;object-fit:contain;margin-bottom:15px;border-radius:8px}.reward-item h4{margin:10px 0 5px}.reward-item .points-cost{font-weight:700;color:var(--accent-color);margin-bottom:15px}.coming-soon-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background-color:rgba(255,255,255,.8);color:var(--primary-color);display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:700;border-radius:var(--border-radius);backdrop-filter:blur(2px)}
     .original-cart-price{text-decoration:line-through;color:#999;font-size:.9rem;}.final-cart-price{font-weight:600}.summary-line small{font-size:.8rem;color:var(--accent-color);font-style:italic}
   </style>
 
-  <!-- NEW: Festival Animations CSS -->
+  <!-- ======================================================================================= -->
+  <!-- ======================= NEW ADVANCED FESTIVAL DECORATIONS CSS ======================= -->
+  <!-- ======================================================================================= -->
   <style id="festival-animations-style">
-    #festival-animations-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: 0; }
-    .festival-element { position: absolute; display: none; background-size: contain; background-repeat: no-repeat; will-change: transform, opacity; animation-timing-function: linear; animation-iteration-count: infinite;}
-    body:not(.default-theme)::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.15; background-size: cover; animation: fadeIn 2s ease-in-out; }
-    
-    /* --- Animation Keyframes --- */
-    @keyframes fall { 0% { transform: translateY(-100%) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 95% { opacity: 1; } 100% { transform: translateY(100vh) rotate(360deg); opacity: 0; } }
-    @keyframes sway { 0% { transform: translateY(0) rotate(-8deg); } 50% { transform: translateY(-20px) rotate(8deg); } 100% { transform: translateY(0) rotate(-8deg); } }
-    @keyframes twinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.8; } }
-    @keyframes firework-1 { 0%, 90%, 100% { opacity: 0; transform: scale(0.5) } 30% { opacity: 1; transform: scale(1.2); } }
-    @keyframes firework-2 { 0%, 80%, 100% { opacity: 0; transform: scale(0.5) } 50% { opacity: 1; transform: scale(1); } }
-    
+    #festival-animations-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: -1; }
+    .festival-element { position: absolute; display: none; background-size: contain; background-repeat: no-repeat; will-change: transform, opacity; }
+    .decorative-border { position: fixed; left: 0; width: 100%; height: 150px; background-size: contain; z-index: -1; display: none; }
+    .top-border { top: 0; background-repeat: repeat-x; }
+    .bottom-border { bottom: 0; background-repeat: repeat-x; }
+
+    /* --- KEYFRAMES --- */
+    @keyframes fall { 0% { transform: translateY(-10vh) rotate(-15deg); opacity: 0; } 10% { opacity: 1; } 100% { transform: translateY(105vh) rotate(15deg); opacity: 0; } }
+    @keyframes sway { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg); } }
+    @keyframes glow { 0%, 100% { filter: drop-shadow(0 0 5px gold) brightness(1.2); } 50% { filter: drop-shadow(0 0 15px gold) brightness(1.8); } }
+    @keyframes twinkle { 0% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1); } 100% { opacity: 0.3; transform: scale(0.8); } }
+    @keyframes firework-burst { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+    @keyframes dragon-dance { 0% { left: -30%; transform: translateY(0); } 40% { transform: translateY(-30px); } 70% { transform: translateY(10px); } 100% { left: 110%; transform: translateY(0); } }
+    @keyframes shoot-star { 0% { transform: translateX(300px) translateY(-300px) scale(0.5); opacity: 0; } 5% { opacity: 1; } 15% { transform: translateX(-300px) translateY(300px) scale(0.5); opacity: 0; } 100% { opacity: 0; } }
+    @keyframes peacock-sway { 0%, 100% { transform: translateY(0) rotate(-15deg); } 50% { transform: translateY(-20px) rotate(15deg); } }
+
     /* --- Grand Opening --- */
-    .theme-GrandOpening .confetti, .theme-GrandOpening .balloon { display: block; }
-    .confetti { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M0 0h10v2H0z" fill="gold"/><path d="M0 4h10v2H0z" fill="tomato"/><path d="M0 8h10v2H0z" fill="dodgerblue"/></svg>'); animation-name: fall; }
-    .balloon { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 125"><path fill="gold" d="M50 0C20 0 0 30 0 60c0 30 20 60 50 60s50-30 50-60C100 30 80 0 50 0z"/><path fill="%23d4af37" d="M50 110v10l-5 5h10l-5-5z"/></svg>'); animation-name: sway; animation-timing-function: ease-in-out; }
-    .confetti-1 {width: 10px; height: 10px; left: 10%; animation-duration: 7s; animation-delay: 0s;} .confetti-2 {width: 15px; height: 15px; left: 30%; animation-duration: 5s; animation-delay: 2s;} .confetti-3 {width: 8px; height: 8px; left: 50%; animation-duration: 9s; animation-delay: 1s;} .confetti-4 {width: 12px; height: 12px; left: 70%; animation-duration: 6s; animation-delay: 4s;} .confetti-5 {width: 10px; height: 10px; left: 90%; animation-duration: 8s; animation-delay: 3s;}
-    .balloon-1 { width: 80px; height: 100px; top: -120px; right: 5%; animation-duration: 15s; animation-delay: 1s; opacity: 0.7;}
-    .balloon-2 { width: 100px; height: 125px; top: -140px; left: 10%; animation-duration: 20s; animation-delay: 4s; opacity: 0.8;}
+    .theme-GrandOpening .confetti, .theme-GrandOpening .popper { display: block; }
+    .confetti { width: 12px; height: 18px; animation: fall linear infinite; }
+    .confetti-1 { background-color: #ffd700; left: 10%; animation-duration: 4s; animation-delay: 0.5s; }
+    .confetti-2 { background-color: #ff6347; left: 25%; animation-duration: 5s; animation-delay: 1s; }
+    .confetti-3 { background-color: #3498db; left: 40%; animation-duration: 3s; animation-delay: 2s; }
+    .confetti-4 { background-color: #2ecc71; left: 60%; animation-duration: 6s; animation-delay: 0.2s; }
+    .confetti-5 { background-color: #ffffff; left: 75%; animation-duration: 4.5s; animation-delay: 3s; }
+    .confetti-6 { background-color: #f1c40f; left: 90%; animation-duration: 5.5s; animation-delay: 1.5s; }
+    .popper { width: 150px; height: 150px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M20 100 L50 70 L80 100 Z" fill="%23e74c3c"/><path d="M50 70 L20 0 L80 0 Z" fill="%23f1c40f"/><circle cx="30" cy="20" r="5" fill="white"/><circle cx="50" cy="30" r="5" fill="white"/><circle cx="70" cy="20" r="5" fill="white"/></svg>'); animation: firework-burst 2s ease-out infinite; }
+    .popper-1 { bottom: -50px; left: 5%; animation-delay: 1s; }
+    .popper-2 { bottom: -50px; right: 5%; animation-delay: 2.5s; }
 
     /* --- Hari Raya --- */
-    .theme-HariRaya .ketupat, .theme-HariRaya .pelita { display: block; animation-name: sway; animation-timing-function: ease-in-out; }
-    .ketupat { background-image: url('https://svgshare.com/i/18bH.svg'); }
-    .pelita { background-image: url('https://svgshare.com/i/18bL.svg'); filter: drop-shadow(0 0 10px #ffdd00); }
-    .ketupat-1 { width: 100px; height: 100px; top: 5%; left: 10%; animation-duration: 12s; opacity: 0.8;}
-    .pelita-1 { width: 70px; height: 70px; top: 40%; left: 85%; animation-duration: 10s; animation-delay: 1s; opacity: 0.9;}
-    .ketupat-2 { width: 80px; height: 80px; top: 60%; left: 5%; animation-duration: 15s; animation-delay: 3s; opacity: 0.7;}
+    .theme-HariRaya body { background-image: linear-gradient(to top, #001a00, #004d00); color: white; }
+    .theme-HariRaya .decorative-border, .theme-HariRaya .star, .theme-HariRaya .mosque { display: block; }
+    .theme-HariRaya .bottom-border { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><path d="M0 20 Q 25 0, 50 20 T 100 20" fill="rgba(255, 215, 0, 0.2)"/></svg>'); height: 100px; background-size: auto 100px; opacity: 0.5; }
+    .mosque { width: 100%; height: 250px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200"><path d="M0 200 L800 200 L800 150 C 750 150, 750 100, 700 100 C 650 100, 650 150, 600 150 L600 100 L550 100 Q 525 50, 500 100 L450 100 L450 80 Q 425 0, 400 80 L350 80 L350 100 Q 325 50, 300 100 L250 100 L250 150 C 200 150, 200 100, 150 100 C 100 100, 100 150, 50 150 L0 150 Z" fill="rgba(0, 50, 0, 0.7)"/></svg>'); background-size: cover; background-position: center bottom; bottom: 0; left:0; }
+    .star { background-color: white; border-radius: 50%; animation: twinkle infinite; box-shadow: 0 0 10px white; }
+    .star-1 { width: 2px; height: 2px; top: 10%; left: 15%; animation-duration: 3s; } .star-2 { width: 3px; height: 3px; top: 20%; left: 80%; animation-duration: 2s; } .star-3 { width: 2px; height: 2px; top: 50%; left: 50%; animation-duration: 4s; } .star-4 { width: 3px; height: 3px; top: 70%; left: 25%; animation-duration: 2.5s; } .star-5 { width: 2px; height: 2px; top: 30%; left: 95%; animation-duration: 3.5s; }
 
     /* --- Deepavali --- */
-    .theme-Deepavali .diya, .theme-Deepavali .rangoli { display: block; }
-    .diya { background-image: url('https://svgshare.com/i/18ae.svg'); animation-name: twinkle; }
-    .rangoli { background-image: url('https://svgshare.com/i/18c5.svg'); animation-name: fadeIn; animation-duration: 8s; animation-timing-function: ease-in-out;}
-    .diya-1 { width: 80px; height: 80px; bottom: 5%; left: 10%; animation-duration: 3s; } .diya-2 { width: 80px; height: 80px; bottom: 5%; right: 10%; animation-duration: 5s; animation-delay: 1s; }
-    .rangoli-1 { width: 200px; height: 200px; top: 10%; right: 5%; opacity: 0.4; animation-delay: 1s;}
-    .rangoli-2 { width: 150px; height: 150px; top: 60%; left: 5%; opacity: 0.3; animation-delay: 4s;}
-    
+    .theme-Deepavali body { background-image: linear-gradient(to top, #4a1833, #8c2f6b); }
+    .theme-Deepavali .decorative-border, .theme-Deepavali .peacock-feather, .theme-Deepavali .sparkle { display: block; }
+    .theme-Deepavali .top-border { height: 80px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50"><g fill="%23f39c12"><circle cx="10" cy="10" r="8"/><path d="M10 18 V 40"/><circle cx="10" cy="40" r="5" fill="%23e74c3c"/></g><g fill="%23f39c12" transform="translate(40,0)"><circle cx="10" cy="10" r="8"/><path d="M10 18 V 40"/><circle cx="10" cy="40" r="5" fill="%23e74c3c"/></g><g fill="%23f39c12" transform="translate(80,0)"><circle cx="10" cy="10" r="8"/><path d="M10 18 V 40"/><circle cx="10" cy="40" r="5" fill="%23e74c3c"/></g></svg>'); background-size: auto 80px; }
+    .peacock-feather { width: 100px; height: 100px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 100 C 20 70, 20 30, 50 0 C 80 30, 80 70, 50 100 Z" fill="%233498db"/><circle cx="50" cy="50" r="15" fill="%2327ae60"/><circle cx="50" cy="50" r="5" fill="%238e44ad"/></svg>'); animation: peacock-sway 10s ease-in-out infinite; }
+    .peacock-1 { top: 15%; left: 5%; animation-duration: 12s; } .peacock-2 { top: 40%; right: -2%; animation-duration: 15s; animation-delay: 2s; }
+    .sparkle { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 0 L60 40 L100 50 L60 60 L50 100 L40 60 L0 50 L40 40 Z" fill="gold"/></svg>'); animation: twinkle 2s infinite; }
+    .sparkle-1 { width: 20px; height: 20px; top: 25%; left: 40%; } .sparkle-2 { width: 30px; height: 30px; top: 60%; left: 80%; animation-delay: 1s; } .sparkle-3 { width: 25px; height: 25px; top: 80%; left: 10%; animation-delay: 0.5s; }
+
     /* --- Christmas --- */
-    .theme-Christmas .snowflake, .theme-Christmas .giftbox { display: block; animation-name: fall; }
-    .snowflake { background-image: url('https://svgshare.com/i/18ar.svg'); opacity: 0.7; }
-    .giftbox { background-image: url('https://svgshare.com/i/18c6.svg'); }
+    .theme-Christmas body { background-image: linear-gradient(to top, #001a33, #003366); }
+    .theme-Christmas .lights, .theme-Christmas .shooting-star, .theme-Christmas .snowflake { display: block; }
+    .lights { width: 100%; height: 50px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50"><path d="M0 20 C 25 40, 75 0, 100 20" stroke="gray" fill="none"/><circle cx="25" cy="30" r="5" fill="red" class="light-1"/><circle cx="50" cy="10" r="5" fill="green" class="light-2"/><circle cx="75" cy="25" r="5" fill="blue" class="light-3"/><style>.light-1{animation:light-blink 3s infinite .5s}.light-2{animation:light-blink 3s infinite 1s}.light-3{animation:light-blink 3s infinite 1.5s}@keyframes light-blink{50%{opacity:0.2}}</style></svg>'); top: 0; left: 0; background-size: 150px 50px; background-repeat: repeat-x; }
+    .shooting-star { width: 100px; height: 2px; background: linear-gradient(to left, white, transparent); border-radius: 50%; top: 20%; left: -300px; animation: shoot-star 10s linear infinite; animation-delay: 3s; filter: drop-shadow(0 0 6px white); }
+    .snowflake { animation-name: fall; background-image: url('https://svgshare.com/i/18ar.svg'); opacity: 0.7; }
     .snowflake-1 { width: 30px; height: 30px; left: 10%; animation-duration: 12s; } .snowflake-2 { width: 40px; height: 40px; left: 30%; animation-duration: 8s; animation-delay: 3s; } .snowflake-3 { width: 25px; height: 25px; left: 50%; animation-duration: 15s; animation-delay: 1s; } .snowflake-4 { width: 35px; height: 35px; left: 70%; animation-duration: 9s; animation-delay: 5s; } .snowflake-5 { width: 30px; height: 30px; left: 90%; animation-duration: 11s; animation-delay: 2s; }
-    .giftbox-1 { width: 50px; height: 50px; left: 20%; animation-duration: 10s; animation-delay: 2s; }
-    .giftbox-2 { width: 60px; height: 60px; left: 80%; animation-duration: 13s; animation-delay: 5s; }
 
     /* --- CNY --- */
-    .theme-CNY .lantern, .theme-CNY .firework { display: block; }
-    .lantern { background-image: url('https://svgshare.com/i/18bM.svg'); animation-name: sway; animation-timing-function: ease-in-out; filter: drop-shadow(0 0 15px #c0392b); }
-    .firework { background-image: url('https://svgshare.com/i/18c7.svg'); }
-    .lantern-1 { width: 150px; height: 150px; top: 5%; left: 15%; animation-duration: 8s; opacity: 0.9;}
-    .lantern-2 { width: 120px; height: 120px; top: 10%; right: 10%; animation-duration: 10s; animation-delay: 2s; opacity: 0.8;}
-    .firework-1 {width: 250px; height: 250px; top: 20%; left: 40%; animation-name: firework-1; animation-duration: 4s; animation-delay: 1s;}
-    .firework-2 {width: 200px; height: 200px; top: 50%; right: 15%; animation-name: firework-2; animation-duration: 5s; animation-delay: 3s;}
-    
+    .theme-CNY body { background-image: linear-gradient(to top, #5c0000, #a30000); }
+    .theme-CNY .cherry-blossom, .theme-CNY .dragon, .theme-CNY .lantern { display: block; }
+    .cherry-blossom { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%23ffb6c1"/><circle cx="50" cy="50" r="10" fill="white"/></svg>'); animation: fall 15s linear infinite; }
+    .cb-1 { width: 15px; height: 15px; left: 5%; animation-duration: 10s; } .cb-2 { width: 20px; height: 20px; left: 25%; animation-duration: 12s; animation-delay: 3s; } .cb-3 { width: 15px; height: 15px; left: 45%; animation-duration: 8s; animation-delay: 1s; } .cb-4 { width: 20px; height: 20px; left: 65%; animation-duration: 14s; animation-delay: 5s; } .cb-5 { width: 15px; height: 15px; left: 85%; animation-duration: 9s; animation-delay: 2s; }
+    .dragon { width: 300px; height: 150px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><path d="M50 150 C 100 50, 200 50, 250 150 S 350 250, 400 150" fill="none" stroke="%23f1c40f" stroke-width="10"/><path d="M50 150 C 40 130, 20 120, 10 150 C 20 180, 40 170, 50 150" fill="%23c0392b"/></svg>'); bottom: 20px; animation: dragon-dance 20s linear infinite; opacity: 0.8; }
+    .lantern { background-image: url('https://svgshare.com/i/18bM.svg'); animation: sway 8s ease-in-out infinite; filter: drop-shadow(0 0 15px #c0392b); }
+    .lantern-1 { width: 120px; height: 120px; top: 2%; left: 10%; } .lantern-2 { width: 100px; height: 100px; top: 5%; right: 5%; animation-delay: 1.5s; }
+
     /* --- National/Malaysia Day --- */
-    .theme-NationalDay .flag, .theme-MalaysiaDay .flag, .theme-NationalDay .firework-my, .theme-MalaysiaDay .firework-my { display: block; }
-    .flag { background-image: url('https://svgshare.com/i/18aq.svg'); animation-name: sway; animation-duration: 10s; animation-timing-function: ease-in-out; }
-    .firework-my { background-image: url('https://svgshare.com/i/18c7.svg'); }
-    .flag-1 { width: 120px; height: 80px; top: 10%; left: 5%; animation-delay: 0s; opacity: 0.8; }
-    .flag-2 { width: 150px; height: 100px; top: 30%; right: 5%; animation-delay: 2s; opacity: 0.9; }
-    .firework-my-1 { width: 200px; height: 200px; top: 50%; left: 15%; animation-name: firework-2; animation-duration: 5s; animation-delay: 1s;}
-    .firework-my-2 { width: 250px; height: 250px; top: 15%; right: 30%; animation-name: firework-1; animation-duration: 4s; animation-delay: 3s;}
+    .theme-NationalDay body, .theme-MalaysiaDay body { background: linear-gradient(to top, #000033, #000066, #cc0000, #ffcc00); }
+    .theme-NationalDay .landmark, .theme-MalaysiaDay .landmark, .theme-NationalDay .firework-my, .theme-MalaysiaDay .firework-my { display: block; }
+    .landmark { width: 100%; height: 300px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300"><path d="M100 300 L120 100 L140 300 Z M200 300 L220 50 L240 300 Z M 220 50 Q 280 0 340 50 L360 300 L320 300 Z M 500 300 L500 100 L 550 50 L 600 100 L 600 300 Z" fill="rgba(0,0,0,0.4)"/></svg>'); bottom: 0; left: 0; background-size: cover; background-position: center bottom; }
+    .firework-my { background-image: url('https://svgshare.com/i/18c7.svg'); animation-name: firework-burst; }
+    .firework-my-1 { width: 250px; height: 250px; top: 10%; left: 15%; animation-duration: 3s; animation-delay: 1s; }
+    .firework-my-2 { width: 300px; height: 300px; top: 20%; right: 10%; animation-duration: 3s; animation-delay: 2.5s; }
+    .firework-my-3 { width: 200px; height: 200px; top: 40%; left: 40%; animation-duration: 3s; animation-delay: 4s; }
 
   </style>
 </head>
@@ -112,24 +125,34 @@
 
 <!-- This is the container for the festive animations -->
 <div id="festival-animations-container">
+    <!-- Decorative Borders -->
+    <div class="decorative-border top-border"></div>
+    <div class="decorative-border bottom-border"></div>
+
     <!-- Grand Opening -->
-    <div class="festival-element confetti confetti-1"></div><div class="festival-element confetti confetti-2"></div><div class="festival-element confetti confetti-3"></div><div class="festival-element confetti confetti-4"></div><div class="festival-element confetti confetti-5"></div>
-    <div class="festival-element balloon balloon-1"></div><div class="festival-element balloon balloon-2"></div>
+    <div class="festival-element confetti confetti-1"></div><div class="festival-element confetti confetti-2"></div><div class="festival-element confetti confetti-3"></div><div class="festival-element confetti confetti-4"></div><div class="festival-element confetti confetti-5"></div><div class="festival-element confetti confetti-6"></div>
+    <div class="festival-element popper popper-1"></div><div class="festival-element popper popper-2"></div>
+    
     <!-- Hari Raya -->
-    <div class="festival-element ketupat ketupat-1"></div><div class="festival-element pelita pelita-1"></div>
-    <div class="festival-element ketupat ketupat-2"></div>
+    <div class="festival-element star star-1"></div><div class="festival-element star star-2"></div><div class="festival-element star star-3"></div><div class="festival-element star star-4"></div><div class="festival-element star star-5"></div>
+    <div class="festival-element mosque"></div>
+
     <!-- Deepavali -->
-    <div class="festival-element diya diya-1"></div><div class="festival-element rangoli rangoli-1"></div>
-    <div class="festival-element diya diya-2"></div><div class="festival-element rangoli rangoli-2"></div>
+    <div class="festival-element peacock-feather peacock-1"></div><div class="festival-element peacock-feather peacock-2"></div>
+    <div class="festival-element sparkle sparkle-1"></div><div class="festival-element sparkle sparkle-2"></div><div class="festival-element sparkle sparkle-3"></div>
+    
     <!-- Christmas -->
+    <div class="festival-element lights"></div><div class="festival-element shooting-star"></div>
     <div class="festival-element snowflake snowflake-1"></div><div class="festival-element snowflake snowflake-2"></div><div class="festival-element snowflake snowflake-3"></div><div class="festival-element snowflake snowflake-4"></div><div class="festival-element snowflake snowflake-5"></div>
-    <div class="festival-element giftbox giftbox-1"></div><div class="festival-element giftbox giftbox-2"></div>
+    
     <!-- CNY -->
     <div class="festival-element lantern lantern-1"></div><div class="festival-element lantern lantern-2"></div>
-    <div class="festival-element firework firework-1"></div><div class="festival-element firework firework-2"></div>
+    <div class="festival-element cherry-blossom cb-1"></div><div class="festival-element cherry-blossom cb-2"></div><div class="festival-element cherry-blossom cb-3"></div><div class="festival-element cherry-blossom cb-4"></div><div class="festival-element cherry-blossom cb-5"></div>
+    <div class="festival-element dragon"></div>
+    
     <!-- National/Malaysia Day -->
-    <div class="festival-element flag flag-1"></div><div class="festival-element flag flag-2"></div>
-    <div class="festival-element firework-my firework-my-1"></div><div class="festival-element firework-my firework-my-2"></div>
+    <div class="festival-element landmark"></div>
+    <div class="festival-element firework-my firework-my-1"></div><div class="festival-element firework-my firework-my-2"></div><div class="festival-element firework-my firework-my-3"></div>
 </div>
 
 <div id="store-wrapper">
@@ -347,7 +370,7 @@
 
 <script>
     // --- CONFIGURATION ---
-    const googleScriptURL = 'https://script.google.com/macros/s/AKfycbxYLW14HDwylOhiW3fLXBNIjtcwPkbgYNL3YxIM8qCcAqpRzCp2vRJ0ksFrF_ty4fErdA/exec';
+    const googleScriptURL = 'https://script.google.com/macros/s/AKfycbzbjr5QZCpdf5mzT4nTM6CMl5P5zgyrggDGpiKnXNipx9iCVC_Y3g_aNPrXeuLFKmP1gw/exec';
     
     // --- GLOBAL STATE ---
     let products = [];
@@ -388,7 +411,7 @@
             }
         }
         
-        const version = "(v10.1)";
+        const version = "(v11.0)";
         const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
         document.getElementById('update-timestamp').textContent = `${date} ${version}`;
 
