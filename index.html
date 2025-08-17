@@ -16,20 +16,8 @@
     *,::after,::before{box-sizing:border-box}
     body{font-family:var(--font-family);margin:0;padding:0;background-color:var(--light-gray);color:var(--dark-text);overflow-x:hidden;line-height:1.6;padding-top:45px; position: relative;}
     .container{max-width:1200px;margin:0 auto;padding:0 20px}h1,h2,h3,h4{color:var(--primary-color);font-weight:600}
-    .default-theme .hero-section{background:linear-gradient(135deg, #2c3e50, #4ca1af);color:var(--light-text);padding:80px 20px;text-align:center;border-radius:var(--border-radius);margin-bottom:30px;transition:all .5s ease;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+    .hero-section{background:linear-gradient(135deg, #2c3e50, #4ca1af);color:var(--light-text);padding:80px 20px;text-align:center;border-radius:var(--border-radius);margin-bottom:30px;transition:all .5s ease;box-shadow:0 10px 30px rgba(0,0,0,.2)}
     
-    /* --- FESTIVAL THEMES --- */
-    .theme-GrandOpening {background-color: #fdf5e6;}
-    .theme-GrandOpening .hero-section {background: linear-gradient(135deg, #ffd700, #ff6347); border: 5px solid #fff; box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);}
-    .theme-GrandOpening #promo-running-banner {background-color: #ff4500; color: #ffffff;}
-
-    .theme-HariRaya{background-color:#f0fff0}.theme-HariRaya .hero-section{background:linear-gradient(135deg, #006400, #daa520); border:4px dashed #FFD700;}.theme-HariRaya #promo-running-banner{background-color:#006400;color:#FFD700}
-    .theme-Deepavali{background-color:#fff8e1}.theme-Deepavali .hero-section{background:linear-gradient(135deg, #ff6b6b, #feca57); border:4px dashed #ff9f43;}.theme-Deepavali #promo-running-banner{background-color:#e74c3c;color:#fff}
-    .theme-Christmas{background-color:#f8f9fa}.theme-Christmas .hero-section{background:linear-gradient(135deg, #d32f2f, #388e3c); border:4px dashed #ffffff;}.theme-Christmas #promo-running-banner{background-color:#c62828;color:#fff}
-    .theme-CNY{background-color:#fffbf0}.theme-CNY .hero-section{background:linear-gradient(135deg, #c0392b, #f1c40f); border:4px dashed #f1c40f;}.theme-CNY #promo-running-banner{background-color:#c0392b;color:#f1c40f}
-    .theme-NationalDay .hero-section, .theme-MalaysiaDay .hero-section {background:linear-gradient(135deg, #000066, #cc0000); border:4px dashed #f1c40f;}
-    .theme-Thaipusam .hero-section {background:linear-gradient(135deg, #ff9933, #ffffff); border:4px dashed #3366cc;}
-    .theme-MooncakeFestival .hero-section {background:linear-gradient(135deg, #1a1a2e, #ff4e50); border:4px dashed #f9d423;}
     header{background-color:var(--light-text);padding:20px 0;text-align:center;border-bottom:1px solid #e0e0e0;position:relative}.header-content{display:flex;align-items:center;justify-content:center;gap:20px}.header-logo{width:80px;height:80px}.header-content h1{margin:0}.header-content h1 span{display:block}#promo-running-banner{color:var(--light-text);padding:10px 0;text-align:center;font-weight:700;font-size:1.1rem;position:fixed;top:0;left:0;width:100%;box-shadow:0 2px 5px rgba(0,0,0,.1);z-index:101;overflow:hidden;white-space:nowrap;display:none}#promo-running-banner .marquee-content{display:inline-block;padding-left:100%;animation:marquee 20s linear infinite}nav{background-color:var(--primary-color);position:sticky;top:45px;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.1)}nav ul{display:flex;list-style:none;padding:10px 0;margin:0;justify-content:center;flex-wrap:wrap}nav a{color:var(--light-text);text-decoration:none;font-weight:600;padding:10px 20px;display:inline-block;position:relative;transition:color .3s;cursor:pointer}nav a::after{content:'';position:absolute;bottom:5px;left:50%;transform:translateX(-50%);width:0;height:2px;background-color:var(--secondary-color);transition:width .3s}nav a:hover{color:#f1c40f}nav a:hover::after{width:60%}
     nav a.nav-disabled{color:#a9a9a9;pointer-events:none;cursor:not-allowed}nav a.nav-disabled:hover{color:#a9a9a9}nav a.nav-disabled::after{width:0!important}
     .tab-content{display:none;padding:20px 0}.tab-content.active{display:block;animation:fadeIn .5s}.hero-section h2{color:var(--light-text)}.ai-suggestion-box,.search-container{margin-bottom:30px;position:relative}
@@ -47,111 +35,172 @@
   <!-- ======================= ADVANCED FESTIVAL DECORATIONS CSS (FIXED) ======================= -->
   <!-- ======================================================================================= -->
   <style id="festival-animations-style">
-    #festival-animations-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: -1; }
-    .festival-element { position: absolute; display: none; background-size: contain; background-repeat: no-repeat; will-change: transform, opacity; }
-    .decorative-border { position: fixed; left: 0; width: 100%; height: 150px; background-size: contain; z-index: -1; display: none; }
-    .top-border { top: 0; background-repeat: repeat-x; }
-    .bottom-border { bottom: 0; background-repeat: repeat-x; }
+    :root {
+      --festive-z: 9999;
+      --speed-slow: 16s;
+      --speed-med: 9s;
+      --speed-fast: 3.5s;
+      --twinkle: 1.8s;
+    }
 
-    /* --- KEYFRAMES --- */
-    @keyframes fall { 0% { transform: translateY(-10vh) rotate(-15deg); opacity: 0; } 10% { opacity: 1; } 100% { transform: translateY(105vh) rotate(15deg); opacity: 0; } }
-    @keyframes sway { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg); } }
-    @keyframes glow { 0%, 100% { filter: drop-shadow(0 0 5px gold) brightness(1.2); } 50% { filter: drop-shadow(0 0 15px gold) brightness(1.8); } }
-    @keyframes twinkle { 0% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1); } 100% { opacity: 0.3; transform: scale(0.8); } }
-    @keyframes firework-burst { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
-    @keyframes dragon-dance { 0% { left: -30%; transform: translateY(0); } 40% { transform: translateY(-30px); } 70% { transform: translateY(10px); } 100% { left: 110%; transform: translateY(0); } }
-    @keyframes shoot-star { 0% { transform: translateX(300px) translateY(-300px) scale(0.5); opacity: 0; } 5% { opacity: 1; } 15% { transform: translateX(-300px) translateY(300px) scale(0.5); opacity: 0; } 100% { opacity: 0; } }
-    @keyframes peacock-sway { 0%, 100% { transform: translateY(0) rotate(-15deg); } 50% { transform: translateY(-20px) rotate(15deg); } }
+    /* ================= Theme Palettes ================= */
+    body[data-festival="cny"] { --c1:#c1121f;--c2:#ffd60a;--c3:#850000;--c4:#fff5cc; background:linear-gradient(to bottom,#ffefba,#fff); }
+    body[data-festival="national-day"] { --c1:#cc0000;--c2:#f7c800;--c3:#001b6b;--c4:#fff; background:linear-gradient(to bottom,#001b6b,#cc0000); }
+    body[data-festival="malaysia-day"] { --c1:#002b5c;--c2:#ffcc00;--c3:#cc0000;--c4:#fff; background:linear-gradient(to right,#002b5c,#cc0000); }
+    body[data-festival="mid-autumn"] { --c1:#1d3557;--c2:#f1c40f;--c3:#8ecae6;--c4:#e9f5ff; background:radial-gradient(circle at top,#1d3557,#000); }
+    body[data-festival="thaipusam"] { --c1:#6a0dad;--c2:#ff9f1c;--c3:#ffd166;--c4:#fff2e6; background:radial-gradient(circle at center,#ffecd1,#6a0dad); }
+    body[data-festival="new-year"] { --c1:#111;--c2:#f5f5f5;--c3:#2a9d8f;--c4:#e9c46a; background:radial-gradient(circle at center,#000,#2a2a2a); }
+    body[data-festival="hari-raya"] { --c1:#016a3a;--c2:#ffd700;--c3:#004d26;--c4:#fffbe6; background:linear-gradient(to bottom,#006b3c,#00331d); }
+    body[data-festival="deepavali"] { --c1:#a020f0;--c2:#ff9933;--c3:#ffd700;--c4:#fff8e1; background:radial-gradient(circle,#ffcc80,#4a148c); }
+    body[data-festival="christmas"] { --c1:#006400;--c2:#ff0000;--c3:#fff;--c4:#ffd700; background:linear-gradient(to bottom,#004d00,#001a00); }
+    body[data-festival="grand-opening"] { --c1:#ff0000;--c2:#ffd700;--c3:#000;--c4:#fff; background:linear-gradient(135deg,#ff0000,#ffd700); }
 
-    /* --- Grand Opening --- */
-    .theme-GrandOpening .confetti, .theme-GrandOpening .popper { display: block; }
-    .confetti { width: 12px; height: 18px; animation: fall linear infinite; }
-    .confetti-1 { background-color: #ffd700; left: 10%; animation-duration: 4s; animation-delay: 0.5s; }
-    .confetti-2 { background-color: #ff6347; left: 25%; animation-duration: 5s; animation-delay: 1s; }
-    .confetti-3 { background-color: #3498db; left: 40%; animation-duration: 3s; animation-delay: 2s; }
-    .confetti-4 { background-color: #2ecc71; left: 60%; animation-duration: 6s; animation-delay: 0.2s; }
-    .confetti-5 { background-color: #ffffff; left: 75%; animation-duration: 4.5s; animation-delay: 3s; }
-    .confetti-6 { background-color: #f1c40f; left: 90%; animation-duration: 5.5s; animation-delay: 1.5s; }
-    .popper { width: 150px; height: 150px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M20 100 L50 70 L80 100 Z" fill="%23e74c3c"/><path d="M50 70 L20 0 L80 0 Z" fill="%23f1c40f"/><circle cx="30" cy="20" r="5" fill="white"/><circle cx="50" cy="30" r="5" fill="white"/><circle cx="70" cy="20" r="5" fill="white"/></svg>'); animation: firework-burst 2s ease-out infinite; }
-    .popper-1 { bottom: -50px; left: 5%; animation-delay: 1s; }
-    .popper-2 { bottom: -50px; right: 5%; animation-delay: 2.5s; }
+    /* ================= Base ================= */
+    .festive-layer { position:fixed; inset:0; pointer-events:none; z-index:var(--festive-z); overflow: hidden; }
+    .decoration { display:none; position: absolute; }
+    body[data-festival="cny"] .decoration.cny {display:block;}
+    body[data-festival="national-day"] .decoration.national-day {display:block;}
+    body[data-festival="malaysia-day"] .decoration.malaysia-day {display:block;}
+    body[data-festival="mid-autumn"] .decoration.mid-autumn {display:block;}
+    body[data-festival="thaipusam"] .decoration.thaipusam {display:block;}
+    body[data-festival="new-year"] .decoration.new-year {display:block;}
+    body[data-festival="hari-raya"] .decoration.hari-raya {display:block;}
+    body[data-festival="deepavali"] .decoration.deepavali {display:block;}
+    body[data-festival="christmas"] .decoration.christmas {display:block;}
+    body[data-festival="grand-opening"] .decoration.grand-opening {display:block;}
 
-    /* --- Hari Raya --- */
-    .theme-HariRaya body { background-image: linear-gradient(to top, #001a00, #004d00); color: white; }
-    .theme-HariRaya .decorative-border, .theme-HariRaya .star, .theme-HariRaya .mosque { display: block; }
-    .theme-HariRaya .bottom-border { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><path d="M0 20 Q 25 0, 50 20 T 100 20" fill="rgba(255, 215, 0, 0.2)"/></svg>'); height: 100px; background-size: auto 100px; opacity: 0.5; }
-    .mosque { width: 100%; height: 250px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200"><path d="M0 200 L800 200 L800 150 C 750 150, 750 100, 700 100 C 650 100, 650 150, 600 150 L600 100 L550 100 Q 525 50, 500 100 L450 100 L450 80 Q 425 0, 400 80 L350 80 L350 100 Q 325 50, 300 100 L250 100 L250 150 C 200 150, 200 100, 150 100 C 100 100, 100 150, 50 150 L0 150 Z" fill="rgba(0, 50, 0, 0.7)"/></svg>'); background-size: cover; background-position: center bottom; bottom: 0; left:0; }
-    .star { background-color: white; border-radius: 50%; animation: twinkle infinite; box-shadow: 0 0 10px white; }
-    .star-1 { width: 2px; height: 2px; top: 10%; left: 15%; animation-duration: 3s; } .star-2 { width: 3px; height: 3px; top: 20%; left: 80%; animation-duration: 2s; } .star-3 { width: 2px; height: 2px; top: 50%; left: 50%; animation-duration: 4s; } .star-4 { width: 3px; height: 3px; top: 70%; left: 25%; animation-duration: 2.5s; } .star-5 { width: 2px; height: 2px; top: 30%; left: 95%; animation-duration: 3.5s; }
+    /* ================= Animations ================= */
+    @keyframes sway{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
+    @keyframes floatUp{0%{transform:translateY(0) scale(1);}100%{transform:translateY(-120vh) scale(1.2); opacity: 0;}}
+    @keyframes fallDown{0%{transform:translateY(-20vh) rotate(0deg);}100%{transform:translateY(120vh) rotate(360deg);}}
+    @keyframes flicker{0%,100%{opacity:.9;}50%{opacity:.6;}}
+    @keyframes burst{0%{transform:scale(.2);opacity:1;}100%{transform:scale(1.2);opacity:0;}}
+    @keyframes twinkle{50%{opacity:.3;}}
 
-    /* --- Deepavali --- */
-    .theme-Deepavali body { background-image: linear-gradient(to top, #4a1833, #8c2f6b); }
-    .theme-Deepavali .decorative-border, .theme-Deepavali .peacock-feather, .theme-Deepavali .sparkle { display: block; }
-    .theme-Deepavali .top-border { height: 80px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50"><g fill="%23f39c12"><circle cx="10" cy="10" r="8"/><path d="M10 18 V 40"/><circle cx="10" cy="40" r="5" fill="%23e74c3c"/></g><g fill="%23f39c12" transform="translate(40,0)"><circle cx="10" cy="10" r="8"/><path d="M10 18 V 40"/><circle cx="10" cy="40" r="5" fill="%23e74c3c"/></g><g fill="%23f39c12" transform="translate(80,0)"><circle cx="10" cy="10" r="8"/><path d="M10 18 V 40"/><circle cx="10" cy="40" r="5" fill="%23e74c3c"/></g></svg>'); background-size: auto 80px; }
-    .peacock-feather { width: 100px; height: 100px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 100 C 20 70, 20 30, 50 0 C 80 30, 80 70, 50 100 Z" fill="%233498db"/><circle cx="50" cy="50" r="15" fill="%2327ae60"/><circle cx="50" cy="50" r="5" fill="%238e44ad"/></svg>'); animation: peacock-sway 10s ease-in-out infinite; }
-    .peacock-1 { top: 15%; left: 5%; animation-duration: 12s; } .peacock-2 { top: 40%; right: -2%; animation-duration: 15s; animation-delay: 2s; }
-    .sparkle { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 0 L60 40 L100 50 L60 60 L50 100 L40 60 L0 50 L40 40 Z" fill="gold"/></svg>'); animation: twinkle 2s infinite; }
-    .sparkle-1 { width: 20px; height: 20px; top: 25%; left: 40%; } .sparkle-2 { width: 30px; height: 30px; top: 60%; left: 80%; animation-delay: 1s; } .sparkle-3 { width: 25px; height: 25px; top: 80%; left: 10%; animation-delay: 0.5s; }
+    /* ================= Individual Decorations ================= */
+    .lantern{top:10vh;left:10vw;width:60px;height:80px;background:radial-gradient(circle,var(--c2),var(--c1) 70%);border-radius:50%;animation:sway 3s infinite ease-in-out;}
+    .firecracker{left:20vw;top:-10vh;width:8px;height:50px;background:var(--c1);animation:fallDown 5s linear infinite;}
+    .gold-ingot{bottom:5vh;left:30vw;width:60px;height:30px;background:gold;border-radius:50% 50% 30% 30%;box-shadow:0 0 10px gold;}
+    .dragon{top:40vh;left:-350px;width:300px;height:60px;background:linear-gradient(90deg,var(--c1),var(--c2));border-radius:30px;animation:sway 4s infinite, fallDown 20s linear infinite reverse;}
+    .confetti-cny{inset:0;background-image:radial-gradient(var(--c1) 2px,transparent 2px),radial-gradient(var(--c2) 2px,transparent 2px);background-size:40px 40px;animation:twinkle 2s infinite;}
 
-    /* --- Christmas --- */
-    .theme-Christmas body { background-image: linear-gradient(to top, #001a33, #003366); }
-    .theme-Christmas .lights, .theme-Christmas .shooting-star, .theme-Christmas .snowflake { display: block; }
-    .lights { width: 100%; height: 50px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50"><path d="M0 20 C 25 40, 75 0, 100 20" stroke="gray" fill="none"/><circle cx="25" cy="30" r="5" fill="red" class="light-1"/><circle cx="50" cy="10" r="5" fill="green" class="light-2"/><circle cx="75" cy="25" r="5" fill="blue" class="light-3"/><style>.light-1{animation:light-blink 3s infinite .5s}.light-2{animation:light-blink 3s infinite 1s}.light-3{animation:light-blink 3s infinite 1.5s}@keyframes light-blink{50%{opacity:0.2}}</style></svg>'); top: 0; left: 0; background-size: 150px 50px; background-repeat: repeat-x; }
-    .shooting-star { width: 100px; height: 2px; background: linear-gradient(to left, white, transparent); border-radius: 50%; top: 20%; left: -300px; animation: shoot-star 10s linear infinite; animation-delay: 3s; filter: drop-shadow(0 0 6px white); }
-    .snowflake { animation-name: fall; background-image: url('https://svgshare.com/i/18ar.svg'); opacity: 0.7; }
-    .snowflake-1 { width: 30px; height: 30px; left: 10%; animation-duration: 12s; } .snowflake-2 { width: 40px; height: 40px; left: 30%; animation-duration: 8s; animation-delay: 3s; } .snowflake-3 { width: 25px; height: 25px; left: 50%; animation-duration: 15s; animation-delay: 1s; } .snowflake-4 { width: 35px; height: 35px; left: 70%; animation-duration: 9s; animation-delay: 5s; } .snowflake-5 { width: 30px; height: 30px; left: 90%; animation-duration: 11s; animation-delay: 2s; }
+    .flag{top:20vh;left:40vw;width:100px;height:60px;background:linear-gradient(var(--c1) 50%,var(--c4) 50%);border:2px solid var(--c3);animation:sway 2s infinite ease-in-out;}
+    .star{top:10vh;right:10vw;width:20px;height:20px;background:var(--c2);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+    .fireworks{inset:0;background:radial-gradient(circle, var(--c2) 5%, transparent 10%);border-radius:50%;animation:burst 2s infinite ease-out;}
+    .bunting{top:0;left:0;right:0;height:50px;background:repeating-linear-gradient(90deg,var(--c1),var(--c1) 20px,var(--c4) 20px,var(--c4) 40px,var(--c3) 40px,var(--c3) 60px);}
 
-    /* --- CNY --- */
-    .theme-CNY body { background-image: linear-gradient(to top, #5c0000, #a30000); }
-    .theme-CNY .cherry-blossom, .theme-CNY .dragon, .theme-CNY .lantern { display: block; }
-    .cherry-blossom { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%23ffb6c1"/><circle cx="50" cy="50" r="10" fill="white"/></svg>'); animation: fall 15s linear infinite; }
-    .cb-1 { width: 15px; height: 15px; left: 5%; animation-duration: 10s; } .cb-2 { width: 20px; height: 20px; left: 25%; animation-duration: 12s; animation-delay: 3s; } .cb-3 { width: 15px; height: 15px; left: 45%; animation-duration: 8s; animation-delay: 1s; } .cb-4 { width: 20px; height: 20px; left: 65%; animation-duration: 14s; animation-delay: 5s; } .cb-5 { width: 15px; height: 15px; left: 85%; animation-duration: 9s; animation-delay: 2s; }
-    .dragon { width: 300px; height: 150px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><path d="M50 150 C 100 50, 200 50, 250 150 S 350 250, 400 150" fill="none" stroke="%23f1c40f" stroke-width="10"/><path d="M50 150 C 40 130, 20 120, 10 150 C 20 180, 40 170, 50 150" fill="%23c0392b"/></svg>'); bottom: 20px; animation: dragon-dance 20s linear infinite; opacity: 0.8; }
-    .lantern { background-image: url('https://svgshare.com/i/18bM.svg'); animation: sway 8s ease-in-out infinite; filter: drop-shadow(0 0 15px #c0392b); }
-    .lantern-1 { width: 120px; height: 120px; top: 2%; left: 10%; } .lantern-2 { width: 100px; height: 100px; top: 5%; right: 5%; animation-delay: 1.5s; }
+    .malaysia-map{top:30vh;left:30vw;width:200px;height:100px;background:rgba(255,255,255,.2); clip-path: polygon(0% 20%, 60% 20%, 60% 0%, 100% 0%, 100% 80%, 40% 80%, 40% 100%, 0% 100%);}
+    .ribbon{top:10vh;left:0;right:0;height:30px;background:linear-gradient(90deg,var(--c1),var(--c4),var(--c3),var(--c2));}
 
-    /* --- National/Malaysia Day --- */
-    .theme-NationalDay body, .theme-MalaysiaDay body { background: linear-gradient(to top, #000033, #000066, #cc0000, #ffcc00); }
-    .theme-NationalDay .landmark, .theme-MalaysiaDay .landmark, .theme-NationalDay .firework-my, .theme-MalaysiaDay .firework-my { display: block; }
-    .landmark { width: 100%; height: 300px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300"><path d="M100 300 L120 100 L140 300 Z M200 300 L220 50 L240 300 Z M 220 50 Q 280 0 340 50 L360 300 L320 300 Z M 500 300 L500 100 L 550 50 L 600 100 L 600 300 Z" fill="rgba(0,0,0,0.4)"/></svg>'); bottom: 0; left: 0; background-size: cover; background-position: center bottom; }
-    .firework-my { background-image: url('https://svgshare.com/i/18c7.svg'); animation-name: firework-burst; }
-    .firework-my-1 { width: 250px; height: 250px; top: 10%; left: 15%; animation-duration: 3s; animation-delay: 1s; }
-    .firework-my-2 { width: 300px; height: 300px; top: 20%; right: 10%; animation-duration: 3s; animation-delay: 2.5s; }
-    .firework-my-3 { width: 200px; height: 200px; top: 40%; left: 40%; animation-duration: 3s; animation-delay: 4s; }
+    .moon{top:10vh;right:10vw;width:100px;height:100px;background:radial-gradient(circle,var(--c4),var(--c2));border-radius:50%;box-shadow:0 0 30px var(--c2);}
+    .rabbit{bottom:10vh;left:10vw;width:60px;height:40px;background:var(--c4);border-radius:50%;}
+    .sky-lantern{bottom:-10vh;left:30vw;width:30px;height:40px;background:radial-gradient(circle, var(--c2), transparent 70%);border-radius:5px 5px 20px 20px;animation:floatUp 15s linear infinite;}
+    .starry-sky{inset:0;background:radial-gradient(var(--c4) 1px,transparent 1px);background-size:50px 50px;animation:twinkle 2s infinite;}
+
+    .kolam{bottom:5vh;left:50%;transform:translateX(-50%);width:200px;height:200px;background:conic-gradient(var(--c1) 0 10%,var(--c2) 10% 20%,#0f0 20% 30%,#00f 30% 40%,#f0f 40% 100%);border-radius:50%;}
+    .diya{bottom:5vh;left:20vw;width:40px;height:20px;background:var(--c2);border-radius:50% 50% 0 0;}
+    .diya::after{content:'';position:absolute;top:-20px;left:50%;transform:translateX(-50%);width:10px;height:20px;background:var(--c3);border-radius:50%;animation:flicker 1s infinite;}
+    .peacock{top:30vh;right:10vw;width:100px;height:100px;background:radial-gradient(circle,var(--c3),var(--c1));border-radius:50%;}
+
+    .fireworks-ny{inset:0;background:radial-gradient(circle, var(--c4) 5%, transparent 10%);border-radius:50%;animation:burst 2s infinite ease-out;}
+    .balloon{bottom:-20vh;left:20vw;width:40px;height:60px;background:radial-gradient(circle,var(--c3),var(--c4));border-radius:50%;animation:floatUp 12s linear infinite;}
+    .champagne{bottom:5vh;right:10vw;width:20px;height:60px;background:var(--c4);border-radius:5px;}
+    .clock{top:10vh;left:50%;transform:translateX(-50%);width:100px;height:100px;border:5px solid var(--c2);border-radius:50%;}
+    .confetti-ny{inset:0;background-image:radial-gradient(var(--c3) 2px,transparent 2px),radial-gradient(var(--c4) 2px,transparent 2px),radial-gradient(var(--c2) 2px,transparent 2px);background-size:30px 30px;animation:twinkle 2s infinite;}
+
+    .ketupat{top:20vh;left:20vw;width:40px;height:40px;background:linear-gradient(45deg,var(--c1) 50%,lightgreen 50%);transform:rotate(45deg);animation:sway 3s infinite;}
+    .oil-lamp{bottom:10vh;left:30vw;width:20px;height:40px;background:var(--c2);border-radius:5px;}
+    .oil-lamp::after{content:'';position:absolute;top:-20px;left:50%;transform:translateX(-50%);width:10px;height:20px;background:var(--c2);border-radius:50%;animation:flicker 1s infinite;}
+    .mosque{top:10vh;right:20vw;width:80px;height:80px;background:radial-gradient(circle,var(--c4),var(--c3));border-radius:50%;}
+    .moon-star{top:5vh;right:5vw;width:40px;height:40px;background:var(--c2);clip-path:polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);}
+
+    .torans{top:0;left:0;right:0;height:20px;background:repeating-linear-gradient(90deg,var(--c2),var(--c2) 10px,var(--c1) 10px,var(--c1) 20px);}
+    .firecrackers{left:50%;top:-10vh;width:10px;height:40px;background:var(--c2);animation:fallDown 5s linear infinite;}
+    .diya-big{bottom:5vh;left:40vw;width:60px;height:30px;background:var(--c2);border-radius:50% 50% 0 0;}
+    .diya-big::after{content:'';position:absolute;top:-20px;left:50%;transform:translateX(-50%);width:15px;height:30px;background:var(--c3);border-radius:50%;animation:flicker 1s infinite;}
+    .pattern{bottom:0;left:0;right:0;height:100px;background:conic-gradient(var(--c1),var(--c2),var(--c3));}
+
+    .tree{bottom:5vh;left:20vw;width:0;height:0;border-left:40px solid transparent;border-right:40px solid transparent;border-bottom:80px solid var(--c1);}
+    .snowflake{top:-10vh;left:10vw;width:20px;height:20px;background:var(--c3);border-radius:50%;animation:fallDown 10s linear infinite;}
+    .gift{bottom:5vh;right:20vw;width:40px;height:40px;background:var(--c2);border:5px solid var(--c4);}
+    .candycane{top:20vh;right:10vw;width:20px;height:60px;background:repeating-linear-gradient(45deg,var(--c2),var(--c2) 10px,var(--c3) 10px,var(--c3) 20px);border-radius:10px;}
+    .star-top{top:0;left:50%;transform:translateX(-50%);width:20px;height:20px;background:var(--c4);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+
+    .ribbon-go{position:absolute;top:30vh;left:50%;transform:translateX(-50%);width:300px;height:30px;background:linear-gradient(to right,var(--c1),var(--c2));animation:sway 3s infinite;}
+    .balloon-go{position:absolute;bottom:-10vh;left:10vw;width:30px;height:50px;background:radial-gradient(circle,var(--c1),var(--c2));border-radius:50%;animation:floatUp 14s linear infinite;}
+    .sparkles{position:absolute;inset:0;background:radial-gradient(var(--c2) 2px,transparent 2px);background-size:40px 40px;animation:twinkle 2s infinite;}
+    .scissors{position:absolute;bottom:10vh;left:50%;transform:translateX(-50%);width:60px;height:20px;background:silver;border-radius:5px;}
+    .banner{position:absolute;top:0;left:0;right:0;height:60px;background:linear-gradient(90deg,var(--c1),var(--c2),var(--c1));}
   </style>
+
 </head>
-<body class="default-theme">
+<body data-festival=""> <!-- The data-festival attribute will be set by JavaScript -->
 
-<!-- This is the container for the festive animations -->
-<div id="festival-animations-container">
-    <!-- Decorative Borders -->
-    <div class="decorative-border top-border"></div>
-    <div class="decorative-border bottom-border"></div>
+<!-- ======================================================================================= -->
+<!-- ======================= NEW HTML FOR FESTIVAL DECORATIONS ======================= -->
+<!-- ======================================================================================= -->
+<div class="festive-layer">
+    <!-- Grand Opening Decorations -->
+    <div class="decoration grand-opening ribbon-go"></div>
+    <div class="decoration grand-opening balloon-go"></div>
+    <div class="decoration grand-opening sparkles"></div>
+    <div class="decoration grand-opening scissors"></div>
+    <div class="decoration grand-opening banner"></div>
 
-    <!-- Grand Opening -->
-    <div class="festival-element confetti confetti-1"></div><div class="festival-element confetti confetti-2"></div><div class="festival-element confetti confetti-3"></div><div class="festival-element confetti confetti-4"></div><div class="festival-element confetti confetti-5"></div><div class="festival-element confetti confetti-6"></div>
-    <div class="festival-element popper popper-1"></div><div class="festival-element popper popper-2"></div>
-    
-    <!-- Hari Raya -->
-    <div class="festival-element star star-1"></div><div class="festival-element star star-2"></div><div class="festival-element star star-3"></div><div class="festival-element star star-4"></div><div class="festival-element star star-5"></div>
-    <div class="festival-element mosque"></div>
+    <!-- Hari Raya Decorations -->
+    <div class="decoration hari-raya ketupat"></div>
+    <div class="decoration hari-raya oil-lamp"></div>
+    <div class="decoration hari-raya mosque"></div>
+    <div class="decoration hari-raya moon-star"></div>
 
-    <!-- Deepavali -->
-    <div class="festival-element peacock-feather peacock-1"></div><div class="festival-element peacock-feather peacock-2"></div>
-    <div class="festival-element sparkle sparkle-1"></div><div class="festival-element sparkle sparkle-2"></div><div class="festival-element sparkle sparkle-3"></div>
+    <!-- Deepavali Decorations -->
+    <div class="decoration deepavali torans"></div>
+    <div class="decoration deepavali firecrackers"></div>
+    <div class="decoration deepavali diya-big"></div>
+    <div class="decoration deepavali pattern"></div>
+
+    <!-- Christmas Decorations -->
+    <div class="decoration christmas tree"></div>
+    <div class="decoration christmas snowflake"></div>
+    <div class="decoration christmas gift"></div>
+    <div class="decoration christmas candycane"></div>
+    <div class="decoration christmas star-top"></div>
+
+    <!-- CNY Decorations -->
+    <div class="decoration cny lantern"></div>
+    <div class="decoration cny firecracker"></div>
+    <div class="decoration cny gold-ingot"></div>
+    <div class="decoration cny dragon"></div>
+    <div class="decoration cny confetti-cny"></div>
+
+    <!-- National Day Decorations -->
+    <div class="decoration national-day flag"></div>
+    <div class="decoration national-day star"></div>
+    <div class="decoration national-day fireworks"></div>
+    <div class="decoration national-day bunting"></div>
+
+    <!-- Malaysia Day Decorations -->
+    <div class="decoration malaysia-day malaysia-map"></div>
+    <div class="decoration malaysia-day ribbon"></div>
+    <div class="decoration malaysia-day fireworks"></div>
+
+    <!-- Mid-Autumn Decorations -->
+    <div class="decoration mid-autumn moon"></div>
+    <div class="decoration mid-autumn rabbit"></div>
+    <div class="decoration mid-autumn sky-lantern"></div>
+    <div class="decoration mid-autumn starry-sky"></div>
     
-    <!-- Christmas -->
-    <div class="festival-element lights"></div><div class="festival-element shooting-star"></div>
-    <div class="festival-element snowflake snowflake-1"></div><div class="festival-element snowflake snowflake-2"></div><div class="festival-element snowflake snowflake-3"></div><div class="festival-element snowflake snowflake-4"></div><div class="festival-element snowflake snowflake-5"></div>
+    <!-- Thaipusam Decorations -->
+    <div class="decoration thaipusam kolam"></div>
+    <div class="decoration thaipusam diya"></div>
+    <div class="decoration thaipusam peacock"></div>
     
-    <!-- CNY -->
-    <div class="festival-element lantern lantern-1"></div><div class="festival-element lantern lantern-2"></div>
-    <div class="festival-element cherry-blossom cb-1"></div><div class="festival-element cherry-blossom cb-2"></div><div class="festival-element cherry-blossom cb-3"></div><div class="festival-element cherry-blossom cb-4"></div><div class="festival-element cherry-blossom cb-5"></div>
-    <div class="festival-element dragon"></div>
-    
-    <!-- National/Malaysia Day -->
-    <div class="festival-element landmark"></div>
-    <div class="festival-element firework-my firework-my-1"></div><div class="festival-element firework-my firework-my-2"></div><div class="festival-element firework-my firework-my-3"></div>
+    <!-- New Year Decorations -->
+    <div class="decoration new-year fireworks-ny"></div>
+    <div class="decoration new-year balloon"></div>
+    <div class="decoration new-year champagne"></div>
+    <div class="decoration new-year clock"></div>
+    <div class="decoration new-year confetti-ny"></div>
 </div>
 
 <div id="store-wrapper">
@@ -368,7 +417,6 @@
   </div>
 
 <script>
-    // This is the full, working JavaScript. No changes are needed here.
     const googleScriptURL = 'https://script.google.com/macros/s/AKfycbzbjr5QZCpdf5mzT4nTM6CMl5P5zgyrggDGpiKnXNipx9iCVC_Y3g_aNPrXeuLFKmP1gw/exec';
     let products = []; let cart = []; let activeFestival = null; let activePromotions = [];
     let shippingRules = {}; let availableDiscountCodes = {}; let appliedDiscount = null;
@@ -390,26 +438,36 @@
                 productListContainer.innerHTML = `<p style="text-align: center; color: red; font-weight: bold; width: 100%; padding: 40px 0;"><i class="fa-solid fa-triangle-exclamation"></i> Error loading store.<br>The product catalog could not be retrieved. Please try again later.</p>`;
             }
         }
-        const version = "(v11.3)";
+        const version = "(v12.0)";
         const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
         document.getElementById('update-timestamp').textContent = `${date} ${version}`;
         if (sessionStorage.getItem('pendingOrder')) { toggleCart(); } else { showTab('products'); }
     }
     function initializeUI() {
-        const body = document.body; body.className = 'default-theme';
-        const festivalContainer = document.getElementById('festival-animations-container');
+        const body = document.body;
+        body.removeAttribute("data-festival");
         if (activeFestival && activeFestival.theme) {
-            body.classList.add(`theme-${activeFestival.theme}`);
+            // This is the new logic to match the new CSS
+            const themeMap = {
+                "CNY": "cny", "NationalDay": "national-day", "MalaysiaDay": "malaysia-day",
+                "MooncakeFestival": "mid-autumn", "Thaipusam": "thaipusam", "HariRaya": "hari-raya",
+                "Deepavali": "deepavali", "Christmas": "christmas", "GrandOpening": "grand-opening"
+            };
+            const festiveAttr = themeMap[activeFestival.theme];
+            if(festiveAttr) {
+                body.setAttribute("data-festival", festiveAttr);
+            }
             document.getElementById('hero-title').innerHTML = `<i class="fa-solid fa-gift"></i> ${activeFestival.name}`;
             document.getElementById('hero-subtitle').textContent = "Enjoy special festive offers!";
             const banner = document.getElementById('promo-running-banner');
+            banner.style.backgroundColor = getComputedStyle(body).getPropertyValue('--c1').trim();
+            banner.style.color = getComputedStyle(body).getPropertyValue('--c4').trim();
             document.getElementById('promo-banner-text').textContent = `✨ ${activeFestival.name}! See special offers below! ✨`;
-            banner.style.display = 'block'; startCountdown(activeFestival.endDate);
-            if(festivalContainer) festivalContainer.style.display = 'block';
+            banner.style.display = 'block'; 
+            startCountdown(activeFestival.endDate);
         } else {
             document.getElementById('hero-title').innerHTML = `<i class="fa-solid fa-store"></i> Welcome to Our Store`;
             document.getElementById('hero-subtitle').textContent = "Enjoy high-quality wellness products for a healthier lifestyle.";
-            if(festivalContainer) festivalContainer.style.display = 'none';
         }
         renderProducts();
     }
