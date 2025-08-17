@@ -1,162 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Forever Living by Muhd Arvind Isa</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* All your CSS styles go here. They are correct and do not need to be changed. */
-        :root{--primary-color:#1a5276;--secondary-color:#f39c12;--accent-color:#27ae60;--light-gray:#f4f6f8;--dark-text:#333;--light-text:#fff;--border-radius:12px;--shadow:0 4px 15px rgba(0,0,0,.08);--font-family:'Poppins',sans-serif}
-        /* ... (The rest of your extensive CSS) ... */
-    </style>
+  <meta charset="UTF-8">
+  <title>Forever Living Shop</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .product { border: 1px solid #ddd; padding: 10px; margin: 10px; border-radius: 8px; }
+    .product h2 { margin: 0 0 10px; }
+  </style>
 </head>
-<body class="default-theme">
+<body>
+  <h1>Forever Living Products</h1>
+  <div id="products">Loading...</div>
 
-    <!-- This is the container for the festive animations -->
-    <div id="festival-animations-container">
-        <!-- All your festival elements go here -->
-    </div>
+  <script>
+    async function loadProducts() {
+      const sheetUrl = "https://script.google.com/macros/s/AKfycbx1UumQLcRJso8yxzJede45MQbxaaimkuSIxD58J_wJamjZ2Id_Y9Ak4ukfcUuDeJgktA/exec"; // paste your deployed Apps Script URL here
+      try {
+        let res = await fetch(sheetUrl);
+        let data = await res.json();
 
-    <div id="store-wrapper">
-      <header>
-        <div class="container">
-            <div class="header-content">
-                <img src="FL.jpg" alt="Business Logo" class="header-logo" onerror="this.style.display='none'">
-                <h1>
-                  FOREVER LIVING by Muhd Arvind Isa
-                  <span style="font-size: 1rem; color: #555; display: block; font-weight: 400;">Quality Wellness Products</span>
-                </h1>
-            </div>
-        </div>
-      </header>
-      
-      <div id="promo-running-banner">
-          <div class="marquee-content" id="promo-banner-text"></div>
-      </div>
-    
-      <nav>
-        <div class="container">
-            <ul id="main-nav">
-              <li><a onclick="showTab('products')">Products</a></li>
-              <li><a onclick="showTab('business')">Business Opportunity</a></li>
-              <li><a onclick="showTab('about')">About Us</a></li>
-              <li><a class="nav-disabled">Rewards</a></li>
-              <li><a class="nav-disabled">My Forever Living</a></li>
-            </ul>
-        </div>
-      </nav>
-    
-      <main id="main-content" class="container">
-        <div id="products" class="tab-content active">
-          <section class="hero-section" id="hero-section">
-            <h2 id="hero-title"><i class="fa-solid fa-store"></i> Welcome to Our Store</h2>
-            <p id="hero-subtitle">Enjoy high-quality wellness products for a healthier lifestyle.</p>
-            <div id="countdown-timer" style="display:none;"></div>
-          </section>
-    
-          <div class="search-container">
-            <input type="text" id="product-search" onkeyup="filterProducts()" placeholder="Search for products by name...">
-            <i class="fa-solid fa-search search-icon"></i>
-          </div>
-    
-          <section class="ai-suggestion-box">
-            <h3><i class="fa-solid fa-robot"></i> AI Product Suggester</h3>
-            <p>Describe your health concern (e.g., "dry skin", "low energy") and our AI will suggest a product for you.</p>
-            <input type="text" id="symptom-input" placeholder="Enter your symptom or concern...">
-            <button id="suggest-btn" class="btn btn-primary" onclick="suggestProduct()">Get Suggestion</button>
-            <div id="suggestion-result"></div>
-          </section>
-    
-          <div id="product-list-container">
-              <p style="text-align: center; width: 100%; font-size: 1.2rem; padding: 40px 0;">
-                <i class="fa-solid fa-spinner fa-spin"></i> Loading Products...
-              </p>
-          </div>
-        </div>
-    
-        <div id="business" class="tab-content">
-          <!-- Your business content here -->
-        </div>
-    
-        <div id="about" class="tab-content">
-          <!-- Your about us content here -->
-        </div>
-    
-        <div id="rewards" class="tab-content">
-          <!-- Your rewards content here -->
-        </div>
-      </main>
-    
-      <footer class="footer">
-        <!-- Your footer content here -->
-      </footer>
-    </div>
-    
-    <div id="floating-cart" class="floating-cart-btn" onclick="toggleCart()">
-      <i class="fa-solid fa-cart-shopping"></i>
-      <span id="cart-count">0</span>
-    </div>
-    
-    <div id="cart-modal" class="modal">
-        <!-- Your entire modal content here -->
-    </div>
+        const container = document.getElementById("products");
+        container.innerHTML = "";
 
-    <script>
-        // =========================================================================
-        // ===             SECURE E-COMMERCE FRONTEND SCRIPT v1.2 (Final)        ===
-        // =========================================================================
+        if (data.error) {
+          container.innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
+          return;
+        }
 
-        // --- CONFIGURATION ---
-        const googleScriptURL = 'https://script.google.com/macros/s/AKfycbz0zdVQ_TbzuuFzS951c7qqnjAFW69HyEnqDeLgF7YTwDS-kkURg5-e9l9RZ8-JPvhmVw/exec'; 
-        
-        // --- GLOBAL STATE ---
-        let cart = [];
-        let allProducts = []; 
-        let activeFestival = null;
-        let activePromotions = [];
-        let shippingRules = {};
-        let availableDiscountCodes = {};
-        let appliedDiscount = null;
-
-        // --- INITIALIZATION ---
-        document.addEventListener('DOMContentLoaded', async function() {
-            document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-            
-            try {
-                const response = await fetch(googleScriptURL);
-                if (!response.ok) throw new Error(`Network response was not ok. Status: ${response.status}`);
-                const data = await response.json();
-                
-                if (data.status === 'success') {
-                    allProducts = data.products;
-                    activeFestival = data.activeFestival;
-                    activePromotions = data.activePromotions;
-                    shippingRules = data.shippingRules;
-                    availableDiscountCodes = data.discountCodes;
-                    initializeUI();
-                } else {
-                    throw new Error(data.message || 'Failed to fetch initial data from server.');
-                }
-            } catch (error) {
-                console.error("Error fetching dynamic data:", error);
-                document.getElementById('product-list-container').innerHTML = `<p style="text-align:center; color:red; font-weight: bold;">Could not load store data.<br>Please check your internet connection or contact support.<br><small>${error.message}</small></p>`;
-            }
-            
-            if (sessionStorage.getItem('pendingOrder')) {
-                toggleCart();
-            } else {
-                showTab('products');
-            }
+        data.forEach(p => {
+          const div = document.createElement("div");
+          div.className = "product";
+          div.innerHTML = `
+            <h2>${p.ProductName || "Unnamed"}</h2>
+            <p><strong>Category:</strong> ${p.Category || "-"}</p>
+            <p><strong>Price:</strong> RM ${p.RSP || "-"}</p>
+            <p><strong>Benefits:</strong> ${p.Benefits || "-"}</p>
+            <p><strong>Consumption:</strong> ${p.Consumption || "-"}</p>
+          `;
+          container.appendChild(div);
         });
+      } catch (err) {
+        document.getElementById("products").innerHTML = 
+          `<p style="color:red;">Failed to load products: ${err.message}</p>`;
+      }
+    }
 
-        // --- All other JavaScript functions go here ---
-        // (initializeUI, renderProducts, renderSingleProduct, addToCart, etc...)
-        // The full, correct script from the previous message should be used here.
-        // It has been omitted for brevity, but you should paste the full frontend script from my prior response.
-    </script>
+    loadProducts();
+  </script>
 </body>
 </html>
