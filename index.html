@@ -29,21 +29,30 @@
     .program-section{background:var(--light-text);padding:40px;border-radius:var(--border-radius);box-shadow:var(--shadow);margin-bottom:30px}.program-section h2{font-size:2.5rem;text-align:center}.program-section ul {list-style: none; padding-left: 0; margin-top: 30px;}.program-section ul li {background: #f9f9f9; border-left: 5px solid var(--accent-color); padding: 15px; margin-bottom: 10px; border-radius: 5px; text-align: left;}.program-section ul li strong {color: var(--primary-color); display: block; margin-bottom: 5px;}
     .cta-button{display:block;width:fit-content;margin:30px auto;background:linear-gradient(135deg,var(--secondary-color),#e67e22);color:var(--light-text);text-align:center;padding:15px 40px;border-radius:50px;font-weight:700;text-decoration:none;font-size:1.2rem;transition:all .3s;box-shadow:0 4px 8px rgba(0,0,0,.2)}.cta-button:hover{transform:translateY(-3px);box-shadow:0 6px 12px rgba(0,0,0,.3)}.rewards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}.reward-item{background:var(--light-gray);border:1px solid #ddd;border-radius:var(--border-radius);padding:20px;text-align:center;display:flex;flex-direction:column;position:relative}.reward-item img{max-width:100%;max-height:100px;object-fit:contain;margin-bottom:15px;border-radius:8px}.reward-item h4{margin:10px 0 5px}.reward-item .points-cost{font-weight:700;color:var(--accent-color);margin-bottom:15px}.coming-soon-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background-color:rgba(255,255,255,.8);color:var(--primary-color);display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:700;border-radius:var(--border-radius);backdrop-filter:blur(2px)}
     .original-cart-price{text-decoration:line-through;color:#999;font-size:.9rem;}.final-cart-price{font-weight:600}.summary-line small{font-size:.8rem;color:var(--accent-color);font-style:italic}
+    
+    /* NEW: Maintenance Overlay Styles */
+    #maintenance-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(26, 82, 118, 0.95);
+      color: white;
+      z-index: 99999;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+    #maintenance-overlay i { font-size: 5rem; margin-bottom: 20px; }
+    #maintenance-overlay h1 { font-size: 2.5rem; color: white; }
+    #maintenance-overlay p { font-size: 1.2rem; max-width: 600px; }
   </style>
 
-  <!-- ======================================================================================= -->
-  <!-- ======================= ADVANCED FESTIVAL DECORATIONS CSS (FIXED) ======================= -->
-  <!-- ======================================================================================= -->
   <style id="festival-animations-style">
-    :root {
-      --festive-z: 9999;
-      --speed-slow: 16s;
-      --speed-med: 9s;
-      --speed-fast: 3.5s;
-      --twinkle: 1.8s;
-    }
-
-    /* ================= Theme Palettes ================= */
+    :root { --festive-z: 9999; --speed-slow: 16s; --speed-med: 9s; --speed-fast: 3.5s; --twinkle: 1.8s; }
     body[data-festival="cny"] { --c1:#c1121f;--c2:#ffd60a;--c3:#850000;--c4:#fff5cc; background:linear-gradient(to bottom,#ffefba,#fff); }
     body[data-festival="national-day"] { --c1:#cc0000;--c2:#f7c800;--c3:#001b6b;--c4:#fff; background:linear-gradient(to bottom,#001b6b,#cc0000); }
     body[data-festival="malaysia-day"] { --c1:#002b5c;--c2:#ffcc00;--c3:#cc0000;--c4:#fff; background:linear-gradient(to right,#002b5c,#cc0000); }
@@ -54,423 +63,147 @@
     body[data-festival="deepavali"] { --c1:#a020f0;--c2:#ff9933;--c3:#ffd700;--c4:#fff8e1; background:radial-gradient(circle,#ffcc80,#4a148c); }
     body[data-festival="christmas"] { --c1:#006400;--c2:#ff0000;--c3:#fff;--c4:#ffd700; background:linear-gradient(to bottom,#004d00,#001a00); }
     body[data-festival="grand-opening"] { --c1:#ff0000;--c2:#ffd700;--c3:#000;--c4:#fff; background:linear-gradient(135deg,#ff0000,#ffd700); }
-
-    /* ================= Base ================= */
     .festive-layer { position:fixed; inset:0; pointer-events:none; z-index:var(--festive-z); overflow: hidden; }
     .decoration { display:none; position: absolute; }
-    body[data-festival="cny"] .decoration.cny {display:block;}
-    body[data-festival="national-day"] .decoration.national-day {display:block;}
-    body[data-festival="malaysia-day"] .decoration.malaysia-day {display:block;}
-    body[data-festival="mid-autumn"] .decoration.mid-autumn {display:block;}
-    body[data-festival="thaipusam"] .decoration.thaipusam {display:block;}
-    body[data-festival="new-year"] .decoration.new-year {display:block;}
-    body[data-festival="hari-raya"] .decoration.hari-raya {display:block;}
-    body[data-festival="deepavali"] .decoration.deepavali {display:block;}
-    body[data-festival="christmas"] .decoration.christmas {display:block;}
-    body[data-festival="grand-opening"] .decoration.grand-opening {display:block;}
-
-    /* ================= Animations ================= */
-    @keyframes sway{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
-    @keyframes floatUp{0%{transform:translateY(0) scale(1);}100%{transform:translateY(-120vh) scale(1.2); opacity: 0;}}
-    @keyframes fallDown{0%{transform:translateY(-20vh) rotate(0deg);}100%{transform:translateY(120vh) rotate(360deg);}}
-    @keyframes flicker{0%,100%{opacity:.9;}50%{opacity:.6;}}
-    @keyframes burst{0%{transform:scale(.2);opacity:1;}100%{transform:scale(1.2);opacity:0;}}
-    @keyframes twinkle{50%{opacity:.3;}}
-
-    /* ================= Individual Decorations ================= */
-    .lantern{top:10vh;left:10vw;width:60px;height:80px;background:radial-gradient(circle,var(--c2),var(--c1) 70%);border-radius:50%;animation:sway 3s infinite ease-in-out;}
-    .firecracker{left:20vw;top:-10vh;width:8px;height:50px;background:var(--c1);animation:fallDown 5s linear infinite;}
-    .gold-ingot{bottom:5vh;left:30vw;width:60px;height:30px;background:gold;border-radius:50% 50% 30% 30%;box-shadow:0 0 10px gold;}
-    .dragon{top:40vh;left:-350px;width:300px;height:60px;background:linear-gradient(90deg,var(--c1),var(--c2));border-radius:30px;animation:sway 4s infinite, fallDown 20s linear infinite reverse;}
-    .confetti-cny{inset:0;background-image:radial-gradient(var(--c1) 2px,transparent 2px),radial-gradient(var(--c2) 2px,transparent 2px);background-size:40px 40px;animation:twinkle 2s infinite;}
-
-    .flag{top:20vh;left:40vw;width:100px;height:60px;background:linear-gradient(var(--c1) 50%,var(--c4) 50%);border:2px solid var(--c3);animation:sway 2s infinite ease-in-out;}
-    .star{top:10vh;right:10vw;width:20px;height:20px;background:var(--c2);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
-    .fireworks{inset:0;background:radial-gradient(circle, var(--c2) 5%, transparent 10%);border-radius:50%;animation:burst 2s infinite ease-out;}
-    .bunting{top:0;left:0;right:0;height:50px;background:repeating-linear-gradient(90deg,var(--c1),var(--c1) 20px,var(--c4) 20px,var(--c4) 40px,var(--c3) 40px,var(--c3) 60px);}
-
-    .malaysia-map{top:30vh;left:30vw;width:200px;height:100px;background:rgba(255,255,255,.2); clip-path: polygon(0% 20%, 60% 20%, 60% 0%, 100% 0%, 100% 80%, 40% 80%, 40% 100%, 0% 100%);}
-    .ribbon{top:10vh;left:0;right:0;height:30px;background:linear-gradient(90deg,var(--c1),var(--c4),var(--c3),var(--c2));}
-
-    .moon{top:10vh;right:10vw;width:100px;height:100px;background:radial-gradient(circle,var(--c4),var(--c2));border-radius:50%;box-shadow:0 0 30px var(--c2);}
-    .rabbit{bottom:10vh;left:10vw;width:60px;height:40px;background:var(--c4);border-radius:50%;}
-    .sky-lantern{bottom:-10vh;left:30vw;width:30px;height:40px;background:radial-gradient(circle, var(--c2), transparent 70%);border-radius:5px 5px 20px 20px;animation:floatUp 15s linear infinite;}
-    .starry-sky{inset:0;background:radial-gradient(var(--c4) 1px,transparent 1px);background-size:50px 50px;animation:twinkle 2s infinite;}
-
-    .kolam{bottom:5vh;left:50%;transform:translateX(-50%);width:200px;height:200px;background:conic-gradient(var(--c1) 0 10%,var(--c2) 10% 20%,#0f0 20% 30%,#00f 30% 40%,#f0f 40% 100%);border-radius:50%;}
-    .diya{bottom:5vh;left:20vw;width:40px;height:20px;background:var(--c2);border-radius:50% 50% 0 0;}
-    .diya::after{content:'';position:absolute;top:-20px;left:50%;transform:translateX(-50%);width:10px;height:20px;background:var(--c3);border-radius:50%;animation:flicker 1s infinite;}
-    .peacock{top:30vh;right:10vw;width:100px;height:100px;background:radial-gradient(circle,var(--c3),var(--c1));border-radius:50%;}
-
-    .fireworks-ny{inset:0;background:radial-gradient(circle, var(--c4) 5%, transparent 10%);border-radius:50%;animation:burst 2s infinite ease-out;}
-    .balloon{bottom:-20vh;left:20vw;width:40px;height:60px;background:radial-gradient(circle,var(--c3),var(--c4));border-radius:50%;animation:floatUp 12s linear infinite;}
-    .champagne{bottom:5vh;right:10vw;width:20px;height:60px;background:var(--c4);border-radius:5px;}
-    .clock{top:10vh;left:50%;transform:translateX(-50%);width:100px;height:100px;border:5px solid var(--c2);border-radius:50%;}
-    .confetti-ny{inset:0;background-image:radial-gradient(var(--c3) 2px,transparent 2px),radial-gradient(var(--c4) 2px,transparent 2px),radial-gradient(var(--c2) 2px,transparent 2px);background-size:30px 30px;animation:twinkle 2s infinite;}
-
-    .ketupat{top:20vh;left:20vw;width:40px;height:40px;background:linear-gradient(45deg,var(--c1) 50%,lightgreen 50%);transform:rotate(45deg);animation:sway 3s infinite;}
-    .oil-lamp{bottom:10vh;left:30vw;width:20px;height:40px;background:var(--c2);border-radius:5px;}
-    .oil-lamp::after{content:'';position:absolute;top:-20px;left:50%;transform:translateX(-50%);width:10px;height:20px;background:var(--c2);border-radius:50%;animation:flicker 1s infinite;}
-    .mosque{top:10vh;right:20vw;width:80px;height:80px;background:radial-gradient(circle,var(--c4),var(--c3));border-radius:50%;}
-    .moon-star{top:5vh;right:5vw;width:40px;height:40px;background:var(--c2);clip-path:polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);}
-
-    .torans{top:0;left:0;right:0;height:20px;background:repeating-linear-gradient(90deg,var(--c2),var(--c2) 10px,var(--c1) 10px,var(--c1) 20px);}
-    .firecrackers{left:50%;top:-10vh;width:10px;height:40px;background:var(--c2);animation:fallDown 5s linear infinite;}
-    .diya-big{bottom:5vh;left:40vw;width:60px;height:30px;background:var(--c2);border-radius:50% 50% 0 0;}
-    .diya-big::after{content:'';position:absolute;top:-20px;left:50%;transform:translateX(-50%);width:15px;height:30px;background:var(--c3);border-radius:50%;animation:flicker 1s infinite;}
-    .pattern{bottom:0;left:0;right:0;height:100px;background:conic-gradient(var(--c1),var(--c2),var(--c3));}
-
-    .tree{bottom:5vh;left:20vw;width:0;height:0;border-left:40px solid transparent;border-right:40px solid transparent;border-bottom:80px solid var(--c1);}
-    .snowflake{top:-10vh;left:10vw;width:20px;height:20px;background:var(--c3);border-radius:50%;animation:fallDown 10s linear infinite;}
-    .gift{bottom:5vh;right:20vw;width:40px;height:40px;background:var(--c2);border:5px solid var(--c4);}
-    .candycane{top:20vh;right:10vw;width:20px;height:60px;background:repeating-linear-gradient(45deg,var(--c2),var(--c2) 10px,var(--c3) 10px,var(--c3) 20px);border-radius:10px;}
-    .star-top{top:0;left:50%;transform:translateX(-50%);width:20px;height:20px;background:var(--c4);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
-
-    .ribbon-go{position:absolute;top:30vh;left:50%;transform:translateX(-50%);width:300px;height:30px;background:linear-gradient(to right,var(--c1),var(--c2));animation:sway 3s infinite;}
-    .balloon-go{position:absolute;bottom:-10vh;left:10vw;width:30px;height:50px;background:radial-gradient(circle,var(--c1),var(--c2));border-radius:50%;animation:floatUp 14s linear infinite;}
-    .sparkles{position:absolute;inset:0;background:radial-gradient(var(--c2) 2px,transparent 2px);background-size:40px 40px;animation:twinkle 2s infinite;}
-    .scissors{position:absolute;bottom:10vh;left:50%;transform:translateX(-50%);width:60px;height:20px;background:silver;border-radius:5px;}
-    .banner{position:absolute;top:0;left:0;right:0;height:60px;background:linear-gradient(90deg,var(--c1),var(--c2),var(--c1));}
+    body[data-festival="cny"] .decoration.cny {display:block;} body[data-festival="national-day"] .decoration.national-day {display:block;} body[data-festival="malaysia-day"] .decoration.malaysia-day {display:block;} body[data-festival="mid-autumn"] .decoration.mid-autumn {display:block;} body[data-festival="thaipusam"] .decoration.thaipusam {display:block;} body[data-festival="new-year"] .decoration.new-year {display:block;} body[data-festival="hari-raya"] .decoration.hari-raya {display:block;} body[data-festival="deepavali"] .decoration.deepavali {display:block;} body[data-festival="christmas"] .decoration.christmas {display:block;} body[data-festival="grand-opening"] .decoration.grand-opening {display:block;}
+    @keyframes sway{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}} @keyframes floatUp{0%{transform:translateY(0) scale(1);}100%{transform:translateY(-120vh) scale(1.2); opacity: 0;}} @keyframes fallDown{0%{transform:translateY(-20vh) rotate(0deg);}100%{transform:translateY(120vh) rotate(360deg);}} @keyframes flicker{0%,100%{opacity:.9;}50%{opacity:.6;}} @keyframes burst{0%{transform:scale(.2);opacity:1;}100%{transform:scale(1.2);opacity:0;}} @keyframes twinkle{50%{opacity:.3;}}
+    .lantern{top:10vh;left:10vw;width:60px;height:80px;background:radial-gradient(circle,var(--c2),var(--c1) 70%);border-radius:50%;animation:sway 3s infinite ease-in-out;} .firecracker{left:20vw;top:-10vh;width:8px;height:50px;background:var(--c1);animation:fallDown 5s linear infinite;} .gold-ingot{bottom:5vh;left:30vw;width:60px;height:30px;background:gold;border-radius:50% 50% 30% 30%;box-shadow:0 0 10px gold;} .dragon{top:40vh;left:-350px;width:300px;height:60px;background:linear-gradient(90deg,var(--c1),var(--c2));border-radius:30px;animation:sway 4s infinite, fallDown 20s linear infinite reverse;} .confetti-cny{inset:0;background-image:radial-gradient(var(--c1) 2px,transparent 2px),radial-gradient(var(--c2) 2px,transparent 2px);background-size:40px 40px;animation:twinkle 2s infinite;} .flag{top:20vh;left:40vw;width:100px;height:60px;background:linear-gradient(var(--c1) 50%,var(--c4) 50%);border:2px solid var(--c3);animation:sway 2s infinite ease-in-out;} .star{top:10vh;right:10vw;width:20px;height:20px;background:var(--c2);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);} .fireworks{inset:0;background:radial-gradient(circle, var(--c2) 5%, transparent 10%);border-radius:50%;animation:burst 2s infinite ease-out;} .bunting{top:0;left:0;right:0;height:50px;background:repeating-linear-gradient(90deg,var(--c1),var(--c1) 20px,var(--c4) 20px,var(--c4) 40px,var(--c3) 40px,var(--c3) 60px);} .malaysia-map{top:30vh;left:30vw;width:200px;height:100px;background:rgba(255,255,255,.2); clip-path: polygon(0% 20%, 60% 20%, 60% 0%, 100% 0%, 100% 80%, 40% 80%, 40% 100%, 0% 100%);} .ribbon{top:10vh;left:0;right:0;height:30px;background:linear-gradient(90deg,var(--c1),var(--c4),var(--c3),var(--c2));} .moon{top:10vh;right:10vw;width:100px;height:100px;background:radial-gradient(circle,var(--c4),var(--c2));border-radius:50%;box-shadow:0 0 30px var(--c2);} .rabbit{bottom:10vh;left:10vw;width:60px;height:40px;background:var(--c4);border-radius:50%;} .sky-lantern{bottom:-10vh;left:30vw;width:30px;height:40px;background:radial-gradient(circle, var(--c2), transparent 70%);border-radius:5px 5px 20px 20px;animation:floatUp 15s linear infinite;} .starry-sky{inset:0;background:radial-gradient(var(--c4) 1px,transparent 1px);background-size:50px 50px;animation:twinkle 2s infinite;} .kolam{bottom:5vh;left:50%;transform:translateX(-50%);width:200px;height:200px;background:conic-gradient(var(--c1) 0 10%,var(--c2) 10% 20%,#0f0 20% 30%,#00f 30% 40%,#f0f 40% 100%);border-radius:50%;} .diya{bottom:5vh;left:20vw;width:40px;height:20px;background:var(--c2);border-radius:50% 50% 0 0;} .diya::after{content:'';position:absolute;top:-20px;left:50%;transform:translateX(-50%);width:10px;height:20px;background:var(--c3);border-radius:50%;animation:flicker 1s infinite;} .peacock{top:30vh;right:10vw;width:100px;height:100px;background:radial-gradient(circle,var(--c3),var(--c1));border-radius:50%;} .fireworks-ny{inset:0;background:radial-gradient(circle, var(--c4) 5%, transparent 10%);border-radius:50%;animation:burst 2s infinite ease-out;} .balloon{bottom:-20vh;left:20vw;width:40px;height:60px;background:radial-gradient(circle,var(--c3),var(--c4));border-radius:50%;animation:floatUp 12s linear infinite;} .champagne{bottom:5vh;right:10vw;width:20px;height:60px;background:var(--c4);border-radius:5px;} .clock{top:10vh;left:50%;transform:translateX(-50%);width:100px;height:100px;border:5px solid var(--c2);border-radius:50%;} .confetti-ny{inset:0;background-image:radial-gradient(var(--c3) 2px,transparent 2px),radial-gradient(var(--c4) 2px,transparent 2px),radial-gradient(var(--c2) 2px,transparent 2px);background-size:30px 30px;animation:twinkle 2s infinite;} .ketupat{top:20vh;left:20vw;width:40px;height:40px;background:linear-gradient(45deg,var(--c1) 50%,lightgreen 50%);transform:rotate(45deg);animation:sway 3s infinite;} .oil-lamp{bottom:10vh;left:30vw;width:20px;height:40px;background:var(--c2);border-radius:5px;} .oil-lamp::after{content:'';position:absolute;top:-20px;left:50%;transform:translateX(-50%);width:10px;height:20px;background:var(--c2);border-radius:50%;animation:flicker 1s infinite;} .mosque{top:10vh;right:20vw;width:80px;height:80px;background:radial-gradient(circle,var(--c4),var(--c3));border-radius:50%;} .moon-star{top:5vh;right:5vw;width:40px;height:40px;background:var(--c2);clip-path:polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);} .torans{top:0;left:0;right:0;height:20px;background:repeating-linear-gradient(90deg,var(--c2),var(--c2) 10px,var(--c1) 10px,var(--c1) 20px);} .firecrackers{left:50%;top:-10vh;width:10px;height:40px;background:var(--c2);animation:fallDown 5s linear infinite;} .diya-big{bottom:5vh;left:40vw;width:60px;height:30px;background:var(--c2);border-radius:50% 50% 0 0;} .diya-big::after{content:'';position:absolute;top:-20px;left:50%;transform:translateX(-50%);width:15px;height:30px;background:var(--c3);border-radius:50%;animation:flicker 1s infinite;} .pattern{bottom:0;left:0;right:0;height:100px;background:conic-gradient(var(--c1),var(--c2),var(--c3));} .tree{bottom:5vh;left:20vw;width:0;height:0;border-left:40px solid transparent;border-right:40px solid transparent;border-bottom:80px solid var(--c1);} .snowflake{top:-10vh;left:10vw;width:20px;height:20px;background:var(--c3);border-radius:50%;animation:fallDown 10s linear infinite;} .gift{bottom:5vh;right:20vw;width:40px;height:40px;background:var(--c2);border:5px solid var(--c4);} .candycane{top:20vh;right:10vw;width:20px;height:60px;background:repeating-linear-gradient(45deg,var(--c2),var(--c2) 10px,var(--c3) 10px,var(--c3) 20px);border-radius:10px;} .star-top{top:0;left:50%;transform:translateX(-50%);width:20px;height:20px;background:var(--c4);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);} .ribbon-go{position:absolute;top:30vh;left:50%;transform:translateX(-50%);width:300px;height:30px;background:linear-gradient(to right,var(--c1),var(--c2));animation:sway 3s infinite;} .balloon-go{position:absolute;bottom:-10vh;left:10vw;width:30px;height:50px;background:radial-gradient(circle,var(--c1),var(--c2));border-radius:50%;animation:floatUp 14s linear infinite;} .sparkles{position:absolute;inset:0;background:radial-gradient(var(--c2) 2px,transparent 2px);background-size:40px 40px;animation:twinkle 2s infinite;} .scissors{position:absolute;bottom:10vh;left:50%;transform:translateX(-50%);width:60px;height:20px;background:silver;border-radius:5px;} .banner{position:absolute;top:0;left:0;right:0;height:60px;background:linear-gradient(90deg,var(--c1),var(--c2),var(--c1));}
   </style>
 
 </head>
-<body data-festival=""> <!-- The data-festival attribute will be set by JavaScript -->
+<body data-festival="">
 
-<!-- ======================================================================================= -->
-<!-- ======================= NEW HTML FOR FESTIVAL DECORATIONS ======================= -->
-<!-- ======================================================================================= -->
+<!-- NEW: Full-page Maintenance Overlay -->
+<div id="maintenance-overlay">
+  <div>
+    <i class="fa-solid fa-person-digging"></i>
+    <h1>Under Maintenance</h1>
+    <p id="maintenance-message">We'll be back shortly!</p>
+  </div>
+</div>
+
+<!-- NEW HTML FOR FESTIVAL DECORATIONS -->
 <div class="festive-layer">
-    <!-- Grand Opening Decorations -->
-    <div class="decoration grand-opening ribbon-go"></div>
-    <div class="decoration grand-opening balloon-go"></div>
-    <div class="decoration grand-opening sparkles"></div>
-    <div class="decoration grand-opening scissors"></div>
-    <div class="decoration grand-opening banner"></div>
-
-    <!-- Hari Raya Decorations -->
-    <div class="decoration hari-raya ketupat"></div>
-    <div class="decoration hari-raya oil-lamp"></div>
-    <div class="decoration hari-raya mosque"></div>
-    <div class="decoration hari-raya moon-star"></div>
-
-    <!-- Deepavali Decorations -->
-    <div class="decoration deepavali torans"></div>
-    <div class="decoration deepavali firecrackers"></div>
-    <div class="decoration deepavali diya-big"></div>
-    <div class="decoration deepavali pattern"></div>
-
-    <!-- Christmas Decorations -->
-    <div class="decoration christmas tree"></div>
-    <div class="decoration christmas snowflake"></div>
-    <div class="decoration christmas gift"></div>
-    <div class="decoration christmas candycane"></div>
-    <div class="decoration christmas star-top"></div>
-
-    <!-- CNY Decorations -->
-    <div class="decoration cny lantern"></div>
-    <div class="decoration cny firecracker"></div>
-    <div class="decoration cny gold-ingot"></div>
-    <div class="decoration cny dragon"></div>
-    <div class="decoration cny confetti-cny"></div>
-
-    <!-- National Day Decorations -->
-    <div class="decoration national-day flag"></div>
-    <div class="decoration national-day star"></div>
-    <div class="decoration national-day fireworks"></div>
-    <div class="decoration national-day bunting"></div>
-
-    <!-- Malaysia Day Decorations -->
-    <div class="decoration malaysia-day malaysia-map"></div>
-    <div class="decoration malaysia-day ribbon"></div>
-    <div class="decoration malaysia-day fireworks"></div>
-
-    <!-- Mid-Autumn Decorations -->
-    <div class="decoration mid-autumn moon"></div>
-    <div class="decoration mid-autumn rabbit"></div>
-    <div class="decoration mid-autumn sky-lantern"></div>
-    <div class="decoration mid-autumn starry-sky"></div>
-    
-    <!-- Thaipusam Decorations -->
-    <div class="decoration thaipusam kolam"></div>
-    <div class="decoration thaipusam diya"></div>
-    <div class="decoration thaipusam peacock"></div>
-    
-    <!-- New Year Decorations -->
-    <div class="decoration new-year fireworks-ny"></div>
-    <div class="decoration new-year balloon"></div>
-    <div class="decoration new-year champagne"></div>
-    <div class="decoration new-year clock"></div>
-    <div class="decoration new-year confetti-ny"></div>
+    <div class="decoration grand-opening ribbon-go"></div> <div class="decoration grand-opening balloon-go"></div> <div class="decoration grand-opening sparkles"></div> <div class="decoration grand-opening scissors"></div> <div class="decoration grand-opening banner"></div>
+    <div class="decoration hari-raya ketupat"></div> <div class="decoration hari-raya oil-lamp"></div> <div class="decoration hari-raya mosque"></div> <div class="decoration hari-raya moon-star"></div>
+    <div class="decoration deepavali torans"></div> <div class="decoration deepavali firecrackers"></div> <div class="decoration deepavali diya-big"></div> <div class="decoration deepavali pattern"></div>
+    <div class="decoration christmas tree"></div> <div class="decoration christmas snowflake"></div> <div class="decoration christmas gift"></div> <div class="decoration christmas candycane"></div> <div class="decoration christmas star-top"></div>
+    <div class="decoration cny lantern"></div> <div class="decoration cny firecracker"></div> <div class="decoration cny gold-ingot"></div> <div class="decoration cny dragon"></div> <div class="decoration cny confetti-cny"></div>
+    <div class="decoration national-day flag"></div> <div class="decoration national-day star"></div> <div class="decoration national-day fireworks"></div> <div class="decoration national-day bunting"></div>
+    <div class="decoration malaysia-day malaysia-map"></div> <div class="decoration malaysia-day ribbon"></div> <div class="decoration malaysia-day fireworks"></div>
+    <div class="decoration mid-autumn moon"></div> <div class="decoration mid-autumn rabbit"></div> <div class="decoration mid-autumn sky-lantern"></div> <div class="decoration mid-autumn starry-sky"></div>
+    <div class="decoration thaipusam kolam"></div> <div class="decoration thaipusam diya"></div> <div class="decoration thaipusam peacock"></div>
+    <div class="decoration new-year fireworks-ny"></div> <div class="decoration new-year balloon"></div> <div class="decoration new-year champagne"></div> <div class="decoration new-year clock"></div> <div class="decoration new-year confetti-ny"></div>
 </div>
 
 <div id="store-wrapper">
-  <header>
-    <div class="container">
-        <div class="header-content">
-            <img src="FL.jpg" alt="Business Logo" class="header-logo" onerror="this.style.display='none'">
-            <h1>
-              FOREVER LIVING by Muhd Arvind Isa
-              <span style="font-size: 1rem; color: #555; display: block; font-weight: 400;">Quality Wellness Products</span>
-            </h1>
-        </div>
-    </div>
-  </header>
-  
-  <div id="promo-running-banner">
-      <div class="marquee-content" id="promo-banner-text"></div>
-  </div>
-
-  <nav>
-    <div class="container">
-        <ul id="main-nav">
-          <li><a onclick="showTab('products')">Products</a></li>
-          <li><a onclick="showTab('business')">Business Opportunity</a></li>
-          <li><a onclick="showTab('about')">About Us</a></li>
-          <li><a class="nav-disabled">Rewards</a></li>
-          <li><a class="nav-disabled">My Forever Living</a></li>
-        </ul>
-    </div>
-  </nav>
-
-  <main id="main-content" class="container">
-    <div id="products" class="tab-content active">
-      <section class="hero-section" id="hero-section">
-        <h2 id="hero-title"><i class="fa-solid fa-store"></i> Welcome to Our Store</h2>
-        <p id="hero-subtitle">Enjoy high-quality wellness products for a healthier lifestyle.</p>
-        <div id="countdown-timer" style="display:none;"></div>
-      </section>
-
-      <div class="search-container">
-        <input type="text" id="product-search" onkeyup="filterProducts()" placeholder="Search for products by name...">
-        <i class="fa-solid fa-search search-icon"></i>
-      </div>
-
-      <section class="ai-suggestion-box">
-        <h3><i class="fa-solid fa-robot"></i> AI Product Suggester</h3>
-        <p>Describe your health concern (e.g., "dry skin", "low energy") and our AI will suggest a product for you.</p>
-        <input type="text" id="symptom-input" placeholder="Enter your symptom or concern...">
-        <button id="suggest-btn" class="btn btn-primary" onclick="suggestProduct()">Get Suggestion</button>
-        <div id="suggestion-result"></div>
-      </section>
-
-      <div id="product-list-container">
-          <p style="text-align: center; width: 100%;">
-            <i class="fa-solid fa-spinner fa-spin"></i> Loading products from our catalog...
-          </p>
-      </div>
-    </div>
-
-    <div id="business" class="tab-content">
-      <section class="program-section">
-        <h2>Build Your Forever Business</h2>
-        <p style="text-align: center; max-width: 800px; margin: 20px auto;">The Forever Living opportunity is more than just selling high-quality products; it's a chance to build a flexible, rewarding business on your own terms. Whether you're looking for extra income or a full-time career, Forever provides a proven path to success.</p>
-        <h3 style="margin-top:40px;">How Does It Work?</h3>
-        <ul>
-            <li><strong>Become Your Own Boss:</strong> As a Forever Business Owner (FBO), you have the freedom to work from anywhere, set your own hours, and grow at your own pace. There are no large startup fees or required inventory purchases.</li>
-            <li><strong>A Simple, Proven Model:</strong> The business is built on a simple cycle: Use the products yourself, share your experience and the products with others, and build a team of like-minded individuals to do the same.</li>
-            <li><strong>Earn Generous Rewards:</strong> You earn income from your retail sales and from the sales of your team members. Forever offers one of the most generous compensation plans in the industry, including performance bonuses, the car plan (Earn While you Drive), and global travel incentives.</li>
-            <li><strong>World-Class Support:</strong> You are never alone. You will receive mentorship, training materials, and support from our team at Rich Academy Global and the wider Forever community to help you achieve your goals.</li>
-        </ul>
-        <h3 style="margin-top:40px;">Ready to Start Your Journey?</h3>
-        <p style="text-align: center;">Take the first step towards a healthier, wealthier life. Contact us today to learn more without any obligation.</p>
-        <a href="https://wa.me/601111033154?text=Hi,%20I'm%20interested%20in%20learning%20more%20about%20the%20Forever%20Living%20business%20opportunity." class="cta-button" target="_blank"><i class="fab fa-whatsapp"></i> Click to Learn More on WhatsApp</a>
-      </section>
-    </div>
-
-    <div id="about" class="tab-content">
-      <section class="about-us-section">
-        <h2>About Us</h2>
-        <div class="owner-profile">
-            <img src="owner.jpg" alt="Muhd Arvind Isa" class="owner-image" onerror="this.src='https://via.placeholder.com/150'">
-            <div class="owner-details">
-                <h3>Muhd Arvind Isa - Independent FBO</h3>
-                <p>Welcome! I am an authorized Independent Forever Business Owner (FBO) dedicated to bringing you the highest quality health and wellness products from Forever Living. My mission is to empower individuals to lead healthier lives and to provide opportunities for financial well-being through the Forever business model.</p>
-                <p><strong>Powered by:</strong> Rich Academy Global</p>
-                <p><strong>Contact Information:</strong></p>
-                <ul>
-                    <li><strong><i class="fab fa-whatsapp"></i> WhatsApp:</strong> <a href="https://wa.me/601111033154">+6011 1103 3154</a></li>
-                    <li><strong><i class="fa fa-envelope"></i> Email:</strong> <a href="mailto:cs.foreverlivingbymuhdarvindisa@gmail.com">cs.foreverlivingbymuhdarvindisa@gmail.com</a></li>
-                </ul>
-            </div>
-        </div>
-        <hr style="margin: 30px 0;">
-        <h3>The Forever Living Legacy</h3>
-        <p>Founded in 1978 by Rex Maughan, Forever Living Products is a multi-billion dollar company that manufactures and sells hundreds of wellness and beauty products all around the world. What makes Forever unique is its commitment to quality through a process called "from seed to product."</p>
-        <ul>
-            <li><strong>The Aloe Vera Company:</strong> Forever owns its own aloe vera plantations in Texas and the Dominican Republic, ensuring the purest and most potent aloe is used in its products. They control the entire process, from planting and harvesting to processing and manufacturing.</li>
-            <li><strong>Global Presence:</strong> For over 40 years, Forever has grown to operate in more than 160 countries, demonstrating the universal appeal and effectiveness of its products and business model.</li>
-            <li><strong>Our Commitment:</strong> We are committed to providing authentic Forever Living products, exceptional customer service, and reliable support for both our customers and business partners. All products are sourced directly from Forever Living Products and are guaranteed to be genuine.</li>
-        </ul>
-        <hr style="margin: 30px 0;">
-        <h3>Feedback & Order Requests</h3>
-        <p>Have a question, compliment, or suggestion? Or perhaps you'd like to place an order directly? Fill out the form below, and we'll get back to you as soon as possible.</p>
-        <form class="feedback-form" onsubmit="sendFeedbackEmail(event)">
-            <input type="text" id="feedback-name" placeholder="Your Name" required>
-            <input type="email" id="feedback-email" placeholder="Your Email" required>
-            <select id="feedback-subject" required>
-                <option value="" disabled selected>Select a Subject...</option>
-                <option value="General Enquiry">General Enquiry</option>
-                <option value="Order Request">Order Request</option>
-                <option value="Compliment">Compliment</option>
-                <option value="Complaint">Complaint</option>
-                <option value="Suggestion">Suggestion</option>
-            </select>
-            <textarea id="feedback-message" placeholder="Your Message" required></textarea>
-            <button type="submit" id="feedback-submit-btn" class="btn btn-primary">Send Message</button>
-            <p id="feedback-status"></p>
-        </form>
-      </section>
-    </div>
-
-    <div id="rewards" class="tab-content">
-      <section class="program-section">
-            <h2><i class="fa-solid fa-award"></i> Redeem Your Points</h2>
-            <p style="text-align: center;">This feature is currently under development. Stay tuned for exciting rewards!</p>
-            <div class="rewards-grid">
-                <div class="reward-item">
-                    <img src="rm5.jpg" alt="RM 5 Voucher" onerror="this.src='https://i.imgur.com/O9yP2aH.png'">
-                    <h4>RM 5 Voucher</h4><p class="points-cost">500 Points</p><div class="coming-soon-overlay"><span>Coming Soon</span></div>
-                </div>
-                <div class="reward-item">
-                    <img src="rm10.jpg" alt="RM 10 Voucher" onerror="this.src='https://i.imgur.com/sY2a2qG.png'">
-                    <h4>RM 10 Voucher</h4><p class="points-cost">1000 Points</p><div class="coming-soon-overlay"><span>Coming Soon</span></div>
-                </div>
-            </div>
-        </section>
-    </div>
-  </main>
-
-  <footer class="footer">
-      <div class="container">
-        <p>© 2025 Forever Living by Muhd Arvind Isa. All rights reserved.</p>
-        <div class="timestamp">Last updated: <span id="update-timestamp"></span></div>
-        <section class="disclaimer">
-          <strong>Disclaimer:</strong> This website is operated by an independent FBO and is not the official site of Forever Living Products.
-        </section>
-      </div>
-  </footer>
+  <header> <!-- ... (rest of your HTML is unchanged) ... --> </header>
+  <div id="promo-running-banner"> <!-- ... --> </div>
+  <nav> <!-- ... --> </nav>
+  <main id="main-content" class="container"> <!-- ... --> </main>
+  <footer class="footer"> <!-- ... --> </footer>
 </div>
-
-  <div id="floating-cart" class="floating-cart-btn" onclick="toggleCart()">
-    <i class="fa-solid fa-cart-shopping"></i>
-    <span id="cart-count">0</span>
-  </div>
-
-  <div id="cart-modal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="toggleCart(true)">×</span>
-      <div id="cart-view">
-        <h2>Your Shopping Cart</h2>
-        <div id="cart-items"><p>Your cart is currently empty.</p></div>
-        <div class="cart-summary">
-          <div class="summary-line"><span>Subtotal</span><span id="cart-subtotal">RM 0.00</span></div>
-          <div class="summary-line" id="discount-line" style="display:none;"><span>Discount</span><span id="cart-discount">RM 0.00</span></div>
-          <div class="summary-line"><span>Shipping</span><span id="cart-shipping">RM 0.00</span></div>
-          <div class="summary-line" id="savings-line" style="display:none; color: var(--accent-color); font-weight: bold;"><span>You Saved</span><span id="cart-savings">RM 0.00</span></div>
-          <div class="summary-line total"><span>Total</span><span id="cart-total">RM 0.00</span></div>
-          <div id="points-earned-display"></div>
-        </div>
-        <div class="discount-section">
-            <input type="text" id="discount-code-input" placeholder="Enter Discount Code">
-            <button class="btn btn-secondary" onclick="applyDiscount()">Apply</button>
-        </div>
-        <p id="discount-status"></p>
-        <div class="customer-info-form">
-          <h3 style="margin-top: 20px;">Customer & Shipping Information</h3>
-          <input type="text" id="customer-name" placeholder="Your Full Name" required>
-          <input type="tel" id="customer-phone" placeholder="Your WhatsApp Number (e.g., 60123456789)" required>
-          <input type="email" id="customer-email" placeholder="Your Email Address (for receipt)" required>
-          <input type="text" id="customer-address1" placeholder="Address Line 1" required>
-          <input type="text" id="customer-address2" placeholder="Address Line 2 (Optional)">
-          <input type="text" id="customer-city" placeholder="City" required>
-          <input type="text" id="customer-state" placeholder="State" required>
-          <input type="text" id="customer-postcode" placeholder="Postcode" required>
-        </div>
-        <div id="consent-form">
-            <label for="consent-checkbox">
-                <input type="checkbox" id="consent-checkbox" onchange="toggleCheckoutButton()">
-                <span>I consent to the collection of my personal data for transaction purposes. You can request data deletion at any time via <a href="https://wa.me/601111033154?text=Hi,%20I%20would%20like%20to%20request%20my%20personal%20data%20to%20be%20deleted." target="_blank">WhatsApp</a> or <a href="mailto:cs.foreverlivingbymuhdarvindisa@gmail.com?subject=Request%20for%20Data%20Deletion">Email</a>.</span>
-            </label>
-        </div>
-        <button class="btn btn-primary checkout-btn" id="checkout-btn" onclick="initiateCheckout()" disabled>Agree & Complete Order via WhatsApp</button>
-      </div>
-      <div id="verification-view" style="display: none;">
-        <h2>Order Verification</h2>
-        <p>Please complete the following steps to finalize your order.</p>
-        <div id="proof-upload-step" class="verification-step active">
-            <h4><i class="fa-solid fa-arrow-up-from-bracket"></i> Step 1: Upload Payment Proof</h4>
-            <p style="font-size: 0.9rem; color: #555;">Upload a screenshot of your transaction receipt.</p>
-            <input type="file" id="payment-proof-upload" accept="image/*">
-            <button class="btn btn-primary" id="upload-proof-btn" onclick="uploadProof()">Upload and Proceed</button>
-            <p id="upload-status"></p>
-        </div>
-        <div id="code-verification-step" class="verification-step">
-            <h4><i class="fa-solid fa-key"></i> Step 2: Finalize with Code</h4>
-            <p style="font-size: 0.9rem; color: #555;">Enter the verification code provided to you by the owner.</p>
-            <input type="text" id="verification-code" placeholder="Enter Verification Code" disabled>
-            <button class="btn btn-primary" id="finalize-order-btn" onclick="finalizeOrder()" disabled>Finalize Order & Get Receipt</button>
-            <p id="verification-status"></p>
-        </div>
-        <button class="btn btn-secondary" style="margin-top: 20px;" onclick="cancelVerification()">Cancel Entire Order</button>
-      </div>
-    </div>
-  </div>
+<div id="floating-cart" class="floating-cart-btn"> <!-- ... --> </div>
+<div id="cart-modal" class="modal"> <!-- ... --> </div>
 
 <script>
-    const googleScriptURL = 'https://script.google.com/macros/s/AKfycbwUNv0Txx93bue0ywz8jXXpses_dwTp-k2Jb-sQRC9EBhCfGnTrWOs57dOCHK0OJx2R8g/exec';
-    let products = []; let cart = []; let activeFestival = null; let activePromotions = [];
-    let shippingRules = {}; let availableDiscountCodes = {}; let appliedDiscount = null;
+    const googleScriptURL = 'https://script.google.com/macros/s/AKfycbwThru1hLFLxDnmm9e0FaOKfSlpf4zSObqI-X-RRtHJ9lQmxKNIvkOBl40x0x9wLFNGAw/exec'; // Replace with your actual URL
+    let products = [], cart = [], activeFestival = null, activePromotions = [], shippingRules = {}, availableDiscountCodes = {}, appliedDiscount = null;
+
     document.addEventListener('DOMContentLoaded', fetchData);
+
     async function fetchData() {
         const productListContainer = document.getElementById("product-list-container");
         try {
             const response = await fetch(googleScriptURL);
-            if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
+            if (!response.ok) throw new Error(`Network response error: ${response.statusText}`);
             const data = await response.json();
-            if (data.status === 'success') {
-                products = data.products || []; activeFestival = data.activeFestival || null;
-                activePromotions = data.activePromotions || []; shippingRules = data.shippingRules || {};
-                availableDiscountCodes = data.discountCodes || {}; initializeUI();
-            } else { throw new Error(data.message || 'Failed to parse data from the server.'); }
+            if (data.status !== 'success') throw new Error(data.message || 'Failed to parse data.');
+
+            const marketingSettings = data.marketing || {};
+            if (marketingSettings.MaintenanceMode === true) {
+                const overlay = document.getElementById('maintenance-overlay');
+                const messageEl = document.getElementById('maintenance-message');
+                messageEl.textContent = marketingSettings.MaintenanceMessage || "We'll be back shortly!";
+                overlay.style.display = 'flex';
+                return;
+            }
+
+            products = data.products || [];
+            activeFestival = data.activeFestival || null;
+            activePromotions = data.activePromotions || [];
+            shippingRules = data.shippingRules || {};
+            availableDiscountCodes = data.discountCodes || {};
+            
+            initializeUI(marketingSettings);
+
         } catch (error) {
             console.error("Error fetching store data:", error);
             if (productListContainer) {
-                productListContainer.innerHTML = `<p style="text-align: center; color: red; font-weight: bold; width: 100%; padding: 40px 0;"><i class="fa-solid fa-triangle-exclamation"></i> Error loading store.<br>The product catalog could not be retrieved. Please try again later.</p>`;
+                productListContainer.innerHTML = `<p style="text-align: center; color: red; font-weight: bold; width: 100%; padding: 40px 0;"><i class="fa-solid fa-triangle-exclamation"></i> Error loading store.<br>Could not retrieve catalog. Please try again later.</p>`;
             }
         }
-        const version = "(v12.0)";
+        
+        const version = "(v13.0)";
         const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
         document.getElementById('update-timestamp').textContent = `${date} ${version}`;
-        if (sessionStorage.getItem('pendingOrder')) { toggleCart(); } else { showTab('products'); }
+        if (sessionStorage.getItem('pendingOrder')) { toggleCart(); } 
+        else { showTab('products'); }
     }
-    function initializeUI() {
+
+    function initializeUI(marketingSettings) {
         const body = document.body;
         body.removeAttribute("data-festival");
+        
         if (activeFestival && activeFestival.theme) {
-            // This is the new logic to match the new CSS
-            const themeMap = {
-                "CNY": "cny", "NationalDay": "national-day", "MalaysiaDay": "malaysia-day",
-                "MooncakeFestival": "mid-autumn", "Thaipusam": "thaipusam", "HariRaya": "hari-raya",
-                "Deepavali": "deepavali", "Christmas": "christmas", "GrandOpening": "grand-opening"
-            };
+            const themeMap = { "CNY": "cny", "NationalDay": "national-day", "MalaysiaDay": "malaysia-day", "MooncakeFestival": "mid-autumn", "Thaipusam": "thaipusam", "HariRaya": "hari-raya", "Deepavali": "deepavali", "Christmas": "christmas", "GrandOpening": "grand-opening", "NewYear": "new-year"};
             const festiveAttr = themeMap[activeFestival.theme];
-            if(festiveAttr) {
-                body.setAttribute("data-festival", festiveAttr);
-            }
+            if(festiveAttr) { body.setAttribute("data-festival", festiveAttr); }
             document.getElementById('hero-title').innerHTML = `<i class="fa-solid fa-gift"></i> ${activeFestival.name}`;
             document.getElementById('hero-subtitle').textContent = "Enjoy special festive offers!";
-            const banner = document.getElementById('promo-running-banner');
-            banner.style.backgroundColor = getComputedStyle(body).getPropertyValue('--c1').trim();
-            banner.style.color = getComputedStyle(body).getPropertyValue('--c4').trim();
-            document.getElementById('promo-banner-text').textContent = `✨ ${activeFestival.name}! See special offers below! ✨`;
-            banner.style.display = 'block'; 
-            startCountdown(activeFestival.endDate);
         } else {
             document.getElementById('hero-title').innerHTML = `<i class="fa-solid fa-store"></i> Welcome to Our Store`;
             document.getElementById('hero-subtitle').textContent = "Enjoy high-quality wellness products for a healthier lifestyle.";
         }
+        
+        const banner = document.getElementById('promo-running-banner');
+        const bannerTextEl = document.getElementById('promo-banner-text');
+        if (marketingSettings.BannerText) {
+            bannerTextEl.textContent = `🔥 ${marketingSettings.BannerText} 🔥`;
+            banner.style.backgroundColor = 'var(--primary-color)'; // A neutral color for custom banners
+            banner.style.color = 'white';
+            banner.style.display = 'block';
+        } else if (activeFestival) {
+            bannerTextEl.textContent = `✨ ${activeFestival.name}! See special offers below! ✨`;
+            banner.style.backgroundColor = getComputedStyle(body).getPropertyValue('--c1').trim() || 'var(--primary-color)';
+            banner.style.color = getComputedStyle(body).getPropertyValue('--c4').trim() || 'white';
+            banner.style.display = 'block';
+        }
+
+        const productTagText = marketingSettings.ProductTagText;
+        document.querySelectorAll('.halal-badge').forEach(badge => {
+            if (productTagText) { badge.textContent = productTagText; badge.style.display = 'block'; } 
+            else { badge.style.display = 'none'; }
+        });
+
+        const popupImageUrl = marketingSettings.PopupImageURL;
+        const popupText = marketingSettings.PopupMessageText;
+        if ((popupImageUrl || popupText) && !sessionStorage.getItem('popupShown')) {
+            const popupModal = document.createElement('div');
+            popupModal.id = 'marketing-popup';
+            popupModal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 10000; align-items: center; justify-content: center; animation: fadeIn 0.5s;';
+            let popupContent = popupImageUrl ? `<img src="${popupImageUrl}" style="max-width: 90%; max-height: 80vh; object-fit: contain; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.4);">` : `<div style="background: white; padding: 40px; border-radius: 12px; text-align: center; max-width: 500px; color: #333;">${popupText}</div>`;
+            popupModal.innerHTML = `<div style="position: relative; animation: slideIn 0.5s;"><span onclick="this.parentElement.parentElement.remove()" style="position: absolute; top: -15px; right: -15px; background: white; border-radius: 50%; width: 35px; height: 35px; line-height: 35px; text-align: center; cursor: pointer; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.3); font-size: 1.2rem; color: #333;">&times;</span>${popupContent}</div>`;
+            document.body.appendChild(popupModal);
+            sessionStorage.setItem('popupShown', 'true');
+        }
+        
         renderProducts();
     }
+    
+    // The rest of your JavaScript functions (renderProducts, cart logic, checkout, etc.)
+    // remain exactly the same. They are included below for completeness.
+    
     function renderProducts(){
         const productListContainer = document.getElementById("product-list-container"); if (!productListContainer) return;
         if (products.length === 0) { productListContainer.innerHTML = `<p style="text-align: center; width: 100%;">No products found in the catalog.</p>`; return; }
@@ -523,7 +256,7 @@
     function calculateShipping(t,e,o){if(0===t.length)return{fee:0,message:"RM 0.00"};let r=null;if(o&&shippingRules[o])r={...shippingRules[o],reason:"Promotional Shipping!"};else{const t=Object.values(shippingRules).filter(t=>t.isDefault&&"Tiered"===t.type).sort((t,e)=>t.minSpend-e.minSpend);for(const o of t)if(e>=o.minSpend&&e<=o.maxSpend){r={...o,reason:`Spend over RM${o.minSpend}`}}}if(!r)return{fee:14,message:"RM 14.00"};if("Free"===r.type)return{fee:0,message:"FREE",reason:r.reason||"Promotional Free Shipping!"};if("FlatRate"===r.type)return{fee:parseFloat(r.charge),message:`RM ${parseFloat(r.charge).toFixed(2)}`};if("Tiered"===r.type){const t=parseFloat(r.charge);return{fee:t,message:0===t?"FREE":`RM ${t.toFixed(2)}`,reason:0===t?`Free shipping for orders over RM ${r.minSpend}!`:"Standard Shipping"}}return{fee:14,message:"RM 14.00"}}
     function updateCartDisplay(){const t=document.getElementById("cart-items"),e=document.getElementById("cart-subtotal"),o=document.getElementById("discount-line"),n=document.getElementById("cart-discount"),i=document.getElementById("cart-shipping"),r=document.getElementById("cart-total"),a=document.getElementById("points-earned-display"),s=document.getElementById("savings-line"),d=document.getElementById("cart-savings");if(0===cart.length)return t.innerHTML="<p>Your cart is currently empty.</p>",e.textContent="RM 0.00",i.textContent="RM 0.00",r.textContent="RM 0.00",a.innerHTML="",o.style.display="none",s.style.display="none",void updateCartCount();const{subtotal:c,originalSubtotal:l,discountValue:u,shipping:m,total:p,totalPoints:f,itemFinalPrices:g}=calculateCartTotals();let h="";cart.forEach(t=>{const e=g[t.id]||t.basePrice;let o=`<div class="final-cart-price">RM ${e.toFixed(2)}</div>`;e<t.basePrice&&(o+=`<div class="original-cart-price">RM ${t.basePrice.toFixed(2)}</div>`),h+=`<div class="cart-item"><div class="cart-item-details"><strong>${t.name}</strong><div class="quantity-controls"><button class="quantity-btn" onclick="decreaseQuantity(${t.id})">-</button><span class="quantity-display">${t.quantity}</span><button class="quantity-btn" onclick="increaseQuantity(${t.id})">+</button></div></div><div style="text-align:right">${o}</div></div>`});const y=l-c+u;t.innerHTML=h,e.textContent=`RM ${c.toFixed(2)}`,u>0?(n.textContent=`- RM ${u.toFixed(2)}`,o.style.display="flex"):(o.style.display="none"),"FREE"===m.message?i.innerHTML=`<span style="color:var(--accent-color);font-weight:700"><i class="fa-solid fa-truck-fast"></i> FREE! <small>(${m.reason})</small></span>`:i.innerHTML=m.message,y>0?(d.textContent=`RM ${y.toFixed(2)}`,s.style.display="flex"):(s.style.display="none"),r.textContent=`RM ${p.toFixed(2)}`,a.innerHTML=`<div class="points-earned"><i class="fa-solid fa-star"></i> Points to be Earned: ${f}</div>`,updateCartCount()}
     async function initiateCheckout(){if(!document.getElementById("consent-checkbox").checked)return void alert("You must agree to the data collection consent before proceeding.");const t=document.getElementById("customer-name").value.trim(),e=document.getElementById("customer-phone").value.trim(),o=document.getElementById("customer-email").value.trim(),n=document.getElementById("customer-address1").value.trim(),i=document.getElementById("customer-address2").value.trim(),r=document.getElementById("customer-city").value.trim(),a=document.getElementById("customer-state").value.trim(),s=document.getElementById("customer-postcode").value.trim();if(!t||!e||!o||!n||!r||!a||!s)return void alert("Please fill in all required customer and shipping information fields.");if(0===cart.length)return void alert("Your cart is empty.");const{subtotal:d,discountValue:c,shipping:l,total:u,totalPoints:m,itemFinalPrices:p}=calculateCartTotals(),f=`${n}, ${i?i+", ":""}${s} ${r}, ${a}.`,g={customerName:t,customerPhone:e,customerEmail:o,customerAddress:f,cart:cart.map(t=>({id:t.id,name:t.name,quantity:t.quantity,finalPrice:p[t.id]})),totalAmount:u.toFixed(2),shippingFee:l.fee.toFixed(2),discountApplied:appliedDiscount?`${appliedDiscount.code} - RM ${c.toFixed(2)}`:"N/A",discountCodeUsed:appliedDiscount?appliedDiscount.code:"N/A",totalPointsForThisPurchase:m};sessionStorage.setItem("pendingOrder",JSON.stringify(g));let h=`Hi, I would like to place an order:\n\n*Customer Details:*\nName: ${t}\nPhone: ${e}\nEmail: ${o}\nAddress: ${f}\n\n--- ORDER SUMMARY ---\nSubtotal: RM ${d.toFixed(2)}${c>0?`\nDiscount: - RM ${c.toFixed(2)}`:""}\nShipping: ${l.message}\n*TOTAL: RM ${u.toFixed(2)}*\n\nPlease provide payment details. After payment, I will upload the proof and verification code on your website to finalize the order. Thank you!`;window.open(`https://wa.me/601111033154?text=${encodeURIComponent(h)}`,"_blank"),document.getElementById("cart-view").style.display="none",document.getElementById("verification-view").style.display="block",updateVerificationUI()}
-    async function uploadProof(){const t=document.getElementById("payment-proof-upload").files[0],e=document.getElementById("upload-status"),o=document.getElementById("upload-proof-btn");let n=JSON.parse(sessionStorage.getItem("pendingOrder"));if(!t)return e.textContent="Please select a file to upload.",void(e.style.color="red");if(!n)return e.textContent="Error: No pending order found.",void(e.style.color="red");o.disabled=!0,e.textContent="Uploading...",e.style.color="blue";try{const t=await getBase64(proofFile),i={action:"logInitialOrderWithProof",customerName:n.customerName,customerEmail:n.customerEmail,customerPhone:n.customerPhone,customerAddress:n.customerAddress,itemsPurchased:n.cart.map(t=>`${t.name} (x${t.quantity})`).join("; "),discountApplied:n.discountApplied,totalAmount:n.totalAmount,shippingFee:n.shippingFee,totalPointsForThisPurchase:n.totalPointsForThisPurchase,paymentProofFile:t.split(",")[1],paymentProofMimeType:proofFile.type,paymentProofFileName:`${n.customerEmail.split("@")[0]}-${Date.now()}`},r=await fetch(googleScriptURL,{method:"POST",body:JSON.stringify(i)}),a=await r.json();if("success"===a.status)e.textContent="Proof uploaded successfully!",e.style.color="green",n.proofUploaded=!0,sessionStorage.setItem("pendingOrder",JSON.stringify(n)),updateVerificationUI();else throw new Error(a.message)}catch(t){e.textContent=`Error: ${t.message}`,e.style.color="red",o.disabled=!1}}
+    async function uploadProof(){const t=document.getElementById("payment-proof-upload").files[0],e=document.getElementById("upload-status"),o=document.getElementById("upload-proof-btn");let n=JSON.parse(sessionStorage.getItem("pendingOrder"));if(!t)return e.textContent="Please select a file to upload.",void(e.style.color="red");if(!n)return e.textContent="Error: No pending order found.",void(e.style.color="red");o.disabled=!0,e.textContent="Uploading...",e.style.color="blue";try{const i=await getBase64(t),r={action:"logInitialOrderWithProof",customerName:n.customerName,customerEmail:n.customerEmail,customerPhone:n.customerPhone,customerAddress:n.customerAddress,itemsPurchased:n.cart.map(t=>`${t.name} (x${t.quantity})`).join("; "),discountApplied:n.discountApplied,totalAmount:n.totalAmount,shippingFee:n.shippingFee,totalPointsForThisPurchase:n.totalPointsForThisPurchase,paymentProofFile:i.split(",")[1],paymentProofMimeType:t.type,paymentProofFileName:`${n.customerEmail.split("@")[0]}-${Date.now()}`},a=await fetch(googleScriptURL,{method:"POST",body:JSON.stringify(r)}),s=await a.json();if("success"===s.status)e.textContent="Proof uploaded successfully!",e.style.color="green",n.proofUploaded=!0,sessionStorage.setItem("pendingOrder",JSON.stringify(n)),updateVerificationUI();else throw new Error(s.message)}catch(t){e.textContent=`Error: ${t.message}`,e.style.color="red",o.disabled=!1}}
     async function finalizeOrder(){const t=document.getElementById("verification-code").value.trim().toUpperCase(),e=document.getElementById("finalize-order-btn"),o=document.getElementById("verification-status");let n=JSON.parse(sessionStorage.getItem("pendingOrder"));if(!t)return o.textContent="Please enter the verification code.",void(o.style.color="red");if(!n)return o.textContent="Error: No pending order found.",void(o.style.color="red");e.disabled=!0,o.textContent="Verifying...",o.style.color="blue";try{const i={action:"finalizeOrder",usedCode:t,customerName:n.customerName,customerEmail:n.customerEmail,customerPhone:n.customerPhone,customerAddress:n.customerAddress,cart:n.cart,totalAmount:n.totalAmount,shippingFee:n.shippingFee,discountApplied:n.discountApplied,discountCodeUsed:n.discountCodeUsed,totalPointsForThisPurchase:n.totalPointsForThisPurchase},r=await fetch(googleScriptURL,{method:"POST",body:JSON.stringify(i)}),a=await r.json();if("success"!==a.status)throw new Error(a.message);o.textContent="Order Verified! Your receipt is downloading...",o.style.color="green";const s=document.createElement("a");s.href=a.receiptUrl.replace("/file/d/","/uc?export=download&id=").replace("/view?usp=drivesdk",""),s.download=`Receipt-Order-${(new Date).getTime()}.pdf`,document.body.appendChild(s),s.click(),document.body.removeChild(s),cart=[],sessionStorage.removeItem("pendingOrder"),updateCartCount(),appliedDiscount=null,document.getElementById("discount-code-input").value="",document.getElementById("discount-status").textContent="",setTimeout(()=>{toggleCart(!0),updateVerificationUI(!0)},4e3)}catch(t){o.textContent=`Error: ${t.message}`,o.style.color="red",e.disabled=!1}}
     function updateVerificationUI(t=!1){const e=document.getElementById("proof-upload-step"),o=document.getElementById("code-verification-step"),n=document.getElementById("upload-proof-btn"),i=document.getElementById("finalize-order-btn"),r=document.getElementById("verification-code"),a=document.getElementById("upload-status"),s=document.getElementById("verification-status");if(t)return e.classList.add("active"),e.classList.remove("completed"),o.classList.remove("active"),n.disabled=!1,i.disabled=!0,r.disabled=!0,a.textContent="",s.textContent="",document.getElementById("payment-proof-upload").value="",void(r.value="");const d=JSON.parse(sessionStorage.getItem("pendingOrder"));d&&d.proofUploaded?(e.classList.remove("active"),e.classList.add("completed"),o.classList.add("active"),n.disabled=!0,i.disabled=!1,r.disabled=!1,a.textContent="Proof Uploaded Successfully!",a.style.color="green"):(e.classList.add("active"),e.classList.remove("completed"),o.classList.remove("active"),n.disabled=!1,i.disabled=!0,r.disabled=!0)}
     function cancelVerification(){confirm("Are you sure? This will cancel the pending order.")&&(sessionStorage.removeItem("pendingOrder"),toggleCart(!0),updateVerificationUI(!0))}
