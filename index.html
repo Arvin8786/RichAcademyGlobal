@@ -1,52 +1,712 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Forever Living Shop</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forever Living by Muhd Arvind Isa</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    .product { border: 1px solid #ddd; padding: 10px; margin: 10px; border-radius: 8px; }
-    .product h2 { margin: 0 0 10px; }
+    :root{--primary-color:#1a5276;--secondary-color:#f39c12;--accent-color:#27ae60;--light-gray:#f4f6f8;--dark-text:#333;--light-text:#fff;--border-radius:12px;--shadow:0 4px 15px rgba(0,0,0,.08);--font-family:'Poppins',sans-serif}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes slideIn{from{opacity:0;transform:translateY(-30px)}to{opacity:1;transform:translateY(0)}}@keyframes promoGlow{0%{box-shadow:0 0 5px rgba(243,156,18,.6)}50%{box-shadow:0 0 20px rgba(243,156,18,.9)}100%{box-shadow:0 0 5px rgba(243,156,18,.6)}}@keyframes marquee{0%{transform:translateX(0%)}100%{transform:translateX(-100%)}}
+    *,::after,::before{box-sizing:border-box}
+    body{font-family:var(--font-family);margin:0;padding:0;background-color:var(--light-gray);color:var(--dark-text);overflow-x:hidden;line-height:1.6;padding-top:45px; position: relative;}
+    .container{max-width:1200px;margin:0 auto;padding:0 20px}h1,h2,h3,h4{color:var(--primary-color);font-weight:600}
+    .default-theme .hero-section{background:linear-gradient(135deg, #2c3e50, #4ca1af);color:var(--light-text);padding:80px 20px;text-align:center;border-radius:var(--border-radius);margin-bottom:30px;transition:all .5s ease;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+    
+    /* --- FESTIVAL THEMES --- */
+    .theme-GrandOpening {background-color: #fdf5e6;}
+    .theme-GrandOpening .hero-section {background: linear-gradient(135deg, #ffd700, #ff6347); border: 5px solid #fff; box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);}
+    .theme-GrandOpening #promo-running-banner {background-color: #ff4500; color: #ffffff;}
+
+    .theme-HariRaya{background-color:#f0fff0}.theme-HariRaya .hero-section{background:linear-gradient(135deg, #006400, #daa520); border:4px dashed #FFD700;}.theme-HariRaya #promo-running-banner{background-color:#006400;color:#FFD700}
+    .theme-Deepavali{background-color:#fff8e1}.theme-Deepavali .hero-section{background:linear-gradient(135deg, #ff6b6b, #feca57); border:4px dashed #ff9f43;}.theme-Deepavali #promo-running-banner{background-color:#e74c3c;color:#fff}
+    .theme-Christmas{background-color:#f8f9fa}.theme-Christmas .hero-section{background:linear-gradient(135deg, #d32f2f, #388e3c); border:4px dashed #ffffff;}.theme-Christmas #promo-running-banner{background-color:#c62828;color:#fff}
+    .theme-CNY{background-color:#fffbf0}.theme-CNY .hero-section{background:linear-gradient(135deg, #c0392b, #f1c40f); border:4px dashed #f1c40f;}.theme-CNY #promo-running-banner{background-color:#c0392b;color:#f1c40f}
+    .theme-NationalDay .hero-section, .theme-MalaysiaDay .hero-section {background:linear-gradient(135deg, #000066, #cc0000); border:4px dashed #f1c40f;}
+    .theme-Thaipusam .hero-section {background:linear-gradient(135deg, #ff9933, #ffffff); border:4px dashed #3366cc;}
+    .theme-MooncakeFestival .hero-section {background:linear-gradient(135deg, #1a1a2e, #ff4e50); border:4px dashed #f9d423;}
+    header{background-color:var(--light-text);padding:20px 0;text-align:center;border-bottom:1px solid #e0e0e0;position:relative}.header-content{display:flex;align-items:center;justify-content:center;gap:20px}.header-logo{width:80px;height:80px}.header-content h1{margin:0}.header-content h1 span{display:block}#promo-running-banner{color:var(--light-text);padding:10px 0;text-align:center;font-weight:700;font-size:1.1rem;position:fixed;top:0;left:0;width:100%;box-shadow:0 2px 5px rgba(0,0,0,.1);z-index:101;overflow:hidden;white-space:nowrap;display:none}#promo-running-banner .marquee-content{display:inline-block;padding-left:100%;animation:marquee 20s linear infinite}nav{background-color:var(--primary-color);position:sticky;top:45px;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.1)}nav ul{display:flex;list-style:none;padding:10px 0;margin:0;justify-content:center;flex-wrap:wrap}nav a{color:var(--light-text);text-decoration:none;font-weight:600;padding:10px 20px;display:inline-block;position:relative;transition:color .3s;cursor:pointer}nav a::after{content:'';position:absolute;bottom:5px;left:50%;transform:translateX(-50%);width:0;height:2px;background-color:var(--secondary-color);transition:width .3s}nav a:hover{color:#f1c40f}nav a:hover::after{width:60%}
+    nav a.nav-disabled{color:#a9a9a9;pointer-events:none;cursor:not-allowed}nav a.nav-disabled:hover{color:#a9a9a9}nav a.nav-disabled::after{width:0!important}
+    .tab-content{display:none;padding:20px 0}.tab-content.active{display:block;animation:fadeIn .5s}.hero-section h2{color:var(--light-text)}.ai-suggestion-box,.search-container{margin-bottom:30px;position:relative}
+    #product-search{width:100%;padding:15px 50px 15px 25px;border:2px solid #ddd;border-radius:50px;font-size:1rem;outline:none;transition:all .3s}#product-search:focus{border-color:var(--primary-color);box-shadow:0 0 10px rgba(26,82,118,.2)}.search-icon{position:absolute;right:25px;top:50%;transform:translateY(-50%);color:var(--primary-color);font-size:1.2rem}
+    .ai-suggestion-box{background:var(--light-text);padding:30px;border-radius:var(--border-radius);box-shadow:var(--shadow);text-align:center}#symptom-input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin:10px 0}#suggest-btn{background:linear-gradient(135deg,var(--primary-color),var(--accent-color));color:var(--light-text);border:none;padding:12px 30px;border-radius:50px;cursor:pointer;font-weight:700;transition:all .3s;margin-top:10px}#suggest-btn:hover{transform:translateY(-3px);box-shadow:0 5px 15px rgba(0,0,0,.2)}#suggestion-result{margin-top:20px;text-align:left}.suggestion-product{background:#f8f9fa;padding:15px;border-radius:8px;margin:10px 0;display:flex;justify-content:space-between;align-items:center;border-left:4px solid var(--accent-color)}
+    .promo-section h2 {font-size: 2rem; border-bottom: 3px solid var(--primary-color); padding-bottom: 10px; margin-bottom: 25px; margin-top: 40px;}
+    .product-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:30px}.product{background:var(--light-text);border-radius:var(--border-radius);box-shadow:var(--shadow);display:flex;flex-direction:column;position:relative;transition:all .3s ease;overflow:hidden}.product:hover{transform:translateY(-8px);box-shadow:0 10px 25px rgba(0,0,0,.12)}.product.promo-highlight{animation:promoGlow 2.5s infinite ease-in-out}.product-image-container{height:220px;padding:15px;display:flex;align-items:center;justify-content:center}.product img{max-width:100%;max-height:100%;object-fit:contain}.product-info{padding:20px;flex-grow:1;display:flex;flex-direction:column;text-align:left;position:relative}.product h3{margin:0 0 10px;font-size:1.25rem;height:3.75rem;overflow:hidden}.product .benefits{font-size:.85rem;color:#555;margin:10px 0;flex-grow:1}.product .consumption{font-size:.85rem;color:var(--primary-color);font-style:italic;margin:10px 0}.price-section{margin:15px 0;text-align:center}.original-price{text-decoration:line-through;color:#999;font-size:1rem;margin-right:10px}.new-price{color:var(--secondary-color);font-weight:700;font-size:1.5rem}.product-points{font-size:.9rem;font-weight:600;color:var(--accent-color);text-align:center;margin-top:10px}.product-actions{margin-top:auto;display:flex;flex-direction:column;gap:10px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px 15px;border-radius:50px;text-decoration:none;font-weight:700;border:none;cursor:pointer;transition:all .3s}.btn:disabled{background-color:#ccc;cursor:not-allowed}.btn-primary{background:var(--primary-color);color:var(--light-text)}.btn-primary:hover{background:#123e5a;transform:scale(1.05)}.btn-secondary{background:var(--light-gray);color:var(--primary-color);border:1px solid var(--primary-color)}.btn-secondary:hover{background:#e0e0e0}.featured-badge{position:absolute;top:0;right:0;background:var(--secondary-color);color:#fff;padding:5px 25px;transform:rotate(45deg) translate(25%,-65%);transform-origin:0 0;font-weight:700;font-size:.9rem;box-shadow:0 3px 10px rgba(0,0,0,.2);z-index:10;white-space:nowrap}.halal-badge{position:absolute;top:10px;left:10px;background-color:rgba(255,255,255,0.8);color:var(--accent-color);padding:3px 8px;border-radius:5px;font-size:.75rem;font-weight:700;border:1px solid rgba(39,174,96,0.3)}.floating-cart-btn{position:fixed;bottom:20px;right:20px;width:60px;height:60px;background-color:var(--primary-color);color:var(--light-text);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;box-shadow:0 4px 12px rgba(0,0,0,.25);cursor:pointer;z-index:1000;transition:transform .3s ease}.floating-cart-btn:hover{transform:scale(1.1)}#cart-count{position:absolute;top:-2px;right:-2px;background-color:var(--secondary-color);color:var(--light-text);border-radius:50%;padding:3px 8px;font-size:.8rem;font-weight:700;border:2px solid var(--light-text)}.modal{display:none;position:fixed;z-index:1001;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,.6);align-items:center;justify-content:center;animation:fadeIn .4s ease}.modal-content{background-color:#fefefe;padding:30px;border-radius:var(--border-radius);width:90%;max-width:600px;animation:slideIn .4s ease;max-height:90vh;overflow-y:auto}.close{color:#aaa;float:right;font-size:28px;font-weight:700;cursor:pointer;transition:color .3s}.close:hover{color:#000}#cart-items{max-height:250px;overflow-y:auto;padding-right:10px;border-bottom:1px solid #eee;margin-bottom:15px}.cart-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0}.cart-item-details{flex-grow:1}.quantity-controls{display:flex;align-items:center;gap:8px;margin-top:5px}.quantity-btn{width:28px;height:28px;background:var(--light-gray);border:1px solid #ccc;border-radius:50%;cursor:pointer;font-weight:700}.quantity-display{font-weight:600;min-width:20px;text-align:center}.remove-item-btn{font-size:1.2rem;color:#c00;cursor:pointer;margin-left:15px}.cart-summary{margin-top:20px;font-size:1.1rem}.summary-line{display:flex;justify-content:space-between;padding:8px 0}.summary-line.total{font-weight:700;font-size:1.3rem;border-top:2px solid #333;margin-top:10px}.points-earned,.free-shipping-promo{background-color:#e0f2f1;color:var(--accent-color);padding:10px;border-radius:8px;text-align:center;margin-top:20px;font-weight:700}.customer-info-form input{width:100%;padding:10px;margin-bottom:10px;border:1px solid #ccc;border-radius:5px}.discount-section{display:flex;gap:10px;margin-top:15px}.discount-section input{flex-grow:1;padding:10px;border:1px solid #ccc;border-radius:5px}.discount-section button{width:auto;padding:10px 15px;flex-shrink:0}#discount-status{font-size:.9rem;font-weight:600;margin-top:8px;min-height:18px;text-align:center}#consent-form{margin-top:20px;padding:15px;background-color:#f8f9fa;border:1px solid #dee2e6;border-radius:8px;font-size:.9rem}#consent-form label{display:flex;align-items:flex-start;gap:10px}#consent-form input[type=checkbox]{margin-top:3px}#consent-form a{color:var(--primary-color);font-weight:600}.checkout-btn{width:100%;margin-top:15px}.verification-step{margin-top:20px;padding:20px;background-color:var(--light-gray);border-radius:var(--border-radius);text-align:center;border:2px dashed #ddd}.verification-step.active{border-color:var(--primary-color);background-color:#eaf2f8}.verification-step.completed{border-color:var(--accent-color);background-color:#e8f8f5;opacity:.7}.verification-step h4{margin-top:0}.verification-step input[type=file],.verification-step input[type=text]{width:100%;padding:12px;margin:15px 0 10px;border:1px solid #ddd;border-radius:8px}#upload-status,#verification-status{margin-top:10px;font-weight:700;min-height:20px}footer{background:var(--primary-color);color:var(--light-text);padding:40px 20px;text-align:center;margin-top:30px}.disclaimer{margin-top:10px;background-color:#fff3cd;color:#856404;padding:15px;border-top:1px solid #ffeeba}
+    .about-us-section{padding:40px;background-color:#fff;border-radius:var(--border-radius);box-shadow:var(--shadow)}.about-us-section .owner-profile{display:flex;align-items:center;gap:30px;flex-wrap:wrap}.about-us-section .owner-image{width:150px;height:150px;border-radius:50%;object-fit:cover;border:5px solid var(--primary-color)}.about-us-section .owner-details{flex:1;min-width:300px}.about-us-section ul {list-style: none; padding-left: 0;} .about-us-section ul li {margin-bottom: 10px;} .feedback-form select{width:100%;padding:10px;margin-bottom:10px;border:1px solid #ccc;border-radius:5px} .feedback-form textarea{width:100%;padding:10px;margin-bottom:10px;border:1px solid #ccc;border-radius:5px;min-height:120px} #feedback-status{font-weight:bold;margin-top:15px;}
+    .program-section{background:var(--light-text);padding:40px;border-radius:var(--border-radius);box-shadow:var(--shadow);margin-bottom:30px}.program-section h2{font-size:2.5rem;text-align:center}.program-section ul {list-style: none; padding-left: 0; margin-top: 30px;}.program-section ul li {background: #f9f9f9; border-left: 5px solid var(--accent-color); padding: 15px; margin-bottom: 10px; border-radius: 5px; text-align: left;}.program-section ul li strong {color: var(--primary-color); display: block; margin-bottom: 5px;}
+    .cta-button{display:block;width:fit-content;margin:30px auto;background:linear-gradient(135deg,var(--secondary-color),#e67e22);color:var(--light-text);text-align:center;padding:15px 40px;border-radius:50px;font-weight:700;text-decoration:none;font-size:1.2rem;transition:all .3s;box-shadow:0 4px 8px rgba(0,0,0,.2)}.cta-button:hover{transform:translateY(-3px);box-shadow:0 6px 12px rgba(0,0,0,.3)}.rewards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}.reward-item{background:var(--light-gray);border:1px solid #ddd;border-radius:var(--border-radius);padding:20px;text-align:center;display:flex;flex-direction:column;position:relative}.reward-item img{max-width:100%;height:100px;object-fit:contain;margin-bottom:15px;border-radius:8px}.reward-item h4{margin:10px 0 5px}.reward-item .points-cost{font-weight:700;color:var(--accent-color);margin-bottom:15px}.coming-soon-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background-color:rgba(255,255,255,.8);color:var(--primary-color);display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:700;border-radius:var(--border-radius);backdrop-filter:blur(2px)}
+    .original-cart-price{text-decoration:line-through;color:#999;font-size:.9rem;}.final-cart-price{font-weight:600}.summary-line small{font-size:.8rem;color:var(--accent-color);font-style:italic}
+  </style>
+
+  <!-- NEW: Festival Animations CSS -->
+  <style id="festival-animations-style">
+    #festival-animations-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: 0; }
+    .festival-element { position: absolute; display: none; background-size: contain; background-repeat: no-repeat; will-change: transform, opacity; animation-timing-function: linear; animation-iteration-count: infinite;}
+    body:not(.default-theme)::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.15; background-size: cover; animation: fadeIn 2s ease-in-out; }
+    
+    /* --- Animation Keyframes --- */
+    @keyframes fall { 0% { transform: translateY(-100%) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 95% { opacity: 1; } 100% { transform: translateY(100vh) rotate(360deg); opacity: 0; } }
+    @keyframes sway { 0% { transform: translateY(0) rotate(-8deg); } 50% { transform: translateY(-20px) rotate(8deg); } 100% { transform: translateY(0) rotate(-8deg); } }
+    @keyframes twinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.8; } }
+    @keyframes firework-1 { 0%, 90%, 100% { opacity: 0; transform: scale(0.5) } 30% { opacity: 1; transform: scale(1.2); } }
+    @keyframes firework-2 { 0%, 80%, 100% { opacity: 0; transform: scale(0.5) } 50% { opacity: 1; transform: scale(1); } }
+    
+    /* --- Grand Opening --- */
+    .theme-GrandOpening .confetti, .theme-GrandOpening .balloon { display: block; }
+    .confetti { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M0 0h10v2H0z" fill="gold"/><path d="M0 4h10v2H0z" fill="tomato"/><path d="M0 8h10v2H0z" fill="dodgerblue"/></svg>'); animation-name: fall; }
+    .balloon { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 125"><path fill="gold" d="M50 0C20 0 0 30 0 60c0 30 20 60 50 60s50-30 50-60C100 30 80 0 50 0z"/><path fill="%23d4af37" d="M50 110v10l-5 5h10l-5-5z"/></svg>'); animation-name: sway; animation-timing-function: ease-in-out; }
+    .confetti-1 {width: 10px; height: 10px; left: 10%; animation-duration: 7s; animation-delay: 0s;} .confetti-2 {width: 15px; height: 15px; left: 30%; animation-duration: 5s; animation-delay: 2s;} .confetti-3 {width: 8px; height: 8px; left: 50%; animation-duration: 9s; animation-delay: 1s;} .confetti-4 {width: 12px; height: 12px; left: 70%; animation-duration: 6s; animation-delay: 4s;} .confetti-5 {width: 10px; height: 10px; left: 90%; animation-duration: 8s; animation-delay: 3s;}
+    .balloon-1 { width: 80px; height: 100px; top: -120px; right: 5%; animation-duration: 15s; animation-delay: 1s; opacity: 0.7;}
+    .balloon-2 { width: 100px; height: 125px; top: -140px; left: 10%; animation-duration: 20s; animation-delay: 4s; opacity: 0.8;}
+
+    /* --- Hari Raya --- */
+    .theme-HariRaya .ketupat, .theme-HariRaya .pelita { display: block; animation-name: sway; animation-timing-function: ease-in-out; }
+    .ketupat { background-image: url('https://svgshare.com/i/18bH.svg'); }
+    .pelita { background-image: url('https://svgshare.com/i/18bL.svg'); filter: drop-shadow(0 0 10px #ffdd00); }
+    .ketupat-1 { width: 100px; height: 100px; top: 5%; left: 10%; animation-duration: 12s; opacity: 0.8;}
+    .pelita-1 { width: 70px; height: 70px; top: 40%; left: 85%; animation-duration: 10s; animation-delay: 1s; opacity: 0.9;}
+    .ketupat-2 { width: 80px; height: 80px; top: 60%; left: 5%; animation-duration: 15s; animation-delay: 3s; opacity: 0.7;}
+
+    /* --- Deepavali --- */
+    .theme-Deepavali .diya, .theme-Deepavali .rangoli { display: block; }
+    .diya { background-image: url('https://svgshare.com/i/18ae.svg'); animation-name: twinkle; }
+    .rangoli { background-image: url('https://svgshare.com/i/18c5.svg'); animation-name: fadeIn; animation-duration: 8s; animation-timing-function: ease-in-out;}
+    .diya-1 { width: 80px; height: 80px; bottom: 5%; left: 10%; animation-duration: 3s; } .diya-2 { width: 80px; height: 80px; bottom: 5%; right: 10%; animation-duration: 5s; animation-delay: 1s; }
+    .rangoli-1 { width: 200px; height: 200px; top: 10%; right: 5%; opacity: 0.4; animation-delay: 1s;}
+    .rangoli-2 { width: 150px; height: 150px; top: 60%; left: 5%; opacity: 0.3; animation-delay: 4s;}
+    
+    /* --- Christmas --- */
+    .theme-Christmas .snowflake, .theme-Christmas .giftbox { display: block; animation-name: fall; }
+    .snowflake { background-image: url('https://svgshare.com/i/18ar.svg'); opacity: 0.7; }
+    .giftbox { background-image: url('https://svgshare.com/i/18c6.svg'); }
+    .snowflake-1 { width: 30px; height: 30px; left: 10%; animation-duration: 12s; } .snowflake-2 { width: 40px; height: 40px; left: 30%; animation-duration: 8s; animation-delay: 3s; } .snowflake-3 { width: 25px; height: 25px; left: 50%; animation-duration: 15s; animation-delay: 1s; } .snowflake-4 { width: 35px; height: 35px; left: 70%; animation-duration: 9s; animation-delay: 5s; } .snowflake-5 { width: 30px; height: 30px; left: 90%; animation-duration: 11s; animation-delay: 2s; }
+    .giftbox-1 { width: 50px; height: 50px; left: 20%; animation-duration: 10s; animation-delay: 2s; }
+    .giftbox-2 { width: 60px; height: 60px; left: 80%; animation-duration: 13s; animation-delay: 5s; }
+
+    /* --- CNY --- */
+    .theme-CNY .lantern, .theme-CNY .firework { display: block; }
+    .lantern { background-image: url('https://svgshare.com/i/18bM.svg'); animation-name: sway; animation-timing-function: ease-in-out; filter: drop-shadow(0 0 15px #c0392b); }
+    .firework { background-image: url('https://svgshare.com/i/18c7.svg'); }
+    .lantern-1 { width: 150px; height: 150px; top: 5%; left: 15%; animation-duration: 8s; opacity: 0.9;}
+    .lantern-2 { width: 120px; height: 120px; top: 10%; right: 10%; animation-duration: 10s; animation-delay: 2s; opacity: 0.8;}
+    .firework-1 {width: 250px; height: 250px; top: 20%; left: 40%; animation-name: firework-1; animation-duration: 4s; animation-delay: 1s;}
+    .firework-2 {width: 200px; height: 200px; top: 50%; right: 15%; animation-name: firework-2; animation-duration: 5s; animation-delay: 3s;}
+    
+    /* --- National/Malaysia Day --- */
+    .theme-NationalDay .flag, .theme-MalaysiaDay .flag, .theme-NationalDay .firework-my, .theme-MalaysiaDay .firework-my { display: block; }
+    .flag { background-image: url('https://svgshare.com/i/18aq.svg'); animation-name: sway; animation-duration: 10s; animation-timing-function: ease-in-out; }
+    .firework-my { background-image: url('https://svgshare.com/i/18c7.svg'); }
+    .flag-1 { width: 120px; height: 80px; top: 10%; left: 5%; animation-delay: 0s; opacity: 0.8; }
+    .flag-2 { width: 150px; height: 100px; top: 30%; right: 5%; animation-delay: 2s; opacity: 0.9; }
+    .firework-my-1 { width: 200px; height: 200px; top: 50%; left: 15%; animation-name: firework-2; animation-duration: 5s; animation-delay: 1s;}
+    .firework-my-2 { width: 250px; height: 250px; top: 15%; right: 30%; animation-name: firework-1; animation-duration: 4s; animation-delay: 3s;}
+
   </style>
 </head>
-<body>
-  <h1>Forever Living Products</h1>
-  <div id="products">Loading...</div>
+<body class="default-theme">
 
-  <script>
-    async function loadProducts() {
-      const sheetUrl = "https://script.google.com/macros/s/AKfycbx1UumQLcRJso8yxzJede45MQbxaaimkuSIxD58J_wJamjZ2Id_Y9Ak4ukfcUuDeJgktA/exec"; // paste your deployed Apps Script URL here
-      try {
-        let res = await fetch(sheetUrl);
-        let data = await res.json();
+<!-- This is the container for the festive animations -->
+<div id="festival-animations-container">
+    <!-- Grand Opening -->
+    <div class="festival-element confetti confetti-1"></div><div class="festival-element confetti confetti-2"></div><div class="festival-element confetti confetti-3"></div><div class="festival-element confetti confetti-4"></div><div class="festival-element confetti confetti-5"></div>
+    <div class="festival-element balloon balloon-1"></div><div class="festival-element balloon balloon-2"></div>
+    <!-- Hari Raya -->
+    <div class="festival-element ketupat ketupat-1"></div><div class="festival-element pelita pelita-1"></div>
+    <div class="festival-element ketupat ketupat-2"></div>
+    <!-- Deepavali -->
+    <div class="festival-element diya diya-1"></div><div class="festival-element rangoli rangoli-1"></div>
+    <div class="festival-element diya diya-2"></div><div class="festival-element rangoli rangoli-2"></div>
+    <!-- Christmas -->
+    <div class="festival-element snowflake snowflake-1"></div><div class="festival-element snowflake snowflake-2"></div><div class="festival-element snowflake snowflake-3"></div><div class="festival-element snowflake snowflake-4"></div><div class="festival-element snowflake snowflake-5"></div>
+    <div class="festival-element giftbox giftbox-1"></div><div class="festival-element giftbox giftbox-2"></div>
+    <!-- CNY -->
+    <div class="festival-element lantern lantern-1"></div><div class="festival-element lantern lantern-2"></div>
+    <div class="festival-element firework firework-1"></div><div class="festival-element firework firework-2"></div>
+    <!-- National/Malaysia Day -->
+    <div class="festival-element flag flag-1"></div><div class="festival-element flag flag-2"></div>
+    <div class="festival-element firework-my firework-my-1"></div><div class="festival-element firework-my firework-my-2"></div>
+</div>
 
-        const container = document.getElementById("products");
-        container.innerHTML = "";
+<div id="store-wrapper">
+  <header>
+    <div class="container">
+        <div class="header-content">
+            <img src="FL.jpg" alt="Business Logo" class="header-logo" onerror="this.style.display='none'">
+            <h1>
+              FOREVER LIVING by Muhd Arvind Isa
+              <span style="font-size: 1rem; color: #555; display: block; font-weight: 400;">Quality Wellness Products</span>
+            </h1>
+        </div>
+    </div>
+  </header>
+  
+  <div id="promo-running-banner">
+      <div class="marquee-content" id="promo-banner-text"></div>
+  </div>
 
-        if (data.error) {
-          container.innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
-          return;
+  <nav>
+    <div class="container">
+        <ul id="main-nav">
+          <li><a onclick="showTab('products')">Products</a></li>
+          <li><a onclick="showTab('business')">Business Opportunity</a></li>
+          <li><a onclick="showTab('about')">About Us</a></li>
+          <li><a class="nav-disabled">Rewards</a></li>
+          <li><a class="nav-disabled">My Forever Living</a></li>
+        </ul>
+    </div>
+  </nav>
+
+  <main id="main-content" class="container">
+    <div id="products" class="tab-content active">
+      <section class="hero-section" id="hero-section">
+        <h2 id="hero-title"><i class="fa-solid fa-store"></i> Welcome to Our Store</h2>
+        <p id="hero-subtitle">Enjoy high-quality wellness products for a healthier lifestyle.</p>
+        <div id="countdown-timer" style="display:none;"></div>
+      </section>
+
+      <div class="search-container">
+        <input type="text" id="product-search" onkeyup="filterProducts()" placeholder="Search for products by name...">
+        <i class="fa-solid fa-search search-icon"></i>
+      </div>
+
+      <section class="ai-suggestion-box">
+        <h3><i class="fa-solid fa-robot"></i> AI Product Suggester</h3>
+        <p>Describe your health concern (e.g., "dry skin", "low energy") and our AI will suggest a product for you.</p>
+        <input type="text" id="symptom-input" placeholder="Enter your symptom or concern...">
+        <button id="suggest-btn" class="btn btn-primary" onclick="suggestProduct()">Get Suggestion</button>
+        <div id="suggestion-result"></div>
+      </section>
+
+      <div id="product-list-container">
+          <p style="text-align: center; width: 100%;">
+            <i class="fa-solid fa-spinner fa-spin"></i> Loading products from our catalog...
+          </p>
+      </div>
+    </div>
+
+    <div id="business" class="tab-content">
+      <section class="program-section">
+        <h2>Build Your Forever Business</h2>
+        <p style="text-align: center; max-width: 800px; margin: 20px auto;">The Forever Living opportunity is more than just selling high-quality products; it's a chance to build a flexible, rewarding business on your own terms. Whether you're looking for extra income or a full-time career, Forever provides a proven path to success.</p>
+        <h3 style="margin-top:40px;">How Does It Work?</h3>
+        <ul>
+            <li><strong>Become Your Own Boss:</strong> As a Forever Business Owner (FBO), you have the freedom to work from anywhere, set your own hours, and grow at your own pace. There are no large startup fees or required inventory purchases.</li>
+            <li><strong>A Simple, Proven Model:</strong> The business is built on a simple cycle: Use the products yourself, share your experience and the products with others, and build a team of like-minded individuals to do the same.</li>
+            <li><strong>Earn Generous Rewards:</strong> You earn income from your retail sales and from the sales of your team members. Forever offers one of the most generous compensation plans in the industry, including performance bonuses, the car plan (Earn While you Drive), and global travel incentives.</li>
+            <li><strong>World-Class Support:</strong> You are never alone. You will receive mentorship, training materials, and support from our team at Rich Academy Global and the wider Forever community to help you achieve your goals.</li>
+        </ul>
+        <h3 style="margin-top:40px;">Ready to Start Your Journey?</h3>
+        <p style="text-align: center;">Take the first step towards a healthier, wealthier life. Contact us today to learn more without any obligation.</p>
+        <a href="https://wa.me/601111033154?text=Hi,%20I'm%20interested%20in%20learning%20more%20about%20the%20Forever%20Living%20business%20opportunity." class="cta-button" target="_blank"><i class="fab fa-whatsapp"></i> Click to Learn More on WhatsApp</a>
+      </section>
+    </div>
+
+    <div id="about" class="tab-content">
+      <section class="about-us-section">
+        <h2>About Us</h2>
+        <div class="owner-profile">
+            <img src="owner.jpg" alt="Muhd Arvind Isa" class="owner-image" onerror="this.src='https://via.placeholder.com/150'">
+            <div class="owner-details">
+                <h3>Muhd Arvind Isa - Independent FBO</h3>
+                <p>Welcome! I am an authorized Independent Forever Business Owner (FBO) dedicated to bringing you the highest quality health and wellness products from Forever Living. My mission is to empower individuals to lead healthier lives and to provide opportunities for financial well-being through the Forever business model.</p>
+                <p><strong>Powered by:</strong> Rich Academy Global</p>
+                <p><strong>Contact Information:</strong></p>
+                <ul>
+                    <li><strong><i class="fab fa-whatsapp"></i> WhatsApp:</strong> <a href="https://wa.me/601111033154">+6011 1103 3154</a></li>
+                    <li><strong><i class="fa fa-envelope"></i> Email:</strong> <a href="mailto:cs.foreverlivingbymuhdarvindisa@gmail.com">cs.foreverlivingbymuhdarvindisa@gmail.com</a></li>
+                </ul>
+            </div>
+        </div>
+        <hr style="margin: 30px 0;">
+        <h3>The Forever Living Legacy</h3>
+        <p>Founded in 1978 by Rex Maughan, Forever Living Products is a multi-billion dollar company that manufactures and sells hundreds of wellness and beauty products all around the world. What makes Forever unique is its commitment to quality through a process called "from seed to product."</p>
+        <ul>
+            <li><strong>The Aloe Vera Company:</strong> Forever owns its own aloe vera plantations in Texas and the Dominican Republic, ensuring the purest and most potent aloe is used in its products. They control the entire process, from planting and harvesting to processing and manufacturing.</li>
+            <li><strong>Global Presence:</strong> For over 40 years, Forever has grown to operate in more than 160 countries, demonstrating the universal appeal and effectiveness of its products and business model.</li>
+            <li><strong>Our Commitment:</strong> We are committed to providing authentic Forever Living products, exceptional customer service, and reliable support for both our customers and business partners. All products are sourced directly from Forever Living Products and are guaranteed to be genuine.</li>
+        </ul>
+        <hr style="margin: 30px 0;">
+        <h3>Feedback & Order Requests</h3>
+        <p>Have a question, compliment, or suggestion? Or perhaps you'd like to place an order directly? Fill out the form below, and we'll get back to you as soon as possible.</p>
+        <form class="feedback-form" onsubmit="sendFeedbackEmail(event)">
+            <input type="text" id="feedback-name" placeholder="Your Name" required>
+            <input type="email" id="feedback-email" placeholder="Your Email" required>
+            <select id="feedback-subject" required>
+                <option value="" disabled selected>Select a Subject...</option>
+                <option value="General Enquiry">General Enquiry</option>
+                <option value="Order Request">Order Request</option>
+                <option value="Compliment">Compliment</option>
+                <option value="Complaint">Complaint</option>
+                <option value="Suggestion">Suggestion</option>
+            </select>
+            <textarea id="feedback-message" placeholder="Your Message" required></textarea>
+            <button type="submit" id="feedback-submit-btn" class="btn btn-primary">Send Message</button>
+            <p id="feedback-status"></p>
+        </form>
+      </section>
+    </div>
+
+    <div id="rewards" class="tab-content">
+      <section class="program-section">
+            <h2><i class="fa-solid fa-award"></i> Redeem Your Points</h2>
+            <p style="text-align: center;">This feature is currently under development. Stay tuned for exciting rewards!</p>
+            <div class="rewards-grid">
+                <div class="reward-item">
+                    <img src="rm5.jpg" alt="RM 5 Voucher" onerror="this.src='https://i.imgur.com/O9yP2aH.png'">
+                    <h4>RM 5 Voucher</h4><p class="points-cost">500 Points</p><div class="coming-soon-overlay"><span>Coming Soon</span></div>
+                </div>
+                <div class="reward-item">
+                    <img src="rm10.jpg" alt="RM 10 Voucher" onerror="this.src='https://i.imgur.com/sY2a2qG.png'">
+                    <h4>RM 10 Voucher</h4><p class="points-cost">1000 Points</p><div class="coming-soon-overlay"><span>Coming Soon</span></div>
+                </div>
+            </div>
+        </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+      <div class="container">
+        <p>© 2025 Forever Living by Muhd Arvind Isa. All rights reserved.</p>
+        <div class="timestamp">Last updated: <span id="current-date"></span> <span style="font-weight:bold;">(v10.0)</span></div>
+        <section class="disclaimer">
+          <strong>Disclaimer:</strong> This website is operated by an independent FBO and is not the official site of Forever Living Products.
+        </section>
+      </div>
+  </footer>
+</div>
+
+  <div id="floating-cart" class="floating-cart-btn" onclick="toggleCart()">
+    <i class="fa-solid fa-cart-shopping"></i>
+    <span id="cart-count">0</span>
+  </div>
+
+  <div id="cart-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="toggleCart(true)">×</span>
+      <div id="cart-view">
+        <h2>Your Shopping Cart</h2>
+        <div id="cart-items"><p>Your cart is currently empty.</p></div>
+        <div class="cart-summary">
+          <div class="summary-line"><span>Subtotal</span><span id="cart-subtotal">RM 0.00</span></div>
+          <div class="summary-line" id="discount-line" style="display:none;"><span>Discount</span><span id="cart-discount">RM 0.00</span></div>
+          <div class="summary-line"><span>Shipping</span><span id="cart-shipping">RM 0.00</span></div>
+          <div class="summary-line" id="savings-line" style="display:none; color: var(--accent-color); font-weight: bold;"><span>You Saved</span><span id="cart-savings">RM 0.00</span></div>
+          <div class="summary-line total"><span>Total</span><span id="cart-total">RM 0.00</span></div>
+          <div id="points-earned-display"></div>
+        </div>
+        <div class="discount-section">
+            <input type="text" id="discount-code-input" placeholder="Enter Discount Code">
+            <button class="btn btn-secondary" onclick="applyDiscount()">Apply</button>
+        </div>
+        <p id="discount-status"></p>
+        <div class="customer-info-form">
+          <h3 style="margin-top: 20px;">Customer & Shipping Information</h3>
+          <input type="text" id="customer-name" placeholder="Your Full Name" required>
+          <input type="tel" id="customer-phone" placeholder="Your WhatsApp Number (e.g., 60123456789)" required>
+          <input type="email" id="customer-email" placeholder="Your Email Address (for receipt)" required>
+          <input type="text" id="customer-address1" placeholder="Address Line 1" required>
+          <input type="text" id="customer-address2" placeholder="Address Line 2 (Optional)">
+          <input type="text" id="customer-city" placeholder="City" required>
+          <input type="text" id="customer-state" placeholder="State" required>
+          <input type="text" id="customer-postcode" placeholder="Postcode" required>
+        </div>
+        <div id="consent-form">
+            <label for="consent-checkbox">
+                <input type="checkbox" id="consent-checkbox" onchange="toggleCheckoutButton()">
+                <span>I consent to the collection of my personal data for transaction purposes. You can request data deletion at any time via <a href="https://wa.me/601111033154?text=Hi,%20I%20would%20like%20to%20request%20my%20personal%20data%20to%20be%20deleted." target="_blank">WhatsApp</a> or <a href="mailto:cs.foreverlivingbymuhdarvindisa@gmail.com?subject=Request%20for%20Data%20Deletion">Email</a>.</span>
+            </label>
+        </div>
+        <button class="btn btn-primary checkout-btn" id="checkout-btn" onclick="initiateCheckout()" disabled>Agree & Complete Order via WhatsApp</button>
+      </div>
+      <div id="verification-view" style="display: none;">
+        <h2>Order Verification</h2>
+        <p>Please complete the following steps to finalize your order.</p>
+        <div id="proof-upload-step" class="verification-step active">
+            <h4><i class="fa-solid fa-arrow-up-from-bracket"></i> Step 1: Upload Payment Proof</h4>
+            <p style="font-size: 0.9rem; color: #555;">Upload a screenshot of your transaction receipt.</p>
+            <input type="file" id="payment-proof-upload" accept="image/*">
+            <button class="btn btn-primary" id="upload-proof-btn" onclick="uploadProof()">Upload and Proceed</button>
+            <p id="upload-status"></p>
+        </div>
+        <div id="code-verification-step" class="verification-step">
+            <h4><i class="fa-solid fa-key"></i> Step 2: Finalize with Code</h4>
+            <p style="font-size: 0.9rem; color: #555;">Enter the verification code provided to you by the owner.</p>
+            <input type="text" id="verification-code" placeholder="Enter Verification Code" disabled>
+            <button class="btn btn-primary" id="finalize-order-btn" onclick="finalizeOrder()" disabled>Finalize Order & Get Receipt</button>
+            <p id="verification-status"></p>
+        </div>
+        <button class="btn btn-secondary" style="margin-top: 20px;" onclick="cancelVerification()">Cancel Entire Order</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+    // --- CONFIGURATION ---
+    // IMPORTANT: Replace this URL with your own published Google Apps Script URL
+    const googleScriptURL = 'https://script.google.com/macros/s/AKfycbzVdP41m6QZV6ktwKXhHURDufxfkJmcVmnfgMORot3EYHOLQvu64S__mGBH-ZIGDApgcQ/exec';
+    
+    // --- GLOBAL STATE ---
+    // These variables will be populated with data from Google Sheets
+    let products = [];
+    let cart = [];
+    let activeFestival = null;
+    let activePromotions = [];
+    let shippingRules = {};
+    let availableDiscountCodes = {};
+    let appliedDiscount = null;
+
+    // --- INITIALIZATION ---
+    document.addEventListener('DOMContentLoaded', fetchData);
+    
+    async function fetchData() {
+        const productListContainer = document.getElementById("product-list-container");
+        try {
+            const response = await fetch(googleScriptURL);
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.statusText}`);
+            }
+            const data = await response.json();
+
+            if (data.status === 'success') {
+                // Populate global variables with the fetched data
+                products = data.products || [];
+                activeFestival = data.activeFestival || null;
+                activePromotions = data.activePromotions || [];
+                shippingRules = data.shippingRules || {};
+                availableDiscountCodes = data.discountCodes || {};
+                
+                // Now that we have data, initialize the UI
+                initializeUI();
+            } else {
+                throw new Error(data.message || 'Failed to parse data from the server.');
+            }
+        } catch (error) {
+            console.error("Error fetching store data:", error);
+            if (productListContainer) {
+                productListContainer.innerHTML = `<p style="text-align: center; color: red; font-weight: bold; width: 100%; padding: 40px 0;">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Error loading store.<br>
+                    The product catalog could not be retrieved. Please try again later.
+                </p>`;
+            }
         }
-
-        data.forEach(p => {
-          const div = document.createElement("div");
-          div.className = "product";
-          div.innerHTML = `
-            <h2>${p.ProductName || "Unnamed"}</h2>
-            <p><strong>Category:</strong> ${p.Category || "-"}</p>
-            <p><strong>Price:</strong> RM ${p.RSP || "-"}</p>
-            <p><strong>Benefits:</strong> ${p.Benefits || "-"}</p>
-            <p><strong>Consumption:</strong> ${p.Consumption || "-"}</p>
-          `;
-          container.appendChild(div);
-        });
-      } catch (err) {
-        document.getElementById("products").innerHTML = 
-          `<p style="color:red;">Failed to load products: ${err.message}</p>`;
-      }
+        
+        // Handle parts that don't depend on the fetch
+        document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        if (sessionStorage.getItem('pendingOrder')) { 
+            toggleCart(); 
+        } else { 
+            showTab('products'); 
+        }
     }
 
-    loadProducts();
-  </script>
+    function initializeUI() {
+        const body = document.body; 
+        body.className = 'default-theme';
+        const festivalContainer = document.getElementById('festival-animations-container');
+        if (activeFestival && activeFestival.theme) {
+            body.classList.add(`theme-${activeFestival.theme}`);
+            document.getElementById('hero-title').innerHTML = `<i class="fa-solid fa-gift"></i> ${activeFestival.name}`;
+            document.getElementById('hero-subtitle').textContent = "Enjoy special festive offers!";
+            const banner = document.getElementById('promo-running-banner');
+            document.getElementById('promo-banner-text').textContent = `✨ ${activeFestival.name}! See special offers below! ✨`;
+            banner.style.display = 'block'; 
+            startCountdown(activeFestival.endDate);
+            if(festivalContainer) festivalContainer.style.display = 'block';
+        } else {
+            document.getElementById('hero-title').innerHTML = `<i class="fa-solid fa-store"></i> Welcome to Our Store`;
+            document.getElementById('hero-subtitle').textContent = "Enjoy high-quality wellness products for a healthier lifestyle.";
+            if(festivalContainer) festivalContainer.style.display = 'none';
+        }
+        renderProducts();
+    }
+    
+    function renderProducts(){
+        const productListContainer = document.getElementById("product-list-container");
+        if (!productListContainer) return;
+        if (products.length === 0) {
+            productListContainer.innerHTML = `<p style="text-align: center; width: 100%;">No products found in the catalog.</p>`;
+            return;
+        }
+
+        let html = "";
+        let remainingProducts = [...products];
+        
+        if (activePromotions && activePromotions.length > 0) {
+            activePromotions.forEach(promo => {
+                let productsInPromo = [];
+                remainingProducts.forEach(p => { 
+                    if (promo.productIDs && promo.productIDs.includes(p.id)) { 
+                        productsInPromo.push(p); 
+                    } 
+                });
+                
+                if (productsInPromo.length > 0) {
+                    html += `<section class="promo-section"><h2>${promo.description}</h2><div class="product-list">`;
+                    productsInPromo.forEach(product => { html += renderSingleProduct(product, promo); });
+                    html += `</div></section>`;
+                    remainingProducts = remainingProducts.filter(p => !promo.productIDs.includes(p.id));
+                }
+            });
+        }
+        
+        if (remainingProducts.length > 0) {
+            html += `<section class="promo-section"><h2>All Products</h2><div class="product-list">`;
+            remainingProducts.forEach(product => { html += renderSingleProduct(product, null); });
+            html += `</div></section>`;
+        }
+        productListContainer.innerHTML = html;
+    }
+
+    function renderSingleProduct(product, promo) {
+        let priceHTML = `<span class="new-price">RM ${product.price.toFixed(2)}</span>`;
+        let finalPrice = product.price;
+        if (promo) {
+            if (promo.type === 'B2G200') {
+                priceHTML = `<span class="original-price">RM ${product.price.toFixed(2)}</span><span class="new-price" style="font-size: 1.2rem; color: var(--primary-color); display: block; margin-top: 5px;">Buy Any 2 for RM 200.00</span><div style="font-size: 0.9rem; color: var(--accent-color); font-weight: bold; margin-top: 5px;"><i class="fa-solid fa-truck-fast"></i> FREE Shipping!</div>`;
+            } else if (promo.type === 'PERCENT') {
+                const discountedPrice = product.price * (1 - parseFloat(promo.value) / 100);
+                priceHTML = `<span class="original-price">RM ${product.price.toFixed(2)}</span><span class="new-price">RM ${discountedPrice.toFixed(2)}</span>`;
+                finalPrice = discountedPrice;
+            } else if (promo.type === 'FIXED') {
+                const discountedPrice = product.price - parseFloat(promo.value);
+                priceHTML = `<span class="original-price">RM ${product.price.toFixed(2)}</span><span class="new-price">RM ${discountedPrice.toFixed(2)}</span>`;
+                finalPrice = discountedPrice;
+            }
+        }
+        return `<div class="product ${promo ? 'promo-highlight' : ''}"><div class="halal-badge">HALAL</div>${promo ? '<div class="featured-badge">On Offer!</div>' : ''}<div class="product-image-container"><img src="${product.image || 'https://via.placeholder.com/200'}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/200x200?text=Image+Not+Found'"></div><div class="product-info"><h3>${product.name}</h3><div class="price-section">${priceHTML}</div><div class="benefits"><strong>Benefits:</strong> ${product.benefits}</div><div class="consumption"><strong>Usage:</strong> ${product.consumption}</div><div class="product-actions"><button class="btn btn-primary" onclick="addToCart(${product.id}, ${finalPrice})"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button></div></div></div>`;
+    }
+    
+    function startCountdown(endDateString){const countdownEl=document.getElementById("countdown-timer");if(!countdownEl||!endDateString)return;countdownEl.style.display="inline-block";const promoEndDate=(new Date(endDateString)).getTime(),interval=setInterval(()=>{const now=(new Date).getTime(),distance=promoEndDate-now;if(distance<0)return clearInterval(interval),void(countdownEl.innerHTML="PROMOTION ENDED");const days=Math.floor(distance/864e5),hours=Math.floor(distance%864e5/36e5),minutes=Math.floor(distance%36e5/6e4),seconds=Math.floor(distance%6e4/1e3);countdownEl.innerHTML=`${days}d ${hours}h ${minutes}m ${seconds}s`},1e3)}
+    function showTab(tabId){document.querySelectorAll(".tab-content").forEach(el=>el.classList.remove("active"));const activeTab=document.getElementById(tabId);activeTab&&activeTab.classList.add("active")}
+    function toggleCheckoutButton(){document.getElementById("checkout-btn").disabled=!document.getElementById("consent-checkbox").checked}
+    
+    function addToCart(productId, finalPrice){
+        const existingItem = cart.find(item => item.id === productId);
+        if (existingItem) {
+            existingItem.quantity++;
+        } else {
+            const productData = products.find(p => p.id === productId);
+            cart.push({ id: productData.id, name: productData.name, quantity: 1, basePrice: productData.price, finalPrice: finalPrice });
+        }
+        updateCartDisplay();
+    }
+
+    function increaseQuantity(productId){const item=cart.find(p=>p.id===productId);if(item){item.quantity++;updateCartDisplay()}}
+    function decreaseQuantity(productId){const item=cart.find(p=>p.id===productId);if(item){item.quantity--;if(item.quantity<=0)removeItemFromCart(productId);else updateCartDisplay()}}
+    function removeItemFromCart(productId){appliedDiscount=null;document.getElementById('discount-code-input').value="";document.getElementById('discount-status').textContent="";cart=cart.filter(p=>p.id!==productId);updateCartDisplay()}
+    function updateCartCount(){document.getElementById("cart-count").textContent=cart.reduce((total,item)=>total+item.quantity,0)}
+    function applyDiscount(){const codeInput=document.getElementById("discount-code-input"),statusEl=document.getElementById("discount-status"),code=codeInput.value.trim().toUpperCase();if(!code)return statusEl.textContent="Please enter a code.",void(statusEl.style.color="orange");const discountData=availableDiscountCodes[code];discountData?(appliedDiscount={code,...discountData},statusEl.textContent=`Code "${code}" applied successfully!`,statusEl.style.color="green"):(appliedDiscount=null,statusEl.textContent="Invalid or expired discount code.",statusEl.style.color="red"),updateCartDisplay()}
+    
+    function calculateCartTotals() {
+        let subtotal = 0;
+        let originalSubtotal = 0;
+        let promoShippingRuleId = null;
+        const itemFinalPrices = {};
+        
+        const cartWithDetails = cart.map(item => {
+            const details = products.find(p => p.id === item.id);
+            return {...item, details};
+        });
+
+        cartWithDetails.forEach(item => {
+            originalSubtotal += item.details.price * item.quantity;
+            itemFinalPrices[item.id] = item.details.price;
+            item.isB2G200 = false;
+        });
+
+        const b2g200Promo = activePromotions.find(p => p.type === 'B2G200');
+        if (b2g200Promo) {
+            const productsInPromo = cartWithDetails.filter(item => b2g200Promo.productIDs.includes(item.details.id));
+            if(productsInPromo.length > 0) {
+                productsInPromo.forEach(item => { item.isB2G200 = true; });
+                if (b2g200Promo.shippingRuleId) promoShippingRuleId = b2g200Promo.shippingRuleId;
+            }
+        }
+        
+        activePromotions.filter(p => p.type !== 'B2G200').forEach(promo => {
+            const productsInPromo = cartWithDetails.filter(item => promo.productIDs.includes(item.details.id) && !item.isB2G200);
+            if(productsInPromo.length > 0) {
+                 if (promo.shippingRuleId) promoShippingRuleId = promo.shippingRuleId;
+                productsInPromo.forEach(item => {
+                    let finalPrice = item.details.price;
+                    if (promo.type === 'PERCENT') { finalPrice = item.details.price * (1 - parseFloat(promo.value) / 100); } 
+                    else if (promo.type === 'FIXED') { finalPrice = item.details.price - parseFloat(promo.value); }
+                    itemFinalPrices[item.id] = finalPrice;
+                });
+            }
+        });
+        
+        const b2g200Items = cartWithDetails.filter(item => item.isB2G200);
+        let b2g200Subtotal = 0;
+        if(b2g200Items.length > 0){
+            const count = b2g200Items.reduce((sum, item) => sum + item.quantity, 0);
+            const numPairs = Math.floor(count/2);
+            const remaining = count % 2;
+            b2g200Subtotal = (numPairs * 200) + (remaining * b2g200Items[0].details.price);
+        }
+
+        const otherSubtotal = cartWithDetails.filter(item => !item.isB2G200)
+            .reduce((sum, item) => sum + (itemFinalPrices[item.id] * item.quantity), 0);
+        
+        subtotal = b2g200Subtotal + otherSubtotal;
+        
+        let discountValue = 0;
+        if (appliedDiscount) {
+            if (appliedDiscount.type === 'Fixed') { discountValue = parseFloat(appliedDiscount.value); } 
+            else if (appliedDiscount.type === 'Percentage') { discountValue = subtotal * (parseFloat(appliedDiscount.value) / 100); } 
+            else if (appliedDiscount.type === 'FreeShipping') {
+                const freeShipRule = Object.keys(shippingRules).find(id => "Free" === shippingRules[id].type);
+                if (freeShipRule) promoShippingRuleId = freeShipRule;
+            }
+        }
+        const subtotalAfterDiscount = subtotal - discountValue;
+        const shipping = calculateShipping(cart, subtotalAfterDiscount, promoShippingRuleId);
+        const total = subtotalAfterDiscount + shipping.fee;
+        const totalPoints = Math.floor(subtotalAfterDiscount);
+
+        return { subtotal, originalSubtotal, discountValue, shipping, total, totalPoints, itemFinalPrices };
+    }
+
+    function calculateShipping(cart,subtotal,promoShippingRuleId){if(cart.length===0)return{fee:0,message:"RM 0.00"};let ruleToApply=null;if(promoShippingRuleId&&shippingRules[promoShippingRuleId]){ruleToApply=shippingRules[promoShippingRuleId];ruleToApply.reason="Promotional Shipping!"}else{const defaultRules=Object.values(shippingRules).filter(r=>r.isDefault&&"Tiered"===r.type).sort((a,b)=>a.minSpend-b.minSpend);for(const rule of defaultRules)if(subtotal>=rule.minSpend&&subtotal<=rule.maxSpend){ruleToApply=rule;ruleToApply.reason=`Spend over RM${rule.minSpend}`}}if(!ruleToApply)return{fee:14,message:"RM 14.00"};if(ruleToApply.type==='Free')return{fee:0,message:"FREE",reason:ruleToApply.reason||"Promotional Free Shipping!"};if(ruleToApply.type==='FlatRate')return{fee:parseFloat(ruleToApply.charge),message:`RM ${parseFloat(ruleToApply.charge).toFixed(2)}`};if(ruleToApply.type==='Tiered'){const fee=parseFloat(ruleToApply.charge);return{fee:fee,message:0===fee?"FREE":`RM ${fee.toFixed(2)}`,reason:0===fee?`Free shipping for orders over RM ${ruleToApply.minSpend}!`:"Standard Shipping"}}return{fee:14,message:"RM 14.00"}}
+    
+    function updateCartDisplay() {
+        const cartItemsEl = document.getElementById("cart-items");
+        const subtotalEl = document.getElementById("cart-subtotal");
+        const discountLine = document.getElementById("discount-line");
+        const discountEl = document.getElementById("cart-discount");
+        const shippingEl = document.getElementById("cart-shipping");
+        const totalEl = document.getElementById("cart-total");
+        const pointsEl = document.getElementById("points-earned-display");
+        const savingsLine = document.getElementById("savings-line");
+        const savingsEl = document.getElementById("cart-savings");
+    
+        if (cart.length === 0) {
+            cartItemsEl.innerHTML = "<p>Your cart is currently empty.</p>";
+            subtotalEl.textContent = "RM 0.00";
+            shippingEl.textContent = "RM 0.00";
+            totalEl.textContent = "RM 0.00";
+            pointsEl.innerHTML = "";
+            discountLine.style.display = "none";
+            savingsLine.style.display = "none";
+            updateCartCount();
+            return;
+        }
+    
+        const { subtotal: calculatedSubtotal, originalSubtotal: originalSubtotal, discountValue: calculatedDiscount, shipping: shipping, total: total, totalPoints: totalPoints, itemFinalPrices: itemFinalPrices } = calculateCartTotals();
+    
+        let itemsHTML = "";
+        cart.forEach(item => {
+            const productData = products.find(p => p.id === item.id);
+            const finalPrice = itemFinalPrices[item.id] || productData.price;
+            let priceDisplay;
+    
+            if (finalPrice < productData.price) {
+                priceDisplay = `<div class="final-cart-price">RM ${finalPrice.toFixed(2)}</div>` +
+                               `<div class="original-cart-price">RM ${productData.price.toFixed(2)}</div>`;
+            } else {
+                priceDisplay = `<div class="final-cart-price">RM ${finalPrice.toFixed(2)}</div>`;
+            }
+    
+            itemsHTML += `<div class="cart-item">
+                            <div class="cart-item-details">
+                                <strong>${item.name}</strong>
+                                <div class="quantity-controls">
+                                    <button class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button>
+                                    <span class="quantity-display">${item.quantity}</span>
+                                    <button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button>
+                                </div>
+                            </div>
+                            <div style="text-align:right">${priceDisplay}</div>
+                        </div>`;
+        });
+    
+        const totalSavings = originalSubtotal - calculatedSubtotal + calculatedDiscount;
+        cartItemsEl.innerHTML = itemsHTML;
+        subtotalEl.textContent = `RM ${calculatedSubtotal.toFixed(2)}`;
+    
+        if (calculatedDiscount > 0) {
+            discountEl.textContent = `- RM ${calculatedDiscount.toFixed(2)}`;
+            discountLine.style.display = "flex";
+        } else {
+            discountLine.style.display = "none";
+        }
+    
+        if (shipping.message === "FREE") {
+            shippingEl.innerHTML = `<span style="color:var(--accent-color);font-weight:700"><i class="fa-solid fa-truck-fast"></i> FREE! <small>(${shipping.reason})</small></span>`;
+        } else {
+            shippingEl.innerHTML = shipping.message;
+        }
+    
+        if (totalSavings > 0) {
+            savingsEl.textContent = `RM ${totalSavings.toFixed(2)}`;
+            savingsLine.style.display = "flex";
+        } else {
+            savingsLine.style.display = "none";
+        }
+    
+        totalEl.textContent = `RM ${total.toFixed(2)}`;
+        pointsEl.innerHTML = `<div class="points-earned"><i class="fa-solid fa-star"></i> Points to be Earned: ${totalPoints}</div>`;
+        updateCartCount();
+    }
+    
+    function initiateCheckout(){if(!document.getElementById("consent-checkbox").checked)return void alert("You must agree to the data collection consent before proceeding.");const name=document.getElementById("customer-name").value.trim(),phone=document.getElementById("customer-phone").value.trim(),email=document.getElementById("customer-email").value.trim(),address1=document.getElementById("customer-address1").value.trim(),address2=document.getElementById("customer-address2").value.trim(),city=document.getElementById("customer-city").value.trim(),state=document.getElementById("customer-state").value.trim(),postcode=document.getElementById("customer-postcode").value.trim();if(!name||!phone||!email||!address1||!city||!state||!postcode)return void alert("Please fill in all required customer and shipping information fields.");if(0===cart.length)return void alert("Your cart is empty.");const{subtotal:subtotal,discountValue:discount,shipping:shipping,total:total,totalPoints:totalPoints,itemFinalPrices:itemFinalPrices}=calculateCartTotals(),fullAddress=`${address1}, ${address2?address2+", ":""}${postcode} ${city}, ${state}.`,pendingOrder={customerName:name,customerPhone:phone,customerEmail:email,customerAddress:fullAddress,cart:cart.map(item=>({id:item.id,name:item.name,quantity:item.quantity,finalPrice:itemFinalPrices[item.id]})),totalAmount:total.toFixed(2),shippingFee:shipping.fee.toFixed(2),discountApplied:appliedDiscount?`${appliedDiscount.code} - RM ${discount.toFixed(2)}`:"N/A",discountCodeUsed:appliedDiscount?appliedDiscount.code:"N/A",totalPointsForThisPurchase:totalPoints};sessionStorage.setItem("pendingOrder",JSON.stringify(pendingOrder));let message=`Hi, I would like to place an order:\n\n*Customer Details:*\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nAddress: ${fullAddress}\n\n--- ORDER SUMMARY ---\nSubtotal: RM ${subtotal.toFixed(2)}${discount>0?`\nDiscount: - RM ${discount.toFixed(2)}`:""}\nShipping: ${shipping.message}\n*TOTAL: RM ${total.toFixed(2)}*\n\nPlease provide payment details. After payment, I will upload the proof and verification code on your website to finalize the order. Thank you!`;window.open(`https://wa.me/601111033154?text=${encodeURIComponent(message)}`,"_blank"),document.getElementById("cart-view").style.display="none",document.getElementById("verification-view").style.display="block",updateVerificationUI()}
+    
+    async function uploadProof(){const proofFile=document.getElementById("payment-proof-upload").files[0],uploadStatusEl=document.getElementById("upload-status"),uploadBtn=document.getElementById("upload-proof-btn");let pendingOrder=JSON.parse(sessionStorage.getItem("pendingOrder"));if(!proofFile)return uploadStatusEl.textContent="Please select a file to upload.",void(uploadStatusEl.style.color="red");if(!pendingOrder)return uploadStatusEl.textContent="Error: No pending order found.",void(uploadStatusEl.style.color="red");uploadBtn.disabled=!0,uploadStatusEl.textContent="Uploading...",uploadStatusEl.style.color="blue";try{const base64File=await getBase64(proofFile),payload={action:"logInitialOrderWithProof",date:(new Date).toLocaleString("en-GB"),customerName:pendingOrder.customerName,customerEmail:pendingOrder.customerEmail,customerPhone:pendingOrder.customerPhone,customerAddress:pendingOrder.customerAddress,itemsPurchased:pendingOrder.cart.map(item=>`${item.name} (x${item.quantity})`).join("; "),discountApplied:pendingOrder.discountApplied,totalAmount:pendingOrder.totalAmount,shippingFee:pendingOrder.shippingFee,totalPointsForThisPurchase:pendingOrder.totalPointsForThisPurchase,paymentProofFile:base64File.split(",")[1],paymentProofMimeType:proofFile.type,paymentProofFileName:`${pendingOrder.customerEmail.split("@")[0]}-${Date.now()}`},response=await fetch(googleScriptURL,{method:"POST",body:JSON.stringify(payload)}),result=await response.json();if("success"===result.status)uploadStatusEl.textContent="Proof uploaded successfully!",uploadStatusEl.style.color="green",pendingOrder.proofUploaded=!0,sessionStorage.setItem("pendingOrder",JSON.stringify(pendingOrder)),updateVerificationUI();else throw new Error(result.message)}catch(error){uploadStatusEl.textContent=`Error: ${error.message}`,uploadStatusEl.style.color="red",uploadBtn.disabled=!1}}
+    
+    async function finalizeOrder(){const codeInput=document.getElementById("verification-code").value.trim().toUpperCase(),finalizeBtn=document.getElementById("finalize-order-btn"),verificationStatusEl=document.getElementById("verification-status");let pendingOrder=JSON.parse(sessionStorage.getItem("pendingOrder"));if(!codeInput)return verificationStatusEl.textContent="Please enter the verification code.",void(verificationStatusEl.style.color="red");if(!pendingOrder)return verificationStatusEl.textContent="Error: No pending order found.",void(verificationStatusEl.style.color="red");finalizeBtn.disabled=!0,verificationStatusEl.textContent="Verifying...",verificationStatusEl.style.color="blue";try{const payload={action:"finalizeOrder",usedCode:codeInput,customerName:pendingOrder.customerName,customerEmail:pendingOrder.customerEmail,customerPhone:pendingOrder.customerPhone,customerAddress:pendingOrder.customerAddress,cart:pendingOrder.cart,totalAmount:pendingOrder.totalAmount,shippingFee:pendingOrder.shippingFee,discountApplied:pendingOrder.discountApplied,discountCodeUsed:pendingOrder.discountCodeUsed,totalPointsForThisPurchase:pendingOrder.totalPointsForThisPurchase},response=await fetch(googleScriptURL,{method:"POST",body:JSON.stringify(payload)}),result=await response.json();if("success"===result.status){verificationStatusEl.textContent="Order Verified! Your receipt is downloading...";verificationStatusEl.style.color="green";const downloadLink=document.createElement("a");downloadLink.href=result.receiptUrl.replace("/file/d/","/uc?export=download&id=").replace("/view?usp=drivesdk",""),downloadLink.download=`Receipt-Order-${(new Date).getTime()}.pdf`,document.body.appendChild(downloadLink),downloadLink.click(),document.body.removeChild(downloadLink),cart=[],sessionStorage.removeItem("pendingOrder"),updateCartCount(),appliedDiscount=null,document.getElementById('discount-code-input').value="",document.getElementById('discount-status').textContent="",setTimeout(()=>{toggleCart(!0),updateVerificationUI(!0)},4e3)}else throw new Error(result.message)}catch(error){verificationStatusEl.textContent=`Error: ${error.message}`,verificationStatusEl.style.color="red",finalizeBtn.disabled=!1}}
+    
+    function updateVerificationUI(reset=!1){const proofStepEl=document.getElementById("proof-upload-step"),codeStepEl=document.getElementById("code-verification-step"),uploadBtn=document.getElementById("upload-proof-btn"),finalizeBtn=document.getElementById("finalize-order-btn"),codeInput=document.getElementById("verification-code"),uploadStatusEl=document.getElementById("upload-status"),verificationStatusEl=document.getElementById("verification-status");if(reset)return proofStepEl.classList.add("active"),proofStepEl.classList.remove("completed"),codeStepEl.classList.remove("active"),uploadBtn.disabled=!1,finalizeBtn.disabled=!0,codeInput.disabled=!0,uploadStatusEl.textContent="",verificationStatusEl.textContent="",document.getElementById("payment-proof-upload").value="",void(codeInput.value="");const pendingOrder=JSON.parse(sessionStorage.getItem("pendingOrder"));pendingOrder&& (pendingOrder.proofUploaded?(proofStepEl.classList.remove("active"),proofStepEl.classList.add("completed"),codeStepEl.classList.add("active"),uploadBtn.disabled=!0,finalizeBtn.disabled=!1,codeInput.disabled=!1,uploadStatusEl.textContent="Proof Uploaded Successfully!",uploadStatusEl.style.color="green"):(proofStepEl.classList.add("active"),proofStepEl.classList.remove("completed"),codeStepEl.classList.remove("active"),uploadBtn.disabled=!1,finalizeBtn.disabled=!0,codeInput.disabled=!0))}
+    
+    function cancelVerification(){confirm("Are you sure you want to cancel? This will remove your pending order and you will have to start over.")&&(sessionStorage.removeItem("pendingOrder"),toggleCart(!0),updateVerificationUI(!0))}
+    function toggleCart(forceClose=!1){const modal=document.getElementById("cart-modal");if(forceClose)return void(modal.style.display="none");if("flex"===modal.style.display)modal.style.display="none";else{modal.style.display="flex";const pendingOrder=JSON.parse(sessionStorage.getItem("pendingOrder"));pendingOrder?(document.getElementById("cart-view").style.display="none",document.getElementById("verification-view").style.display="block",updateVerificationUI()):(document.getElementById("cart-view").style.display="block",document.getElementById("verification-view").style.display="none",updateCartDisplay(),updateVerificationUI(!0))}}
+    function getBase64(file){return new Promise((resolve,reject)=>{const reader=new FileReader;reader.readAsDataURL(file),reader.onload=()=>resolve(reader.result),reader.onerror=error=>reject(error)})}
+    function filterProducts(){const query=document.getElementById("product-search").value.toLowerCase();document.querySelectorAll(".product").forEach(productCard=>{const productName=productCard.querySelector("h3").textContent.toLowerCase();productCard.style.display=productName.includes(query)?"flex":"none"})}
+    
+    function suggestProduct(){const symptom=document.getElementById("symptom-input").value.toLowerCase().trim(),resultContainer=document.getElementById("suggestion-result");if(!symptom)return void(resultContainer.innerHTML='<p style="color:red">Please enter a symptom or health concern.</p>');const suggestionMap={'digestion':{keywords:['digestion','stomach','tummy','bloated','indigestion','constipation'],ids:[1,2,3,7,11,18]},'immune':{keywords:['immune','sick','flu','cold','cough','fever','infection'],ids:[1,2,14,15,17]},'energy':{keywords:['energy','tired','fatigue','stamina','lethargic','weak'],ids:[12,13,15,8]},'weight':{keywords:['weight','diet','slim','lose weight','kurus'],ids:[4,5,6,7]},'skin':{keywords:['skin','dry','acne','eczema','sunburn','aging','wrinkles','kulit'],ids:[30,32,29,39,52,24,21,22,31,38,41]},'joint':{keywords:['joint','muscle','pain','sore','arthritis','sakit','otot'],ids:[34,16,33]},'heart':{keywords:['heart','cholesterol','blood pressure','jantung'],ids:[16]},'bone':{keywords:['bone','calcium','osteoporosis','tulang'],ids:[19]},'headache':{keywords:['headache','migraine','pening','sakit kepala'],ids:[33]}},suggestedIds=new Set,inputWords=symptom.split(" ");inputWords.forEach(word=>{for(const key in suggestionMap)suggestionMap[key].keywords.includes(word)&&suggestionMap[key].ids.forEach(id=>suggestedIds.add(id))});if(suggestedIds.size>0){let html="<h4>Based on your concern, we suggest:</h4>";[...suggestedIds].slice(0,3).forEach(id=>{const product=products.find(p=>p.id===id),promo=activePromotions.find(p=>p.productIDs.includes(id));let finalPrice=product.price;"PERCENT"===promo?.type?finalPrice=product.price*(1-parseFloat(promo.value)/100):"FIXED"===promo?.type&&(finalPrice=product.price-parseFloat(promo.value)),html+=`<div class="suggestion-product"><span><strong>${product.name}</strong> - ${product.benefits.split(",")[0]}</span><button class="btn btn-primary" style="width:auto;padding:8px 15px" onclick="addToCart(${product.id}, ${finalPrice});toggleCart()">Add</button></div>`}),resultContainer.innerHTML=html}else resultContainer.innerHTML="<p>We could not find a specific match. Try searching for products directly.</p>"}
+    
+    function sendFeedbackEmail(event) {
+        event.preventDefault(); 
+        const submitBtn = document.getElementById('feedback-submit-btn');
+        const statusEl = document.getElementById('feedback-status');
+
+        // This feature requires a third-party service like EmailJS.
+        // It's disabled here to avoid errors. Replace with your actual IDs to enable.
+        const serviceID = 'YOUR_SERVICE_ID';
+        const templateID = 'YOUR_TEMPLATE_ID';
+
+        if (serviceID === 'YOUR_SERVICE_ID' || templateID === 'YOUR_TEMPLATE_ID') {
+            statusEl.textContent = "Feedback form is not configured. Please contact the owner directly.";
+            statusEl.style.color = "orange";
+            return;
+        }
+
+        submitBtn.disabled = true;
+        statusEl.textContent = "Sending...";
+        statusEl.style.color = "blue";
+
+        // This part would require including the EmailJS library in your head tag
+        // <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+        /*
+        emailjs.sendForm(serviceID, templateID, this)
+            .then(() => {
+               statusEl.textContent = "Thank you! Your message has been sent successfully.";
+               statusEl.style.color = "green";
+               submitBtn.disabled = false;
+               event.target.reset(); 
+            }, (err) => {
+               statusEl.textContent = "Error: Could not send message. Please try again later.";
+               statusEl.style.color = "red";
+               submitBtn.disabled = false;
+               console.log('EMAILJS FAILED...', err);
+            });
+        */
+    }
+
+</script>
 </body>
 </html>
