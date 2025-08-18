@@ -30,25 +30,8 @@
     .cta-button{display:block;width:fit-content;margin:30px auto;background:linear-gradient(135deg,var(--secondary-color),#e67e22);color:var(--light-text);text-align:center;padding:15px 40px;border-radius:50px;font-weight:700;text-decoration:none;font-size:1.2rem;transition:all .3s;box-shadow:0 4px 8px rgba(0,0,0,.2)}.cta-button:hover{transform:translateY(-3px);box-shadow:0 6px 12px rgba(0,0,0,.3)}.rewards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}.reward-item{background:var(--light-gray);border:1px solid #ddd;border-radius:var(--border-radius);padding:20px;text-align:center;display:flex;flex-direction:column;position:relative}.reward-item img{max-width:100%;max-height:100px;object-fit:contain;margin-bottom:15px;border-radius:8px}.reward-item h4{margin:10px 0 5px}.reward-item .points-cost{font-weight:700;color:var(--accent-color);margin-bottom:15px}.coming-soon-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background-color:rgba(255,255,255,.8);color:var(--primary-color);display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:700;border-radius:var(--border-radius);backdrop-filter:blur(2px)}
     .original-cart-price{text-decoration:line-through;color:#999;font-size:.9rem;}.final-cart-price{font-weight:600}.summary-line small{font-size:.8rem;color:var(--accent-color);font-style:italic}
     
-    /* NEW: Maintenance Overlay Styles */
-    #maintenance-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(26, 82, 118, 0.95);
-      color: white;
-      z-index: 99999;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 20px;
-    }
-    #maintenance-overlay i { font-size: 5rem; margin-bottom: 20px; }
-    #maintenance-overlay h1 { font-size: 2.5rem; color: white; }
-    #maintenance-overlay p { font-size: 1.2rem; max-width: 600px; }
+    #maintenance-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(26, 82, 118, 0.95); color: white; z-index: 99999; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+    #maintenance-overlay i { font-size: 5rem; margin-bottom: 20px; } #maintenance-overlay h1 { font-size: 2.5rem; color: white; } #maintenance-overlay p { font-size: 1.2rem; max-width: 600px; }
   </style>
 
   <style id="festival-animations-style">
@@ -73,7 +56,6 @@
 </head>
 <body data-festival="">
 
-<!-- NEW: Full-page Maintenance Overlay -->
 <div id="maintenance-overlay">
   <div>
     <i class="fa-solid fa-person-digging"></i>
@@ -82,7 +64,6 @@
   </div>
 </div>
 
-<!-- NEW HTML FOR FESTIVAL DECORATIONS -->
 <div class="festive-layer">
     <div class="decoration grand-opening ribbon-go"></div> <div class="decoration grand-opening balloon-go"></div> <div class="decoration grand-opening sparkles"></div> <div class="decoration grand-opening scissors"></div> <div class="decoration grand-opening banner"></div>
     <div class="decoration hari-raya ketupat"></div> <div class="decoration hari-raya oil-lamp"></div> <div class="decoration hari-raya mosque"></div> <div class="decoration hari-raya moon-star"></div>
@@ -119,6 +100,7 @@
           <li><a onclick="showTab('products')">Products</a></li>
           <li><a onclick="showTab('business')">Business Opportunity</a></li>
           <li><a onclick="showTab('about')">About Us</a></li>
+          <li><a onclick="showTab('contact')" class="nav-disabled">Contact Us</a></li>
           <li><a class="nav-disabled">Rewards</a></li>
           <li><a class="nav-disabled">My Forever Living</a></li>
         </ul>
@@ -194,25 +176,30 @@
             <li><strong>Global Presence:</strong> For over 40 years, Forever has grown to operate in more than 160 countries, demonstrating the universal appeal and effectiveness of its products and business model.</li>
             <li><strong>Our Commitment:</strong> We are committed to providing authentic Forever Living products, exceptional customer service, and reliable support for both our customers and business partners. All products are sourced directly from Forever Living Products and are guaranteed to be genuine.</li>
         </ul>
-        <hr style="margin: 30px 0;">
-        <h3>Feedback & Order Requests</h3>
-        <p>Have a question, compliment, or suggestion? Or perhaps you'd like to place an order directly? Fill out the form below, and we'll get back to you as soon as possible.</p>
-        <form class="feedback-form" onsubmit="sendFeedbackEmail(event)">
-            <input type="text" id="feedback-name" placeholder="Your Name" required>
-            <input type="email" id="feedback-email" placeholder="Your Email" required>
-            <select id="feedback-subject" required>
-                <option value="" disabled selected>Select a Subject...</option>
-                <option value="General Enquiry">General Enquiry</option>
-                <option value="Order Request">Order Request</option>
-                <option value="Compliment">Compliment</option>
-                <option value="Complaint">Complaint</option>
-                <option value="Suggestion">Suggestion</option>
-            </select>
-            <textarea id="feedback-message" placeholder="Your Message" required></textarea>
-            <button type="submit" id="feedback-submit-btn" class="btn btn-primary">Send Message</button>
-            <p id="feedback-status"></p>
-        </form>
       </section>
+    </div>
+    
+    <div id="contact" class="tab-content">
+        <section class="about-us-section">
+            <h2>Contact Us</h2>
+            <p>Have a question, compliment, or suggestion? Or perhaps you'd like to place an order directly? Fill out the form below, and we'll get back to you as soon as possible.</p>
+            <p><strong>Note:</strong> This feature is currently under development. Please use the WhatsApp or Email links in the 'About Us' tab to contact us directly.</p>
+            <form class="feedback-form" onsubmit="sendFeedbackEmail(event)">
+                <input type="text" id="feedback-name" placeholder="Your Name" required disabled>
+                <input type="email" id="feedback-email" placeholder="Your Email" required disabled>
+                <select id="feedback-subject" required disabled>
+                    <option value="" disabled selected>Select a Subject...</option>
+                    <option value="General Enquiry">General Enquiry</option>
+                    <option value="Order Request">Order Request</option>
+                    <option value="Compliment">Compliment</option>
+                    <option value="Complaint">Complaint</option>
+                    <option value="Suggestion">Suggestion</option>
+                </select>
+                <textarea id="feedback-message" placeholder="Your Message" required disabled></textarea>
+                <button type="submit" id="feedback-submit-btn" class="btn btn-primary" disabled>Send Message</button>
+                <p id="feedback-status"></p>
+            </form>
+        </section>
     </div>
 
     <div id="rewards" class="tab-content">
@@ -310,7 +297,7 @@
   </div>
 
 <script>
-    const googleScriptURL = 'https://script.google.com/macros/s/AKfycbwThru1hLFLxDnmm9e0FaOKfSlpf4zSObqI-X-RRtHJ9lQmxKNIvkOBl40x0x9wLFNGAw/exec';
+    const googleScriptURL = 'https://script.google.com/macros/s/AKfycbwjb6iWaciuX8DOYo11C74lF3dqBQbHGFCHwcWw9zyvka0Hha3AyHCe2AKoDz_1wJpVCA/exec';
     let products = []; let cart = []; let activeFestival = null; let activePromotions = [];
     let shippingRules = {}; let availableDiscountCodes = {}; let appliedDiscount = null;
     document.addEventListener('DOMContentLoaded', fetchData);
@@ -403,8 +390,6 @@
         renderProducts();
     }
     
-    // The rest of your JavaScript functions are identical to the previous working version.
-    // They are included here for completeness.
     function renderProducts(){
         const productListContainer = document.getElementById("product-list-container"); if (!productListContainer) return;
         if (products.length === 0) { productListContainer.innerHTML = `<p style="text-align: center; width: 100%;">No products found in the catalog.</p>`; return; }
