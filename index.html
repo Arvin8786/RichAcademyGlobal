@@ -295,7 +295,7 @@
     // --- START OF JAVASCRIPT LOGIC ---
 
     // Global variables to hold store data
-    const googleScriptURL = 'https://script.google.com/macros/s/AKfycbwquoruBKK9NGVehS9SUOjeSMLUukzVyGQtPidYjsZw7Ma6WNAa8ralR8TIvx5scGPiJw/exec'; // Ensure this is your correct deployment URL
+    const googleScriptURL = 'https://script.google.com/macros/s/AKfycbx_EY22mVSKJrwlaKWyKxlgYPoZ9qhF_d5CuK-l0JUyVPNkvPrxwRa5bX-8_PRfyeXumQ/exec'; // Ensure this is your correct deployment URL
     let products = [];
     let cart = [];
     let activeFestival = null;
@@ -513,108 +513,120 @@
     }
 
     /**
-     * [NEW BRAIN OF THE CART] Replaces the old calculation logic with a powerful new one.
-     */
-    function calculateCartTotals() {
-        let originalSubtotal = 0;
-        let discountFromPromos = 0;
-        let discountFromCode = 0;
-        let appliedPromoDescriptions = new Set();
-        let promotionalShippingRuleId = null;
+ * [CORRECTED FUNCTION v2]
+ * Calculates totals, handling promotion priority and shipping rules more accurately.
+ */
+function calculateCartTotals() {
+    let originalSubtotal = 0;
+    let totalDiscount = 0;
+    let finalSubtotal = 0;
+    let appliedPromoDescriptions = new Set();
+    let potentialShippingRuleIds = new Set(); // Use a Set to store potential shipping rules
 
-        // Create a temporary copy of the cart to modify quantities as we apply bundle deals
-        let tempCart = JSON.parse(JSON.stringify(cart)); 
-        
-        // First, calculate the original subtotal before any discounts
-        tempCart.forEach(item => {
-            const product = products.find(p => p.id === item.id);
-            originalSubtotal += product.price * item.quantity;
-        });
+    // Create a deep copy of the cart to safely modify for calculations
+    let tempCart = JSON.parse(JSON.stringify(cart));
 
-        // 1. APPLY BUNDLE PROMOTIONS FIRST (e.g., B2G200)
-        const bundlePromos = activePromotions.filter(p => p.type === 'BUNDLE' && p.bundle);
+    // Calculate original subtotal from base prices
+    tempCart.forEach(item => {
+        originalSubtotal += item.basePrice * item.quantity;
+    });
 
-        bundlePromos.forEach(promo => {
-            const eligibleItems = tempCart.filter(item => promo.productIDs.includes(item.id) && item.quantity > 0);
-            const totalEligibleQuantity = eligibleItems.reduce((sum, item) => sum + item.quantity, 0);
-            const numberOfBundles = Math.floor(totalEligibleQuantity / promo.bundle.quantity);
+    // --- APPLY PROMOTIONS ---
+    const allApplicablePromos = activePromotions.filter(promo => 
+        cart.some(item => promo.productIDs.includes(item.id))
+    );
 
-            if (numberOfBundles > 0) {
-                appliedPromoDescriptions.add(promo.description);
-                if (promo.shippingRuleId) promotionalShippingRuleId = promo.shippingRuleId;
+    // Give bundle promotions priority
+    const bundlePromos = allApplicablePromos.filter(p => p.type === 'BUNDLE' && p.bundle);
+    const itemPromos = allApplicablePromos.filter(p => p.type === 'PERCENT' || p.type === 'FIXED');
 
-                let itemsToProcessForBundle = numberOfBundles * promo.bundle.quantity;
-                
-                for (const item of eligibleItems) {
-                    if (itemsToProcessForBundle <= 0) break;
-                    
-                    const product = products.find(p => p.id === item.id);
-                    const quantityToBundle = Math.min(item.quantity, itemsToProcessForBundle);
-                    
-                    const originalCostOfBundledPortion = product.price * quantityToBundle;
-                    const bundledCostPortion = (promo.bundle.price / promo.bundle.quantity) * quantityToBundle;
+    // Step 1: Process BUNDLE promotions first
+    bundlePromos.forEach(promo => {
+        const eligibleItems = tempCart.filter(item => promo.productIDs.includes(item.id) && item.quantity > 0);
+        const totalEligibleQuantity = eligibleItems.reduce((sum, item) => sum + item.quantity, 0);
+        const numberOfBundles = Math.floor(totalEligibleQuantity / promo.bundle.quantity);
 
-                    discountFromPromos += originalCostOfBundledPortion - bundledCostPortion;
-                    
-                    item.quantity -= quantityToBundle; // Reduce quantity in our temporary cart
-                    itemsToProcessForBundle -= quantityToBundle;
-                }
+        if (numberOfBundles > 0) {
+            appliedPromoDescriptions.add(promo.description);
+            if (promo.shippingRuleId) potentialShippingRuleIds.add(promo.shippingRuleId);
+
+            let itemsToProcessForBundle = numberOfBundles * promo.bundle.quantity;
+            for (const item of eligibleItems) {
+                if (itemsToProcessForBundle <= 0) break;
+                const quantityToBundle = Math.min(item.quantity, itemsToProcessForBundle);
+                const originalCostOfPortion = item.basePrice * quantityToBundle;
+                const bundledCostPortion = (promo.bundle.price / promo.bundle.quantity) * quantityToBundle;
+                totalDiscount += originalCostOfPortion - bundledCostPortion;
+                item.quantity -= quantityToBundle;
+                itemsToProcessForBundle -= quantityToBundle;
             }
-        });
-
-        // 2. APPLY ITEM-SPECIFIC PROMOTIONS (FIXED & PERCENT) on any remaining items
-        tempCart.forEach(item => {
-            if (item.quantity > 0) { // Only check items not fully used in bundles
-                const product = products.find(p => p.id === item.id);
-                const itemPromo = activePromotions.find(p => p.productIDs.includes(item.id) && (p.type === 'PERCENT' || p.type === 'FIXED'));
-                
-                if (itemPromo) {
-                    let itemDiscount = 0;
-                    if (itemPromo.type === 'PERCENT') {
-                        itemDiscount = (product.price * (itemPromo.value / 100)) * item.quantity;
-                    } else if (itemPromo.type === 'FIXED') {
-                        itemDiscount = itemPromo.value * item.quantity;
-                    }
-                    discountFromPromos += itemDiscount;
-                    appliedPromoDescriptions.add(itemPromo.description);
-                    if (itemPromo.shippingRuleId && !promotionalShippingRuleId) {
-                        promotionalShippingRuleId = itemPromo.shippingRuleId;
-                    }
-                }
-            }
-        });
-
-        // 3. APPLY VOUCHER CODE (if any)
-        let subtotalAfterPromos = originalSubtotal - discountFromPromos;
-        if (appliedDiscount) {
-            if (appliedDiscount.type === 'Fixed') {
-                discountFromCode = Math.min(subtotalAfterPromos, parseFloat(appliedDiscount.value));
-            } else if (appliedDiscount.type === 'Percentage') {
-                discountFromCode = subtotalAfterPromos * (parseFloat(appliedDiscount.value) / 100);
-            }
-            // FreeShipping from voucher is handled within calculateShipping
         }
+    });
 
-        const totalDiscount = discountFromPromos + discountFromCode;
-        const finalSubtotal = originalSubtotal - totalDiscount;
+    // Step 2: Process standard promotions on REMAINING items
+    itemPromos.forEach(promo => {
+        const eligibleItems = tempCart.filter(item => promo.productIDs.includes(item.id) && item.quantity > 0);
+        if (eligibleItems.length > 0) {
+            appliedPromoDescriptions.add(promo.description);
+            if (promo.shippingRuleId) potentialShippingRuleIds.add(promo.shippingRuleId);
 
-        // 4. CALCULATE SHIPPING
-        const shipping = calculateShipping(cart, finalSubtotal, promotionalShippingRuleId);
-        
-        // 5. FINAL TOTALS
-        const finalTotal = finalSubtotal + shipping.fee;
-        const totalPoints = Math.floor(finalSubtotal);
+            eligibleItems.forEach(item => {
+                let itemDiscount = 0;
+                if (promo.type === 'PERCENT') {
+                    itemDiscount = (item.basePrice * (promo.value / 100)) * item.quantity;
+                } else if (promo.type === 'FIXED') {
+                    itemDiscount = promo.value * item.quantity;
+                }
+                totalDiscount += itemDiscount;
+                item.quantity = 0; // Mark as fully discounted
+            });
+        }
+    });
 
-        return {
-            originalSubtotal,
-            totalDiscount,
-            finalSubtotal,
-            shipping,
-            finalTotal,
-            totalPoints,
-            appliedPromoDescriptions: Array.from(appliedPromoDescriptions)
-        };
+    finalSubtotal = originalSubtotal - totalDiscount;
+
+    // Step 3: Apply voucher code discount
+    let discountFromCode = 0;
+    if (appliedDiscount) {
+        if (appliedDiscount.type === 'Fixed') {
+            discountFromCode = Math.min(finalSubtotal, parseFloat(appliedDiscount.value));
+        } else if (appliedDiscount.type === 'Percentage') {
+            discountFromCode = finalSubtotal * (parseFloat(appliedDiscount.value) / 100);
+        }
+        finalSubtotal -= discountFromCode;
+        totalDiscount += discountFromCode;
     }
+
+    // --- FIX 2: Choose the BEST promotional shipping rule ---
+    let bestPromoShippingRuleId = null;
+    if (potentialShippingRuleIds.size > 0) {
+        // Simple logic: 'Free' shipping is always the best option.
+        const hasFreeShipping = Array.from(potentialShippingRuleIds).find(id => shippingRules[id] && shippingRules[id].type === 'Free');
+        if (hasFreeShipping) {
+            bestPromoShippingRuleId = hasFreeShipping;
+        } else {
+            // Otherwise, just take the first one found (can be expanded later if needed)
+            bestPromoShippingRuleId = potentialShippingRuleIds.values().next().value;
+        }
+    }
+    
+    // Step 4: Calculate shipping using the determined rule
+    const shipping = calculateShipping(cart, finalSubtotal, bestPromoShippingRuleId);
+    
+    // Step 5: Finalize totals
+    const finalTotal = finalSubtotal + shipping.fee;
+    const totalPoints = Math.floor(finalSubtotal);
+
+    return {
+        originalSubtotal,
+        totalDiscount,
+        finalSubtotal,
+        shipping,
+        finalTotal,
+        totalPoints,
+        appliedPromoDescriptions: Array.from(appliedPromoDescriptions)
+    };
+}
     
     /**
      * [UPDATED FUNCTION] Determines the correct shipping fee.
