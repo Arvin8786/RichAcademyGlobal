@@ -326,7 +326,7 @@
             }
         }
         
-        document.getElementById('update-timestamp').textContent = `${new Date().toLocaleDateString('en-GB')} (v14.0)`;
+        document.getElementById('update-timestamp').textContent = `${new Date().toLocaleDateString('en-GB')} (v14.1)`;
         if (sessionStorage.getItem('pendingOrder')) { toggleCart(); } 
         else { showTab('products'); }
     }
@@ -557,24 +557,53 @@
         pointsEl.innerHTML = `<div class="points-earned"><i class="fa-solid fa-star"></i> Points to be Earned: ${totalPoints}</div>`;
     }
 
+    async function initiateCheckout() {
+        if (!document.getElementById('consent-checkbox').checked) { alert("You must agree to the data collection consent before proceeding."); return; }
+        const customerName = document.getElementById('customer-name').value.trim();
+        const customerPhone = document.getElementById('customer-phone').value.trim();
+        const customerEmail = document.getElementById('customer-email').value.trim();
+        const address1 = document.getElementById('customer-address1').value.trim();
+        const address2 = document.getElementById('customer-address2').value.trim();
+        const city = document.getElementById('customer-city').value.trim();
+        const state = document.getElementById('customer-state').value.trim();
+        const postcode = document.getElementById('customer-postcode').value.trim();
+        if (!customerName || !customerPhone || !customerEmail || !address1 || !city || !state || !postcode) { alert("Please fill in all required customer and shipping information fields."); return; }
+        if (cart.length === 0) { alert("Your cart is empty."); return; }
+        
+        const totals = calculateCartTotals();
+        const fullAddress = `${address1}, ${address2 ? address2 + ", " : ""}${postcode} ${city}, ${state}.`;
+        
+        const orderData = {
+            customerName, customerPhone, customerEmail, customerAddress: fullAddress,
+            cart: cart.map(item => ({ id: item.id, name: item.name, quantity: item.quantity, finalPrice: item.basePrice })),
+            itemsPurchased: cart.map(item => `${item.name} (x${item.quantity})`).join('; '),
+            totalAmount: totals.finalTotal.toFixed(2),
+            shippingFee: totals.shipping.fee.toFixed(2),
+            discountApplied: appliedDiscount ? `${appliedDiscount.code} - RM ${totals.totalDiscount.toFixed(2)}` : `Promotions - RM ${totals.totalDiscount.toFixed(2)}`,
+            discountCodeUsed: appliedDiscount ? appliedDiscount.code : "N/A",
+            totalPointsForThisPurchase: totals.totalPoints,
+            appliedPromotions: totals.appliedPromoDescriptions
+        };
+
+        sessionStorage.setItem("pendingOrder", JSON.stringify(orderData));
+        
+        let waMessage = `Hi, I would like to place an order:\n\n*Customer Details:*\nName: ${customerName}\nPhone: ${customerPhone}\nEmail: ${customerEmail}\nAddress: ${fullAddress}\n\n--- ORDER SUMMARY ---\nSubtotal: RM ${totals.originalSubtotal.toFixed(2)}\nDiscount: - RM ${totals.totalDiscount.toFixed(2)}\nShipping: ${totals.shipping.message}\n*TOTAL: RM ${totals.finalTotal.toFixed(2)}*\n\nPlease provide payment details. After payment, I will upload the proof and verification code on your website to finalize the order. Thank you!`;
+        window.open(`https://wa.me/601111033154?text=${encodeURIComponent(waMessage)}`, "_blank");
+
+        document.getElementById('cart-view').style.display = 'none';
+        document.getElementById('verification-view').style.display = 'block';
+        updateVerificationUI();
+    }
+    
     async function uploadProof() {
         const fileInput = document.getElementById('payment-proof-upload');
         const statusEl = document.getElementById('upload-status');
         const uploadBtn = document.getElementById('upload-proof-btn');
         const file = fileInput.files[0];
-        
         let pendingOrder = JSON.parse(sessionStorage.getItem("pendingOrder"));
 
-        if (!file) {
-            statusEl.textContent = "Please select a file to upload.";
-            statusEl.style.color = "red";
-            return;
-        }
-        if (!pendingOrder) {
-            statusEl.textContent = "Error: No pending order found. Please refresh.";
-            statusEl.style.color = "red";
-            return;
-        }
+        if (!file) { statusEl.textContent = "Please select a file to upload."; statusEl.style.color = "red"; return; }
+        if (!pendingOrder) { statusEl.textContent = "Error: No pending order found. Please refresh."; statusEl.style.color = "red"; return; }
 
         uploadBtn.disabled = true;
         statusEl.textContent = "Uploading...";
@@ -582,40 +611,25 @@
 
         try {
             const base64File = await getBase64(file);
-            
             const payload = {
                 action: "logInitialOrderWithProof",
-                customerName: pendingOrder.customerName,
-                customerEmail: pendingOrder.customerEmail,
-                customerPhone: pendingOrder.customerPhone,
-                customerAddress: pendingOrder.customerAddress,
-                itemsPurchased: pendingOrder.itemsPurchased,
-                discountApplied: pendingOrder.discountApplied,
-                totalAmount: pendingOrder.totalAmount,
-                shippingFee: pendingOrder.shippingFee,
+                customerName: pendingOrder.customerName, customerEmail: pendingOrder.customerEmail,
+                customerPhone: pendingOrder.customerPhone, customerAddress: pendingOrder.customerAddress,
+                itemsPurchased: pendingOrder.itemsPurchased, discountApplied: pendingOrder.discountApplied,
+                totalAmount: pendingOrder.totalAmount, shippingFee: pendingOrder.shippingFee,
                 totalPointsForThisPurchase: pendingOrder.totalPointsForThisPurchase,
-                paymentProofFile: base64File.split(",")[1],
-                paymentProofMimeType: file.type,
+                paymentProofFile: base64File.split(",")[1], paymentProofMimeType: file.type,
                 paymentProofFileName: `${pendingOrder.customerEmail.split("@")[0]}-${Date.now()}`,
                 cart: pendingOrder.cart 
             };
-
-            const response = await fetch(googleScriptURL, {
-                method: "POST",
-                body: JSON.stringify(payload)
-            });
-            
+            const response = await fetch(googleScriptURL, { method: "POST", body: JSON.stringify(payload) });
             const result = await response.json();
-            
             if (result.status === 'success') {
-                statusEl.textContent = "Proof uploaded successfully!";
-                statusEl.style.color = "green";
+                statusEl.textContent = "Proof uploaded successfully!"; statusEl.style.color = "green";
                 pendingOrder.proofUploaded = true;
                 sessionStorage.setItem("pendingOrder", JSON.stringify(pendingOrder));
                 updateVerificationUI();
-            } else {
-                throw new Error(result.message || 'Unknown server error');
-            }
+            } else { throw new Error(result.message || 'Unknown server error'); }
         } catch (error) {
             statusEl.textContent = `Upload Error: ${error.message}`;
             statusEl.style.color = "red";
@@ -624,13 +638,31 @@
     }
 
     async function finalizeOrder(){const t=document.getElementById("verification-code").value.trim().toUpperCase(),e=document.getElementById("finalize-order-btn"),o=document.getElementById("verification-status");let n=JSON.parse(sessionStorage.getItem("pendingOrder"));if(!t)return o.textContent="Please enter the verification code.",void(o.style.color="red");if(!n)return o.textContent="Error: No pending order found.",void(o.style.color="red");e.disabled=!0,o.textContent="Verifying...",o.style.color="blue";try{const i=await fetch(googleScriptURL,{method:"POST",body:JSON.stringify({action:"finalizeOrder",usedCode:t,...n})}),r=await i.json();if("success"!==r.status)throw new Error(r.message);o.textContent="Order Verified! Your receipt is downloading...",o.style.color="green";const a=document.createElement("a");a.href=r.receiptUrl.replace("/file/d/","/uc?export=download&id=").replace("/view?usp=drivesdk",""),a.download=`Receipt-Order-${(new Date).getTime()}.pdf`,document.body.appendChild(a),a.click(),document.body.removeChild(a),cart=[],sessionStorage.removeItem("pendingOrder"),updateCartDisplay(),appliedDiscount=null,document.getElementById("discount-code-input").value="",document.getElementById("discount-status").textContent="",setTimeout(()=>{toggleCart(!0),updateVerificationUI(!0)},4e3)}catch(t){o.textContent=`Error: ${t.message}`,o.style.color="red",e.disabled=!1}}
+    
     function updateVerificationUI(t=!1){const e=document.getElementById("proof-upload-step"),o=document.getElementById("code-verification-step"),n=document.getElementById("upload-proof-btn"),i=document.getElementById("finalize-order-btn"),r=document.getElementById("verification-code"),a=document.getElementById("upload-status"),s=document.getElementById("verification-status");if(t)return e.classList.add("active"),e.classList.remove("completed"),o.classList.remove("active"),n.disabled=!1,i.disabled=!0,r.disabled=!0,a.textContent="",s.textContent="",document.getElementById("payment-proof-upload").value="",void(r.value="");const d=JSON.parse(sessionStorage.getItem("pendingOrder"));d&&d.proofUploaded?(e.classList.remove("active"),e.classList.add("completed"),o.classList.add("active"),n.disabled=!0,i.disabled=!1,r.disabled=!1,a.textContent="Proof Uploaded Successfully!",a.style.color="green"):(e.classList.add("active"),e.classList.remove("completed"),o.classList.remove("active"),n.disabled=!1,i.disabled=!0,r.disabled=!0)}
+    
     function cancelVerification(){if(confirm("Are you sure? This will cancel the pending order.")){sessionStorage.removeItem("pendingOrder"),toggleCart(!0),updateVerificationUI(!0)}}
+    
     function toggleCart(t=!1){const e=document.getElementById("cart-modal");if(t)return void(e.style.display="none");"flex"===e.style.display?e.style.display="none":(e.style.display="flex",JSON.parse(sessionStorage.getItem("pendingOrder"))?(document.getElementById("cart-view").style.display="none",document.getElementById("verification-view").style.display="block",updateVerificationUI()):(document.getElementById("cart-view").style.display="block",document.getElementById("verification-view").style.display="none",updateCartDisplay(),updateVerificationUI(!0)))}
+    
     function getBase64(t){return new Promise((e,o)=>{const n=new FileReader;n.readAsDataURL(t),n.onload=()=>e(n.result),n.onerror=t=>o(t)})}
+    
     function filterProducts(){const t=document.getElementById("product-search").value.toLowerCase();document.querySelectorAll(".product-list").forEach(e=>{let o=!1;e.querySelectorAll(".product").forEach(e=>{e.querySelector("h3").textContent.toLowerCase().includes(t)?(e.style.display="flex",o=!0):e.style.display="none"});const n=e.closest(".promo-section");n&&(n.style.display=o?"block":"none")})}
+    
     function suggestProduct(){const t=document.getElementById("symptom-input").value.toLowerCase().trim(),e=document.getElementById("suggestion-result");if(!t)return void(e.innerHTML='<p style="color:red">Please enter a symptom or health concern.</p>');const o={'digestion':{keywords:['digestion','stomach','tummy','bloated','indigestion','constipation'],ids:[1,2,3,7,11,18]},'immune':{keywords:['immune','sick','flu','cold','cough','fever','infection'],ids:[1,2,14,15,17]},'energy':{keywords:['energy','tired','fatigue','stamina','lethargic','weak'],ids:[12,13,15,8]},'weight':{keywords:['weight','diet','slim','lose weight','kurus'],ids:[4,5,6,7]},'skin':{keywords:['skin','dry','acne','eczema','sunburn','aging','wrinkles','kulit'],ids:[30,32,29,39,52,24,21,22,31,38,41]},'joint':{keywords:['joint','muscle','pain','sore','arthritis','sakit','otot'],ids:[34,16,33]},'heart':{keywords:['heart','cholesterol','blood pressure','jantung'],ids:[16]},'bone':{keywords:['bone','calcium','osteoporosis','tulang'],ids:[19]},'headache':{keywords:['headache','migraine','pening','sakit kepala'],ids:[33]}},n=new Set,i=t.split(" ");i.forEach(t=>{for(const e in o)o[e].keywords.includes(t)&&o[e].ids.forEach(t=>n.add(t))}),n.size>0?(e.innerHTML="<h4>Based on your concern, we suggest:</h4>",[...n].slice(0,3).forEach(t=>{const n=products.find(e=>e.id===t);let i=n.price;const r=activePromotions.find(e=>e.productIDs.includes(t));"PERCENT"===r?.type?i*=(1-parseFloat(r.value)/100):"FIXED"===r?.type&&(i-=parseFloat(r.value)),e.innerHTML+=`<div class="suggestion-product"><span><strong>${n.name}</strong> - ${n.benefits.split(",")[0]}</span><button class="btn btn-primary" style="width:auto;padding:8px 15px" onclick="addToCart(${n.id});toggleCart()">Add</button></div>`})):(e.innerHTML="<p>We could not find a specific match. Try searching for products directly.</p>")}
+    
     function sendFeedbackEmail(t){t.preventDefault();const e=document.getElementById("feedback-submit-btn"),o=document.getElementById("feedback-status");if("YOUR_SERVICE_ID"==='YOUR_SERVICE_ID'||"YOUR_TEMPLATE_ID"==='YOUR_TEMPLATE_ID')return o.textContent="Feedback form is not configured. Please contact the owner directly.",void(o.style.color="orange");e.disabled=!0,o.textContent="Sending...",o.style.color="blue"}
+    
+    // [FIX INCLUDED] This function was missing in a previous version.
+    function toggleCheckoutButton() {
+      document.getElementById('checkout-btn').disabled = !document.getElementById('consent-checkbox').checked;
+    }
+    
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      const tab = document.getElementById(tabId);
+      if (tab) tab.classList.add('active');
+    }
 </script>
 </body>
 </html>
