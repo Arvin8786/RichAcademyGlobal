@@ -838,41 +838,44 @@ function calculateCartTotals() {
         });
     }
 
-    async function initiateCheckout() {
-        if (!document.getElementById('consent-checkbox').checked) { alert("You must agree to the data collection consent before proceeding."); return; }
-        const customerName = document.getElementById('customer-name').value.trim();
-        const customerPhone = document.getElementById('customer-phone').value.trim();
-        const customerEmail = document.getElementById('customer-email').value.trim();
-        const address1 = document.getElementById('customer-address1').value.trim();
-        const address2 = document.getElementById('customer-address2').value.trim();
-        const city = document.getElementById('customer-city').value.trim();
-        const state = document.getElementById('customer-state').value.trim();
-        const postcode = document.getElementById('customer-postcode').value.trim();
-        if (!customerName || !customerPhone || !customerEmail || !address1 || !city || !state || !postcode) { alert("Please fill in all required customer and shipping information fields."); return; }
-        if (cart.length === 0) { alert("Your cart is empty."); return; }
-        
-        const { finalSubtotal, totalDiscount, shipping, finalTotal, totalPoints } = calculateCartTotals();
-        const fullAddress = `${address1}, ${address2 ? address2 + ", " : ""}${postcode} ${city}, ${state}.`;
-        
-        const orderData = {
-            customerName, customerPhone, customerEmail, customerAddress: fullAddress,
-            cart: cart.map(item => ({ id: item.id, name: item.name, quantity: item.quantity, finalPrice: item.basePrice })), // Note: final price calculation is complex, sending base price for now
-            totalAmount: finalTotal.toFixed(2),
-            shippingFee: shipping.fee.toFixed(2),
-            discountApplied: appliedDiscount ? `${appliedDiscount.code} - RM ${totalDiscount.toFixed(2)}` : "N/A",
-            discountCodeUsed: appliedDiscount ? appliedDiscount.code : "N/A",
-            totalPointsForThisPurchase: totalPoints
-        };
+async function initiateCheckout() {
+    if (!document.getElementById("consent-checkbox").checked) { alert("You must agree to the data collection consent before proceeding."); return; }
+    const customerName = document.getElementById('customer-name').value.trim();
+    const customerPhone = document.getElementById('customer-phone').value.trim();
+    const customerEmail = document.getElementById('customer-email').value.trim();
+    const address1 = document.getElementById('customer-address1').value.trim();
+    const address2 = document.getElementById('customer-address2').value.trim();
+    const city = document.getElementById('customer-city').value.trim();
+    const state = document.getElementById('customer-state').value.trim();
+    const postcode = document.getElementById('customer-postcode').value.trim();
+    if (!customerName || !customerPhone || !customerEmail || !address1 || !city || !state || !postcode) { alert("Please fill in all required customer and shipping information fields."); return; }
+    if (cart.length === 0) { alert("Your cart is empty."); return; }
+    
+    // Calculate final totals one last time
+    const totals = calculateCartTotals();
+    const fullAddress = `${address1}, ${address2 ? address2 + ", " : ""}${postcode} ${city}, ${state}.`;
+    
+    const orderData = {
+        customerName, customerPhone, customerEmail, customerAddress: fullAddress,
+        cart: cart.map(item => ({ id: item.id, name: item.name, quantity: item.quantity, finalPrice: item.basePrice })),
+        totalAmount: totals.finalTotal.toFixed(2),
+        shippingFee: totals.shipping.fee.toFixed(2),
+        discountApplied: appliedDiscount ? `${appliedDiscount.code} - RM ${totals.totalDiscount.toFixed(2)}` : `Promotions - RM ${totals.totalDiscount.toFixed(2)}`,
+        discountCodeUsed: appliedDiscount ? appliedDiscount.code : "N/A",
+        totalPointsForThisPurchase: totals.totalPoints,
+        // [NEW] Add the list of applied promotion descriptions
+        appliedPromotions: totals.appliedPromoDescriptions
+    };
 
-        sessionStorage.setItem("pendingOrder", JSON.stringify(orderData));
-        
-        let waMessage = `Hi, I would like to place an order:\n\n*Customer Details:*\nName: ${customerName}\nPhone: ${customerPhone}\nEmail: ${customerEmail}\nAddress: ${fullAddress}\n\n--- ORDER SUMMARY ---\nSubtotal: RM ${finalSubtotal.toFixed(2)}\nDiscount: - RM ${totalDiscount.toFixed(2)}\nShipping: ${shipping.message}\n*TOTAL: RM ${finalTotal.toFixed(2)}*\n\nPlease provide payment details. After payment, I will upload the proof and verification code on your website to finalize the order. Thank you!`;
-        window.open(`https://wa.me/601111033154?text=${encodeURIComponent(waMessage)}`, "_blank");
+    sessionStorage.setItem("pendingOrder", JSON.stringify(orderData));
+    
+    let waMessage = `Hi, I would like to place an order:\n\n*Customer Details:*\nName: ${customerName}\nPhone: ${customerPhone}\nEmail: ${customerEmail}\nAddress: ${fullAddress}\n\n--- ORDER SUMMARY ---\nSubtotal: RM ${totals.originalSubtotal.toFixed(2)}\nDiscount: - RM ${totals.totalDiscount.toFixed(2)}\nShipping: ${totals.shipping.message}\n*TOTAL: RM ${totals.finalTotal.toFixed(2)}*\n\nPlease provide payment details. After payment, I will upload the proof and verification code on your website to finalize the order. Thank you!`;
+    window.open(`https://wa.me/601111033154?text=${encodeURIComponent(waMessage)}`, "_blank");
 
-        document.getElementById('cart-view').style.display = 'none';
-        document.getElementById('verification-view').style.display = 'block';
-        updateVerificationUI();
-    }
+    document.getElementById('cart-view').style.display = 'none';
+    document.getElementById('verification-view').style.display = 'block';
+    updateVerificationUI();
+}
     
     // All other functions (verification, file upload, etc.) remain the same as your previous version.
     // They are included here for completeness.
