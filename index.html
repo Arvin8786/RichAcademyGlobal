@@ -50,12 +50,189 @@
     @keyframes sway{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}} @keyframes floatUp{0%{transform:translateY(0) scale(1);}100%{transform:translateY(-120vh) scale(1.2); opacity: 0;}} @keyframes fallDown{0%{transform:translateY(-20vh) rotate(0deg);}100%{transform:translateY(120vh) rotate(360deg);}} @keyframes flicker{0%,100%{opacity:.9;}50%{opacity:.6;}} @keyframes burst{0%{transform:scale(.2);opacity:1;}100%{transform:scale(1.2);opacity:0;}} @keyframes twinkle{50%{opacity:.3;}}
     .lantern{top:10vh;left:10vw;width:60px;height:80px;background:radial-gradient(circle,var(--c2),var(--c1) 70%);border-radius:50%;animation:sway 3s infinite ease-in-out;} .firecracker{left:20vw;top:-10vh;width:8px;height:50px;background:var(--c1);animation:fallDown 5s linear infinite;} .gold-ingot{bottom:5vh;left:30vw;width:60px;height:30px;background:gold;border-radius:50% 50% 30% 30%;box-shadow:0 0 10px gold;} .dragon{top:40vh;left:-350px;width:300px;height:60px;background:linear-gradient(90deg,var(--c1),var(--c2));border-radius:30px;animation:sway 4s infinite, fallDown 20s linear infinite reverse;} .confetti-cny{inset:0;background-image:radial-gradient(var(--c1) 2px,transparent 2px),radial-gradient(var(--c2) 2px,transparent 2px);background-size:40px 40px;animation:twinkle 2s infinite;} .flag{top:20vh;left:40vw;width:100px;height:60px;background:linear-gradient(var(--c1) 50%,var(--c4) 50%);border:2px solid var(--c3);animation:sway 2s infinite ease-in-out;} .star{top:10vh;right:10vw;width:20px;height:20px;background:var(--c2);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);} .fireworks{inset:0;background:radial-gradient(circle, var(--c2) 5%, transparent 10%);border-radius:50%;animation:burst 2s infinite ease-out;} .bunting{top:0;left:0;right:0;height:50px;background:repeating-linear-gradient(90deg,var(--c1),var(--c1) 20px,var(--c4) 20px,var(--c4) 40px,var(--c3) 40px,var(--c3) 60px);} .malaysia-map{top:30vh;left:30vw;width:200px;height:100px;background:rgba(255,255,255,.2); clip-path: polygon(0% 20%, 60% 20%, 60% 0%, 100% 0%, 100% 80%, 40% 80%, 40% 100%, 0% 100%);} .ribbon{top:10vh;left:0;right:0;height:30px;background:linear-gradient(90deg,var(--c1),var(--c4),var(--c3),var(--c2));} .moon{top:10vh;right:10vw;width:100px;height:100px;background:radial-gradient(circle,var(--c4),var(--c2));border-radius:50%;box-shadow:0 0 30px var(--c2);} .rabbit{bottom:10vh;left:10vw;width:60px;height:40px;background:var(--c4);border-radius:50%;} .sky-lantern{bottom:-10vh;left:30vw;width:30px;height:40px;background:radial-gradient(circle, var(--c2), transparent 70%);border-radius:5px 5px 20px 20px;animation:floatUp 15s linear infinite;} .starry-sky{inset:0;background:radial-gradient(var(--c4) 1px,transparent 1px);background-size:50px 50px;animation:twinkle 2s infinite;} .kolam{bottom:5vh;left:50%;transform:translateX(-50%);width:200px;height:200px;background:conic-gradient(var(--c1) 0 10%,var(--c2) 10% 20%,#0f0 20% 30%,#00f 30% 40%,#f0f 40% 100%);border-radius:50%;} .diya{bottom:5vh;left:20vw;width:40px;height:20px;background:var(--c2);border-radius:50% 50% 0 0;} .diya::after{content:'';position:absolute;top:-20px;left:50%;transform:translateX(-50%);width:10px;height:20px;background:var(--c3);border-radius:50%;animation:flicker 1s infinite;} .peacock{top:30vh;right:10vw;width:100px;height:100px;background:radial-gradient(circle,var(--c3),var(--c1));border-radius:50%;} .fireworks-ny{inset:0;background:radial-gradient(circle, var(--c4) 5%, transparent 10%);border-radius:50%;animation:burst 2s infinite ease-out;} .balloon{bottom:-20vh;left:20vw;width:40px;height:60px;background:radial-gradient(circle,var(--c3),var(--c4));border-radius:50%;animation:floatUp 12s linear infinite;} .champagne{bottom:5vh;right:10vw;width:20px;height:60px;background:var(--c4);border-radius:5px;} .clock{top:10vh;left:50%;transform:translateX(-50%);width:100px;height:100px;border:5px solid var(--c2);border-radius:50%;} .confetti-ny{inset:0;background-image:radial-gradient(var(--c3) 2px,transparent 2px),radial-gradient(var(--c4) 2px,transparent 2px),radial-gradient(var(--c2) 2px,transparent 2px);background-size:30px 30px;animation:twinkle 2s infinite;} .ketupat{top:20vh;left:20vw;width:40px;height:40px;background:linear-gradient(45deg,var(--c1) 50%,lightgreen 50%);transform:rotate(45deg);animation:sway 3s infinite;} .oil-lamp{bottom:10vh;left:30vw;width:20px;height:40px;background:var(--c2);border-radius:5px;} .oil-lamp::after{content:'';position:absolute;top:-20px;left:50%;transform:translateX(-50%);width:10px;height:20px;background:var(--c2);border-radius:50%;animation:flicker 1s infinite;} .mosque{top:10vh;right:20vw;width:80px;height:80px;background:radial-gradient(circle,var(--c4),var(--c3));border-radius:50%;} .moon-star{top:5vh;right:5vw;width:40px;height:40px;background:var(--c2);clip-path:polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);} .torans{top:0;left:0;right:0;height:20px;background:repeating-linear-gradient(90deg,var(--c2),var(--c2) 10px,var(--c1) 10px,var(--c1) 20px);} .firecrackers{left:50%;top:-10vh;width:10px;height:40px;background:var(--c2);animation:fallDown 5s linear infinite;} .diya-big{bottom:5vh;left:40vw;width:60px;height:30px;background:var(--c2);border-radius:50% 50% 0 0;} .diya-big::after{content:'';position:absolute;top:-20px;left:50%;transform:translateX(-50%);width:15px;height:30px;background:var(--c3);border-radius:50%;animation:flicker 1s infinite;} .pattern{bottom:0;left:0;right:0;height:100px;background:conic-gradient(var(--c1),var(--c2),var(--c3));} .tree{bottom:5vh;left:20vw;width:0;height:0;border-left:40px solid transparent;border-right:40px solid transparent;border-bottom:80px solid var(--c1);} .snowflake{top:-10vh;left:10vw;width:20px;height:20px;background:var(--c3);border-radius:50%;animation:fallDown 10s linear infinite;} .gift{bottom:5vh;right:20vw;width:40px;height:40px;background:var(--c2);border:5px solid var(--c4);} .candycane{top:20vh;right:10vw;width:20px;height:60px;background:repeating-linear-gradient(45deg,var(--c2),var(--c2) 10px,var(--c3) 10px,var(--c3) 20px);border-radius:10px;} .star-top{top:0;left:50%;transform:translateX(-50%);width:20px;height:20px;background:var(--c4);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);} .ribbon-go{position:absolute;top:30vh;left:50%;transform:translateX(-50%);width:300px;height:30px;background:linear-gradient(to right,var(--c1),var(--c2));animation:sway 3s infinite;} .balloon-go{position:absolute;bottom:-10vh;left:10vw;width:30px;height:50px;background:radial-gradient(circle,var(--c1),var(--c2));border-radius:50%;animation:floatUp 14s linear infinite;} .sparkles{position:absolute;inset:0;background:radial-gradient(var(--c2) 2px,transparent 2px);background-size:40px 40px;animation:twinkle 2s infinite;} .scissors{position:absolute;bottom:10vh;left:50%;transform:translateX(-50%);width:60px;height:20px;background:silver;border-radius:5px;} .banner{position:absolute;top:0;left:0;right:0;height:60px;background:linear-gradient(90deg,var(--c1),var(--c2),var(--c1));}
   </style>
+</head>
+<body data-festival="">
+
+<div id="maintenance-overlay">
+  <div><i class="fa-solid fa-person-digging"></i><h1>Under Maintenance</h1><p id="maintenance-message">We'll be back shortly!</p></div>
+</div>
+
+<div class="festive-layer"></div>
+
+<div id="store-wrapper">
+  <header>
+    <div class="container"><div class="header-content"><img src="FL.jpg" alt="Business Logo" class="header-logo" onerror="this.style.display='none'"><h1>FOREVER LIVING by Muhd Arvind Isa<span style="font-size: 1rem; color: #555; display: block; font-weight: 400;">Quality Wellness Products</span></h1></div></div>
+  </header>
+  
+  <div id="promo-running-banner"><div class="marquee-content" id="promo-banner-text"></div></div>
+
+  <nav>
+    <div class="container">
+        <ul id="main-nav">
+          <li><a onclick="showTab('products')">Products</a></li>
+          <li><a onclick="showTab('business')">Business Opportunity</a></li>
+          <li><a onclick="showTab('about')">About Us</a></li>
+          <li><a class="nav-disabled">Rewards</a></li>
+          <li><a class="nav-disabled">My Forever Living</a></li>
+        </ul>
+    </div>
+  </nav>
+
+  <main id="main-content" class="container">
+    <div id="products" class="tab-content active">
+      <section class="hero-section" id="hero-section">
+        <h2 id="hero-title"><i class="fa-solid fa-store"></i> Welcome to Our Store</h2>
+        <p id="hero-subtitle">Enjoy high-quality wellness products for a healthier lifestyle.</p>
+        <div id="countdown-timer" style="display:none;"></div>
+      </section>
+      <div class="search-container">
+        <input type="text" id="product-search" onkeyup="filterProducts()" placeholder="Search for products by name..."><i class="fa-solid fa-search search-icon"></i>
+      </div>
+      <section class="ai-suggestion-box">
+        <h3><i class="fa-solid fa-robot"></i> AI Product Suggester</h3>
+        <p>Describe your health concern (e.g., "dry skin", "low energy") and our AI will suggest a product for you.</p>
+        <input type="text" id="symptom-input" placeholder="Enter your symptom or concern..."><button id="suggest-btn" class="btn btn-primary" onclick="suggestProduct()">Get Suggestion</button>
+        <div id="suggestion-result"></div>
+      </section>
+      <div id="product-list-container"><p style="text-align: center; width: 100%;"><i class="fa-solid fa-spinner fa-spin"></i> Loading products from our catalog...</p></div>
+    </div>
+    
+    <div id="business" class="tab-content">
+      <section class="program-section">
+        <h2>Build Your Forever Business</h2>
+        <p style="text-align: center; max-width: 800px; margin: 20px auto;">The Forever Living opportunity is more than just selling high-quality products; it's a chance to build a flexible, rewarding business on your own terms. Whether you're looking for extra income or a full-time career, Forever provides a proven path to success.</p>
+        <h3 style="margin-top:40px;">How Does It Work?</h3>
+        <ul>
+            <li><strong>Become Your Own Boss:</strong> As a Forever Business Owner (FBO), you have the freedom to work from anywhere, set your own hours, and grow at your own pace. There are no large startup fees or required inventory purchases.</li>
+            <li><strong>A Simple, Proven Model:</strong> The business is built on a simple cycle: Use the products yourself, share your experience and the products with others, and build a team of like-minded individuals to do the same.</li>
+            <li><strong>Earn Generous Rewards:</strong> You earn income from your retail sales and from the sales of your team members. Forever offers one of the most generous compensation plans in the industry, including performance bonuses, the car plan (Earn While you Drive), and global travel incentives.</li>
+            <li><strong>World-Class Support:</strong> You are never alone. You will receive mentorship, training materials, and support from our team at Rich Academy Global and the wider Forever community to help you achieve your goals.</li>
+        </ul>
+        <h3 style="margin-top:40px;">Ready to Start Your Journey?</h3>
+        <p style="text-align: center;">Take the first step towards a healthier, wealthier life. Contact us today to learn more without any obligation.</p>
+        <a href="https://wa.me/601111033154?text=Hi,%20I'm%20interested%20in%20learning%20more%20about%20the%20Forever%20Living%20business%20opportunity." class="cta-button" target="_blank"><i class="fab fa-whatsapp"></i> Click to Learn More on WhatsApp</a>
+      </section>
+    </div>
+
+    <div id="about" class="tab-content">
+      <section class="about-us-section">
+        <h2>About Us</h2>
+        <div class="owner-profile">
+            <img src="owner.jpg" alt="Muhd Arvind Isa" class="owner-image" onerror="this.src='https://via.placeholder.com/150'">
+            <div class="owner-details">
+                <h3>Muhd Arvind Isa - Independent FBO</h3>
+                <p>Welcome! I am an authorized Independent Forever Business Owner (FBO) dedicated to bringing you the highest quality health and wellness products from Forever Living. My mission is to empower individuals to lead healthier lives and to provide opportunities for financial well-being through the Forever business model.</p>
+                <p><strong>Powered by:</strong> Rich Academy Global</p>
+                <p><strong>Contact Information:</strong></p>
+                <ul>
+                    <li><strong><i class="fab fa-whatsapp"></i> WhatsApp:</strong> <a href="https://wa.me/601111033154">+6011 1103 3154</a></li>
+                    <li><strong><i class="fa fa-envelope"></i> Email:</strong> <a href="mailto:cs.foreverlivingbymuhdarvindisa@gmail.com">cs.foreverlivingbymuhdarvindisa@gmail.com</a></li>
+                </ul>
+            </div>
+        </div>
+        <hr style="margin: 30px 0;">
+        <h3>The Forever Living Legacy</h3>
+        <p>Founded in 1978 by Rex Maughan, Forever Living Products is a multi-billion dollar company that manufactures and sells hundreds of wellness and beauty products all around the world. What makes Forever unique is its commitment to quality through a process called "from seed to product."</p>
+        <ul>
+            <li><strong>The Aloe Vera Company:</strong> Forever owns its own aloe vera plantations in Texas and the Dominican Republic, ensuring the purest and most potent aloe is used in its products. They control the entire process, from planting and harvesting to processing and manufacturing.</li>
+            <li><strong>Global Presence:</strong> For over 40 years, Forever has grown to operate in more than 160 countries, demonstrating the universal appeal and effectiveness of its products and business model.</li>
+            <li><strong>Our Commitment:</strong> We are committed to providing authentic Forever Living products, exceptional customer service, and reliable support for both our customers and business partners. All products are sourced directly from Forever Living Products and are guaranteed to be genuine.</li>
+        </ul>
+        <hr style="margin: 30px 0;">
+        <h3>Feedback & Order Requests</h3>
+        <form class="feedback-form" onsubmit="sendFeedbackEmail(event)">
+            <input type="text" id="feedback-name" placeholder="Your Name" required>
+            <input type="email" id="feedback-email" placeholder="Your Email" required>
+            <select id="feedback-subject" required>
+                <option value="" disabled selected>Select a Subject...</option>
+                <option value="General Enquiry">General Enquiry</option>
+                <option value="Order Request">Order Request</option>
+                <option value="Compliment">Compliment</option>
+                <option value="Complaint">Complaint</option>
+                <option value="Suggestion">Suggestion</option>
+            </select>
+            <textarea id="feedback-message" placeholder="Your Message" required></textarea>
+            <button type="submit" id="feedback-submit-btn" class="btn btn-primary">Send Message</button>
+            <p id="feedback-status"></p>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+      <div class="container">
+        <p>© 2025 Forever Living by Muhd Arvind Isa. All rights reserved.</p>
+        <div class="timestamp">Last updated: <span id="update-timestamp"></span></div>
+        <section class="disclaimer"><strong>Disclaimer:</strong> This website is operated by an independent FBO and is not the official site of Forever Living Products.</section>
+      </div>
+  </footer>
+</div>
+
+  <div id="floating-cart" class="floating-cart-btn" onclick="toggleCart()"><i class="fa-solid fa-cart-shopping"></i><span id="cart-count">0</span></div>
+
+  <div id="cart-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="toggleCart(true)">×</span>
+      <div id="cart-view">
+        <h2>Your Shopping Cart</h2>
+        <div id="cart-items"><p>Your cart is currently empty.</p></div>
+        <div class="cart-summary">
+          <div class="summary-line"><span>Subtotal</span><span id="cart-subtotal">RM 0.00</span></div>
+          <div class="summary-line" id="discount-line" style="display:none;"><span>Discount</span><span id="cart-discount">RM 0.00</span></div>
+          <div class="summary-line"><span>Shipping</span><span id="cart-shipping">RM 0.00</span></div>
+          <div class="summary-line" id="savings-line" style="display:none; color: var(--accent-color); font-weight: bold;"><span>You Saved</span><span id="cart-savings">RM 0.00</span></div>
+          <div class="summary-line total"><span>Total</span><span id="cart-total">RM 0.00</span></div>
+          <div id="points-earned-display"></div>
+        </div>
+        <div class="discount-section">
+            <input type="text" id="discount-code-input" placeholder="Enter Discount Code"><button class="btn btn-secondary" onclick="applyDiscount()">Apply</button>
+        </div>
+        <p id="discount-status"></p>
+        <div class="customer-info-form">
+          <h3 style="margin-top: 20px;">Customer & Shipping Information</h3>
+          <input type="text" id="customer-name" placeholder="Your Full Name" required>
+          <input type="tel" id="customer-phone" placeholder="Your WhatsApp Number (e.g., 60123456789)" required>
+          <input type="email" id="customer-email" placeholder="Your Email Address (for receipt)" required>
+          <input type="text" id="customer-address1" placeholder="Address Line 1" required>
+          <input type="text" id="customer-address2" placeholder="Address Line 2 (Optional)">
+          <input type="text" id="customer-city" placeholder="City" required>
+          <input type="text" id="customer-state" placeholder="State" required>
+          <input type="text" id="customer-postcode" placeholder="Postcode" required>
+        </div>
+        <div id="consent-form">
+            <label for="consent-checkbox">
+                <input type="checkbox" id="consent-checkbox" onchange="toggleCheckoutButton()">
+                <span>I consent to the collection of my personal data for transaction purposes. You can request data deletion at any time via <a href="https://wa.me/601111033154?text=Hi,%20I%20would%20like%20to%20request%20my%20personal%20data%20to%20be%20deleted." target="_blank">WhatsApp</a> or <a href="mailto:cs.foreverlivingbymuhdarvindisa@gmail.com?subject=Request%20for%20Data%20Deletion">Email</a>.</span>
+            </label>
+        </div>
+        <button class="btn btn-primary checkout-btn" id="checkout-btn" onclick="initiateCheckout()" disabled>Agree & Complete Order via WhatsApp</button>
+      </div>
+      <div id="verification-view" style="display: none;">
+        <h2>Order Verification</h2>
+        <p>Please complete the following steps to finalize your order.</p>
+        <div id="proof-upload-step" class="verification-step active">
+            <h4><i class="fa-solid fa-arrow-up-from-bracket"></i> Step 1: Upload Payment Proof</h4>
+            <p style="font-size: 0.9rem; color: #555;">Upload a screenshot of your transaction receipt.</p>
+            <input type="file" id="payment-proof-upload" accept="image/*">
+            <button class="btn btn-primary" id="upload-proof-btn" onclick="uploadProof()">Upload and Proceed</button>
+            <p id="upload-status"></p>
+        </div>
+        <div id="code-verification-step" class="verification-step">
+            <h4><i class="fa-solid fa-key"></i> Step 2: Finalize with Code</h4>
+            <p style="font-size: 0.9rem; color: #555;">Enter the verification code provided to you by the owner.</p>
+            <input type="text" id="verification-code" placeholder="Enter Verification Code" disabled>
+            <button class="btn btn-primary" id="finalize-order-btn" onclick="finalizeOrder()" disabled>Finalize Order & Get Receipt</button>
+            <p id="verification-status"></p>
+        </div>
+        <button class="btn btn-secondary" style="margin-top: 20px;" onclick="cancelVerification()">Cancel Entire Order</button>
+      </div>
+    </div>
+  </div>
 
 <script>
     const googleScriptURL = 'https://script.google.com/macros/s/AKfycbwjCXQFDp2Vgd9F9DuFQdw1zuLMR0i--g3Wk4tFt0IS43n9ev6b0cQ0C6Tu_TA2Hb4c/exec';
     let products = []; let cart = []; let activeFestival = null; let activePromotions = [];
     let shippingRules = {}; let availableDiscountCodes = {}; let appliedDiscount = null;
-    let statusCheckInterval = null;
 
     document.addEventListener('DOMContentLoaded', fetchData);
 
@@ -434,9 +611,7 @@
 
     function handleSuccessfulFinalization(receiptUrl) {
         const statusEl = document.getElementById("verification-status");
-        const downloadUrl = receiptUrl; // The URL from the server is already a direct download link.
-        
-        statusEl.innerHTML = `Order Verified!<br><br><a href="${downloadUrl}" class="btn btn-primary" style="text-decoration:none;" target="_blank">Click Here to Download Receipt</a>`;
+        statusEl.innerHTML = `Order Verified!<br><br><a href="${receiptUrl}" class="btn btn-primary" style="text-decoration:none;" target="_blank">Click Here to Download Receipt</a>`;
         statusEl.style.color = "green";
         
         cart = []; sessionStorage.removeItem("pendingOrder"); updateCartDisplay(); appliedDiscount = null;
