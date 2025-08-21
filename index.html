@@ -50,6 +50,7 @@
     @keyframes sway{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}} @keyframes floatUp{0%{transform:translateY(0) scale(1);}100%{transform:translateY(-120vh) scale(1.2); opacity: 0;}} @keyframes fallDown{0%{transform:translateY(-20vh) rotate(0deg);}100%{transform:translateY(120vh) rotate(360deg);}} @keyframes flicker{0%,100%{opacity:.9;}50%{opacity:.6;}} @keyframes burst{0%{transform:scale(.2);opacity:1;}100%{transform:scale(1.2);opacity:0;}} @keyframes twinkle{50%{opacity:.3;}}
     .lantern{top:10vh;left:10vw;width:60px;height:80px;background:radial-gradient(circle,var(--c2),var(--c1) 70%);border-radius:50%;animation:sway 3s infinite ease-in-out;} .firecracker{left:20vw;top:-10vh;width:8px;height:50px;background:var(--c1);animation:fallDown 5s linear infinite;} .gold-ingot{bottom:5vh;left:30vw;width:60px;height:30px;background:gold;border-radius:50% 50% 30% 30%;box-shadow:0 0 10px gold;} .dragon{top:40vh;left:-350px;width:300px;height:60px;background:linear-gradient(90deg,var(--c1),var(--c2));border-radius:30px;animation:sway 4s infinite, fallDown 20s linear infinite reverse;} .confetti-cny{inset:0;background-image:radial-gradient(var(--c1) 2px,transparent 2px),radial-gradient(var(--c2) 2px,transparent 2px);background-size:40px 40px;animation:twinkle 2s infinite;} .flag{top:20vh;left:40vw;width:100px;height:60px;background:linear-gradient(var(--c1) 50%,var(--c4) 50%);border:2px solid var(--c3);animation:sway 2s infinite ease-in-out;} .star{top:10vh;right:10vw;width:20px;height:20px;background:var(--c2);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);} .fireworks{inset:0;background:radial-gradient(circle, var(--c2) 5%, transparent 10%);border-radius:50%;animation:burst 2s infinite ease-out;} .bunting{top:0;left:0;right:0;height:50px;background:repeating-linear-gradient(90deg,var(--c1),var(--c1) 20px,var(--c4) 20px,var(--c4) 40px,var(--c3) 40px,var(--c3) 60px);} .malaysia-map{top:30vh;left:30vw;width:200px;height:100px;background:rgba(255,255,255,.2); clip-path: polygon(0% 20%, 60% 20%, 60% 0%, 100% 0%, 100% 80%, 40% 80%, 40% 100%, 0% 100%);} .ribbon{top:10vh;left:0;right:0;height:30px;background:linear-gradient(90deg,var(--c1),var(--c4),var(--c3),var(--c2));} .moon{top:10vh;right:10vw;width:100px;height:100px;background:radial-gradient(circle,var(--c4),var(--c2));border-radius:50%;box-shadow:0 0 30px var(--c2);} .rabbit{bottom:10vh;left:10vw;width:60px;height:40px;background:var(--c4);border-radius:50%;} .sky-lantern{bottom:-10vh;left:30vw;width:30px;height:40px;background:radial-gradient(circle, var(--c2), transparent 70%);border-radius:5px 5px 20px 20px;animation:floatUp 15s linear infinite;} .starry-sky{inset:0;background:radial-gradient(var(--c4) 1px,transparent 1px);background-size:50px 50px;animation:twinkle 2s infinite;} .kolam{bottom:5vh;left:50%;transform:translateX(-50%);width:200px;height:200px;background:conic-gradient(var(--c1) 0 10%,var(--c2) 10% 20%,#0f0 20% 30%,#00f 30% 40%,#f0f 40% 100%);border-radius:50%;} .diya{bottom:5vh;left:20vw;width:40px;height:20px;background:var(--c2);border-radius:50% 50% 0 0;} .diya::after{content:'';position:absolute;top:-20px;left:50%;transform:translateX(-50%);width:10px;height:20px;background:var(--c3);border-radius:50%;animation:flicker 1s infinite;} .peacock{top:30vh;right:10vw;width:100px;height:100px;background:radial-gradient(circle,var(--c3),var(--c1));border-radius:50%;} .fireworks-ny{inset:0;background:radial-gradient(circle, var(--c4) 5%, transparent 10%);border-radius:50%;animation:burst 2s infinite ease-out;} .balloon{bottom:-20vh;left:20vw;width:40px;height:60px;background:radial-gradient(circle,var(--c3),var(--c4));border-radius:50%;animation:floatUp 12s linear infinite;} .champagne{bottom:5vh;right:10vw;width:20px;height:60px;background:var(--c4);border-radius:5px;} .clock{top:10vh;left:50%;transform:translateX(-50%);width:100px;height:100px;border:5px solid var(--c2);border-radius:50%;} .confetti-ny{inset:0;background-image:radial-gradient(var(--c3) 2px,transparent 2px),radial-gradient(var(--c4) 2px,transparent 2px),radial-gradient(var(--c2) 2px,transparent 2px);background-size:30px 30px;animation:twinkle 2s infinite;} .ketupat{top:20vh;left:20vw;width:40px;height:40px;background:linear-gradient(45deg,var(--c1) 50%,lightgreen 50%);transform:rotate(45deg);animation:sway 3s infinite;} .oil-lamp{bottom:10vh;left:30vw;width:20px;height:40px;background:var(--c2);border-radius:5px;} .oil-lamp::after{content:'';position:absolute;top:-20px;left:50%;transform:translateX(-50%);width:10px;height:20px;background:var(--c2);border-radius:50%;animation:flicker 1s infinite;} .mosque{top:10vh;right:20vw;width:80px;height:80px;background:radial-gradient(circle,var(--c4),var(--c3));border-radius:50%;} .moon-star{top:5vh;right:5vw;width:40px;height:40px;background:var(--c2);clip-path:polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);} .torans{top:0;left:0;right:0;height:20px;background:repeating-linear-gradient(90deg,var(--c2),var(--c2) 10px,var(--c1) 10px,var(--c1) 20px);} .firecrackers{left:50%;top:-10vh;width:10px;height:40px;background:var(--c2);animation:fallDown 5s linear infinite;} .diya-big{bottom:5vh;left:40vw;width:60px;height:30px;background:var(--c2);border-radius:50% 50% 0 0;} .diya-big::after{content:'';position:absolute;top:-20px;left:50%;transform:translateX(-50%);width:15px;height:30px;background:var(--c3);border-radius:50%;animation:flicker 1s infinite;} .pattern{bottom:0;left:0;right:0;height:100px;background:conic-gradient(var(--c1),var(--c2),var(--c3));} .tree{bottom:5vh;left:20vw;width:0;height:0;border-left:40px solid transparent;border-right:40px solid transparent;border-bottom:80px solid var(--c1);} .snowflake{top:-10vh;left:10vw;width:20px;height:20px;background:var(--c3);border-radius:50%;animation:fallDown 10s linear infinite;} .gift{bottom:5vh;right:20vw;width:40px;height:40px;background:var(--c2);border:5px solid var(--c4);} .candycane{top:20vh;right:10vw;width:20px;height:60px;background:repeating-linear-gradient(45deg,var(--c2),var(--c2) 10px,var(--c3) 10px,var(--c3) 20px);border-radius:10px;} .star-top{top:0;left:50%;transform:translateX(-50%);width:20px;height:20px;background:var(--c4);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);} .ribbon-go{position:absolute;top:30vh;left:50%;transform:translateX(-50%);width:300px;height:30px;background:linear-gradient(to right,var(--c1),var(--c2));animation:sway 3s infinite;} .balloon-go{position:absolute;bottom:-10vh;left:10vw;width:30px;height:50px;background:radial-gradient(circle,var(--c1),var(--c2));border-radius:50%;animation:floatUp 14s linear infinite;} .sparkles{position:absolute;inset:0;background:radial-gradient(var(--c2) 2px,transparent 2px);background-size:40px 40px;animation:twinkle 2s infinite;} .scissors{position:absolute;bottom:10vh;left:50%;transform:translateX(-50%);width:60px;height:20px;background:silver;border-radius:5px;} .banner{position:absolute;top:0;left:0;right:0;height:60px;background:linear-gradient(90deg,var(--c1),var(--c2),var(--c1));}
   </style>
+
 </head>
 <body data-festival="">
 
@@ -267,7 +268,7 @@
                 productListContainer.innerHTML = `<p style="text-align: center; color: red; font-weight: bold; width: 100%; padding: 40px 0;"><i class="fa-solid fa-triangle-exclamation"></i> Error loading store.<br>Could not retrieve catalog. Please try again later.</p>`;
             }
         }
-        document.getElementById('update-timestamp').textContent = `${new Date().toLocaleDateString('en-GB')} (v16.1)`;
+        document.getElementById('update-timestamp').textContent = `${new Date().toLocaleDateString('en-GB')} (v17.0)`;
         if (sessionStorage.getItem('pendingOrder')) { 
             toggleCart(); 
         } 
@@ -614,9 +615,8 @@
         const statusEl = document.getElementById("verification-status");
         const downloadUrl = receiptUrl.replace("/file/d/", "/uc?export=download&id=").replace("/view?usp=drivesdk", "");
         
-        statusEl.innerHTML = isManual 
-            ? `Order Manually Approved!<br><a href="${downloadUrl}" target="_blank" style="color:green; font-weight:bold;">Click here to download your receipt.</a>`
-            : `Order Verified!<br><a href="${downloadUrl}" target="_blank" style="color:green; font-weight:bold;">Click here to download your receipt.</a>`;
+        statusEl.innerHTML = (isManual ? "Order Manually Approved!" : "Order Verified!") + 
+            `<br><br><a href="${downloadUrl}" target="_blank" class="btn btn-primary" style="text-decoration:none;">Click Here to Download Receipt</a>`;
         statusEl.style.color = "green";
         
         if (statusCheckInterval) clearInterval(statusCheckInterval);
@@ -628,31 +628,9 @@
         setTimeout(() => {
             toggleCart(true);
             updateVerificationUI(true);
-        }, 8000);
+        }, 10000); 
     }
     
-    function startCheckingOrderStatus() {
-        if (statusCheckInterval) clearInterval(statusCheckInterval);
-        let pendingOrder = JSON.parse(sessionStorage.getItem("pendingOrder"));
-        if (!pendingOrder || !pendingOrder.customerEmail) return;
-        statusCheckInterval = setInterval(() => {
-            checkOrderStatus(pendingOrder.customerEmail);
-        }, 5000);
-    }
-
-    async function checkOrderStatus(email) {
-        try {
-            const response = await fetch(`${googleScriptURL}?action=getOrderStatus&email=${encodeURIComponent(email)}`);
-            const result = await response.json();
-            if (result.status === 'approved' && result.receiptUrl) {
-                if (statusCheckInterval) clearInterval(statusCheckInterval);
-                handleSuccessfulFinalization(result.receiptUrl, true);
-            }
-        } catch (error) {
-            console.error("Status check failed:", error);
-        }
-    }
-
     function updateVerificationUI(reset = false) {
         const proofStep = document.getElementById('proof-upload-step'), codeStep = document.getElementById('code-verification-step');
         const uploadBtn = document.getElementById('upload-proof-btn'), finalizeBtn = document.getElementById('finalize-order-btn');
@@ -669,7 +647,6 @@
             proofStep.classList.remove('active'); proofStep.classList.add('completed'); codeStep.classList.add('active');
             uploadBtn.disabled = true; finalizeBtn.disabled = false; codeInput.disabled = false;
             uploadStatus.textContent = "Proof Uploaded Successfully!"; uploadStatus.style.color = "green";
-            startCheckingOrderStatus();
         } else {
             proofStep.classList.add('active'); proofStep.classList.remove('completed'); codeStep.classList.remove('active');
             uploadBtn.disabled = false; finalizeBtn.disabled = true; codeInput.disabled = true;
