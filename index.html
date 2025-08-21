@@ -163,7 +163,6 @@
         </form>
       </section>
     </div>
-
   </main>
 
   <footer class="footer">
@@ -274,7 +273,7 @@
             }
         }
         
-        document.getElementById('update-timestamp').textContent = `${new Date().toLocaleDateString('en-GB')} (v15.1)`;
+        document.getElementById('update-timestamp').textContent = `${new Date().toLocaleDateString('en-GB')} (v15.2)`;
         if (sessionStorage.getItem('pendingOrder')) { 
             toggleCart(); 
         } 
@@ -555,7 +554,6 @@
         document.getElementById('cart-view').style.display = 'none';
         document.getElementById('verification-view').style.display = 'block';
         updateVerificationUI();
-        startCheckingOrderStatus();
     }
     
     async function uploadProof() {
@@ -627,12 +625,11 @@
         statusEl.textContent = isManual ? "Order Manually Approved! Your receipt is now downloading..." : "Order Verified! Your receipt is downloading...";
         statusEl.style.color = "green";
         if (statusCheckInterval) clearInterval(statusCheckInterval);
-        const link = document.createElement("a");
-        link.href = receiptUrl.replace("/file/d/", "/uc?export=download&id=").replace("/view?usp=drivesdk", "");
-        link.download = `Receipt-Order-${(new Date).getTime()}.pdf`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+
+        // [FIXED] Use window.open for a more reliable download trigger
+        const downloadUrl = receiptUrl.replace("/file/d/", "/uc?export=download&id=").replace("/view?usp=drivesdk", "");
+        window.open(downloadUrl, '_blank');
+        
         cart = []; sessionStorage.removeItem("pendingOrder"); updateCartDisplay(); appliedDiscount = null;
         document.getElementById("discount-code-input").value = "";
         document.getElementById("discount-status").textContent = "";
