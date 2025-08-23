@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base target="_top">
+  <title>Manual Order Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -31,19 +32,20 @@
     td input { text-align: right; }
     .summary-table td:nth-child(2) { text-align: right; font-weight: 500; }
     #customer-details { background-color: #eef2ff; padding: 15px; border-radius: 4px; border: 1px solid #c7d2fe; display: none; margin-top: 10px; }
-    #loader { display: none; text-align: center; padding: 50px; }
-    #success-message { display: none; background-color: #d1fae5; color: #065f46; padding: 15px; border-radius: 4px; text-align: center; font-weight: 500; margin-top: 20px; }
+    #loader { display: block; text-align: center; padding: 50px; }
+    #success-message, #error-message { display: none; padding: 15px; border-radius: 4px; text-align: center; font-weight: 500; margin-top: 20px; }
+    #success-message { background-color: #d1fae5; color: #065f46; }
+    #error-message { background-color: #fee2e2; color: #991b1b; }
   </style>
 </head>
 <body>
-  <div id="loader">
-    <h2>Loading Portal Data...</h2>
-  </div>
+  <div class="container">
+    <div id="loader">
+      <h2>Loading Portal Data...</h2>
+    </div>
 
-  <div id="main-content" style="display:none;">
-    <div class="container">
+    <div id="main-content" style="display:none;">
       <h1>Manual Order & Database Portal</h1>
-
       <!-- Customer Section -->
       <h2>1. Customer Details</h2>
       <div class="form-group">
@@ -69,9 +71,7 @@
               <th style="width: 80px; text-align:center;">Action</th>
             </tr>
           </thead>
-          <tbody>
-            <!-- Product rows will be injected here by JavaScript -->
-          </tbody>
+          <tbody></tbody>
         </table>
       </div>
 
@@ -89,16 +89,10 @@
                 <th style="width: 60px; text-align:center;"></th>
               </tr>
             </thead>
-            <tbody>
-              <!-- Cart items will be injected here -->
-            </tbody>
+            <tbody></tbody>
           </table>
         </div>
-        
-        <div>
-           <!-- This space can be used for notes in the future -->
-        </div>
-
+        <div></div>
         <div>
           <table class="summary-table">
             <tr><td>Subtotal</td><td id="subtotal">0.00</td></tr>
@@ -126,160 +120,59 @@
         <button id="submit-order" class="btn btn-primary" style="font-size: 16px;">SUBMIT MANUAL ORDER</button>
       </div>
       <div id="success-message"></div>
+      <div id="error-message"></div>
     </div>
   </div>
 
   <script>
+    // --- ACTION REQUIRED: PASTE YOUR TESTING SCRIPT URL HERE ---
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx0siI7MQQ4nYgCGVOR5vUyJXQ_hVvp02uOuFVhRirBBkj_216RJxek-SCNXpsE5YHD/exec";
+
     let allProducts = [];
-    let allCustomers = {}; // Use an object for quick PAC lookups
+    let allCustomers = {};
     let cart = {};
 
     // --- INITIALIZATION ---
     document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('loader').style.display = 'block';
-      // This is the call from the HTML page to the Code.gs file
-      google.script.run
-        .withSuccessHandler(onDataLoaded)
-        .withFailureHandler(onFailure)
-        .getPortalData();
+        fetch(SCRIPT_URL + '?action=getPortalData')
+            .then(response => response.json())
+            .then(onDataLoaded)
+            .catch(onFailure);
     });
 
     function onDataLoaded(data) {
-      if (data.status === 'success') {
-          allProducts = data.products;
-          allCustomers = data.customers;
-          populateProductTable(allProducts);
-          populateCustomerDatalist(allCustomers);
-          document.getElementById('loader').style.display = 'none';
-          document.getElementById('main-content').style.display = 'block';
-          setupEventListeners();
-      } else {
-          onFailure(data);
-      }
+        if (data.status === 'success') {
+            allProducts = data.products;
+            allCustomers = data.customers;
+            populateProductTable(allProducts);
+            populateCustomerDatalist(allCustomers);
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+            setupEventListeners();
+        } else {
+            onFailure(data);
+        }
     }
 
     function onFailure(error) {
-      alert('Failed to load portal data: ' + error.message);
+        const errorDiv = document.getElementById('error-message');
+        errorDiv.textContent = 'A critical error occurred: ' + (error.message || 'Could not connect to the server.');
+        errorDiv.style.display = 'block';
+        document.getElementById('loader').style.display = 'none';
     }
     
-    function populateProductTable(products) {
-      const tbody = document.getElementById('product-table').querySelector('tbody');
-      tbody.innerHTML = products.map(p => `
-        <tr data-sku="${p.sku}">
-          <td>${p.name}</td>
-          <td>${p.sku}</td>
-          <td style="text-align:right;">${p.price.toFixed(2)}</td>
-          <td style="text-align:center;">
-            <button class="btn btn-primary btn-small" onclick="addToCart(${p.sku})">Add</button>
-          </td>
-        </tr>
-      `).join('');
-    }
+    // ... (All the other JavaScript functions from the previous HTML file are identical) ...
+    function populateProductTable(products){/*...*/}
+    function populateCustomerDatalist(customers){/*...*/}
+    function setupEventListeners(){/*...*/}
+    function filterProducts(e){/*...*/}
+    function selectCustomer(e){/*...*/}
+    function addToCart(sku){/*...*/}
+    function renderCart(){/*...*/}
+    function updateCartItem(sku, key, value){/*...*/}
+    function removeFromCart(sku){/*...*/}
+    function updateSummary(){/*...*/}
 
-    function populateCustomerDatalist(customers) {
-      const datalist = document.getElementById('customer-list');
-      datalist.innerHTML = Object.values(customers).map(c => `<option value="${c.pac}">${c.name} - ${c.email}</option>`).join('');
-    }
-    
-    // --- EVENT LISTENERS ---
-    function setupEventListeners() {
-      document.getElementById('product-search').addEventListener('input', filterProducts);
-      document.getElementById('customer-search').addEventListener('input', selectCustomer);
-      document.getElementById('discount-type').addEventListener('change', updateSummary);
-      document.getElementById('discount-value').addEventListener('input', updateSummary);
-      document.getElementById('shipping-fee').addEventListener('input', updateSummary);
-      document.getElementById('submit-order').addEventListener('click', submitOrder);
-    }
-
-    // --- CORE FUNCTIONS ---
-    function filterProducts(e) {
-      const searchTerm = e.target.value.toLowerCase();
-      const filtered = allProducts.filter(p => 
-        p.name.toLowerCase().includes(searchTerm) || 
-        p.sku.toString().includes(searchTerm)
-      );
-      populateProductTable(filtered);
-    }
-    
-    function selectCustomer(e) {
-      const pac = e.target.value;
-      const customer = allCustomers[pac];
-      const detailsDiv = document.getElementById('customer-details');
-      if (customer) {
-        detailsDiv.innerHTML = `<strong>${customer.name}</strong> (${customer.email})<br>${customer.address}`;
-        detailsDiv.style.display = 'block';
-      } else {
-        detailsDiv.style.display = 'none';
-      }
-    }
-
-    function addToCart(sku) {
-      if (cart[sku]) {
-        cart[sku].quantity++;
-      } else {
-        const product = allProducts.find(p => p.sku === sku);
-        cart[sku] = {
-          sku: product.sku,
-          name: product.name,
-          standardPrice: product.price,
-          overridePrice: product.price,
-          quantity: 1
-        };
-      }
-      renderCart();
-    }
-    
-    function renderCart() {
-      const tbody = document.getElementById('cart-table').querySelector('tbody');
-      if (Object.keys(cart).length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color: var(--light-text);">Cart is empty</td></tr>';
-      } else {
-        tbody.innerHTML = Object.values(cart).map(item => `
-          <tr>
-            <td>${item.name}</td>
-            <td><input type="number" value="${item.quantity}" min="1" oninput="updateCartItem(${item.sku}, 'quantity', this.value)"></td>
-            <td><input type="number" value="${item.overridePrice.toFixed(2)}" step="0.01" oninput="updateCartItem(${item.sku}, 'overridePrice', this.value)"></td>
-            <td style="text-align:right;">${(item.quantity * item.overridePrice).toFixed(2)}</td>
-            <td style="text-align:center;"><button class="btn btn-secondary btn-small" onclick="removeFromCart(${item.sku})">X</button></td>
-          </tr>
-        `).join('');
-      }
-      updateSummary();
-    }
-    
-    function updateCartItem(sku, key, value) {
-      if (cart[sku]) {
-        cart[sku][key] = parseFloat(value) || 0;
-        renderCart();
-      }
-    }
-
-    function removeFromCart(sku) {
-      delete cart[sku];
-      renderCart();
-    }
-    
-    function updateSummary() {
-      let subtotal = 0;
-      Object.values(cart).forEach(item => {
-        subtotal += item.quantity * item.overridePrice;
-      });
-      document.getElementById('subtotal').textContent = subtotal.toFixed(2);
-
-      const discountType = document.getElementById('discount-type').value;
-      const discountValue = parseFloat(document.getElementById('discount-value').value) || 0;
-      let totalDiscount = 0;
-      if (discountType === 'Percentage' && discountValue > 0) {
-        totalDiscount = subtotal * (discountValue / 100);
-      } else if (discountType === 'Fixed') {
-        totalDiscount = discountValue;
-      }
-      
-      const shipping = parseFloat(document.getElementById('shipping-fee').value) || 0;
-      const grandTotal = subtotal - totalDiscount + shipping;
-      document.getElementById('grand-total').textContent = grandTotal.toFixed(2);
-    }
-    
     function submitOrder() {
       const customerPAC = document.getElementById('customer-search').value;
       if (!allCustomers[customerPAC]) {
@@ -304,10 +197,14 @@
         grandTotal: parseFloat(document.getElementById('grand-total').textContent) || 0,
       };
 
-      google.script.run
-        .withSuccessHandler(onOrderSuccess)
-        .withFailureHandler(onFailure)
-        .processManualOrder(payload);
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'processManualOrder', payload: payload }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(response => response.json())
+      .then(onOrderSuccess)
+      .catch(onFailure);
     }
     
     function onOrderSuccess(response) {
@@ -334,7 +231,18 @@
            onFailure(response);
        }
     }
-
+    
+    // Paste the missing functions here
+    function populateProductTable(products){const tbody=document.getElementById('product-table').querySelector('tbody');tbody.innerHTML=products.map(p=>`<tr data-sku="${p.sku}"><td>${p.name}</td><td>${p.sku}</td><td style="text-align:right;">${p.price.toFixed(2)}</td><td style="text-align:center;"><button class="btn btn-primary btn-small" onclick="addToCart(${p.sku})">Add</button></td></tr>`).join('')}
+    function populateCustomerDatalist(customers){const datalist=document.getElementById('customer-list');datalist.innerHTML=Object.values(customers).map(c=>`<option value="${c.pac}">${c.name} - ${c.email}</option>`).join('')}
+    function setupEventListeners(){document.getElementById('product-search').addEventListener('input',filterProducts);document.getElementById('customer-search').addEventListener('input',selectCustomer);document.getElementById('discount-type').addEventListener('change',updateSummary);document.getElementById('discount-value').addEventListener('input',updateSummary);document.getElementById('shipping-fee').addEventListener('input',updateSummary);document.getElementById('submit-order').addEventListener('click',submitOrder)}
+    function filterProducts(e){const searchTerm=e.target.value.toLowerCase();const filtered=allProducts.filter(p=>p.name.toLowerCase().includes(searchTerm)||p.sku.toString().includes(searchTerm));populateProductTable(filtered)}
+    function selectCustomer(e){const pac=e.target.value;const customer=allCustomers[pac];const detailsDiv=document.getElementById('customer-details');if(customer){detailsDiv.innerHTML=`<strong>${customer.name}</strong> (${customer.email})<br>${customer.address}`;detailsDiv.style.display='block'}else{detailsDiv.style.display='none'}}
+    function addToCart(sku){if(cart[sku]){cart[sku].quantity++}else{const product=allProducts.find(p=>p.sku===sku);cart[sku]={sku:product.sku,name:product.name,standardPrice:product.price,overridePrice:product.price,quantity:1}}renderCart()}
+    function renderCart(){const tbody=document.getElementById('cart-table').querySelector('tbody');if(Object.keys(cart).length===0){tbody.innerHTML='<tr><td colspan="5" style="text-align:center; color: var(--light-text);">Cart is empty</td></tr>'}else{tbody.innerHTML=Object.values(cart).map(item=>`<tr><td>${item.name}</td><td><input type="number" value="${item.quantity}" min="1" oninput="updateCartItem(${item.sku}, 'quantity', this.value)"></td><td><input type="number" value="${item.overridePrice.toFixed(2)}" step="0.01" oninput="updateCartItem(${item.sku}, 'overridePrice', this.value)"></td><td style="text-align:right;">${(item.quantity*item.overridePrice).toFixed(2)}</td><td style="text-align:center;"><button class="btn btn-secondary btn-small" onclick="removeFromCart(${item.sku})">X</button></td></tr>`).join('')}updateSummary()}
+    function updateCartItem(sku,key,value){if(cart[sku]){cart[sku][key]=parseFloat(value)||0;renderCart()}}
+    function removeFromCart(sku){delete cart[sku];renderCart()}
+    function updateSummary(){let subtotal=0;Object.values(cart).forEach(item=>{subtotal+=item.quantity*item.overridePrice});document.getElementById('subtotal').textContent=subtotal.toFixed(2);const discountType=document.getElementById('discount-type').value;const discountValue=parseFloat(document.getElementById('discount-value').value)||0;let totalDiscount=0;if(discountType==='Percentage'&&discountValue>0){totalDiscount=subtotal*(discountValue/100)}else if(discountType==='Fixed'){totalDiscount=discountValue}const shipping=parseFloat(document.getElementById('shipping-fee').value)||0;const grandTotal=subtotal-totalDiscount+shipping;document.getElementById('grand-total').textContent=grandTotal.toFixed(2)}
   </script>
 </body>
 </html>
