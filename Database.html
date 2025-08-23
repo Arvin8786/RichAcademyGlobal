@@ -1,193 +1,238 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Manual Order Portal</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary-color: #4f46e5; --primary-hover: #4338ca; --secondary-color: #f3f4f6;
-      --border-color: #d1d5db; --text-color: #374151; --light-text: #6b7280;
-      --success-color: #10b981; --error-color: #ef4444;
-    }
-    body { font-family: 'Inter', sans-serif; background-color: var(--secondary-color); color: var(--text-color); margin: 0; font-size: 14px; }
-    .container { max-width: 1200px; margin: 20px auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-    h1, h2 { color: var(--primary-color); border-bottom: 2px solid var(--secondary-color); padding-bottom: 10px; margin-top: 0; }
-    h1 { font-size: 24px; } h2 { font-size: 18px; margin-top: 25px; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    .grid-full { grid-column: 1 / -1; }
-    .form-group { margin-bottom: 15px; }
-    label { display: block; font-weight: 500; margin-bottom: 5px; }
-    input, select { width: 100%; padding: 8px 10px; border: 1px solid var(--border-color); border-radius: 4px; box-sizing: border-box; }
-    input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2); }
-    .btn { padding: 10px 15px; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; transition: background-color 0.2s; }
-    .btn-primary { background-color: var(--primary-color); color: #fff; }
-    .btn-primary:hover { background-color: var(--primary-hover); }
-    .btn-secondary { background-color: var(--light-text); color: #fff; }
-    .btn-small { padding: 5px 10px; font-size: 12px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    th, td { padding: 10px; text-align: left; border-bottom: 1px solid var(--border-color); }
-    th { background-color: var(--secondary-color); font-weight: 600; }
-    td input { text-align: right; }
-    .summary-table td:nth-child(2) { text-align: right; font-weight: 500; }
-    #customer-details { background-color: #eef2ff; padding: 15px; border-radius: 4px; border: 1px solid #c7d2fe; display: none; margin-top: 10px; }
-    #loader { display: block; text-align: center; padding: 50px; }
-    #success-message, #error-message { display: none; padding: 15px; border-radius: 4px; text-align: center; font-weight: 500; margin-top: 20px; }
-    #success-message { background-color: #d1fae5; color: #065f46; }
-    #error-message { background-color: #fee2e2; color: #991b1b; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div id="loader">
-      <h2>Loading Portal Data...</h2>
-    </div>
+// --- CONFIGURATION ---
+const SPREADSHEET_ID = '19huSirUr186LPCLsS-k2ElrvWsJN580uyprHFh2Zb9g';
 
-    <div id="main-content" style="display:none;">
-      <h1>Manual Order & Database Portal</h1>
-      <h2>1. Customer Details</h2>
-      <div class="form-group">
-        <label for="customer-search">Search for Customer by PAC</label>
-        <input type="search" id="customer-search" list="customer-list" placeholder="Type PAC to search...">
-        <datalist id="customer-list"></datalist>
-      </div>
-      <div id="customer-details"></div>
+// --- GLOBAL CONSTANTS ---
+const SHEET_PRODUCTS = 'Product_Master';
+const SHEET_ORDER_LOG = 'Order_Log';
+const SHEET_CUSTOMERS = 'Customers';
+const SHEET_ITEMIZED_SALES = 'Itemized_Sales';
+const FINAL_RECEIPT_FOLDER_ID = '1LQnItk07gntSOEv4qQUjfrik3fdxuanx';
+const LOGO_URL = 'https://i.imgur.com/E4ZAT1K.png';
 
-      <h2>2. Build Order</h2>
-      <div class="form-group">
-        <label for="product-search">Search for Products</label>
-        <input type="search" id="product-search" placeholder="Type product name or SKU to filter list...">
-      </div>
-      <div style="max-height: 300px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 4px;">
-        <table id="product-table">
-          <thead>
-            <tr>
-              <th>Product Name</th><th>SKU</th><th style="text-align:right;">Price (RM)</th><th style="width: 80px; text-align:center;">Action</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
+// =================================================================
+// WEB APP & PORTAL FUNCTIONS
+// =================================================================
 
-      <h2>3. Order Summary</h2>
-      <div class="grid">
-        <div class="grid-full">
-          <table id="cart-table">
-            <thead>
-              <tr>
-                <th>Product</th><th style="width: 100px; text-align:right;">Qty</th><th style="width: 120px; text-align:right;">Unit Price (RM)</th><th style="width: 120px; text-align:right;">Total (RM)</th><th style="width: 60px; text-align:center;"></th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-        <div></div>
-        <div>
-          <table class="summary-table">
-            <tr><td>Subtotal</td><td id="subtotal">0.00</td></tr>
-            <tr>
-              <td>Discount</td>
-              <td style="display:flex; gap: 5px; align-items: center;">
-                <select id="discount-type" style="width: 100px;"><option value="None">None</option><option value="Fixed">Fixed RM</option><option value="Percentage">Percentage %</option></select>
-                <input type="number" id="discount-value" value="0" style="width: 80px;">
-              </td>
-            </tr>
-            <tr><td>Shipping Fee</td><td><input type="number" id="shipping-fee" value="0.00"></td></tr>
-            <tr style="font-weight: bold; font-size: 1.2em; border-top: 2px solid var(--text-color);"><td>Grand Total</td><td id="grand-total">0.00</td></tr>
-          </table>
-        </div>
-      </div>
-      
-      <div style="text-align: right; margin-top: 25px;">
-        <button id="submit-order" class="btn btn-primary" style="font-size: 16px;">SUBMIT MANUAL ORDER</button>
-      </div>
-      <div id="success-message"></div>
-      <div id="error-message"></div>
-    </div>
-  </div>
+/**
+ * This doGet function is not used by the external portal, but is required by Apps Script.
+ * It can be used for testing or as a placeholder.
+ */
+function doGet(e) {
+  return HtmlService.createHtmlOutput("Manual Order Portal Backend is running.");
+}
 
-  <script>
-    // --- ACTION REQUIRED: PASTE YOUR DEPLOYMENT URL HERE ---
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyP5AY4dah3xdX07WS1ESh-HgRYwt4Mwkei2X6u9JIC8fItco9FQBesN9SWgv89DZ5a/exec";
+/**
+ * [FINAL CORRECTED VERSION] This doPost handles all requests from the external portal.
+ */
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    let responsePayload;
 
-    let allProducts = [];
-    let allCustomers = {};
-    let cart = {};
-
-    document.addEventListener('DOMContentLoaded', () => {
-        fetch(SCRIPT_URL + '?action=getPortalData')
-            .then(response => response.json())
-            .then(onDataLoaded)
-            .catch(onFailure);
-    });
-
-    function onDataLoaded(data) {
-        if (data.status === 'success') {
-            allProducts = data.products;
-            allCustomers = data.customers;
-            populateProductTable(allProducts);
-            populateCustomerDatalist(allCustomers);
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('main-content').style.display = 'block';
-            setupEventListeners();
-        } else { onFailure(data); }
-    }
-
-    function onFailure(error) {
-        const errorDiv = document.getElementById('error-message');
-        errorDiv.textContent = 'A critical error occurred: ' + (error.message || 'Could not connect to the server.');
-        errorDiv.style.display = 'block';
-        document.getElementById('loader').style.display = 'none';
+    if (data.action === 'getPortalData') {
+        responsePayload = getPortalData();
+    } else if (data.action === 'processManualOrder') { 
+        responsePayload = processManualOrder(data.payload);
+    } else {
+        throw new Error("Unknown action received: " + data.action);
     }
     
-    function submitOrder() {
-        // ... function content ...
-        const payload = { /* ... */ }; // The data to send
+    // Add CORS header to all successful responses
+    return ContentService.createTextOutput(JSON.stringify(responsePayload))
+      .setMimeType(ContentService.MimeType.JSON)
+      .withHeaders({"Access-Control-Allow-Origin": "*"});
+
+  } catch (error) { 
+    const errorPayload = { status: 'error', message: error.message, stack: error.stack };
+    // Add CORS header to the error response as well
+    return ContentService.createTextOutput(JSON.stringify(errorPayload))
+      .setMimeType(ContentService.MimeType.JSON)
+      .withHeaders({"Access-Control-Allow-Origin": "*"});
+  }
+}
+
+/**
+ * Bundles all necessary data for the admin portal into one call.
+ */
+function getPortalData() {
+    try {
+        const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+        const products = getProductsData(spreadsheet);
+        const customers = getCustomersData(spreadsheet);
+        return { status: 'success', products: products, customers: customers };
+    } catch (error) {
+        return { status: 'error', message: error.message, stack: error.stack };
+    }
+}
+
+/**
+ * This function is called by the portal to process a manual order.
+ */
+function processManualOrder(payload) {
+    try {
+        const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+        const orderLogSheet = spreadsheet.getSheetByName(SHEET_ORDER_LOG);
+        const indexes = getColumnIndexes(orderLogSheet);
+        const nextRow = orderLogSheet.getLastRow() + 1;
+        const today = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "yyyyMMdd");
+        const invoiceID = `INV-${today}-M${nextRow}`;
+
+        const customer = payload.customer;
+        const cart = payload.cart;
+
+        const itemsPurchased = cart.map(item => `${item.quantity} x ${item.name}`).join(', ');
+        const discountApplied = payload.discountType !== 'None' ? `${payload.discountType} - ${payload.discountValue}` : 'N/A';
         
-        fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors', // Important for Apps Script POST requests from external sites
-            cache: 'no-cache',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'processManualOrder', payload: payload }),
-            redirect: 'follow'
-        })
-        .then(response => response.json())
-        .then(onOrderSuccess)
-        .catch(onFailure);
+        const logData = [];
+        logData[indexes['Timestamp'] - 1] = new Date();
+        logData[indexes['CustomerName'] - 1] = customer.name;
+        logData[indexes['CustomerEmail'] - 1] = customer.email;
+        logData[indexes['CustomerPhone'] - 1] = customer.phone;
+        logData[indexes['CustomerAddress'] - 1] = customer.address;
+        logData[indexes['ItemsPurchased'] - 1] = itemsPurchased;
+        logData[indexes['DiscountApplied'] - 1] = discountApplied;
+        logData[indexes['TotalAmount'] - 1] = payload.grandTotal;
+        logData[indexes['ShippingFee'] - 1] = payload.shippingFee;
+        logData[indexes['PointsEarned'] - 1] = 0;
+        logData[indexes['Status'] - 1] = "Approved";
+        logData[indexes['PaymentProofLink'] - 1] = "Manual Order";
+        logData[indexes['InvoiceID'] - 1] = invoiceID;
+        logData[indexes['Cart_Data'] - 1] = JSON.stringify(cart);
+        logData[indexes['Sales_Logged'] - 1] = true;
+        logData[indexes['PAC'] - 1] = customer.pac;
+        
+        const fullRow = [];
+        for(let i=0; i < orderLogSheet.getLastColumn(); i++) {
+            fullRow[i] = logData[i] || "";
+        }
+        orderLogSheet.appendRow(fullRow);
+
+        logItemizedSales(spreadsheet, invoiceID, new Date(), customer.pac, cart, payload.shippingFee);
+
+        const receiptData = {
+            cart: cart.map(item => ({...item, finalPrice: item.overridePrice, id: item.sku})),
+            discountApplied: discountApplied, totalAmount: payload.grandTotal, shippingFee: payload.shippingFee,
+            customerName: customer.name, customerEmail: customer.email, customerPhone: customer.phone, customerAddress: customer.address,
+            appliedPromotions: []
+        };
+
+        const receiptUrl = createReceiptPdf(invoiceID, customer.pac, receiptData, 0, customer.points);
+        orderLogSheet.getRange(nextRow, indexes['FinalReceiptURL']).setValue(receiptUrl);
+
+        return { status: 'success', invoiceID: invoiceID, receiptUrl: receiptUrl };
+    } catch (error) {
+        return { status: 'error', message: error.message, stack: error.stack };
     }
-    
-    function onOrderSuccess(response) {
-       if (response.status === 'success') {
-            const successDiv = document.getElementById('success-message');
-            successDiv.innerHTML = `Success! Order ${response.invoiceID} created. <a href="${response.receiptUrl}" target="_blank">View Receipt</a>`;
-            successDiv.style.display = 'block';
-            // Reset the form
-            cart = {};
-            document.getElementById('customer-search').value = '';
-            document.getElementById('customer-details').style.display = 'none';
-            document.getElementById('discount-type').value = 'None';
-            document.getElementById('discount-value').value = '0';
-            document.getElementById('shipping-fee').value = '0.00';
-            renderCart();
-            const button = document.getElementById('submit-order');
-            button.disabled = false;
-            button.textContent = 'SUBMIT MANUAL ORDER';
-            setTimeout(() => { successDiv.style.display = 'none'; }, 15000);
-       } else { onFailure(response); }
-    }
-    
-    // --- Helper functions (no changes needed below this line) ---
-    function populateProductTable(products){const t=document.getElementById("product-table").querySelector("tbody");t.innerHTML=products.map(p=>`<tr data-sku="${p.sku}"><td>${p.name}</td><td>${p.sku}</td><td style="text-align:right;">${p.price.toFixed(2)}</td><td style="text-align:center;"><button class="btn btn-primary btn-small" onclick="addToCart(${p.sku})">Add</button></td></tr>`).join("")}
-    function populateCustomerDatalist(customers){const t=document.getElementById("customer-list");t.innerHTML=Object.values(customers).map(c=>`<option value="${c.pac}">${c.name} - ${c.email}</option>`).join("")}
-    function setupEventListeners(){document.getElementById("product-search").addEventListener("input",filterProducts);document.getElementById("customer-search").addEventListener("input",selectCustomer);document.getElementById("discount-type").addEventListener("change",updateSummary);document.getElementById("discount-value").addEventListener("input",updateSummary);document.getElementById("shipping-fee").addEventListener("input",updateSummary);document.getElementById("submit-order").addEventListener("click",submitOrder)}
-    function filterProducts(e){const t=e.target.value.toLowerCase();const o=allProducts.filter(p=>p.name.toLowerCase().includes(t)||p.sku.toString().includes(t));populateProductTable(o)}
-    function selectCustomer(e){const t=e.target.value;const o=allCustomers[t];const n=document.getElementById("customer-details");o?(n.innerHTML=`<strong>${o.name}</strong> (${o.email})<br>${o.address}`,n.style.display="block"):(n.style.display="none")}
-    function addToCart(e){if(cart[e]){cart[e].quantity++}else{const t=allProducts.find(p=>p.sku===e);cart[e]={sku:t.sku,name:t.name,standardPrice:t.price,overridePrice:t.price,quantity:1}}renderCart()}
-    function renderCart(){const e=document.getElementById("cart-table").querySelector("tbody");0===Object.keys(cart).length?e.innerHTML='<tr><td colspan="5" style="text-align:center; color: var(--light-text);">Cart is empty</td></tr>':e.innerHTML=Object.values(cart).map(t=>`<tr><td>${t.name}</td><td><input type="number" value="${t.quantity}" min="1" oninput="updateCartItem(${t.sku}, 'quantity', this.value)"></td><td><input type="number" value="${t.overridePrice.toFixed(2)}" step="0.01" oninput="updateCartItem(${t.sku}, 'overridePrice', this.value)"></td><td style="text-align:right;">${(t.quantity*t.overridePrice).toFixed(2)}</td><td style="text-align:center;"><button class="btn btn-secondary btn-small" onclick="removeFromCart(${t.sku})">X</button></td></tr>`).join("");updateSummary()}
-    function updateCartItem(e,t,o){cart[e]&&(cart[e][t]=parseFloat(o)||0,renderCart())}
-    function removeFromCart(e){delete cart[e];renderCart()}
-    function updateSummary(){let e=0;Object.values(cart).forEach(t=>{e+=t.quantity*t.overridePrice});document.getElementById("subtotal").textContent=e.toFixed(2);const t=document.getElementById("discount-type").value;const o=parseFloat(document.getElementById("discount-value").value)||0;let n=0;"Percentage"===t&&o>0?n=e*(o/100):"Fixed"===t&&(n=o);const c=parseFloat(document.getElementById("shipping-fee").value)||0;const d=e-n+c;document.getElementById("grand-total").textContent=d.toFixed(2)}
-  </script>
-</body>
-</html>
+}
+
+// =================================================================
+// HELPER FUNCTIONS 
+// =================================================================
+
+function getProductsData(spreadsheet) {
+    const sheet = spreadsheet.getSheetByName(SHEET_PRODUCTS);
+    return sheet.getDataRange().getValues().slice(1)
+        .filter(row => row[0]) // Filter: requires a SKU in column A
+        .map(row => ({ sku: parseInt(row[0]), name: row[2], price: parseFloat(row[5]) || 0 }));
+}
+
+function getCustomersData(spreadsheet) {
+    const sheet = spreadsheet.getSheetByName(SHEET_CUSTOMERS);
+    const data = sheet.getDataRange().getValues().slice(1);
+    const customers = {};
+    data.forEach(row => {
+        const pac = row[0];
+        if (pac) {
+            customers[pac] = { pac: pac, name: row[1], email: row[2], phone: row[3], address: row[4], points: row[5] || 0 };
+        }
+    });
+    return customers;
+}
+
+function logItemizedSales(spreadsheet, invoiceID, saleDate, customerPAC, cartItems, shippingFee) {
+  const salesSheet = spreadsheet.getSheetByName(SHEET_ITEMIZED_SALES);
+  const productSheet = spreadsheet.getSheetByName(SHEET_PRODUCTS);
+  const productData = productSheet.getDataRange().getValues();
+  const productMap = new Map(productData.map(row => [parseInt(row[0]), row]));
+  const shippingCost = parseFloat(shippingFee) || 0;
+
+  const rowsToAdd = cartItems.map((item, index) => {
+    const skuToLookup = item.sku || item.id;
+    const productInfo = productMap.get(skuToLookup); 
+    const costPrice = productInfo ? (parseFloat(productInfo[4]) || 0) : 0;
+    const itemShippingCost = (index === 0) ? shippingCost : 0;
+    const quantity = parseInt(item.quantity) || 0;
+    const unitPrice = parseFloat(item.overridePrice) || 0;
+    const totalSale = quantity * unitPrice;
+    const totalCost = quantity * costPrice;
+    const profit = totalSale - totalCost - itemShippingCost;
+
+    return [
+      Utilities.getUuid(), invoiceID, saleDate, "SALE", customerPAC, skuToLookup, item.name,
+      quantity, unitPrice, totalSale, costPrice, itemShippingCost, profit, "Completed"
+    ];
+  });
+  if (rowsToAdd.length > 0) {
+    salesSheet.getRange(salesSheet.getLastRow() + 1, 1, rowsToAdd.length, 14).setValues(rowsToAdd);
+  }
+}
+
+function createReceiptPdf(orderID, pac, data, pointsThisPurchase, totalAccumulatedPoints) {
+  const folder = DriveApp.getFolderById(FINAL_RECEIPT_FOLDER_ID);
+  const logoBase64 = getImageAsBase64(LOGO_URL);
+  let itemsHtml = data.cart.map(item => `<tr><td style="padding: 8px; border-bottom: 1px solid #eee;">${item.id || item.sku}</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${item.name}</td><td style="padding: 8px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td><td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right;">RM ${parseFloat(item.finalPrice || item.overridePrice).toFixed(2)}</td></tr>`).join('');
+  const discountAppliedText = data.discountApplied || 'N/A';
+  const discountValue = parseFloat(discountAppliedText.split(' - RM ')[1]) || 0;
+  const nettPrice = parseFloat(data.totalAmount);
+  const subtotal = nettPrice - parseFloat(data.shippingFee) + discountValue;
+
+  const htmlContent = `
+    <html>
+      <body style="font-family: Arial, sans-serif; color: #333; margin: 20px;">
+        ${logoBase64 ? `<img src="${logoBase64}" style="max-height: 80px; display: block; margin-bottom: 20px;">` : ''}
+        <h1 style="color: #1a5276;">Official Receipt</h1>
+        <table style="width: 100%; margin-bottom: 20px;">
+          <tr>
+            <td><strong>Invoice No:</strong> ${orderID}<br><strong>Date:</strong> ${new Date().toLocaleString('en-GB')}</td>
+            <td style="text-align: right;"><strong>Customer ID:</strong> ${pac || 'N/A'}<br><strong>Status:</strong> Paid</td>
+          </tr>
+        </table><hr>
+        <h3 style="color: #1a5276;">Customer Details:</h3>
+        <p>${data.customerName}<br>${data.customerEmail}<br>${data.customerPhone}<br>${data.customerAddress}</p><hr>
+        <h3 style="color: #1a5276;">Order Summary:</h3>
+        <table style="width:100%; border-collapse: collapse;">
+          <thead><tr><th style="border-bottom: 2px solid #333; padding: 8px; text-align: left;">SKU</th><th style="border-bottom: 2px solid #333; padding: 8px; text-align: left;">Item</th><th style="border-bottom: 2px solid #333; padding: 8px; text-align: center;">Qty</th><th style="border-bottom: 2px solid #333; padding: 8px; text-align: right;">Price</th></tr></thead>
+          <tbody>${itemsHtml}</tbody>
+        </table><hr>
+        <table style="width: 100%; margin-top: 15px;">
+          <tr><td>Subtotal:</td><td style="text-align: right;">RM ${subtotal.toFixed(2)}</td></tr>
+          <tr><td>Discount Applied:</td><td style="text-align: right;">- RM ${discountValue.toFixed(2)}</td></tr>
+          <tr><td>Shipping Fee:</td><td style="text-align: right;">RM ${parseFloat(data.shippingFee).toFixed(2)}</td></tr>
+          <tr><td colspan="2"><hr></td></tr>
+          <tr style="font-weight: bold; font-size: 1.2em;"><td>Nett Price:</td><td style="text-align: right;">RM ${nettPrice.toFixed(2)}</td></tr>
+        </table>
+      </body>
+    </html>`;
+
+  const blob = Utilities.newBlob(htmlContent, MimeType.HTML, `${orderID}-Receipt.html`);
+  const pdfFile = folder.createFile(blob.getAs(MimeType.PDF)).setName(`${orderID}-Receipt.pdf`);
+  pdfFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  const fileId = pdfFile.getId();
+  return `https://drive.google.com/uc?id=${fileId}&export=download`;
+}
+
+function getImageAsBase64(url) {
+    if (!url || !url.startsWith('http')) return null;
+    try {
+        const response = UrlFetchApp.fetch(url);
+        const blob = response.getBlob();
+        return "data:" + blob.getContentType() + ";base64," + Utilities.encodeBase64(blob.getBytes());
+    } catch (e) { return null; }
+}
+
+function getColumnIndexes(sheet) {
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  const indexes = {};
+  headers.forEach((header, i) => { if (header) { indexes[header.trim()] = i + 1; } });
+  return indexes;
+}
