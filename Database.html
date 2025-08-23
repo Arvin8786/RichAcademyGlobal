@@ -20,7 +20,6 @@
     label { display: block; font-weight: 500; margin-bottom: 5px; }
     input, select { width: 100%; padding: 8px 10px; border: 1px solid var(--border-color); border-radius: 4px; box-sizing: border-box; }
     input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2); }
-    input[type="search"]::-webkit-search-cancel-button { display: none; }
     .btn { padding: 10px 15px; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; transition: background-color 0.2s; }
     .btn-primary { background-color: var(--primary-color); color: #fff; }
     .btn-primary:hover { background-color: var(--primary-hover); }
@@ -46,7 +45,6 @@
 
     <div id="main-content" style="display:none;">
       <h1>Manual Order & Database Portal</h1>
-      <!-- Customer Section -->
       <h2>1. Customer Details</h2>
       <div class="form-group">
         <label for="customer-search">Search for Customer by PAC</label>
@@ -55,7 +53,6 @@
       </div>
       <div id="customer-details"></div>
 
-      <!-- Product Section -->
       <h2>2. Build Order</h2>
       <div class="form-group">
         <label for="product-search">Search for Products</label>
@@ -65,28 +62,20 @@
         <table id="product-table">
           <thead>
             <tr>
-              <th>Product Name</th>
-              <th>SKU</th>
-              <th style="text-align:right;">Price (RM)</th>
-              <th style="width: 80px; text-align:center;">Action</th>
+              <th>Product Name</th><th>SKU</th><th style="text-align:right;">Price (RM)</th><th style="width: 80px; text-align:center;">Action</th>
             </tr>
           </thead>
           <tbody></tbody>
         </table>
       </div>
 
-      <!-- Cart Section -->
       <h2>3. Order Summary</h2>
       <div class="grid">
         <div class="grid-full">
           <table id="cart-table">
             <thead>
               <tr>
-                <th>Product</th>
-                <th style="width: 100px; text-align:right;">Qty</th>
-                <th style="width: 120px; text-align:right;">Unit Price (RM)</th>
-                <th style="width: 120px; text-align:right;">Total (RM)</th>
-                <th style="width: 60px; text-align:center;"></th>
+                <th>Product</th><th style="width: 100px; text-align:right;">Qty</th><th style="width: 120px; text-align:right;">Unit Price (RM)</th><th style="width: 120px; text-align:right;">Total (RM)</th><th style="width: 60px; text-align:center;"></th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -99,19 +88,12 @@
             <tr>
               <td>Discount</td>
               <td style="display:flex; gap: 5px; align-items: center;">
-                <select id="discount-type" style="width: 100px;">
-                  <option value="None">None</option>
-                  <option value="Fixed">Fixed RM</option>
-                  <option value="Percentage">Percentage %</option>
-                </select>
+                <select id="discount-type" style="width: 100px;"><option value="None">None</option><option value="Fixed">Fixed RM</option><option value="Percentage">Percentage %</option></select>
                 <input type="number" id="discount-value" value="0" style="width: 80px;">
               </td>
             </tr>
             <tr><td>Shipping Fee</td><td><input type="number" id="shipping-fee" value="0.00"></td></tr>
-            <tr style="font-weight: bold; font-size: 1.2em; border-top: 2px solid var(--text-color);">
-                <td>Grand Total</td>
-                <td id="grand-total">0.00</td>
-            </tr>
+            <tr style="font-weight: bold; font-size: 1.2em; border-top: 2px solid var(--text-color);"><td>Grand Total</td><td id="grand-total">0.00</td></tr>
           </table>
         </div>
       </div>
@@ -125,14 +107,13 @@
   </div>
 
   <script>
-    // --- ACTION REQUIRED: PASTE YOUR TESTING SCRIPT URL HERE ---
+    // --- ACTION REQUIRED: PASTE YOUR DEPLOYMENT URL HERE ---
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx0siI7MQQ4nYgCGVOR5vUyJXQ_hVvp02uOuFVhRirBBkj_216RJxek-SCNXpsE5YHD/exec";
 
     let allProducts = [];
     let allCustomers = {};
     let cart = {};
 
-    // --- INITIALIZATION ---
     document.addEventListener('DOMContentLoaded', () => {
         fetch(SCRIPT_URL + '?action=getPortalData')
             .then(response => response.json())
@@ -149,9 +130,7 @@
             document.getElementById('loader').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
             setupEventListeners();
-        } else {
-            onFailure(data);
-        }
+        } else { onFailure(data); }
     }
 
     function onFailure(error) {
@@ -161,50 +140,21 @@
         document.getElementById('loader').style.display = 'none';
     }
     
-    // ... (All the other JavaScript functions from the previous HTML file are identical) ...
-    function populateProductTable(products){/*...*/}
-    function populateCustomerDatalist(customers){/*...*/}
-    function setupEventListeners(){/*...*/}
-    function filterProducts(e){/*...*/}
-    function selectCustomer(e){/*...*/}
-    function addToCart(sku){/*...*/}
-    function renderCart(){/*...*/}
-    function updateCartItem(sku, key, value){/*...*/}
-    function removeFromCart(sku){/*...*/}
-    function updateSummary(){/*...*/}
-
     function submitOrder() {
-      const customerPAC = document.getElementById('customer-search').value;
-      if (!allCustomers[customerPAC]) {
-        alert('Please select a valid customer.');
-        return;
-      }
-      if (Object.keys(cart).length === 0) {
-        alert('Cannot submit an empty order. Please add products to the cart.');
-        return;
-      }
-      
-      const button = document.getElementById('submit-order');
-      button.disabled = true;
-      button.textContent = 'Processing...';
-
-      const payload = {
-        customer: allCustomers[customerPAC],
-        cart: Object.values(cart),
-        discountType: document.getElementById('discount-type').value,
-        discountValue: parseFloat(document.getElementById('discount-value').value) || 0,
-        shippingFee: parseFloat(document.getElementById('shipping-fee').value) || 0,
-        grandTotal: parseFloat(document.getElementById('grand-total').textContent) || 0,
-      };
-
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'processManualOrder', payload: payload }),
-        headers: { 'Content-Type': 'application/json' }
-      })
-      .then(response => response.json())
-      .then(onOrderSuccess)
-      .catch(onFailure);
+        // ... function content ...
+        const payload = { /* ... */ }; // The data to send
+        
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors', // Important for Apps Script POST requests from external sites
+            cache: 'no-cache',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'processManualOrder', payload: payload }),
+            redirect: 'follow'
+        })
+        .then(response => response.json())
+        .then(onOrderSuccess)
+        .catch(onFailure);
     }
     
     function onOrderSuccess(response) {
@@ -212,7 +162,6 @@
             const successDiv = document.getElementById('success-message');
             successDiv.innerHTML = `Success! Order ${response.invoiceID} created. <a href="${response.receiptUrl}" target="_blank">View Receipt</a>`;
             successDiv.style.display = 'block';
-
             // Reset the form
             cart = {};
             document.getElementById('customer-search').value = '';
@@ -221,28 +170,24 @@
             document.getElementById('discount-value').value = '0';
             document.getElementById('shipping-fee').value = '0.00';
             renderCart();
-            
             const button = document.getElementById('submit-order');
             button.disabled = false;
             button.textContent = 'SUBMIT MANUAL ORDER';
-
             setTimeout(() => { successDiv.style.display = 'none'; }, 15000);
-       } else {
-           onFailure(response);
-       }
+       } else { onFailure(response); }
     }
     
-    // Paste the missing functions here
-    function populateProductTable(products){const tbody=document.getElementById('product-table').querySelector('tbody');tbody.innerHTML=products.map(p=>`<tr data-sku="${p.sku}"><td>${p.name}</td><td>${p.sku}</td><td style="text-align:right;">${p.price.toFixed(2)}</td><td style="text-align:center;"><button class="btn btn-primary btn-small" onclick="addToCart(${p.sku})">Add</button></td></tr>`).join('')}
-    function populateCustomerDatalist(customers){const datalist=document.getElementById('customer-list');datalist.innerHTML=Object.values(customers).map(c=>`<option value="${c.pac}">${c.name} - ${c.email}</option>`).join('')}
-    function setupEventListeners(){document.getElementById('product-search').addEventListener('input',filterProducts);document.getElementById('customer-search').addEventListener('input',selectCustomer);document.getElementById('discount-type').addEventListener('change',updateSummary);document.getElementById('discount-value').addEventListener('input',updateSummary);document.getElementById('shipping-fee').addEventListener('input',updateSummary);document.getElementById('submit-order').addEventListener('click',submitOrder)}
-    function filterProducts(e){const searchTerm=e.target.value.toLowerCase();const filtered=allProducts.filter(p=>p.name.toLowerCase().includes(searchTerm)||p.sku.toString().includes(searchTerm));populateProductTable(filtered)}
-    function selectCustomer(e){const pac=e.target.value;const customer=allCustomers[pac];const detailsDiv=document.getElementById('customer-details');if(customer){detailsDiv.innerHTML=`<strong>${customer.name}</strong> (${customer.email})<br>${customer.address}`;detailsDiv.style.display='block'}else{detailsDiv.style.display='none'}}
-    function addToCart(sku){if(cart[sku]){cart[sku].quantity++}else{const product=allProducts.find(p=>p.sku===sku);cart[sku]={sku:product.sku,name:product.name,standardPrice:product.price,overridePrice:product.price,quantity:1}}renderCart()}
-    function renderCart(){const tbody=document.getElementById('cart-table').querySelector('tbody');if(Object.keys(cart).length===0){tbody.innerHTML='<tr><td colspan="5" style="text-align:center; color: var(--light-text);">Cart is empty</td></tr>'}else{tbody.innerHTML=Object.values(cart).map(item=>`<tr><td>${item.name}</td><td><input type="number" value="${item.quantity}" min="1" oninput="updateCartItem(${item.sku}, 'quantity', this.value)"></td><td><input type="number" value="${item.overridePrice.toFixed(2)}" step="0.01" oninput="updateCartItem(${item.sku}, 'overridePrice', this.value)"></td><td style="text-align:right;">${(item.quantity*item.overridePrice).toFixed(2)}</td><td style="text-align:center;"><button class="btn btn-secondary btn-small" onclick="removeFromCart(${item.sku})">X</button></td></tr>`).join('')}updateSummary()}
-    function updateCartItem(sku,key,value){if(cart[sku]){cart[sku][key]=parseFloat(value)||0;renderCart()}}
-    function removeFromCart(sku){delete cart[sku];renderCart()}
-    function updateSummary(){let subtotal=0;Object.values(cart).forEach(item=>{subtotal+=item.quantity*item.overridePrice});document.getElementById('subtotal').textContent=subtotal.toFixed(2);const discountType=document.getElementById('discount-type').value;const discountValue=parseFloat(document.getElementById('discount-value').value)||0;let totalDiscount=0;if(discountType==='Percentage'&&discountValue>0){totalDiscount=subtotal*(discountValue/100)}else if(discountType==='Fixed'){totalDiscount=discountValue}const shipping=parseFloat(document.getElementById('shipping-fee').value)||0;const grandTotal=subtotal-totalDiscount+shipping;document.getElementById('grand-total').textContent=grandTotal.toFixed(2)}
+    // --- Helper functions (no changes needed below this line) ---
+    function populateProductTable(products){const t=document.getElementById("product-table").querySelector("tbody");t.innerHTML=products.map(p=>`<tr data-sku="${p.sku}"><td>${p.name}</td><td>${p.sku}</td><td style="text-align:right;">${p.price.toFixed(2)}</td><td style="text-align:center;"><button class="btn btn-primary btn-small" onclick="addToCart(${p.sku})">Add</button></td></tr>`).join("")}
+    function populateCustomerDatalist(customers){const t=document.getElementById("customer-list");t.innerHTML=Object.values(customers).map(c=>`<option value="${c.pac}">${c.name} - ${c.email}</option>`).join("")}
+    function setupEventListeners(){document.getElementById("product-search").addEventListener("input",filterProducts);document.getElementById("customer-search").addEventListener("input",selectCustomer);document.getElementById("discount-type").addEventListener("change",updateSummary);document.getElementById("discount-value").addEventListener("input",updateSummary);document.getElementById("shipping-fee").addEventListener("input",updateSummary);document.getElementById("submit-order").addEventListener("click",submitOrder)}
+    function filterProducts(e){const t=e.target.value.toLowerCase();const o=allProducts.filter(p=>p.name.toLowerCase().includes(t)||p.sku.toString().includes(t));populateProductTable(o)}
+    function selectCustomer(e){const t=e.target.value;const o=allCustomers[t];const n=document.getElementById("customer-details");o?(n.innerHTML=`<strong>${o.name}</strong> (${o.email})<br>${o.address}`,n.style.display="block"):(n.style.display="none")}
+    function addToCart(e){if(cart[e]){cart[e].quantity++}else{const t=allProducts.find(p=>p.sku===e);cart[e]={sku:t.sku,name:t.name,standardPrice:t.price,overridePrice:t.price,quantity:1}}renderCart()}
+    function renderCart(){const e=document.getElementById("cart-table").querySelector("tbody");0===Object.keys(cart).length?e.innerHTML='<tr><td colspan="5" style="text-align:center; color: var(--light-text);">Cart is empty</td></tr>':e.innerHTML=Object.values(cart).map(t=>`<tr><td>${t.name}</td><td><input type="number" value="${t.quantity}" min="1" oninput="updateCartItem(${t.sku}, 'quantity', this.value)"></td><td><input type="number" value="${t.overridePrice.toFixed(2)}" step="0.01" oninput="updateCartItem(${t.sku}, 'overridePrice', this.value)"></td><td style="text-align:right;">${(t.quantity*t.overridePrice).toFixed(2)}</td><td style="text-align:center;"><button class="btn btn-secondary btn-small" onclick="removeFromCart(${t.sku})">X</button></td></tr>`).join("");updateSummary()}
+    function updateCartItem(e,t,o){cart[e]&&(cart[e][t]=parseFloat(o)||0,renderCart())}
+    function removeFromCart(e){delete cart[e];renderCart()}
+    function updateSummary(){let e=0;Object.values(cart).forEach(t=>{e+=t.quantity*t.overridePrice});document.getElementById("subtotal").textContent=e.toFixed(2);const t=document.getElementById("discount-type").value;const o=parseFloat(document.getElementById("discount-value").value)||0;let n=0;"Percentage"===t&&o>0?n=e*(o/100):"Fixed"===t&&(n=o);const c=parseFloat(document.getElementById("shipping-fee").value)||0;const d=e-n+c;document.getElementById("grand-total").textContent=d.toFixed(2)}
   </script>
 </body>
 </html>
