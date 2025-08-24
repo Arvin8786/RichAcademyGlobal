@@ -329,19 +329,18 @@
     function addToCart(productId) {
         const productToAdd = products.find(p => p.id === productId);
         if (!productToAdd) return;
-        const existingItem = cart.find(item => item.id === productId);
-        if (existingItem) {
-            existingItem.quantity++;
+        const existingItemInCart = cart.find(item => item.id === productId);
+        if (existingItemInCart) {
+            existingItemInCart.quantity++;
         } else {
             cart.push({
                 id: productToAdd.id,
                 name: productToAdd.name,
-                basePrice: productToAdd.originalPrice || productToAdd.price, // Always start from the full RSP
-                price: productToAdd.price, // This is the current display price
+                basePrice: productToAdd.originalPrice || productToAdd.price,
+                price: productToAdd.price,
                 quantity: 1
             });
         }
-        toggleCart();
         updateCartDisplay();
     }
     
@@ -368,59 +367,26 @@
         const finalPrices = {};
         cart.forEach(item => {
             originalSubtotal += item.basePrice * item.quantity;
-            finalPrices[item.id] = item.basePrice; // Start with the full price
+            finalPrices[item.id] = item.price; 
         });
-        let tempCart = JSON.parse(JSON.stringify(cart));
         const allApplicablePromos = activePromotions.filter(promo => cart.some(item => promo.productIDs.includes(item.id)));
         const bundlePromos = allApplicablePromos.filter(p => p.type === 'BUNDLE' && p.bundle);
-        const itemPromos = allApplicablePromos.filter(p => p.type === 'PERCENT' || p.type === 'FIXED');
-        bundlePromos.forEach(promo => {
-            const eligibleItems = tempCart.filter(item => promo.productIDs.includes(item.id) && item.quantity > 0);
-            const totalEligibleQuantity = eligibleItems.reduce((sum, item) => sum + item.quantity, 0);
-            const numberOfBundles = Math.floor(totalEligibleQuantity / promo.bundle.quantity);
-            if (numberOfBundles > 0) {
-                appliedPromoDescriptions.add(promo.description);
-                if (promo.shippingRuleId) potentialShippingRuleIds.add(promo.shippingRuleId);
-                let itemsToProcessForBundle = numberOfBundles * promo.bundle.quantity;
-                const pricePerItemInBundle = (promo.bundle.price / promo.bundle.quantity);
-                for (const item of eligibleItems) {
-                    if (itemsToProcessForBundle <= 0) break;
-                    const quantityToBundle = Math.min(item.quantity, itemsToProcessForBundle);
-                    for (let i = 0; i < quantityToBundle; i++) {
-                        finalPrices[item.id] = pricePerItemInBundle; // This is a placeholder, real logic is below
-                    }
-                    item.quantity -= quantityToBundle;
-                    itemsToProcessForBundle -= quantityToBundle;
-                }
-            }
-        });
-        itemPromos.forEach(promo => {
-            const eligibleItems = tempCart.filter(item => promo.productIDs.includes(item.id) && item.quantity > 0);
-            if (eligibleItems.length > 0) {
-                appliedPromoDescriptions.add(promo.description);
-                if (promo.shippingRuleId) potentialShippingRuleIds.add(promo.shippingRuleId);
-                eligibleItems.forEach(item => {
-                    if (promo.type === 'PERCENT') {
-                        finalPrices[item.id] = item.basePrice * (1 - parseFloat(promo.value) / 100);
-                    } else if (promo.type === 'FIXED') {
-                        finalPrices[item.id] = item.basePrice - parseFloat(promo.value);
-                    }
-                });
-            }
-        });
-        
+
         finalSubtotal = cart.reduce((total, item) => {
             let itemTotal = 0;
-            const eligibleItemsForBundle = bundlePromos.flatMap(p=>p.productIDs).includes(item.id);
-            if(eligibleItemsForBundle){
-                const promo = bundlePromos.find(p=>p.productIDs.includes(item.id));
-                const pricePerItemInBundle = (promo.bundle.price / promo.bundle.quantity);
-                const bundlesCount = Math.floor(item.quantity / promo.bundle.quantity);
-                const remainingQty = item.quantity % promo.bundle.quantity;
-                itemTotal = (bundlesCount * promo.bundle.price) + (remainingQty * item.basePrice);
-            }
-            else {
-                itemTotal = item.quantity * finalPrices[item.id];
+            const itemPromo = activePromotions.find(p => p.productIDs.includes(item.id));
+            if (itemPromo && itemPromo.type === 'BUNDLE') {
+                const pricePerItemInBundle = (itemPromo.bundle.price / itemPromo.bundle.quantity);
+                const eligibleItemsForBundle = cart.filter(cartItem => itemPromo.productIDs.includes(cartItem.id));
+                const totalEligibleQuantity = eligibleItemsForBundle.reduce((sum, i) => sum + i.quantity, 0);
+                if (totalEligibleQuantity >= itemPromo.bundle.quantity) {
+                    itemTotal = item.quantity * pricePerItemInBundle;
+                    appliedPromoDescriptions.add(itemPromo.description);
+                } else {
+                    itemTotal = item.quantity * item.basePrice;
+                }
+            } else {
+                itemTotal = item.quantity * item.price;
             }
             return total + itemTotal;
         }, 0);
@@ -428,11 +394,8 @@
         totalDiscount = originalSubtotal - finalSubtotal;
         let discountFromCode = 0;
         if (appliedDiscount) {
-            if (appliedDiscount.type === 'Fixed') {
-                discountFromCode = Math.min(finalSubtotal, parseFloat(appliedDiscount.value));
-            } else if (appliedDiscount.type === 'Percentage') {
-                discountFromCode = finalSubtotal * (parseFloat(appliedDiscount.value) / 100);
-            }
+            if (appliedDiscount.type === 'Fixed') { discountFromCode = Math.min(finalSubtotal, parseFloat(appliedDiscount.value)); } 
+            else if (appliedDiscount.type === 'Percentage') { discountFromCode = finalSubtotal * (parseFloat(appliedDiscount.value) / 100); }
             finalSubtotal -= discountFromCode;
             totalDiscount += discountFromCode;
         }
@@ -447,7 +410,7 @@
         const totalPoints = Math.floor(finalSubtotal);
         return { originalSubtotal, totalDiscount, finalSubtotal, shipping, finalTotal, totalPoints, appliedPromoDescriptions: Array.from(appliedPromoDescriptions), finalPrices };
     }
-
+    
     function updateCartDisplay() {
         const cartItemsEl = document.getElementById("cart-items");
         const subtotalEl = document.getElementById("cart-subtotal");
@@ -515,12 +478,136 @@
         totalEl.textContent = `RM ${finalTotal.toFixed(2)}`;
         pointsEl.innerHTML = `<div class="points-earned"><i class="fa-solid fa-star"></i> Points to be Earned: ${totalPoints}</div>`;
     }
+    
+    function initiateCheckout() {
+        if (!document.getElementById('consent-checkbox').checked) { alert("You must agree to the data collection consent before proceeding."); return; }
+        const customerName = document.getElementById('customer-name').value.trim();
+        const customerPhone = document.getElementById('customer-phone').value.trim();
+        const customerEmail = document.getElementById('customer-email').value.trim();
+        const address1 = document.getElementById('customer-address1').value.trim();
+        const address2 = document.getElementById('customer-address2').value.trim();
+        const city = document.getElementById('customer-city').value.trim();
+        const state = document.getElementById('customer-state').value.trim();
+        const postcode = document.getElementById('customer-postcode').value.trim();
+        if (!customerName || !customerPhone || !customerEmail || !address1 || !city || !state || !postcode) { alert("Please fill in all required customer and shipping information fields."); return; }
+        if (cart.length === 0) { alert("Your cart is empty."); return; }
+        
+        const totals = calculateCartTotals();
+        const fullAddress = `${address1}, ${address2 ? address2 + ", " : ""}${postcode} ${city}, ${state}.`;
+        
+        const orderData = {
+            customerName, customerPhone, customerEmail, customerAddress: fullAddress,
+            cart: cart.map(item => ({ id: item.id, name: item.name, quantity: item.quantity, finalPrice: totals.finalPrices[item.id] || item.basePrice })),
+            itemsPurchased: cart.map(item => `${item.name} (x${item.quantity})`).join('; '),
+            totalAmount: totals.finalTotal.toFixed(2),
+            shippingFee: totals.shipping.fee.toFixed(2),
+            discountApplied: `Total Discount - RM ${totals.totalDiscount.toFixed(2)}`,
+            discountCodeUsed: appliedDiscount ? appliedDiscount.code : "N/A",
+            totalPointsForThisPurchase: totals.totalPoints,
+            appliedPromotions: totals.appliedPromoDescriptions
+        };
+        sessionStorage.setItem("pendingOrder", JSON.stringify(orderData));
+        
+        let waMessage = `Hi, I would like to place an order:\n\n*Customer Details:*\nName: ${customerName}\nPhone: ${customerPhone}\nEmail: ${customerEmail}\nAddress: ${fullAddress}\n\n--- ORDER SUMMARY ---\nSubtotal: RM ${totals.originalSubtotal.toFixed(2)}\nDiscount: - RM ${totals.totalDiscount.toFixed(2)}\nShipping: ${totals.shipping.message}\n*TOTAL: RM ${totals.finalTotal.toFixed(2)}*\n\nPlease provide payment details. Thank you!`;
+        window.open(`https://wa.me/601111033154?text=${encodeURIComponent(waMessage)}`, "_blank");
 
-    function initiateCheckout() { /* ... unchanged ... */ }
-    function uploadProof() { /* ... unchanged ... */ }
-    function finalizeOrder(){ /* ... unchanged ... */ }
-    function handleSuccessfulFinalization(receiptUrl) { /* ... unchanged ... */ }
-    function updateVerificationUI(reset = false) { /* ... unchanged ... */ }
+        document.getElementById('cart-view').style.display = 'none';
+        document.getElementById('verification-view').style.display = 'block';
+        updateVerificationUI();
+    }
+    
+    async function uploadProof() {
+        const fileInput = document.getElementById('payment-proof-upload');
+        const statusEl = document.getElementById('upload-status');
+        const uploadBtn = document.getElementById('upload-proof-btn');
+        const file = fileInput.files[0];
+        let pendingOrder = JSON.parse(sessionStorage.getItem("pendingOrder"));
+        if (!file) { statusEl.textContent = "Please select a file to upload."; statusEl.style.color = "red"; return; }
+        if (!pendingOrder) { statusEl.textContent = "Error: No pending order found. Please refresh."; statusEl.style.color = "red"; return; }
+        uploadBtn.disabled = true;
+        statusEl.textContent = "Uploading...";
+        statusEl.style.color = "blue";
+        try {
+            const base64File = await getBase64(file);
+            const payload = {
+                action: "logInitialOrderWithProof",
+                ...pendingOrder,
+                paymentProofFile: base64File.split(",")[1], 
+                paymentProofMimeType: file.type,
+                paymentProofFileName: `${pendingOrder.customerEmail.split("@")[0]}-${Date.now()}`
+            };
+            const response = await fetch(googleScriptURL, { method: "POST", body: JSON.stringify(payload) });
+            const result = await response.json();
+            if (result.status === 'success') {
+                statusEl.textContent = "Proof uploaded successfully!"; statusEl.style.color = "green";
+                pendingOrder.proofUploaded = true;
+                sessionStorage.setItem("pendingOrder", JSON.stringify(pendingOrder));
+                updateVerificationUI();
+            } else { throw new Error(result.message || 'Unknown server error'); }
+        } catch (error) {
+            statusEl.textContent = `Upload Error: ${error.message}`;
+            statusEl.style.color = "red";
+            uploadBtn.disabled = false;
+        }
+    }
+
+    async function finalizeOrder(){
+        const codeInput = document.getElementById("verification-code").value.trim().toUpperCase();
+        const finalizeBtn = document.getElementById("finalize-order-btn");
+        const statusEl = document.getElementById("verification-status");
+        let pendingOrder = JSON.parse(sessionStorage.getItem("pendingOrder"));
+        if (!codeInput) { statusEl.textContent = "Please enter the verification code."; statusEl.style.color = "red"; return; }
+        if (!pendingOrder) { statusEl.textContent = "Error: No pending order found."; statusEl.style.color = "red"; return; }
+        finalizeBtn.disabled = true;
+        statusEl.textContent = "Verifying...";
+        statusEl.style.color = "blue";
+        try {
+            const payload = { action: "finalizeOrder", usedCode: codeInput, ...pendingOrder };
+            const response = await fetch(googleScriptURL, { method: "POST", body: JSON.stringify(payload) });
+            const result = await response.json();
+            if (result.status !== 'success') { throw new Error(result.message); }
+            handleSuccessfulFinalization(result.receiptUrl);
+        } catch (error) {
+            statusEl.textContent = `Error: ${error.message}`;
+            statusEl.style.color = "red";
+            finalizeBtn.disabled = false;
+        }
+    }
+
+    function handleSuccessfulFinalization(receiptUrl) {
+        const statusEl = document.getElementById("verification-status");
+        statusEl.innerHTML = `Order Verified!<br><br><a href="${receiptUrl}" class="btn btn-primary" style="text-decoration:none;" target="_blank">Click Here to Download Receipt</a>`;
+        statusEl.style.color = "green";
+        cart = []; sessionStorage.removeItem("pendingOrder"); updateCartDisplay(); appliedDiscount = null;
+        document.getElementById("discount-code-input").value = "";
+        document.getElementById("discount-status").textContent = "";
+        setTimeout(() => {
+            toggleCart(true);
+            updateVerificationUI(true);
+        }, 15000); 
+    }
+    
+    function updateVerificationUI(reset = false) {
+        const proofStep = document.getElementById('proof-upload-step'), codeStep = document.getElementById('code-verification-step');
+        const uploadBtn = document.getElementById('upload-proof-btn'), finalizeBtn = document.getElementById('finalize-order-btn');
+        const codeInput = document.getElementById('verification-code'), uploadStatus = document.getElementById('upload-status'), verifyStatus = document.getElementById('verification-status');
+        if (reset) {
+            proofStep.classList.add('active'); proofStep.classList.remove('completed'); codeStep.classList.remove('active');
+            uploadBtn.disabled = false; finalizeBtn.disabled = true; codeInput.disabled = true;
+            uploadStatus.textContent = ""; verifyStatus.innerHTML = "";
+            document.getElementById('payment-proof-upload').value = ""; codeInput.value = ""; return;
+        }
+        const pendingOrder = JSON.parse(sessionStorage.getItem("pendingOrder"));
+        if (pendingOrder && pendingOrder.proofUploaded) {
+            proofStep.classList.remove('active'); proofStep.classList.add('completed'); codeStep.classList.add('active');
+            uploadBtn.disabled = true; finalizeBtn.disabled = false; codeInput.disabled = false;
+            uploadStatus.textContent = "Proof Uploaded Successfully!"; uploadStatus.style.color = "green";
+        } else {
+            proofStep.classList.add('active'); proofStep.classList.remove('completed'); codeStep.classList.remove('active');
+            uploadBtn.disabled = false; finalizeBtn.disabled = true; codeInput.disabled = true;
+        }
+    }
+    
     function cancelVerification(){if(confirm("Are you sure? This will cancel the pending order.")){sessionStorage.removeItem("pendingOrder"),toggleCart(!0),updateVerificationUI(!0)}}
     function toggleCart(t=!1){const e=document.getElementById("cart-modal");if(t)return void(e.style.display="none");"flex"===e.style.display?e.style.display="none":(e.style.display="flex",JSON.parse(sessionStorage.getItem("pendingOrder"))?(document.getElementById("cart-view").style.display="none",document.getElementById("verification-view").style.display="block",updateVerificationUI()):(document.getElementById("cart-view").style.display="block",document.getElementById("verification-view").style.display="none",updateCartDisplay(),updateVerificationUI(!0)))}
     function getBase64(t){return new Promise((e,o)=>{const n=new FileReader;n.readAsDataURL(t),n.onload=()=>e(n.result),n.onerror=t=>o(t)})}
