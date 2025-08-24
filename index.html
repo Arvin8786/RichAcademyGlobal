@@ -37,10 +37,7 @@
     .new-price { color: var(--secondary-color); font-weight: 700; font-size: 1.5rem; }
     .promo-price { color: var(--accent-color); }
   </style>
-  <style id="festival-animations-style">
-    :root { --festive-z: -1; }
-    body[data-festival="cny"] .decoration.cny {display:block;} body[data-festival="national-day"] .decoration.national-day {display:block;}
-  </style>
+  <style id="festival-animations-style"></style>
 </head>
 <body data-festival="">
 
@@ -366,16 +363,18 @@
         let potentialShippingRuleIds = new Set();
         const finalPrices = {};
         cart.forEach(item => {
-            originalSubtotal += item.basePrice * item.quantity;
             finalPrices[item.id] = item.price; 
+            originalSubtotal += item.basePrice * item.quantity;
         });
+        
+        let tempCart = JSON.parse(JSON.stringify(cart));
         const allApplicablePromos = activePromotions.filter(promo => cart.some(item => promo.productIDs.includes(item.id)));
         const bundlePromos = allApplicablePromos.filter(p => p.type === 'BUNDLE' && p.bundle);
 
         finalSubtotal = cart.reduce((total, item) => {
             let itemTotal = 0;
-            const itemPromo = activePromotions.find(p => p.productIDs.includes(item.id));
-            if (itemPromo && itemPromo.type === 'BUNDLE') {
+            const itemPromo = bundlePromos.find(p => p.productIDs.includes(item.id));
+            if (itemPromo) {
                 const pricePerItemInBundle = (itemPromo.bundle.price / itemPromo.bundle.quantity);
                 const eligibleItemsForBundle = cart.filter(cartItem => itemPromo.productIDs.includes(cartItem.id));
                 const totalEligibleQuantity = eligibleItemsForBundle.reduce((sum, i) => sum + i.quantity, 0);
@@ -394,23 +393,18 @@
         totalDiscount = originalSubtotal - finalSubtotal;
         let discountFromCode = 0;
         if (appliedDiscount) {
-            if (appliedDiscount.type === 'Fixed') { discountFromCode = Math.min(finalSubtotal, parseFloat(appliedDiscount.value)); } 
+            if (appliedDiscount.type === 'Fixed') { discountFromCode = Math.min(finalSubtotal, parseFloat(appliedDiscount.value)); }
             else if (appliedDiscount.type === 'Percentage') { discountFromCode = finalSubtotal * (parseFloat(appliedDiscount.value) / 100); }
             finalSubtotal -= discountFromCode;
             totalDiscount += discountFromCode;
         }
         
-        let bestPromoShippingRuleId = null;
-        if (potentialShippingRuleIds.size > 0) {
-            const hasFreeShipping = Array.from(potentialShippingRuleIds).find(id => shippingRules[id] && shippingRules[id].type === 'Free');
-            bestPromoShippingRuleId = hasFreeShipping || potentialShippingRuleIds.values().next().value;
-        }
-        const shipping = calculateShipping(cart, finalSubtotal, bestPromoShippingRuleId);
+        const shipping = calculateShipping(cart, finalSubtotal, Array.from(potentialShippingRuleIds)[0]);
         const finalTotal = finalSubtotal + shipping.fee;
         const totalPoints = Math.floor(finalSubtotal);
         return { originalSubtotal, totalDiscount, finalSubtotal, shipping, finalTotal, totalPoints, appliedPromoDescriptions: Array.from(appliedPromoDescriptions), finalPrices };
     }
-    
+
     function updateCartDisplay() {
         const cartItemsEl = document.getElementById("cart-items");
         const subtotalEl = document.getElementById("cart-subtotal");
@@ -478,7 +472,35 @@
         totalEl.textContent = `RM ${finalTotal.toFixed(2)}`;
         pointsEl.innerHTML = `<div class="points-earned"><i class="fa-solid fa-star"></i> Points to be Earned: ${totalPoints}</div>`;
     }
-    
+
+    function calculateShipping(currentCart, totalAfterDiscounts, promoShippingRuleId) {
+        if (currentCart.length === 0) return { fee: 0, message: "RM 0.00" };
+        let applicableRule = null;
+        if (promoShippingRuleId && shippingRules[promoShippingRuleId]) {
+            const promoRule = shippingRules[promoShippingRuleId];
+            if (totalAfterDiscounts >= promoRule.minSpend) {
+                applicableRule = { ...promoRule, reason: "Promotion Applied" };
+            }
+        }
+        if (!applicableRule && appliedDiscount && appliedDiscount.type === 'FreeShipping') {
+             applicableRule = { type: 'Free', charge: 0, reason: "Discount Code" };
+        }
+        if (!applicableRule) {
+            const defaultRules = Object.values(shippingRules).filter(rule => rule.isDefault);
+            for (const rule of defaultRules) {
+                if (totalAfterDiscounts >= rule.minSpend && totalAfterDiscounts <= rule.maxSpend) {
+                    applicableRule = { ...rule, reason: `Order total is RM ${totalAfterDiscounts.toFixed(2)}`};
+                    break;
+                }
+            }
+        }
+        if (!applicableRule) return { fee: 14, message: "RM 14.00 (Default)" };
+        const charge = parseFloat(applicableRule.charge) || 0;
+        let message = `RM ${charge.toFixed(2)}`;
+        if (charge === 0) message = "FREE";
+        return { fee: charge, message: message, reason: applicableRule.reason };
+    }
+
     function initiateCheckout() {
         if (!document.getElementById('consent-checkbox').checked) { alert("You must agree to the data collection consent before proceeding."); return; }
         const customerName = document.getElementById('customer-name').value.trim();
@@ -504,7 +526,7 @@
             discountApplied: `Total Discount - RM ${totals.totalDiscount.toFixed(2)}`,
             discountCodeUsed: appliedDiscount ? appliedDiscount.code : "N/A",
             totalPointsForThisPurchase: totals.totalPoints,
-            appliedPromotions: totals.appliedPromoDescriptions
+            appliedPromoDescriptions: totals.appliedPromoDescriptions
         };
         sessionStorage.setItem("pendingOrder", JSON.stringify(orderData));
         
