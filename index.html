@@ -702,23 +702,23 @@
 
 <!-- START: Floating WhatsApp Button Code -->
 <style>
-    .whatsapp-fab {
-        position: fixed;
-        bottom: 25px;
-        right: 25px;
-        background-color: #25D366;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        cursor: pointer;
-        transition: transform 0.3s;
-        z-index: 1000;
-        text-decoration: none; /* Removes underline from the link */
-    }
+.whatsapp-fab {
+    position: fixed;
+    top: 100px;      /* MOVED: From bottom to top, with space for your header */
+    right: 25px;
+    background-color: #25D366;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.3s;
+    z-index: 999; /* Lowered slightly to be safe */
+    text-decoration: none; /* Removes underline from the link */
+}
     .whatsapp-fab:hover {
         transform: scale(1.1);
     }
