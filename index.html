@@ -697,8 +697,10 @@
     function suggestProduct(){const t=document.getElementById("symptom-input").value.toLowerCase().trim(),e=document.getElementById("suggestion-result");if(!t)return void(e.innerHTML='<p style="color:red">Please enter a symptom or health concern.</p>');const o={'digestion':{keywords:['digestion','stomach','tummy','bloated','indigestion','constipation'],ids:[1,2,3,7,11,18]},'immune':{keywords:['immune','sick','flu','cold','cough','fever','infection'],ids:[1,2,14,15,17]},'energy':{keywords:['energy','tired','fatigue','stamina','lethargic','weak'],ids:[12,13,15,8]},'weight':{keywords:['weight','diet','slim','lose weight','kurus'],ids:[4,5,6,7]},'skin':{keywords:['skin','dry','acne','eczema','sunburn','aging','wrinkles','kulit'],ids:[30,32,29,39,52,24,21,22,31,38,41]},'joint':{keywords:['joint','muscle','pain','sore','arthritis','sakit','otot'],ids:[34,16,33]},'heart':{keywords:['heart','cholesterol','blood pressure','jantung'],ids:[16]},'bone':{keywords:['bone','calcium','osteoporosis','tulang'],ids:[19]},'headache':{keywords:['headache','migraine','pening','sakit kepala'],ids:[33]}},n=new Set,i=t.split(" ");i.forEach(t=>{for(const e in o)o[e].keywords.includes(t)&&o[e].ids.forEach(t=>n.add(t))}),n.size>0?(e.innerHTML="<h4>Based on your concern, we suggest:</h4>",[...n].slice(0,3).forEach(t=>{const n=products.find(e=>e.id===t);let i=n.price;const r=activePromotions.find(e=>e.productIDs.includes(t));"PERCENT"===r?.type?i*=(1-parseFloat(r.value)/100):"FIXED"===r?.type&&(i-=parseFloat(r.value)),e.innerHTML+=`<div class="suggestion-product"><span><strong>${n.name}</strong> - ${n.benefits.split(",")[0]}</span><button class="btn btn-primary" style="width:auto;padding:8px 15px" onclick="addToCart(${n.id});toggleCart()">Add</button></div>`})):(e.innerHTML="<p>We could not find a specific match. Try searching for products directly.</p>")}
     function sendFeedbackEmail(t){t.preventDefault();const e=document.getElementById("feedback-submit-btn"),o=document.getElementById("feedback-status");if("YOUR_SERVICE_ID"==='YOUR_SERVICE_ID'||"YOUR_TEMPLATE_ID"==='YOUR_TEMPLATE_ID')return o.textContent="Feedback form is not configured. Please contact the owner directly.",void(o.style.color="orange");e.disabled=!0,o.textContent="Sending...",o.style.color="blue"}
     function toggleCheckoutButton() { document.getElementById('checkout-btn').disabled = !document.getElementById('consent-checkbox').checked; }
-    function showTab(tabId) { document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active')); const tab = document.getElementById(tabId); if (tab) tab.classList.add('active'); }
-  <!-- START: Floating WhatsApp Button Code -->
+  function showTab(tabId) { document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active')); const tab = document.getElementById(tabId); if (tab) tab.classList.add('active'); }
+</script>
+
+<!-- START: Floating WhatsApp Button Code -->
 <style>
     .whatsapp-fab {
         position: fixed;
@@ -733,6 +735,6 @@
     </svg>
 </a>
 <!-- END: Floating WhatsApp Button Code -->
-</script>
+
 </body>
-</html>
+</html>    
