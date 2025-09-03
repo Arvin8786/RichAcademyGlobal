@@ -116,13 +116,15 @@ nav a.nav-disabled::after { width: 0 !important; }
 }
 
 .fab i {
-    /* These styles are specifically for FontAwesome icons to center them perfectly */
     font-size: 28px;
     color: white;
-    /* The next two lines are the fix: they remove fixed dimensions */
-    /* and let the flexbox centering do its job. */
-    width: auto;
-    height: auto;
+    
+    /* NEW: This line is a powerful way to force vertical centering for icons */
+    line-height: 60px; /* This should match the height of the .fab container */
+
+    /* We also ensure the width is centered */
+    width: 100%;
+    text-align: center;
 }
 .floating-cart-btn {
     background-color: var(--primary-color);
