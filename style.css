@@ -109,12 +109,20 @@ nav a.nav-disabled::after { width: 0 !important; }
     transform: scale(1.1);
     box-shadow: 0 6px 16px rgba(0, 0, 0, .3);
 }
-.fab svg, .fab i {
+.fab svg {
     width: 32px;
     height: 32px;
     fill: white;
-    font-size: 28px; /* For FontAwesome icon */
+}
+
+.fab i {
+    /* These styles are specifically for FontAwesome icons to center them perfectly */
+    font-size: 28px;
     color: white;
+    /* The next two lines are the fix: they remove fixed dimensions */
+    /* and let the flexbox centering do its job. */
+    width: auto;
+    height: auto;
 }
 .floating-cart-btn {
     background-color: var(--primary-color);
