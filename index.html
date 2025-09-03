@@ -185,9 +185,9 @@
 </div>
 <script>
     // =================================================================
-    // SECTION A: COMPLETE E-SHOP SCRIPT (VERSION 10 - PRICING FIX)
+    // SECTION A: COMPLETE E-SHOP SCRIPT (VERSION 11 - PROMO & UPLOAD FIX)
     // =================================================================
-    const googleScriptURL = 'https://script.google.com/macros/s/AKfycbwydZKQ9FmyhXKrSMEbI6dv8l-UGDsiZePf6bj4vXs-CKPj9VCrnRRnBQLUEArBRqZV/exec';
+    const googleScriptURL = 'https://script.google.com/macros/s/AKfycbylw334qZ_jGs2W6ZzFso7AszWkQrDlMbTlM6kd_LejBZlNDQc2sWHdonVlnJ8rT3xt/exec';
     const botServerURL = 'https://whatsapp-eshop-bot.onrender.com/eshop-chat';
     
     let products = []; let cart = []; let activeFestival = null; let activePromotions = [];
@@ -330,12 +330,13 @@
         if (existingItemInCart) {
             existingItemInCart.quantity++;
         } else {
+            // BUG FIX: Use the full product object from the main list to get the correct base price
             const productMaster = products.find(p => p.id === productId);
             cart.push({
                 id: productToAdd.id,
                 name: productToAdd.name,
                 basePrice: productMaster.originalPrice || productMaster.price,
-                price: productToAdd.price, // This is the potentially discounted price for display
+                price: productToAdd.price, // This is the potentially discounted price from the display list
                 quantity: 1
             });
         }
@@ -355,8 +356,7 @@
         else { appliedDiscount = null; statusEl.textContent = "Invalid or expired discount code."; statusEl.style.color = "red"; }
         updateCartDisplay();
     }
-    
-    // BUG FIX: Rewritten with robust logic for FIXED and BUNDLE prices
+
     function calculateCartTotals() {
         let originalSubtotal = 0;
         let finalSubtotal = 0;
@@ -380,7 +380,7 @@
             if (numberOfBundles > 0) {
                 finalSubtotal += numberOfBundles * promo.bundle.price;
                 let itemsToDiscount = numberOfBundles * promo.bundle.quantity;
-                eligibleItems.sort((a, b) => a.basePrice - b.basePrice); // Discount cheaper items first
+                eligibleItems.sort((a, b) => a.basePrice - b.basePrice);
                 eligibleItems.forEach(item => {
                     const discountable = Math.min(item.quantity, itemsToDiscount);
                     item.quantity -= discountable;
@@ -393,13 +393,9 @@
             if (item.quantity > 0) {
                 const itemPromo = itemPromos.find(p => p.productIDs.includes(item.id));
                 let unitPrice = item.basePrice;
-
                 if (itemPromo) {
-                    if (itemPromo.type === 'FIXED') {
-                        unitPrice = itemPromo.value;
-                    } else if (itemPromo.type === 'PERCENT') {
-                        unitPrice = unitPrice * (1 - parseFloat(itemPromo.value) / 100);
-                    }
+                    if (itemPromo.type === 'FIXED') { unitPrice = itemPromo.value; } 
+                    else if (itemPromo.type === 'PERCENT') { unitPrice = unitPrice * (1 - parseFloat(itemPromo.value) / 100); }
                 }
                 finalSubtotal += item.quantity * unitPrice;
             }
@@ -417,7 +413,8 @@
         const shipping = calculateShipping(cart, finalSubtotal);
         const finalTotal = finalSubtotal + shipping.fee;
         const totalPoints = Math.floor(finalSubtotal);
-        return { originalSubtotal, totalDiscount, finalSubtotal, shipping, finalTotal, totalPoints };
+        const appliedPromoDescriptions = allApplicablePromos.map(p => p.description);
+        return { originalSubtotal, totalDiscount, finalSubtotal, shipping, finalTotal, totalPoints, appliedPromoDescriptions };
     }
     
     function updateCartDisplay() {
@@ -431,13 +428,15 @@
         const savingsLineEl = document.getElementById("savings-line");
         const savingsEl = document.getElementById("cart-savings");
         updateCartCount();
+        const oldPromoList = document.getElementById('applied-promos-list-container');
+        if (oldPromoList) oldPromoList.remove();
         if (cart.length === 0) {
             cartItemsEl.innerHTML = "<p>Your cart is currently empty.</p>";
             subtotalEl.textContent = "RM 0.00"; shippingEl.textContent = "RM 0.00"; totalEl.textContent = "RM 0.00";
             pointsEl.innerHTML = ""; discountLineEl.style.display = "none"; savingsLineEl.style.display = "none";
             return;
         }
-        const { originalSubtotal, totalDiscount, shipping, finalTotal, totalPoints } = calculateCartTotals();
+        const { originalSubtotal, totalDiscount, finalTotal, shipping, totalPoints, appliedPromoDescriptions } = calculateCartTotals();
         let itemsHtml = "";
         cart.forEach(item => {
             itemsHtml += `<div class="cart-item"><div class="cart-item-details"><strong>${item.name}</strong><div class="quantity-controls"><button class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button><span class="quantity-display">${item.quantity}</span><button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button></div></div><div style="text-align:right"><div class="final-cart-price">RM ${item.basePrice.toFixed(2)}</div></div><button class="remove-item-btn" onclick="removeItemFromCart(${item.id})"><i class="fa-solid fa-trash-can"></i></button></div>`;
@@ -452,6 +451,11 @@
         } else {
             discountLineEl.style.display = "none";
             savingsLineEl.style.display = "none";
+        }
+        if (appliedPromoDescriptions.length > 0) {
+            let promoListHTML = [...new Set(appliedPromoDescriptions)].map(desc => `<li><small>${desc}</small></li>`).join('');
+            const promoListContainerHTML = `<div class="summary-line" id="applied-promos-list-container" style="font-size: 0.9em; color: #555;"><span>Applied Promotions:</span><ul style="padding-left: 15px; margin: 0; text-align: right; list-style-type: none;">${promoListHTML}</ul></div>`;
+            shippingEl.parentElement.insertAdjacentHTML('beforebegin', promoListContainerHTML);
         }
         shippingEl.innerHTML = shipping.message === "FREE" ? `<span style="color:var(--accent-color);font-weight:700"><i class="fa-solid fa-truck-fast"></i> FREE! <small>(${shipping.reason || ''})</small></span>` : `RM ${shipping.fee.toFixed(2)}`;
         totalEl.textContent = `RM ${finalTotal.toFixed(2)}`;
@@ -537,7 +541,7 @@
                 discountApplied: `Total Discount - RM ${totals.totalDiscount.toFixed(2)}`,
                 discountCodeUsed: appliedDiscount ? appliedDiscount.code : "N/A",
                 totalPointsForThisPurchase: totals.totalPoints,
-                appliedPromotions: Array.from(totals.appliedPromoDescriptions),
+                appliedPromotions: totals.appliedPromoDescriptions || [],
                 paymentProofFile: base64File.split(",")[1], 
                 paymentProofMimeType: file.type,
                 paymentProofFileName: `${customerEmail.split("@")[0]}-${Date.now()}`
@@ -596,12 +600,10 @@
     }
     
     function updateVerificationUI(reset = false) {
-        const proofStep = document.getElementById('proof-upload-step');
-        const codeStep = document.getElementById('code-verification-step');
+        const proofStep = document.getElementById('proof-upload-step'), codeStep = document.getElementById('code-verification-step');
         if (reset) {
             proofStep.classList.add('active'); proofStep.classList.remove('completed');
             codeStep.classList.remove('active');
-            // Reset fields
             document.getElementById('payment-proof-upload').value = "";
             document.getElementById('verification-code').value = "";
             return;
@@ -618,7 +620,7 @@
     function toggleCart(t=!1){const e=document.getElementById("cart-modal");if(t)return void(e.style.display="none");"flex"===e.style.display?e.style.display="none":(e.style.display="flex",JSON.parse(sessionStorage.getItem("pendingOrder"))?(document.getElementById("cart-view").style.display="none",document.getElementById("verification-view").style.display="block",updateVerificationUI()):(document.getElementById("cart-view").style.display="block",document.getElementById("verification-view").style.display="none",updateCartDisplay(),updateVerificationUI(!0)))}
     function getBase64(t){return new Promise((e,o)=>{const n=new FileReader;n.readAsDataURL(t),n.onload=()=>e(n.result),n.onerror=t=>o(t)})}
     function filterProducts(){const t=document.getElementById("product-search").value.toLowerCase();document.querySelectorAll(".product-list").forEach(e=>{let o=!1;e.querySelectorAll(".product").forEach(e=>{e.querySelector("h3").textContent.toLowerCase().includes(t)?(e.style.display="flex",o=!0):e.style.display="none"});const n=e.closest(".promo-section");n&&(n.style.display=o?"block":"none")})}
-    function sendFeedbackEmail(t){t.preventDefault();const e=document.getElementById("feedback-submit-btn"),o=document.getElementById("feedback-status");if("YOUR_SERVICE_ID"==='YOUR_SERVICE_ID'||"YOUR_TEMPLATE_ID"==='YOUR_TEMPLATE_ID')return o.textContent="Feedback form is not configured. Please contact the Admin directly.",void(o.style.color="orange");e.disabled=!0,o.textContent="Sending...",o.style.color="blue"}
+    function sendFeedbackEmail(t){t.preventDefault();const e=document.getElementById("feedback-submit-btn"),o=document.getElementById("feedback-status");if("YOUR_SERVICE_ID"==='YOUR_SERVICE_ID'||"YOUR_TEMPLATE_ID"==='YOUR_TEMPLATE_ID')return o.textContent="Feedback form is not configured. Please contact the owner directly.",void(o.style.color="orange");e.disabled=!0,o.textContent="Sending...",o.style.color="blue"}
     function toggleCheckoutButton() { document.getElementById('checkout-btn').disabled = !document.getElementById('consent-checkbox').checked; }
     function showTab(tabId) { document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active')); const tab = document.getElementById(tabId); if (tab) tab.classList.add('active'); }
 
@@ -639,8 +641,10 @@
     }
     
     function onProofUploaded(orderId, customerName, totalAmount, proofUrl, customerPhone) {
-        // BUG FIX: Do not close the entire modal. Just hide the verification view.
-        document.getElementById('verification-view').style.display = 'none';
+        // BUG FIX: Do not close the entire modal. Just hide the cart/verification view.
+        document.getElementById('cart-view').style.display = 'none';
+        document.getElementById('verification-view').style.display = 'none'; // Hide both views
+        
         toggleChatWidget(true); 
         document.getElementById('chat-body').innerHTML = '';
         addChatMessage('bot', "Thank you for your upload. Looking for verification? I'm here to assist.");
@@ -675,7 +679,7 @@
         const buttons = document.querySelector('.chat-buttons');
         if (buttons) buttons.remove();
         addChatMessage('user', "Verify Now");
-        addChatMessage('bot', "Great! I have sent a request to the Admin for real-time approval. This may take a few moments. Please keep this page open. I will check for an update every 10 seconds.");
+        addChatMessage('bot', "Great! I have sent a request to the admin for real-time approval. This may take a few moments. Please keep this page open. I will check for an update every 10 seconds.");
         
         try {
             const response = await fetch(botServerURL, {
@@ -688,18 +692,14 @@
             if (result.success) {
                 pollForOrderStatus(orderData.orderId);
             } else {
-                // BUG FIX: Provide a direct, actionable link for the failover
                 addChatMessage('bot', `Sorry, there was an error sending the approval request. To complete your order, please click the link below to talk to our support team on WhatsApp and provide your Order ID: ${orderData.orderId}.`);
-                const totals = calculateCartTotals();
                 const waMessage = `MANUAL ORDER VERIFICATION\n\nOrder ID: ${orderData.orderId}\nCustomer: ${orderData.customerName}\nTotal: ${orderData.totalAmount}`;
                 const waLink = `https://wa.me/601111033154?text=${encodeURIComponent(waMessage)}`;
                 addChatMessage('bot', `<a href="${waLink}" target="_blank" class="btn btn-primary" style="width: auto; margin-top: 10px;">Contact Support on WhatsApp</a>`);
             }
         } catch (error) {
             console.error('Error starting verification:', error);
-             // BUG FIX: Provide a direct, actionable link for the failover
             addChatMessage('bot', `Sorry, a connection error occurred. To complete your order, please click the link below to talk to our support team on WhatsApp and provide your Order ID: ${orderData.orderId}.`);
-            const totals = calculateCartTotals();
             const waMessage = `MANUAL ORDER VERIFICATION (Connection Error)\n\nOrder ID: ${orderData.orderId}\nCustomer: ${orderData.customerName}\nTotal: ${orderData.totalAmount}`;
             const waLink = `https://wa.me/601111033154?text=${encodeURIComponent(waMessage)}`;
             addChatMessage('bot', `<a href="${waLink}" target="_blank" class="btn btn-primary" style="width: auto; margin-top: 10px;">Contact Support on WhatsApp</a>`);
@@ -711,14 +711,13 @@
         addChatMessage('bot', "No problem. Your order is saved. You can complete the verification later by using our main WhatsApp bot. This window will now close.");
         setTimeout(() => {
             toggleChatWidget(false);
-            toggleCart(true); // Close the modal completely
+            toggleCart(true); 
         }, 3000);
     }
 
     function pollForOrderStatus(orderId) {
         let pollingTries = 0;
-        const maxTries = 60; // Poll for 10 minutes max
-
+        const maxTries = 60; 
         const intervalId = setInterval(async () => {
             pollingTries++;
             if (pollingTries > maxTries) {
@@ -739,7 +738,6 @@
                     addChatMessage('bot', `Your order has been verified and approved! Here is your receipt: <a href="${result.receiptUrl}" target="_blank">Download Receipt</a>`);
                     addChatMessage('bot', "Thank you for your purchase! This page will now redirect to the homepage.");
                     
-                    // Clear cart and session storage after successful order
                     cart = [];
                     sessionStorage.removeItem("pendingOrder");
                     updateCartDisplay();
