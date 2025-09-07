@@ -616,7 +616,27 @@
         }
     }
     
-    function cancelVerification(){if(confirm("Are you sure? This will cancel the pending order.")){sessionStorage.removeItem("pendingOrder"),toggleCart(!0),updateVerificationUI(!0)}}
+        function cancelVerification() {
+        if (confirm("Are you sure? This will cancel the pending order and clear your cart.")) {
+            // Clear all order data
+            cart = [];
+            sessionStorage.removeItem("pendingOrder");
+            appliedDiscount = null;
+            document.getElementById("discount-code-input").value = "";
+            document.getElementById("discount-status").textContent = "";
+            
+            // Update the cart display to show it's empty
+            updateCartDisplay();
+            
+            // Hide the modal and reset its views
+            toggleCart(true); // Close the modal
+            document.getElementById('cart-view').style.display = 'block';
+            document.getElementById('verification-view').style.display = 'none';
+
+            // Optional: Reload the page to ensure a completely fresh state
+            window.location.reload();
+        }
+    }
     function toggleCart(t=!1){const e=document.getElementById("cart-modal");if(t)return void(e.style.display="none");"flex"===e.style.display?e.style.display="none":(e.style.display="flex",JSON.parse(sessionStorage.getItem("pendingOrder"))?(document.getElementById("cart-view").style.display="none",document.getElementById("verification-view").style.display="block",updateVerificationUI()):(document.getElementById("cart-view").style.display="block",document.getElementById("verification-view").style.display="none",updateCartDisplay(),updateVerificationUI(!0)))}
     function getBase64(t){return new Promise((e,o)=>{const n=new FileReader;n.readAsDataURL(t),n.onload=()=>e(n.result),n.onerror=t=>o(t)})}
     function filterProducts(){const t=document.getElementById("product-search").value.toLowerCase();document.querySelectorAll(".product-list").forEach(e=>{let o=!1;e.querySelectorAll(".product").forEach(e=>{e.querySelector("h3").textContent.toLowerCase().includes(t)?(e.style.display="flex",o=!0):e.style.display="none"});const n=e.closest(".promo-section");n&&(n.style.display=o?"block":"none")})}
