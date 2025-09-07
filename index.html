@@ -184,7 +184,7 @@
 </div>
 <script>
     // =================================================================
-    // SECTION A: COMPLETE E-SHOP SCRIPT (VERSION 12 - FINAL FIX)
+    // SECTION A: COMPLETE E-SHOP SCRIPT (VERSION 12 - FINAL)
     // =================================================================
     const googleScriptURL = 'https://script.google.com/macros/s/AKfycbzSEYPLuGuKKoEBUcyTuDGW3AOqtZ57Fdg28yKvhqgAXHmc42sZKcXtCPqfvt7DbtyS/exec';
     const botServerURL = 'https://whatsapp-eshop-bot.onrender.com/eshop-chat';
@@ -219,7 +219,7 @@
                 productListContainer.innerHTML = `<p style="text-align: center; color: red; font-weight: bold; width: 100%; padding: 40px 0;"><i class="fa-solid fa-triangle-exclamation"></i> Error loading store.<br>Could not retrieve catalog. Please try again later.</p>`;
             }
         }
-        document.getElementById('update-timestamp').textContent = `${new Date().toLocaleDateString('en-GB')} (v18.2)`;
+        document.getElementById('update-timestamp').textContent = `${new Date().toLocaleDateString('en-GB')} (v12.0)`;
         const pendingOrder = JSON.parse(sessionStorage.getItem("pendingOrder"));
         if (pendingOrder) { 
             toggleCart();
@@ -355,7 +355,6 @@
         updateCartDisplay();
     }
 
-    // FINAL CORRECTED VERSION of the pricing logic
     function calculateCartTotals() {
         let originalSubtotal = 0;
         let finalSubtotal = 0;
@@ -392,7 +391,6 @@
             if (item.quantity > 0) {
                 const itemPromo = itemPromos.find(p => p.productIDs.includes(item.id));
                 let unitPrice = item.basePrice;
-
                 if (itemPromo) {
                     if (itemPromo.type === 'FIXED') { unitPrice = itemPromo.value; } 
                     else if (itemPromo.type === 'PERCENT') { unitPrice = unitPrice * (1 - parseFloat(itemPromo.value) / 100); }
@@ -616,24 +614,17 @@
         }
     }
     
-        function cancelVerification() {
-        if (confirm("Are you sure? This will cancel the pending order and clear your cart.")) {
-            // Clear all order data
+    function cancelVerification(){
+        if(confirm("Are you sure? This will cancel the pending order and clear your cart.")){
             cart = [];
             sessionStorage.removeItem("pendingOrder");
             appliedDiscount = null;
             document.getElementById("discount-code-input").value = "";
             document.getElementById("discount-status").textContent = "";
-            
-            // Update the cart display to show it's empty
             updateCartDisplay();
-            
-            // Hide the modal and reset its views
-            toggleCart(true); // Close the modal
+            toggleCart(true);
             document.getElementById('cart-view').style.display = 'block';
             document.getElementById('verification-view').style.display = 'none';
-
-            // Optional: Reload the page to ensure a completely fresh state
             window.location.reload();
         }
     }
@@ -661,9 +652,10 @@
     }
     
     function onProofUploaded(orderId, customerName, totalAmount, proofUrl, customerPhone) {
-        // BUG FIX: Do not close the entire modal. Stay on the verification page.
-        document.getElementById('proof-upload-step').style.display = 'none'; // Hide the upload part
-        document.getElementById('code-verification-step').style.display = 'none'; // Hide the manual backup part
+        document.getElementById('verification-view').style.display = 'block';
+        document.getElementById('proof-upload-step').style.display = 'none';
+        document.getElementById('code-verification-step').innerHTML = `<p style="font-weight: bold; font-size: 1.2rem; color: var(--primary-color);">Kindly please wait, the payment is being verified...</p><p>You will receive a code in the chat window below once approved by the admin.</p>`;
+        
         toggleChatWidget(true); 
         document.getElementById('chat-body').innerHTML = '';
         addChatMessage('bot', "Thank you for your upload. Looking for verification? I'm here to assist.");
@@ -754,16 +746,21 @@
                 if (result.success && result.status === 'Approved') {
                     clearInterval(intervalId);
                     
-                    addChatMessage('bot', `Your order has been verified and approved! Here is your receipt: <a href="${result.receiptUrl}" target="_blank">Download Receipt</a>`);
-                    addChatMessage('bot', "Thank you for your purchase! This page will now redirect to the homepage.");
-                    
-                    cart = [];
-                    sessionStorage.removeItem("pendingOrder");
-                    updateCartDisplay();
+                    const codeResult = await fetch(botServerURL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'getVerificationCode', data: { orderId: orderId } })
+                    });
+                    const codeData = await codeResult.json();
 
-                    setTimeout(() => {
-                        window.location.href = window.location.pathname;
-                    }, 10000);
+                    if(codeData.success){
+                        addChatMessage('bot', `Your payment has been approved! Here is your verification code: <strong>${codeData.code}</strong>`);
+                        document.getElementById('verification-code').value = codeData.code;
+                        document.getElementById('code-verification-step').innerHTML = `<h4 style="color:var(--accent-color);">Payment Approved!</h4><p>Your verification code has been automatically entered below. Please click to finalize.</p>`;
+                        finalizeOrder(); // Auto-finalize
+                    } else {
+                        addChatMessage('bot', 'Payment approved, but there was an issue getting your code. Please use the manual verification option.');
+                    }
                 }
             } catch (error) {
                 console.error('Polling error:', error);
