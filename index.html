@@ -101,7 +101,6 @@
       </div>
   </footer>
 </div>
-
 <!-- CART MODAL -->
 <div id="cart-modal" class="modal">
     <div class="modal-content">
@@ -152,7 +151,7 @@
         </div>
         <div id="code-verification-step" class="verification-step">
             <h4><i class="fa-solid fa-key"></i> Step 2: Finalize with Code (Manual Backup)</h4>
-            <p style="font-size: 0.9rem; color: #555;">If the live chat fails, you can enter a verification code provided by the Admin here.</p>
+            <p style="font-size: 0.9rem; color: #555;">If the live chat fails, you can enter a verification code provided by the owner here.</p>
             <input type="text" id="verification-code" placeholder="Enter Verification Code">
             <button class="btn btn-primary" id="finalize-order-btn" onclick="finalizeOrder()">Finalize Order & Get Receipt</button>
             <p id="verification-status"></p>
@@ -185,7 +184,7 @@
 </div>
 <script>
     // =================================================================
-    // SECTION A: COMPLETE E-SHOP SCRIPT (VERSION 11 - PROMO & UPLOAD FIX)
+    // SECTION A: COMPLETE E-SHOP SCRIPT (VERSION 12 - FINAL FIX)
     // =================================================================
     const googleScriptURL = 'https://script.google.com/macros/s/AKfycbwzIMKjav7dNKBhf8fxQL2QYhgDYYbEGca5AICeWND4SuVi8nh9_0IYdxH3GI9JkRxv/exec';
     const botServerURL = 'https://whatsapp-eshop-bot.onrender.com/eshop-chat';
@@ -297,7 +296,7 @@
             priceHTML = `<span class="new-price">RM ${product.price.toFixed(2)}</span>`;
         }
         priceContainerDiv.innerHTML = priceHTML;
-        const itemPromo = activePromotions.find(p => p.productIDs.includes(p.id));
+        const itemPromo = activePromotions.find(p => p.productIDs.includes(product.id));
         let promoDescriptionHTML = '';
         if (itemPromo && itemPromo.type === 'BUNDLE') {
             promoDescriptionHTML = `<p class="promo-description">${itemPromo.description}</p>`;
@@ -330,13 +329,12 @@
         if (existingItemInCart) {
             existingItemInCart.quantity++;
         } else {
-            // BUG FIX: Use the full product object from the main list to get the correct base price
             const productMaster = products.find(p => p.id === productId);
             cart.push({
                 id: productToAdd.id,
                 name: productToAdd.name,
                 basePrice: productMaster.originalPrice || productMaster.price,
-                price: productToAdd.price, // This is the potentially discounted price from the display list
+                price: productToAdd.price, // Captures the promo display price
                 quantity: 1
             });
         }
@@ -357,6 +355,7 @@
         updateCartDisplay();
     }
 
+    // FINAL CORRECTED VERSION of the pricing logic
     function calculateCartTotals() {
         let originalSubtotal = 0;
         let finalSubtotal = 0;
@@ -381,11 +380,11 @@
                 finalSubtotal += numberOfBundles * promo.bundle.price;
                 let itemsToDiscount = numberOfBundles * promo.bundle.quantity;
                 eligibleItems.sort((a, b) => a.basePrice - b.basePrice);
-                eligibleItems.forEach(item => {
+                for (const item of eligibleItems) {
                     const discountable = Math.min(item.quantity, itemsToDiscount);
                     item.quantity -= discountable;
                     itemsToDiscount -= discountable;
-                });
+                }
             }
         });
 
@@ -393,6 +392,7 @@
             if (item.quantity > 0) {
                 const itemPromo = itemPromos.find(p => p.productIDs.includes(item.id));
                 let unitPrice = item.basePrice;
+
                 if (itemPromo) {
                     if (itemPromo.type === 'FIXED') { unitPrice = itemPromo.value; } 
                     else if (itemPromo.type === 'PERCENT') { unitPrice = unitPrice * (1 - parseFloat(itemPromo.value) / 100); }
@@ -414,7 +414,7 @@
         const finalTotal = finalSubtotal + shipping.fee;
         const totalPoints = Math.floor(finalSubtotal);
         const appliedPromoDescriptions = allApplicablePromos.map(p => p.description);
-        return { originalSubtotal, totalDiscount, finalSubtotal, shipping, finalTotal, totalPoints, appliedPromoDescriptions };
+        return { originalSubtotal, totalDiscount, finalSubtotal, shipping, finalTotal, totalPoints, appliedPromoDescriptions: [...new Set(appliedPromoDescriptions)] };
     }
     
     function updateCartDisplay() {
@@ -453,7 +453,7 @@
             savingsLineEl.style.display = "none";
         }
         if (appliedPromoDescriptions.length > 0) {
-            let promoListHTML = [...new Set(appliedPromoDescriptions)].map(desc => `<li><small>${desc}</small></li>`).join('');
+            let promoListHTML = appliedPromoDescriptions.map(desc => `<li><small>${desc}</small></li>`).join('');
             const promoListContainerHTML = `<div class="summary-line" id="applied-promos-list-container" style="font-size: 0.9em; color: #555;"><span>Applied Promotions:</span><ul style="padding-left: 15px; margin: 0; text-align: right; list-style-type: none;">${promoListHTML}</ul></div>`;
             shippingEl.parentElement.insertAdjacentHTML('beforebegin', promoListContainerHTML);
         }
@@ -641,10 +641,9 @@
     }
     
     function onProofUploaded(orderId, customerName, totalAmount, proofUrl, customerPhone) {
-        // BUG FIX: Do not close the entire modal. Just hide the cart/verification view.
-        document.getElementById('cart-view').style.display = 'none';
-        document.getElementById('verification-view').style.display = 'none'; // Hide both views
-        
+        // BUG FIX: Do not close the entire modal. Stay on the verification page.
+        document.getElementById('proof-upload-step').style.display = 'none'; // Hide the upload part
+        document.getElementById('code-verification-step').style.display = 'none'; // Hide the manual backup part
         toggleChatWidget(true); 
         document.getElementById('chat-body').innerHTML = '';
         addChatMessage('bot', "Thank you for your upload. Looking for verification? I'm here to assist.");
