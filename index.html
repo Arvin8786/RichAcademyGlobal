@@ -123,7 +123,7 @@
         <div class="customer-info-form">
           <h3 style="margin-top: 20px;">Customer & Shipping Information</h3>
           <input type="text" id="customer-name" placeholder="Your Full Name" required>
-          <input type="tel" id="customer-phone" placeholder="Your WhatsApp Number (e.g., 60123456789)" required>
+          <input type="tel" id="customer-phone" placeholder="Your WhatsApp Number (e.g., +60123456789)" required>
           <input type="email" id="customer-email" placeholder="Your Email Address (for receipt)" required>
           <input type="text" id="customer-address1" placeholder="Address Line 1" required>
           <input type="text" id="customer-address2" placeholder="Address Line 2 (Optional)">
@@ -141,7 +141,6 @@
       </div>
       <div id="verification-view" style="display: none;">
         <h2>Order Verification</h2>
-        <p>Please complete the following steps to finalize your order.</p>
         <div id="proof-upload-step" class="verification-step active">
             <h4><i class="fa-solid fa-arrow-up-from-bracket"></i> Step 1: Upload Payment Proof</h4>
             <p style="font-size: 0.9rem; color: #555;">Upload a screenshot of your transaction receipt.</p>
@@ -150,8 +149,8 @@
             <p id="upload-status"></p>
         </div>
         <div id="code-verification-step" class="verification-step">
-            <h4><i class="fa-solid fa-key"></i> Step 2: Finalize with Code (Manual Backup)</h4>
-            <p style="font-size: 0.9rem; color: #555;">If the live chat fails, you can enter a verification code provided by the owner here.</p>
+            <h4><i class="fa-solid fa-key"></i> Step 2: Finalize with Code</h4>
+            <p id="verification-prompt">Please wait while our admin reviews your payment. Once approved, you will receive a verification code via WhatsApp.</p>
             <input type="text" id="verification-code" placeholder="Enter Verification Code">
             <button class="btn btn-primary" id="finalize-order-btn" onclick="finalizeOrder()">Finalize Order & Get Receipt</button>
             <p id="verification-status"></p>
@@ -172,14 +171,18 @@
     </div>
 </div>
 
-<!-- E-SHOP ON-SCREEN CHATBOT WIDGET -->
+<!-- E-SHOP ON-SCREEN AI CHATBOT WIDGET -->
 <div id="eshop-chat-widget">
     <div id="chat-header">
-        FL Chatbot
+        FL AI Assistant
         <button id="close-chat-btn" onclick="toggleChatWidget(false)">&times;</button>
     </div>
     <div id="chat-body">
         <!-- Chat messages will be added here by JavaScript -->
+    </div>
+    <div id="chat-input-container">
+        <input type="text" id="chat-input" placeholder="Ask a question...">
+        <button id="chat-send-btn"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
 </div>
 <script>
@@ -192,7 +195,18 @@
     let products = []; let cart = []; let activeFestival = null; let activePromotions = [];
     let shippingRules = {}; let availableDiscountCodes = {}; let appliedDiscount = null;
 
-    document.addEventListener('DOMContentLoaded', fetchData);
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchData();
+        // Add event listener for the new AI chat input
+        const chatInput = document.getElementById('chat-input');
+        const chatSendBtn = document.getElementById('chat-send-btn');
+        chatSendBtn.addEventListener('click', handleAIChatSubmit);
+        chatInput.addEventListener('keyup', (event) => {
+            if (event.key === "Enter") {
+                handleAIChatSubmit();
+            }
+        });
+    });
 
     async function fetchData() {
         const productListContainer = document.getElementById("product-list-container");
@@ -296,7 +310,7 @@
             priceHTML = `<span class="new-price">RM ${product.price.toFixed(2)}</span>`;
         }
         priceContainerDiv.innerHTML = priceHTML;
-        const itemPromo = activePromotions.find(p => p.productIDs.includes(product.id));
+        const itemPromo = activePromotions.find(p => p.productIDs.includes(p.id));
         let promoDescriptionHTML = '';
         if (itemPromo && itemPromo.type === 'BUNDLE') {
             promoDescriptionHTML = `<p class="promo-description">${itemPromo.description}</p>`;
@@ -495,6 +509,7 @@
         const state = document.getElementById('customer-state').value.trim();
         const postcode = document.getElementById('customer-postcode').value.trim();
         if (!customerName || !customerPhone || !customerEmail || !address1 || !city || !state || !postcode) { alert("Please fill in all required customer and shipping information fields."); return; }
+        if (!customerPhone.startsWith('+')) { alert("Invalid phone number. Please include the country code (e.g., +60 or +65)."); return; }
         if (cart.length === 0) { alert("Your cart is empty."); return; }
         
         document.getElementById('checkout-btn').textContent = 'Proceeding to Payment Upload...';
@@ -549,8 +564,6 @@
             const result = await response.json();
 
             if (result.status === 'success') {
-                statusEl.textContent = "Proof uploaded successfully! Starting live verification...";
-                statusEl.style.color = "green";
                 sessionStorage.setItem("pendingOrder", JSON.stringify({ ...payload, invoiceId: result.invoiceId }));
                 onProofUploaded(result.invoiceId, customerName, totals.finalTotal.toFixed(2), result.proofUrl, customerPhone);
             } else { throw new Error(result.message || 'Unknown server error'); }
@@ -586,15 +599,12 @@
 
     function handleSuccessfulFinalization(receiptUrl) {
         const statusEl = document.getElementById("verification-status");
-        statusEl.innerHTML = `Order Verified!<br><br><a href="${receiptUrl}" class="btn btn-primary" style="text-decoration:none;" target="_blank">Click Here to Download Receipt</a>`;
+        document.getElementById('verification-prompt').innerHTML = `<h4 style="color:var(--accent-color);">Payment Verified!</h4>`;
+        statusEl.innerHTML = `<a href="${receiptUrl}" class="btn btn-primary" style="text-decoration:none;" target="_blank">Click Here to Download Receipt</a>`;
         statusEl.style.color = "green";
         cart = []; sessionStorage.removeItem("pendingOrder"); updateCartDisplay(); appliedDiscount = null;
         document.getElementById("discount-code-input").value = "";
         document.getElementById("discount-status").textContent = "";
-        setTimeout(() => {
-            toggleCart(true);
-            updateVerificationUI(true);
-        }, 15000); 
     }
     
     function updateVerificationUI(reset = false) {
@@ -636,7 +646,7 @@
     function showTab(tabId) { document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active')); const tab = document.getElementById(tabId); if (tab) tab.classList.add('active'); }
 
     // =================================================================
-    // SECTION B: NEW E-SHOP ON-SCREEN CHATBOT LOGIC
+    // SECTION B: NEW E-SHOP ON-SCREEN CHATBOT & VERIFICATION LOGIC
     // =================================================================
     
     function toggleChatWidget(show) {
@@ -652,15 +662,45 @@
     }
     
     function onProofUploaded(orderId, customerName, totalAmount, proofUrl, customerPhone) {
-        document.getElementById('verification-view').style.display = 'block';
-        document.getElementById('proof-upload-step').style.display = 'none';
-        document.getElementById('code-verification-step').innerHTML = `<p style="font-weight: bold; font-size: 1.2rem; color: var(--primary-color);">Kindly please wait, the payment is being verified...</p><p>You will receive a code in the chat window below once approved by the admin.</p>`;
+        document.getElementById('upload-status').innerHTML = `<p style="font-weight: bold; font-size: 1.2rem; color: var(--primary-color);">Kindly please wait, the payment is being verified by our admin...</p>`;
+        document.getElementById('upload-proof-btn').style.display = 'none'; // Hide upload button
+
+        // Start the 3-minute failover timer
+        const failoverTimer = setTimeout(() => {
+            const verificationPrompt = document.getElementById('verification-prompt');
+            verificationPrompt.innerHTML = `<strong style="color: red;">Verification is taking longer than expected.</strong> We are redirecting you to our admin on WhatsApp to complete your order manually.`;
+            const waMessage = `MANUAL ORDER VERIFICATION (TIMEOUT)\n\nOrder ID: ${orderId}\nCustomer: ${customerName}\nTotal: ${totalAmount}`;
+            const waLink = `https://wa.me/601111033154?text=${encodeURIComponent(waMessage)}`;
+            window.open(waLink, '_blank');
+        }, 3 * 60 * 1000); // 3 minutes
+
+        // Start polling for the approval status
+        pollForApproval(orderId, failoverTimer);
+    }
+
+    async function handleAIChatSubmit() {
+        const chatInput = document.getElementById('chat-input');
+        const userMessage = chatInput.value.trim();
+        if (!userMessage) return;
         
-        toggleChatWidget(true); 
-        document.getElementById('chat-body').innerHTML = '';
-        addChatMessage('bot', "Thank you for your upload. Looking for verification? I'm here to assist.");
-        const orderData = { orderId, customerName, totalAmount, proofUrl, customerPhone };
-        addChatChoiceButtons(orderData);
+        addChatMessage('user', userMessage);
+        chatInput.value = '';
+        addChatMessage('bot', "<i>The AI is thinking...</i>");
+
+        try {
+            const response = await fetch(botServerURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'askAI', data: { question: userMessage } })
+            });
+            const result = await response.json();
+            const botMessages = document.querySelectorAll('.bot-message');
+            botMessages[botMessages.length - 1].innerHTML = result.answer || "Sorry, I couldn't find an answer to that.";
+
+        } catch (error) {
+            const botMessages = document.querySelectorAll('.bot-message');
+            botMessages[botMessages.length - 1].textContent = "Sorry, the AI assistant is currently unavailable.";
+        }
     }
 
     function addChatMessage(sender, text) {
@@ -673,69 +713,8 @@
         chatBody.scrollTop = chatBody.scrollHeight;
     }
 
-    function addChatChoiceButtons(orderData) {
-        const chatBody = document.getElementById('chat-body');
-        if (!chatBody) return;
-        const buttonDiv = document.createElement('div');
-        buttonDiv.classList.add('chat-buttons');
-        buttonDiv.innerHTML = `
-            <button onclick='handleVerifyNow(${JSON.stringify(orderData)})'>Verify Now</button>
-            <button onclick='handleVerifyLater()'>I'll Verify Later</button>
-        `;
-        chatBody.appendChild(buttonDiv);
-        chatBody.scrollTop = chatBody.scrollHeight;
-    }
-
-    async function handleVerifyNow(orderData) {
-        const buttons = document.querySelector('.chat-buttons');
-        if (buttons) buttons.remove();
-        addChatMessage('user', "Verify Now");
-        addChatMessage('bot', "Great! I have sent a request to the admin for real-time approval. This may take a few moments. Please keep this page open. I will check for an update every 10 seconds.");
-        
-        try {
-            const response = await fetch(botServerURL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'startVerification', data: orderData })
-            });
-            const result = await response.json();
-            
-            if (result.success) {
-                pollForOrderStatus(orderData.orderId);
-            } else {
-                addChatMessage('bot', `Sorry, there was an error sending the approval request. To complete your order, please click the link below to talk to our support team on WhatsApp and provide your Order ID: ${orderData.orderId}.`);
-                const waMessage = `MANUAL ORDER VERIFICATION\n\nOrder ID: ${orderData.orderId}\nCustomer: ${orderData.customerName}\nTotal: ${orderData.totalAmount}`;
-                const waLink = `https://wa.me/601111033154?text=${encodeURIComponent(waMessage)}`;
-                addChatMessage('bot', `<a href="${waLink}" target="_blank" class="btn btn-primary" style="width: auto; margin-top: 10px;">Contact Support on WhatsApp</a>`);
-            }
-        } catch (error) {
-            console.error('Error starting verification:', error);
-            addChatMessage('bot', `Sorry, a connection error occurred. To complete your order, please click the link below to talk to our support team on WhatsApp and provide your Order ID: ${orderData.orderId}.`);
-            const waMessage = `MANUAL ORDER VERIFICATION (Connection Error)\n\nOrder ID: ${orderData.orderId}\nCustomer: ${orderData.customerName}\nTotal: ${orderData.totalAmount}`;
-            const waLink = `https://wa.me/601111033154?text=${encodeURIComponent(waMessage)}`;
-            addChatMessage('bot', `<a href="${waLink}" target="_blank" class="btn btn-primary" style="width: auto; margin-top: 10px;">Contact Support on WhatsApp</a>`);
-        }
-    }
-
-    function handleVerifyLater() {
-        addChatMessage('user', "I'll Verify Later");
-        addChatMessage('bot', "No problem. Your order is saved. You can complete the verification later by using our main WhatsApp bot. This window will now close.");
-        setTimeout(() => {
-            toggleChatWidget(false);
-            toggleCart(true); 
-        }, 3000);
-    }
-
-    function pollForOrderStatus(orderId) {
-        let pollingTries = 0;
-        const maxTries = 60; 
+    function pollForApproval(orderId, failoverTimer) {
         const intervalId = setInterval(async () => {
-            pollingTries++;
-            if (pollingTries > maxTries) {
-                clearInterval(intervalId);
-                addChatMessage('bot', "The approval request has timed out. Please contact support directly or use the manual verification method in the cart.");
-                return;
-            }
             try {
                 const response = await fetch(botServerURL, {
                     method: 'POST',
@@ -744,7 +723,13 @@
                 });
                 const result = await response.json();
                 if (result.success && result.status === 'Approved') {
-                    clearInterval(intervalId);
+                    clearInterval(intervalId); // Stop this polling
+                    clearTimeout(failoverTimer); // Stop the failover timer
+                    
+                    // Show the chatbot with the code
+                    toggleChatWidget(true);
+                    document.getElementById('chat-body').innerHTML = ''; // Clear chat
+                    addChatMessage('bot', `Great news! Your payment has been approved. Here is your verification code to finalize the order:`);
                     
                     const codeResult = await fetch(botServerURL, {
                         method: 'POST',
@@ -754,18 +739,19 @@
                     const codeData = await codeResult.json();
 
                     if(codeData.success){
-                        addChatMessage('bot', `Your payment has been approved! Here is your verification code: <strong>${codeData.code}</strong>`);
+                        addChatMessage('bot', `<strong>${codeData.code}</strong>`);
                         document.getElementById('verification-code').value = codeData.code;
-                        document.getElementById('code-verification-step').innerHTML = `<h4 style="color:var(--accent-color);">Payment Approved!</h4><p>Your verification code has been automatically entered below. Please click to finalize.</p>`;
-                        finalizeOrder(); // Auto-finalize
+                        document.getElementById('verification-prompt').innerHTML = `<h4 style="color:var(--accent-color);">Payment Approved!</h4><p>Your code has been delivered in the chat window. Please enter it below to finalize.</p>`;
+                        toggleChatWidget(true); // Ensure widget is visible
                     } else {
-                        addChatMessage('bot', 'Payment approved, but there was an issue getting your code. Please use the manual verification option.');
+                        document.getElementById('verification-prompt').innerHTML = `<p style="color: red;">Payment approved, but there was an issue getting your code. Please use the manual verification option.</p>`;
                     }
                 }
             } catch (error) {
                 console.error('Polling error:', error);
+                // Don't stop polling on a single network error, it might recover.
             }
-        }, 10000);
+        }, 10000); // Poll every 10 seconds
     }
 </script>
 
