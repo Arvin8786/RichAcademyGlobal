@@ -95,7 +95,7 @@
   </main>
   <footer class="footer">
       <div class="container">
-        <p>© 2025 Forever Living by Muhd Arvind Isa. All rights reserved.</p>
+        <p>© 2024 Forever Living by Muhd Arvind Isa. All rights reserved.</p>
         <div class="timestamp">Last updated: <span id="update-timestamp"></span></div>
         <section class="disclaimer"><strong>Disclaimer:</strong> This website is operated by an independent FBO and is not the official site of Forever Living Products.</section>
       </div>
@@ -184,10 +184,10 @@
         <input type="text" id="chat-input" placeholder="Ask a question...">
         <button id="chat-send-btn"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
-</div>
-<script>
+</div>=
+  <script>
     // =================================================================
-    // SECTION A: COMPLETE E-SHOP SCRIPT (VERSION 12 - FINAL)
+    // SECTION A: COMPLETE E-SHOP SCRIPT (VERSION 13 - FINAL)
     // =================================================================
     const googleScriptURL = 'https://script.google.com/macros/s/AKfycbzSEYPLuGuKKoEBUcyTuDGW3AOqtZ57Fdg28yKvhqgAXHmc42sZKcXtCPqfvt7DbtyS/exec';
     const botServerURL = 'https://whatsapp-eshop-bot.onrender.com/eshop-chat';
@@ -197,7 +197,6 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         fetchData();
-        // Add event listener for the new AI chat input
         const chatInput = document.getElementById('chat-input');
         const chatSendBtn = document.getElementById('chat-send-btn');
         chatSendBtn.addEventListener('click', handleAIChatSubmit);
@@ -233,7 +232,7 @@
                 productListContainer.innerHTML = `<p style="text-align: center; color: red; font-weight: bold; width: 100%; padding: 40px 0;"><i class="fa-solid fa-triangle-exclamation"></i> Error loading store.<br>Could not retrieve catalog. Please try again later.</p>`;
             }
         }
-        document.getElementById('update-timestamp').textContent = `${new Date().toLocaleDateString('en-GB')} (v12.0)`;
+        document.getElementById('update-timestamp').textContent = `${new Date().toLocaleDateString('en-GB')} (v13.0)`;
         const pendingOrder = JSON.parse(sessionStorage.getItem("pendingOrder"));
         if (pendingOrder) { 
             toggleCart();
@@ -310,7 +309,7 @@
             priceHTML = `<span class="new-price">RM ${product.price.toFixed(2)}</span>`;
         }
         priceContainerDiv.innerHTML = priceHTML;
-        const itemPromo = activePromotions.find(p => p.productIDs.includes(p.id));
+        const itemPromo = activePromotions.find(p => p.productIDs.includes(product.id));
         let promoDescriptionHTML = '';
         if (itemPromo && itemPromo.type === 'BUNDLE') {
             promoDescriptionHTML = `<p class="promo-description">${itemPromo.description}</p>`;
@@ -348,7 +347,7 @@
                 id: productToAdd.id,
                 name: productToAdd.name,
                 basePrice: productMaster.originalPrice || productMaster.price,
-                price: productToAdd.price, // Captures the promo display price
+                price: productToAdd.price,
                 quantity: 1
             });
         }
@@ -646,7 +645,7 @@
     function showTab(tabId) { document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active')); const tab = document.getElementById(tabId); if (tab) tab.classList.add('active'); }
 
     // =================================================================
-    // SECTION B: NEW E-SHOP ON-SCREEN CHATBOT & VERIFICATION LOGIC
+    // SECTION B: E-SHOP ON-SCREEN CHATBOT & VERIFICATION LOGIC (FINAL)
     // =================================================================
     
     function toggleChatWidget(show) {
@@ -662,22 +661,42 @@
     }
     
     function onProofUploaded(orderId, customerName, totalAmount, proofUrl, customerPhone) {
-        document.getElementById('upload-status').innerHTML = `<p style="font-weight: bold; font-size: 1.2rem; color: var(--primary-color);">Kindly please wait, the payment is being verified by our admin...</p>`;
-        document.getElementById('upload-proof-btn').style.display = 'none'; // Hide upload button
+        document.getElementById('upload-status').innerHTML = `<p style="font-weight: bold; font-size: 1.2rem; color: var(--primary-color);">Kindly please wait, the payment is being verified by our admin.</p>`;
+        document.getElementById('upload-proof-btn').style.display = 'none';
 
-        // Start the 3-minute failover timer
         const failoverTimer = setTimeout(() => {
             const verificationPrompt = document.getElementById('verification-prompt');
             verificationPrompt.innerHTML = `<strong style="color: red;">Verification is taking longer than expected.</strong> We are redirecting you to our admin on WhatsApp to complete your order manually.`;
-            const waMessage = `MANUAL ORDER VERIFICATION (TIMEOUT)\n\nOrder ID: ${orderId}\nCustomer: ${customerName}\nTotal: ${totalAmount}`;
+            const waMessage = `MANUAL ORDER VERIFICATION (TIMEOUT)\n\nOrder Ref: ${orderId}\nCustomer: ${customerName}\nTotal: ${totalAmount}`;
             const waLink = `https://wa.me/601111033154?text=${encodeURIComponent(waMessage)}`;
             window.open(waLink, '_blank');
         }, 3 * 60 * 1000); // 3 minutes
 
-        // Start polling for the approval status
-        pollForApproval(orderId, failoverTimer);
+        startAdminNotification(orderId, customerName, totalAmount, proofUrl, customerPhone, failoverTimer);
     }
 
+    async function startAdminNotification(orderId, customerName, totalAmount, proofUrl, customerPhone, failoverTimer) {
+        try {
+            const response = await fetch(botServerURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'startVerification', data: { orderId, customerName, totalAmount, proofUrl, customerPhone } })
+            });
+            const result = await response.json();
+            if (!result.success) {
+                throw new Error(result.message || 'Bot server failed to send notification.');
+            }
+        } catch (error) {
+            console.error('FAILOVER TRIGGERED:', error);
+            clearTimeout(failoverTimer); // Stop the timer because we are failing over immediately
+            const verificationPrompt = document.getElementById('verification-prompt');
+            verificationPrompt.innerHTML = `<strong style="color: red;">Could not connect to the verification bot.</strong> We are redirecting you to our admin on WhatsApp to complete your order manually.`;
+            const waMessage = `MANUAL ORDER VERIFICATION (BOT FAILOVER)\n\nOrder Ref: ${orderId}\nCustomer: ${customerName}\nTotal: ${totalAmount}`;
+            const waLink = `https://wa.me/601111033154?text=${encodeURIComponent(waMessage)}`;
+            window.open(waLink, '_blank');
+        }
+    }
+    
     async function handleAIChatSubmit() {
         const chatInput = document.getElementById('chat-input');
         const userMessage = chatInput.value.trim();
@@ -713,46 +732,6 @@
         chatBody.scrollTop = chatBody.scrollHeight;
     }
 
-    function pollForApproval(orderId, failoverTimer) {
-        const intervalId = setInterval(async () => {
-            try {
-                const response = await fetch(botServerURL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'pollOrderStatus', data: { orderId: orderId } })
-                });
-                const result = await response.json();
-                if (result.success && result.status === 'Approved') {
-                    clearInterval(intervalId); // Stop this polling
-                    clearTimeout(failoverTimer); // Stop the failover timer
-                    
-                    // Show the chatbot with the code
-                    toggleChatWidget(true);
-                    document.getElementById('chat-body').innerHTML = ''; // Clear chat
-                    addChatMessage('bot', `Great news! Your payment has been approved. Here is your verification code to finalize the order:`);
-                    
-                    const codeResult = await fetch(botServerURL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action: 'getVerificationCode', data: { orderId: orderId } })
-                    });
-                    const codeData = await codeResult.json();
-
-                    if(codeData.success){
-                        addChatMessage('bot', `<strong>${codeData.code}</strong>`);
-                        document.getElementById('verification-code').value = codeData.code;
-                        document.getElementById('verification-prompt').innerHTML = `<h4 style="color:var(--accent-color);">Payment Approved!</h4><p>Your code has been delivered in the chat window. Please enter it below to finalize.</p>`;
-                        toggleChatWidget(true); // Ensure widget is visible
-                    } else {
-                        document.getElementById('verification-prompt').innerHTML = `<p style="color: red;">Payment approved, but there was an issue getting your code. Please use the manual verification option.</p>`;
-                    }
-                }
-            } catch (error) {
-                console.error('Polling error:', error);
-                // Don't stop polling on a single network error, it might recover.
-            }
-        }, 10000); // Poll every 10 seconds
-    }
 </script>
 
 </body>
