@@ -221,8 +221,9 @@
     </div>
 </div>
 <script>
+    <script>
     // =================================================================
-    // SECTION A: COMPLETE E-SHOP SCRIPT (VERSION 14 - FINAL)
+    // SECTION A: COMPLETE E-SHOP SCRIPT (VERSION 15 - FINAL FIX)
     // =================================================================
     const googleScriptURL = 'https://script.google.com/macros/s/AKfycbwWYywFNli-Rz-iGlYyoh_5hS_3X1T-1XoKLuibdLS0OF32dvHcjObo6x49QCLBv0DW/exec';
     const botServerURL = 'https://whatsapp-eshop-bot.onrender.com/eshop-chat';
@@ -269,7 +270,320 @@
                 productListContainer.innerHTML = `<p style="text-align: center; color: red; font-weight: bold; width: 100%; padding: 40px 0;"><i class="fa-solid fa-triangle-exclamation"></i> Error loading store.<br>Could not retrieve catalog. Please try again later.</p>`;
             }
         }
-        document.getElementById('update-timestamp').textContent = `${new Date().toLocaleDateString('en-GB')} (v14.0)`;
+        document.getElementById('update-timestamp').textContent = `${new Date().toLocaleDateString('en-GB')} (v15.0)`;
+        const pendingOrder = JSON.parse(sessionStorage.getItem("pendingOrder"));
+        if (pendingOrder) { 
+            toggleCart();
+            document.getElementById('cart-view').style.display = 'none';
+            document.getElementById('verification-view').style.display = 'block';
+            updateVerificationUI();
+        } 
+        else { showTab('products'); }
+    }
+
+    function initializeUI(marketingSettings) {
+        const body = document.body;
+        body.removeAttribute("data-festival");
+        if (activeFestival && activeFestival.theme) {
+            const themeMap = { "CNY": "cny", "NationalDay": "national-day", "MalaysiaDay": "malaysia-day", "MooncakeFestival": "mid-autumn", "Thaipusam": "thaipusam", "HariRaya": "hari-raya", "Deepavali": "deepavali", "Christmas": "christmas", "GrandOpening": "grand-opening", "NewYear": "new-year"};
+            const festiveAttr = themeMap[activeFestival.theme];
+            if(festiveAttr) { body.setAttribute("data-festival", festiveAttr); }
+            document.getElementById('hero-title').innerHTML = `<i class="fa-solid fa-gift"></i> ${activeFestival.name}`;
+            document.getElementById('hero-subtitle').textContent = "Enjoy special festive offers!";
+        } else {
+            document.getElementById('hero-title').innerHTML = `<i class="fa-solid fa-store"></i> Welcome to Our Store`;
+            document.getElementById('hero-subtitle').textContent = "Enjoy high-quality wellness products for a healthier lifestyle.";
+        }
+        const banner = document.getElementById('promo-running-banner');
+        const bannerTextEl = document.getElementById('promo-banner-text');
+        if (marketingSettings.BannerText) {
+            bannerTextEl.textContent = `🔥 ${marketingSettings.BannerText} 🔥`;
+            banner.style.backgroundColor = 'var(--primary-color)';
+            banner.style.color = 'white';
+            banner.style.display = 'block';
+        } else if (activePromotions.length > 0) {
+            const promoNames = activePromotions.map(p => p.description).join(' | ');
+            bannerTextEl.textContent = `✨ ONGOING PROMOTIONS: ${promoNames} ✨`;
+            banner.style.backgroundColor = 'var(--accent-color)';
+            banner.style.color = 'white';
+            banner.style.display = 'block';
+        }
+        renderProducts();
+    }
+    
+    function renderProducts(){
+        const productListContainer = document.getElementById("product-list-container"); if (!productListContainer) return;
+        if (products.length === 0) { productListContainer.innerHTML = `<p style="text-align: center; width: 100%;">No products found in the catalog.</p>`; return; }
+        let html = ""; let displayedProductIds = new Set();
+        if (activePromotions && activePromotions.length > 0) {
+            activePromotions.forEach(promo => {
+                const productsInPromo = products.filter(p => promo.productIDs.includes(p.id));
+                if (productsInPromo.length > 0) {
+                    html += `<section class="promo-section"><h2>${promo.description}</h2><div class="product-list">`;
+                    productsInPromo.forEach(product => { 
+                        html += renderSingleProduct(product); 
+                        displayedProductIds.add(product.id);
+                    });
+                    html += `</div></section>`;
+                }
+            });
+        }
+        const remainingProducts = products.filter(p => !displayedProductIds.has(p.id));
+        if (remainingProducts.length > 0) {
+            html += `<section class="promo-section"><h2>All Products</h2><div class="product-list">`;
+            remainingProducts.forEach(product => { html += renderSingleProduct(product); });
+            html += `</div></section>`;
+        }
+        productListContainer.innerHTML = html;
+    }
+
+    function renderSingleProduct(product) {
+        let priceHTML = '';
+        const priceContainerDiv = document.createElement('div');
+        priceContainerDiv.classList.add('price-container');
+        if (product.originalPrice && product.originalPrice > product.price) {
+            priceHTML = `<span class="original-price">RM ${product.originalPrice.toFixed(2)}</span><span class="new-price promo-price">RM ${product.price.toFixed(2)}</span>`;
+        } else {
+            priceHTML = `<span class="new-price">RM ${product.price.toFixed(2)}</span>`;
+        }
+        priceContainerDiv.innerHTML = priceHTML;
+        const itemPromo = activePromotions.find(p => p.productIDs.includes(p.id));
+        let promoDescriptionHTML = '';
+        if (itemPromo && itemPromo.type === 'BUNDLE') {
+            promoDescriptionHTML = `<p class="promo-description">${itemPromo.description}</p>`;
+        }
+        return `
+            <div class="product ${itemPromo ? 'promo-highlight' : ''}">
+                <div class="halal-badge">HALAL</div>
+                ${itemPromo ? '<div class="featured-badge">On Offer!</div>' : ''}
+                <div class="product-image-container">
+                    <img src="${product.image || 'https://via.placeholder.com/200'}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/200x200?text=Image+Not+Found'">
+                </div>
+                <div class="product-info">
+                    <h3>${product.name}</h3>
+                    <div class="price-section">${priceContainerDiv.outerHTML}</div>
+                    ${promoDescriptionHTML}
+                    <div class="benefits"><strong>Benefits:</strong> ${product.benefits || ''}</div>
+                    <div class="consumption"><strong>Usage:</strong> ${product.consumption || ''}</div>
+                    <div class="product-actions">
+                        <button class="btn btn-primary" onclick="addToCart(${product.id})"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function addToCart(productId) {
+        const productToAdd = products.find(p => p.id === productId);
+        if (!productToAdd) return;
+        const existingItemInCart = cart.find(item => item.id === productId);
+        if (existingItemInCart) {
+            existingItemInCart.quantity++;
+        } else {
+            const productMaster = products.find(p => p.id === productId);
+            cart.push({
+                id: productToAdd.id,
+                name: productToAdd.name,
+                basePrice: productMaster.originalPrice || productMaster.price,
+                price: productToAdd.price,
+                quantity: 1
+            });
+        }
+        updateCartDisplay();
+    }
+    
+    function increaseQuantity(productId) { const item = cart.find(i => i.id === productId); if (item) { item.quantity++; } updateCartDisplay(); }
+    function decreaseQuantity(productId) { const item = cart.find(i => i.id === productId); if (item) { item.quantity--; if (item.quantity <= 0) { removeItemFromCart(productId); } else { updateCartDisplay(); } } }
+    function removeItemFromCart(productId) { cart = cart.filter(item => item.id !== productId); updateCartDisplay(); }
+    function updateCartCount() { document.getElementById('cart-count').textContent = cart.reduce((total, item) => total + item.quantity, 0); }
+
+    function applyDiscount() {
+        const input = document.getElementById("discount-code-input"); const statusEl = document.getElementById("discount-status"); const code = input.value.trim().toUpperCase();
+        if (!code) { statusEl.textContent = "Please enter a code."; statusEl.style.color = "orange"; return; }
+        const discountData = availableDiscountCodes[code];
+        if (discountData) { appliedDiscount = { code: code, ...discountData }; statusEl.textContent = `Code "${code}" applied successfully!`; statusEl.style.color = "green"; } 
+        else { appliedDiscount = null; statusEl.textContent = "Invalid or expired discount code."; statusEl.style.color = "red"; }
+        updateCartDisplay();
+    }
+
+    function calculateCartTotals() {
+        let originalSubtotal = 0;
+        let finalSubtotal = 0;
+        let tempCart = JSON.parse(JSON.stringify(cart));
+        
+        tempCart.forEach(item => {
+            const productInfo = products.find(p => p.id === item.id);
+            item.basePrice = productInfo.originalPrice || productInfo.price;
+            originalSubtotal += item.basePrice * item.quantity;
+        });
+
+        const allApplicablePromos = activePromotions.filter(promo => tempCart.some(item => promo.productIDs.includes(item.id)));
+        const bundlePromos = allApplicablePromos.filter(p => p.type === 'BUNDLE' && p.bundle);
+        const itemPromos = allApplicablePromos.filter(p => p.type === 'PERCENT' || p.type === 'FIXED');
+
+        bundlePromos.forEach(promo => {
+            const eligibleItems = tempCart.filter(item => promo.productIDs.includes(item.id));
+            const totalEligibleQuantity = eligibleItems.reduce((sum, item) => sum + item.quantity, 0);
+            const numberOfBundles = Math.floor(totalEligibleQuantity / promo.bundle.quantity);
+
+            if (numberOfBundles > 0) {
+                finalSubtotal += numberOfBundles * promo.bundle.price;
+                let itemsToDiscount = numberOfBundles * promo.bundle.quantity;
+                eligibleItems.sort((a, b) => a.basePrice - b.basePrice);
+                for (const item of eligibleItems) {
+                    const discountable = Math.min(item.quantity, itemsToDiscount);
+                    item.quantity -= discountable;
+                    itemsToDiscount -= discountable;
+                }
+            }
+        });
+
+        tempCart.forEach(item => {
+            if (item.quantity > 0) {
+                const itemPromo = itemPromos.find(p => p.productIDs.includes(item.id));
+                let unitPrice = item.basePrice;
+                if (itemPromo) {
+                    if (itemPromo.type === 'FIXED') { unitPrice = itemPromo.value; } 
+                    else if (itemPromo.type === 'PERCENT') { unitPrice = unitPrice * (1 - parseFloat(itemPromo.value) / 100); }
+                }
+                finalSubtotal += item.quantity * unitPrice;
+            }
+        });
+
+        let totalDiscount = originalSubtotal - finalSubtotal;
+        if (appliedDiscount) {
+            let discountFromCode = 0;
+            if (appliedDiscount.type.toLowerCase() === 'fixed') { discountFromCode = Math.min(finalSubtotal, parseFloat(appliedDiscount.value)); }
+            else if (appliedDiscount.type.toLowerCase() === 'percentage') { discountFromCode = finalSubtotal * (parseFloat(appliedDiscount.value) / 100); }
+            finalSubtotal -= discountFromCode;
+            totalDiscount += discountFromCode;
+        }
+        
+        const shipping = calculateShipping(cart, finalSubtotal);
+        const finalTotal = finalSubtotal + shipping.fee;
+        const totalPoints = Math.floor(finalSubtotal);
+        const appliedPromoDescriptions = allApplicablePromos.map(p => p.description);
+        return { originalSubtotal, totalDiscount, finalSubtotal, shipping, finalTotal, totalPoints, appliedPromoDescriptions: [...new Set(appliedPromoDescriptions)] };
+    }
+    
+    function updateCartDisplay() {
+        const cartItemsEl = document.getElementById("cart-items");
+        const subtotalEl = document.getElementById("cart-subtotal");
+        const discountLineEl = document.getElementById("discount-line");
+        const discountEl = document.getElementById("cart-discount");
+        const shippingEl = document.getElementById("cart-shipping");
+        const totalEl = document.getElementById("cart-total");
+        const pointsEl = document.getElementById("points-earned-display");
+        const savingsLineEl = document.getElementById("savings-line");
+        const savingsEl = document.getElementById("cart-savings");
+        updateCartCount();
+        const oldPromoList = document.getElementById('applied-promos-list-container');
+        if (oldPromoList) oldPromoList.remove();
+        if (cart.length === 0) {
+            cartItemsEl.innerHTML = "<p>Your cart is currently empty.</p>";
+            subtotalEl.textContent = "RM 0.00"; shippingEl.textContent = "RM 0.00"; totalEl.textContent = "RM 0.00";
+            pointsEl.innerHTML = ""; discountLineEl.style.display = "none"; savingsLineEl.style.display = "none";
+            return;
+        }
+        const { originalSubtotal, totalDiscount, finalTotal, shipping, totalPoints, appliedPromoDescriptions } = calculateCartTotals();
+        let itemsHtml = "";
+        cart.forEach(item => {
+            itemsHtml += `<div class="cart-item"><div class="cart-item-details"><strong>${item.name}</strong><div class="quantity-controls"><button class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button><span class="quantity-display">${item.quantity}</span><button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button></div></div><div style="text-align:right"><div class="final-cart-price">RM ${item.basePrice.toFixed(2)}</div></div><button class="remove-item-btn" onclick="removeItemFromCart(${item.id})"><i class="fa-solid fa-trash-can"></i></button></div>`;
+        });
+        cartItemsEl.innerHTML = itemsHtml;
+        subtotalEl.textContent = `RM ${originalSubtotal.toFixed(2)}`;
+        if (totalDiscount > 0.01) {
+            discountEl.textContent = `- RM ${totalDiscount.toFixed(2)}`;
+            discountLineEl.style.display = "flex";
+            savingsEl.textContent = `RM ${totalDiscount.toFixed(2)}`;
+            savingsLineEl.style.display = "flex";
+        } else {
+            discountLineEl.style.display = "none";
+            savingsLineEl.style.display = "none";
+        }
+        if (appliedPromoDescriptions.length > 0) {
+            let promoListHTML = appliedPromoDescriptions.map(desc => `<li><small>${desc}</small></li>`).join('');
+            const promoListContainerHTML = `<div class="summary-line" id="applied-promos-list-container" style="font-size: 0.9em; color: #555;"><span>Applied Promotions:</span><ul style="padding-left: 15px; margin: 0; text-align: right; list-style-type: none;">${promoListHTML}</ul></div>`;
+            shippingEl.parentElement.insertAdjacentHTML('beforebegin', promoListContainerHTML);
+        }
+        shippingEl.innerHTML = shipping.message === "FREE" ? `<span style="color:var(--accent-color);font-weight:700"><i class="fa-solid fa-truck-fast"></i> FREE! <small>(${shipping.reason || ''})</small></span>` : `RM ${shipping.fee.toFixed(2)}`;
+        totalEl.textContent = `RM ${finalTotal.toFixed(2)}`;
+        pointsEl.innerHTML = `<div class="points-earned"><i class="fa-solid fa-star"></i> Points to be Earned: ${totalPoints}</div>`;
+    }
+
+    function calculateShipping(currentCart, totalAfterDiscounts, promoShippingRuleId) {
+        if (currentCart.length === 0) return { fee: 0, message: "RM 0.00" };
+        let applicableRule = null;
+        if (promoShippingRuleId && shippingRules[promoShippingRuleId]) {
+            const promoRule = shippingRules[promoShippingRuleId];
+            if (totalAfterDiscounts >= promoRule.minSpend) { applicableRule = { ...promoRule, reason: "Promotion Applied" }; }
+        }
+        if (!applicableRule && appliedDiscount && appliedDiscount.type === 'FreeShipping') { applicableRule = { type: 'Free', charge: 0, reason: "Discount Code" }; }
+        if (!applicableRule) {
+            const defaultRules = Object.values(shippingRules).filter(rule => rule.isDefault);
+            for (const rule of defaultRules) {
+                if (totalAfterDiscounts >= rule.minSpend && totalAfterDiscounts <= rule.maxSpend) {
+                    applicableRule = { ...rule, reason: `Order total is RM ${totalAfterDiscounts.toFixed(2)}`};
+                    break;
+                }
+            }
+        }
+        if (!applicableRule) return { fee: 14, message: "RM 14.00 (Default)" };
+        const charge = parseFloat(applicableRule.charge) || 0;
+        let message = `RM ${charge.toFixed(2)}`;
+        if (charge === 0) message = "FREE";
+        return { fee: charge, message: message, reason: applicableRule.reason };
+    }
+  <script>
+    // =================================================================
+    // SECTION A: COMPLETE E-SHOP SCRIPT (VERSION 15 - FINAL FIX)
+    // =================================================================
+    const googleScriptURL = 'https://script.google.com/macros/s/AKfycbylw334qZ_jGs2W6ZzFso7AszWkQrDlMbTlM6kd_LejBZlNDQc2sWHdonVlnJ8rT3xt/exec';
+    const botServerURL = 'https://whatsapp-eshop-bot.onrender.com/eshop-chat';
+    
+    let products = []; let cart = []; let activeFestival = null; let activePromotions = [];
+    let shippingRules = {}; let availableDiscountCodes = {}; let appliedDiscount = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchData();
+        const chatInput = document.getElementById('chat-input');
+        const chatSendBtn = document.getElementById('chat-send-btn');
+        if (chatSendBtn) {
+            chatSendBtn.addEventListener('click', handleAIChatSubmit);
+            chatInput.addEventListener('keyup', (event) => {
+                if (event.key === "Enter") {
+                    handleAIChatSubmit();
+                }
+            });
+        }
+    });
+
+    async function fetchData() {
+        const productListContainer = document.getElementById("product-list-container");
+        try {
+            const response = await fetch(googleScriptURL);
+            if (!response.ok) throw new Error(`Network response error: ${response.statusText}`);
+            const data = await response.json();
+            if (data.status !== 'success') throw new Error(data.message || 'Failed to parse data.');
+            const marketingSettings = data.marketing || {};
+            if (marketingSettings.MaintenanceMode === true) {
+                document.getElementById('maintenance-message').textContent = marketingSettings.MaintenanceMessage || "We'll be back shortly!";
+                document.getElementById('maintenance-overlay').style.display = 'flex';
+                return;
+            }
+            products = data.products || [];
+            activeFestival = data.activeFestival || null;
+            activePromotions = data.activePromotions || [];
+            shippingRules = data.shippingRules || {};
+            availableDiscountCodes = data.discountCodes || {};
+            initializeUI(marketingSettings);
+        } catch (error) {
+            console.error("Error fetching store data:", error);
+            if (productListContainer) {
+                productListContainer.innerHTML = `<p style="text-align: center; color: red; font-weight: bold; width: 100%; padding: 40px 0;"><i class="fa-solid fa-triangle-exclamation"></i> Error loading store.<br>Could not retrieve catalog. Please try again later.</p>`;
+            }
+        }
+        document.getElementById('update-timestamp').textContent = `${new Date().toLocaleDateString('en-GB')} (v15.0)`;
         const pendingOrder = JSON.parse(sessionStorage.getItem("pendingOrder"));
         if (pendingOrder) { 
             toggleCart();
