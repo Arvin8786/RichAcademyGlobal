@@ -137,19 +137,49 @@
                 <span>I consent to the collection of my personal data for transaction purposes. You can request data deletion at any time via <a href="https://wa.me/601111033154?text=Hi,%20I%20would%20like%20to%20request%20my%20personal%20data%20to%20be%20deleted." target="_blank">WhatsApp</a> or <a href="mailto:cs.foreverlivingbymuhdarvindisa@gmail.com?subject=Request%20for%20Data%20Deletion">Email</a>.</span>
             </label>
         </div>
-        <button class="btn btn-primary checkout-btn" id="checkout-btn" onclick="initiateCheckout()" disabled>Proceed to Payment Upload</button>
+        <button class="btn btn-primary checkout-btn" id="checkout-btn" onclick="initiateCheckout()" disabled>Proceed to Payment</button>
       </div>
       <div id="verification-view" style="display: none;">
         <h2>Order Verification</h2>
         <div id="proof-upload-step" class="verification-step active">
-            <h4><i class="fa-solid fa-arrow-up-from-bracket"></i> Step 1: Upload Payment Proof</h4>
-            <p style="font-size: 0.9rem; color: #555;">Upload a screenshot of your transaction receipt.</p>
-            <input type="file" id="payment-proof-upload" accept="image/*">
-            <button class="btn btn-primary" id="upload-proof-btn" onclick="uploadProof()">Upload and Start Verification</button>
-            <p id="upload-status"></p>
+            <div id="payment-options-view">
+                <h3>Payment Options</h3>
+                <div class="payment-options">
+                    <div class="payment-option">
+                        <h4>Option 1: Online Banking / Bank Transfer</h4>
+                        <p>Bank: <strong>Maybank</strong></p>
+                        <p>Account Name: <strong>Arvinderan A/L M Ganeson</strong></p>
+                        <p>Account Number: <strong>102037147223</strong></p>
+                    </div>
+                    <div class="payment-option">
+                        <h4>Option 2: Touch 'n Go eWallet</h4>
+                        <p>Please scan the QR code below with your TNG app.</p>
+                        <img src="https://i.imgur.com/46ddVhc.png" alt="TNG QR Code">
+                    </div>
+                </div>
+                <div id="payment-choice-buttons" style="margin-top: 20px;">
+                    <button class="btn btn-primary" onclick="proceedToUpload()">I Have Made My Payment</button>
+                    <button class="btn btn-secondary" onclick="payLater()">I Will Pay Later</button>
+                </div>
+                <p style="text-align: center; margin-top: 15px; font-size: 0.8rem;">In the future, we will add automated payment options to skip manual verification. We appreciate your support and cooperation!</p>
+            </div>
+            <div id="upload-section" style="display: none;">
+                 <h4><i class="fa-solid fa-arrow-up-from-bracket"></i> Upload Payment Proof</h4>
+                <div class="payment-method-selection" style="margin: 15px 0;">
+                    <label for="payment-method">Payment Method Used:</label>
+                    <select id="payment-method" style="padding: 8px; border-radius: 5px;">
+                        <option value="" disabled selected>Please select...</option>
+                        <option value="Bank Transfer">Bank Transfer</option>
+                        <option value="TNG eWallet">TNG eWallet</option>
+                    </select>
+                </div>
+                <input type="file" id="payment-proof-upload" accept="image/*">
+                <button class="btn btn-primary" id="upload-proof-btn" onclick="uploadProof()">Upload and Submit for Verification</button>
+                <p id="upload-status"></p>
+            </div>
         </div>
         <div id="code-verification-step" class="verification-step">
-            <h4><i class="fa-solid fa-key"></i> Step 2: Finalize with Code</h4>
+            <h4><i class="fa-solid fa-key"></i> Finalize with Code</h4>
             <p id="verification-prompt">Please wait while our admin reviews your payment. Once approved, you will receive a verification code via WhatsApp.</p>
             <input type="text" id="verification-code" placeholder="Enter Verification Code">
             <button class="btn btn-primary" id="finalize-order-btn" onclick="finalizeOrder()">Finalize Order & Get Receipt</button>
@@ -184,10 +214,10 @@
         <input type="text" id="chat-input" placeholder="Ask a question...">
         <button id="chat-send-btn"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
-</div>=
-  <script>
+</div>
+<script>
     // =================================================================
-    // SECTION A: COMPLETE E-SHOP SCRIPT (VERSION 13 - FINAL)
+    // SECTION A: COMPLETE E-SHOP SCRIPT (VERSION 14 - FINAL)
     // =================================================================
     const googleScriptURL = 'https://script.google.com/macros/s/AKfycbzSEYPLuGuKKoEBUcyTuDGW3AOqtZ57Fdg28yKvhqgAXHmc42sZKcXtCPqfvt7DbtyS/exec';
     const botServerURL = 'https://whatsapp-eshop-bot.onrender.com/eshop-chat';
@@ -232,7 +262,7 @@
                 productListContainer.innerHTML = `<p style="text-align: center; color: red; font-weight: bold; width: 100%; padding: 40px 0;"><i class="fa-solid fa-triangle-exclamation"></i> Error loading store.<br>Could not retrieve catalog. Please try again later.</p>`;
             }
         }
-        document.getElementById('update-timestamp').textContent = `${new Date().toLocaleDateString('en-GB')} (v13.0)`;
+        document.getElementById('update-timestamp').textContent = `${new Date().toLocaleDateString('en-GB')} (v14.0)`;
         const pendingOrder = JSON.parse(sessionStorage.getItem("pendingOrder"));
         if (pendingOrder) { 
             toggleCart();
@@ -309,7 +339,7 @@
             priceHTML = `<span class="new-price">RM ${product.price.toFixed(2)}</span>`;
         }
         priceContainerDiv.innerHTML = priceHTML;
-        const itemPromo = activePromotions.find(p => p.productIDs.includes(product.id));
+        const itemPromo = activePromotions.find(p => p.productIDs.includes(p.id));
         let promoDescriptionHTML = '';
         if (itemPromo && itemPromo.type === 'BUNDLE') {
             promoDescriptionHTML = `<p class="promo-description">${itemPromo.description}</p>`;
@@ -511,20 +541,32 @@
         if (!customerPhone.startsWith('+')) { alert("Invalid phone number. Please include the country code (e.g., +60 or +65)."); return; }
         if (cart.length === 0) { alert("Your cart is empty."); return; }
         
-        document.getElementById('checkout-btn').textContent = 'Proceeding to Payment Upload...';
-        document.getElementById('checkout-btn').disabled = true;
-
+        document.getElementById('checkout-btn').style.display = 'none';
+        document.getElementById('customer-info-form').style.display = 'none';
+        document.getElementById('consent-form').style.display = 'none';
+        document.getElementById('payment-options-view').style.display = 'block';
+    }
+    
+    function proceedToUpload() {
+        document.getElementById('payment-options-view').style.display = 'none';
         document.getElementById('cart-view').style.display = 'none';
         document.getElementById('verification-view').style.display = 'block';
+    }
+
+    function payLater() {
+        alert("Your order has been saved as 'Pending Payment'. You can complete your order later via our WhatsApp bot's 'My Account' section.");
+        toggleCart(true);
     }
     
     async function uploadProof() {
         const fileInput = document.getElementById('payment-proof-upload');
         const statusEl = document.getElementById('upload-status');
         const uploadBtn = document.getElementById('upload-proof-btn');
+        const paymentMethod = document.getElementById('payment-method').value;
         const file = fileInput.files[0];
 
         if (!file) { statusEl.textContent = "Please select a file to upload."; statusEl.style.color = "red"; return; }
+        if (!paymentMethod) { statusEl.textContent = "Please select the payment method you used."; statusEl.style.color = "red"; return; }
         
         uploadBtn.disabled = true;
         statusEl.textContent = "Uploading...";
@@ -663,14 +705,15 @@
     function onProofUploaded(orderId, customerName, totalAmount, proofUrl, customerPhone) {
         document.getElementById('upload-status').innerHTML = `<p style="font-weight: bold; font-size: 1.2rem; color: var(--primary-color);">Kindly please wait, the payment is being verified by our admin.</p>`;
         document.getElementById('upload-proof-btn').style.display = 'none';
+        document.getElementById('payment-method-selection').style.display = 'none';
+        document.getElementById('payment-proof-upload').style.display = 'none';
 
         const failoverTimer = setTimeout(() => {
-            const verificationPrompt = document.getElementById('verification-prompt');
-            verificationPrompt.innerHTML = `<strong style="color: red;">Verification is taking longer than expected.</strong> We are redirecting you to our admin on WhatsApp to complete your order manually.`;
+            document.getElementById('upload-status').innerHTML = `<p style="color: red; font-weight: bold;">Verification is taking longer than expected.</p><p>We are redirecting you to our admin on WhatsApp to complete your order manually.</p>`;
             const waMessage = `MANUAL ORDER VERIFICATION (TIMEOUT)\n\nOrder Ref: ${orderId}\nCustomer: ${customerName}\nTotal: ${totalAmount}`;
             const waLink = `https://wa.me/601111033154?text=${encodeURIComponent(waMessage)}`;
             window.open(waLink, '_blank');
-        }, 3 * 60 * 1000); // 3 minutes
+        }, 3 * 60 * 1000);
 
         startAdminNotification(orderId, customerName, totalAmount, proofUrl, customerPhone, failoverTimer);
     }
@@ -682,15 +725,17 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action: 'startVerification', data: { orderId, customerName, totalAmount, proofUrl, customerPhone } })
             });
+            if (!response.ok) throw new Error(`Server responded with status: ${response.status}`);
             const result = await response.json();
             if (!result.success) {
                 throw new Error(result.message || 'Bot server failed to send notification.');
             }
+            // If successful, the polling will begin for the user.
+            pollForApproval(orderId, failoverTimer);
         } catch (error) {
             console.error('FAILOVER TRIGGERED:', error);
-            clearTimeout(failoverTimer); // Stop the timer because we are failing over immediately
-            const verificationPrompt = document.getElementById('verification-prompt');
-            verificationPrompt.innerHTML = `<strong style="color: red;">Could not connect to the verification bot.</strong> We are redirecting you to our admin on WhatsApp to complete your order manually.`;
+            clearTimeout(failoverTimer);
+            document.getElementById('upload-status').innerHTML = `<p style="color: red; font-weight: bold;">Could not connect to the verification bot.</p><p>We are redirecting you to our admin on WhatsApp to complete your order manually.</p>`;
             const waMessage = `MANUAL ORDER VERIFICATION (BOT FAILOVER)\n\nOrder Ref: ${orderId}\nCustomer: ${customerName}\nTotal: ${totalAmount}`;
             const waLink = `https://wa.me/601111033154?text=${encodeURIComponent(waMessage)}`;
             window.open(waLink, '_blank');
@@ -698,28 +743,13 @@
     }
     
     async function handleAIChatSubmit() {
+        // This is a placeholder for the future AI integration
         const chatInput = document.getElementById('chat-input');
         const userMessage = chatInput.value.trim();
         if (!userMessage) return;
-        
         addChatMessage('user', userMessage);
         chatInput.value = '';
-        addChatMessage('bot', "<i>The AI is thinking...</i>");
-
-        try {
-            const response = await fetch(botServerURL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'askAI', data: { question: userMessage } })
-            });
-            const result = await response.json();
-            const botMessages = document.querySelectorAll('.bot-message');
-            botMessages[botMessages.length - 1].innerHTML = result.answer || "Sorry, I couldn't find an answer to that.";
-
-        } catch (error) {
-            const botMessages = document.querySelectorAll('.bot-message');
-            botMessages[botMessages.length - 1].textContent = "Sorry, the AI assistant is currently unavailable.";
-        }
+        addChatMessage('bot', "I am an AI assistant in training. This feature will be available soon!");
     }
 
     function addChatMessage(sender, text) {
@@ -731,7 +761,31 @@
         chatBody.appendChild(messageDiv);
         chatBody.scrollTop = chatBody.scrollHeight;
     }
-
+    
+    // This is a new function for the simplified flow. It only polls for approval.
+    function pollForApproval(orderId, failoverTimer) {
+        const intervalId = setInterval(async () => {
+            try {
+                const response = await fetch(botServerURL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'pollOrderStatus', data: { orderId: orderId } })
+                });
+                const result = await response.json();
+                if (result.success && result.status === 'Approved') {
+                    clearInterval(intervalId); 
+                    clearTimeout(failoverTimer); 
+                    
+                    document.getElementById('upload-status').innerHTML = `<h4 style="color:var(--accent-color);">Payment Approved!</h4><p>You will now receive your verification code via WhatsApp. Please enter it below to finalize your order.</p>`;
+                    document.getElementById('proof-upload-step').classList.remove('active');
+                    document.getElementById('proof-upload-step').classList.add('completed');
+                    document.getElementById('code-verification-step').classList.add('active');
+                }
+            } catch (error) {
+                console.error('Polling error:', error);
+            }
+        }, 15000); // Check every 15 seconds
+    }
 </script>
 
 </body>
