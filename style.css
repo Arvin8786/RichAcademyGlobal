@@ -1,5 +1,5 @@
 /* =================================================================
-   MAIN STYLESHEET for E-Shop (Version 2 - Final)
+   MAIN STYLESHEET for E-Shop (Version 13 - FINAL)
    ================================================================= */
 
 /* --- ROOT VARIABLES & KEYFRAMES --- */
@@ -82,70 +82,13 @@ nav a.nav-disabled::after { width: 0 !important; }
 .halal-badge { position: absolute; top: 10px; left: 10px; background-color: rgba(255, 255, 255, 0.8); color: var(--accent-color); padding: 3px 8px; border-radius: 5px; font-size: .75rem; font-weight: 700; border: 1px solid rgba(39, 174, 96, 0.3); }
 
 /* --- FLOATING ACTION BUTTONS (FAB) CONTAINER & BUTTONS --- */
-.fab-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
-    display: flex;
-    flex-direction: row-reverse;
-    align-items: center;
-    gap: 15px;
-    transition: right 0.3s ease-in-out;
-}
-.fab {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-decoration: none;
-}
-.fab:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, .3);
-}
-.fab svg {
-    width: 32px;
-    height: 32px;
-    fill: white;
-}
-
-.fab i {
-    font-size: 28px;
-    color: white;
-    
-    /* NEW: This line is a powerful way to force vertical centering for icons */
-    line-height: 60px; /* This should match the height of the .fab container */
-
-    /* We also ensure the width is centered */
-    width: 100%;
-    text-align: center;
-}
-.floating-cart-btn {
-    background-color: var(--primary-color);
-    position: relative;
-}
-#cart-count {
-    position: absolute;
-    top: -2px;
-    right: -2px;
-    background-color: var(--secondary-color);
-    color: var(--light-text);
-    border-radius: 50%;
-    padding: 3px 8px;
-    font-size: .8rem;
-    font-weight: 700;
-    border: 2px solid var(--light-text);
-}
-.whatsapp-fab {
-    background-color: #25D366;
-    position: relative;
-}
+.fab-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: row-reverse; align-items: center; gap: 15px; transition: right 0.3s ease-in-out; }
+.fab { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0, 0, 0, .25); cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; text-decoration: none; }
+.fab:hover { transform: scale(1.1); box-shadow: 0 6px 16px rgba(0, 0, 0, .3); }
+.fab i { font-size: 28px; color: white; line-height: 60px; width: 100%; text-align: center; }
+.floating-cart-btn { background-color: var(--primary-color); position: relative; }
+#cart-count { position: absolute; top: -2px; right: -2px; background-color: var(--secondary-color); color: var(--light-text); border-radius: 50%; padding: 3px 8px; font-size: .8rem; font-weight: 700; border: 2px solid var(--light-text); }
+.chatbot-fab { background-color: var(--accent-color); position: relative; }
 
 /* --- CART MODAL --- */
 .modal { display: none; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, .6); align-items: center; justify-content: center; animation: fadeIn .4s ease; }
@@ -182,98 +125,24 @@ nav a.nav-disabled::after { width: 0 !important; }
 .original-cart-price { text-decoration: line-through; color: #999; font-size: .9rem; }
 .final-cart-price { font-weight: 600; }
 .summary-line small { font-size: .8rem; color: var(--accent-color); font-style: italic; }
+.payment-options { margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; }
+.payment-option { margin-bottom: 15px; }
+.payment-option h4 { margin-bottom: 5px; }
+.payment-option p { margin: 0; font-size: 0.9rem; }
+.payment-option img { max-width: 200px; margin-top: 10px; border: 1px solid #ddd; border-radius: 8px; }
 
-/* --- E-SHOP ON-SCREEN CHATBOT WIDGET --- */
-#eshop-chat-widget {
-    display: none;
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 370px;
-    max-width: 90%;
-    height: 550px;
-    max-height: 80vh;
-    background-color: white;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    z-index: 1001;
-    flex-direction: column;
-    overflow: hidden;
-    transform: scale(0);
-    transform-origin: bottom right;
-    transition: transform 0.3s ease-in-out;
-}
-#eshop-chat-widget.active {
-    display: flex;
-    transform: scale(1);
-}
-#chat-header {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 15px;
-    font-weight: bold;
-    text-align: center;
-    position: relative;
-}
-#close-chat-btn {
-    position: absolute;
-    top: 50%;
-    right: 15px;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.5rem;
-    cursor: pointer;
-}
-#chat-body {
-    flex-grow: 1;
-    padding: 15px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-}
-.chat-message {
-    padding: 8px 12px;
-    border-radius: 18px;
-    margin-bottom: 10px;
-    max-width: 85%;
-    line-height: 1.4;
-    word-wrap: break-word;
-}
-.bot-message {
-    background-color: #f1f0f0;
-    align-self: flex-start;
-    text-align: left;
-}
-.user-message {
-    background-color: #dcf8c6;
-    align-self: flex-end;
-    text-align: right;
-    margin-left: auto;
-}
-.chat-buttons {
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    align-items: center;
-}
-.chat-buttons button {
-    width: 100%;
-    padding: 10px 15px;
-    border: 1px solid var(--primary-color);
-    background-color: white;
-    color: var(--primary-color);
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.2s;
-}
-.chat-buttons button:hover {
-    background-color: var(--primary-color);
-    color: white;
-}
+/* --- E-SHOP ON-SCREEN AI CHATBOT WIDGET --- */
+#eshop-chat-widget { display: none; position: fixed; bottom: 20px; right: 20px; width: 370px; max-width: 90%; height: 550px; max-height: 80vh; background-color: white; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); z-index: 1001; flex-direction: column; overflow: hidden; transform: scale(0); transform-origin: bottom right; transition: transform 0.3s ease-in-out; }
+#eshop-chat-widget.active { display: flex; transform: scale(1); }
+#chat-header { background-color: var(--primary-color); color: white; padding: 15px; font-weight: bold; text-align: center; position: relative; }
+#close-chat-btn { position: absolute; top: 50%; right: 15px; transform: translateY(-50%); background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+#chat-body { flex-grow: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; }
+#chat-input-container { border-top: 1px solid #eee; padding: 10px; display: flex; gap: 10px; }
+#chat-input { flex-grow: 1; border: 1px solid #ddd; border-radius: 20px; padding: 10px 15px; font-size: 1rem; outline: none; }
+#chat-send-btn { background-color: var(--primary-color); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1.1rem; flex-shrink: 0; }
+.chat-message { padding: 8px 12px; border-radius: 18px; margin-bottom: 10px; max-width: 85%; line-height: 1.4; word-wrap: break-word; }
+.bot-message { background-color: #f1f0f0; align-self: flex-start; text-align: left; }
+.user-message { background-color: #dcf8c6; align-self: flex-end; text-align: right; margin-left: auto; }
 
 /* --- FOOTER & MISC --- */
 footer { background: var(--primary-color); color: var(--light-text); padding: 40px 20px; text-align: center; margin-top: 30px; }
@@ -299,9 +168,3 @@ footer { background: var(--primary-color); color: var(--light-text); padding: 40
 .program-section ul li strong { color: var(--primary-color); display: block; margin-bottom: 5px; }
 .cta-button { display: block; width: fit-content; margin: 30px auto; background: linear-gradient(135deg, var(--secondary-color), #e67e22); color: var(--light-text); text-align: center; padding: 15px 40px; border-radius: 50px; font-weight: 700; text-decoration: none; font-size: 1.2rem; transition: all .3s; box-shadow: 0 4px 8px rgba(0, 0, 0, .2); }
 .cta-button:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0, 0, 0, .3); }
-
-/* --- NEW: FLOATING CHATBOT BUTTON --- */
-.chatbot-fab {
-    background-color: var(--accent-color); /* A nice green color */
-    position: relative;
-}
