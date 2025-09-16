@@ -100,9 +100,12 @@ nav a.nav-disabled:hover { background-color: transparent; }
     overflow: hidden; 
 }
 .product:hover { transform: translateY(-10px); box-shadow: var(--shadow-hover); }
-.product-image-container { height: 250px; overflow: hidden; }
+
+/* --- IMAGE SIZE ADJUSTMENT --- */
+.product-image-container { height: 220px; overflow: hidden; }
 .product img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
 .product:hover img { transform: scale(1.05); }
+
 .product-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
 .product h3 { margin: 0 0 10px; font-size: 1.15rem; height: 3.4em; overflow: hidden; }
 .product .benefits, .product .consumption { font-size: .9rem; color: #555; margin-bottom: 15px; flex-grow: 1; }
@@ -113,7 +116,7 @@ nav a.nav-disabled:hover { background-color: transparent; }
 .product-actions { margin-top: auto; }
 
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px 15px; border-radius: 50px; text-decoration: none; font-weight: 600; border: 2px solid transparent; cursor: pointer; transition: all .3s; }
-.btn:disabled { background-color: #ccc; cursor: not-allowed; border-color: #ccc; }
+.btn:disabled { background-color: #ccc; cursor: not-allowed; border-color: #ccc; transform: none !important; }
 .btn-primary { background: var(--primary-color); color: var(--light-text-color); }
 .btn-primary:hover:not(:disabled) { background: var(--secondary-color); transform: translateY(-2px); }
 .btn-secondary { background: transparent; color: var(--primary-color); border-color: var(--primary-color); }
@@ -178,12 +181,29 @@ body[data-festival="deepavali"] .festive-layer { background: linear-gradient(135
 body[data-festival="christmas"] { --primary-color: #b71c1c; --secondary-color: #1b5e20; }
 body[data-festival="christmas"] .festive-layer { background-image: url('https://www.transparenttextures.com/patterns/snow.png'); opacity: 0.2; }
 
-/* --- SECTION 9: MISC & RESPONSIVE DESIGN --- */
+/* --- SECTION 9: MISC, OVERLAYS & RESPONSIVE DESIGN --- */
 .about-us-section, .program-section { padding: 30px; background-color: var(--surface-color); border-radius: var(--border-radius); box-shadow: var(--shadow); }
 .owner-profile { display: flex; align-items: center; gap: 30px; }
 .owner-image { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid var(--primary-color); }
 .cta-button { display: inline-block; background: var(--accent-color); color: var(--light-text-color); padding: 12px 30px; border-radius: 50px; font-weight: 600; text-decoration: none; transition: transform 0.3s; }
 .cta-button:hover { transform: scale(1.05); }
+
+/* --- FIX: Hide maintenance overlay by default --- */
+#maintenance-overlay { 
+    display: none; 
+    position: fixed; 
+    top: 0; left: 0; 
+    width: 100%; height: 100%; 
+    background-color: rgba(13, 71, 161, 0.95); 
+    color: white; 
+    z-index: 99999; 
+    justify-content: center; 
+    align-items: center; 
+    text-align: center; 
+    padding: 20px; 
+}
+#maintenance-overlay i { font-size: 4rem; margin-bottom: 20px; }
+#maintenance-overlay h1 { font-size: 2rem; color: white; }
 
 @media (max-width: 768px) {
   h1 { font-size: 1.8rem; }
