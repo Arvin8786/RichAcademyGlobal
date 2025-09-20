@@ -1,0 +1,61 @@
+/* =================================== */
+/* FESTIVAL THEME STYLES             */
+/* =================================== */
+
+/* This layer is used for background images so it doesn't affect content readability */
+.festive-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none; /* Allows clicking through it */
+}
+
+/* --- Chinese New Year Theme --- */
+body[data-festival="cny"] {
+    --primary-color: #D92328; /* Red */
+    --accent-color: #F1C40F; /* Gold */
+}
+body[data-festival="cny"] .festive-layer {
+    background-image: url('https://www.transparenttextures.com/patterns/debut-light.png'); /* Add a subtle pattern or festive image URL here */
+}
+
+/* --- Hari Raya Theme --- */
+body[data-festival="hari-raya"] {
+    --primary-color: #006847; /* Dark Green */
+    --accent-color: #FDD119; /* Yellow */
+}
+body[data-festival="hari-raya"] .festive-layer {
+     background-image: url('https://www.transparenttextures.com/patterns/mosque.png'); /* Example pattern */
+}
+
+/* --- Deepavali Theme --- */
+body[data-festival="deepavali"] {
+    --primary-color: #FF7700; /* Orange */
+    --accent-color: #8B008B; /* Magenta */
+}
+body[data-festival="deepavali"] .festive-layer {
+     background-image: url('https://www.transparenttextures.com/patterns/pinstripe-light.png'); /* Example pattern */
+}
+
+/* --- Christmas Theme --- */
+body[data-festival="christmas"] {
+    --primary-color: #C82333; /* Red */
+    --accent-color: #1E7E34; /* Green */
+}
+body[data-festival="christmas"] .festive-layer {
+     background-image: url('https://www.transparenttextures.com/patterns/snow.png');
+     opacity: 0.2;
+}
+
+/* --- National Day / Malaysia Day Theme --- */
+body[data-festival="national-day"],
+body[data-festival="malaysia-day"] {
+    --primary-color: #000066; /* Blue */
+    --accent-color: #FFCC00; /* Yellow */
+}
