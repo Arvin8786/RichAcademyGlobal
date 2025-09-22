@@ -69,7 +69,7 @@ async function fetchData() {
             productListContainer.innerHTML = `<p style="text-align: center; color: red; width: 100%;"><i class="fa-solid fa-triangle-exclamation"></i> Error loading store data. Please try again later.</p>`;
         }
     }
-    document.getElementById('update-timestamp').textContent = `${new Date().toLocaleDateString('en-GB')} (v-NewFlow)`;
+    document.getElementById('update-timestamp').textContent = `${new Date().toLocaleDateString('en-GB')} (v10.3)`;
     showTab('products');
 }
 
