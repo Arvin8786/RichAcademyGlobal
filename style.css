@@ -1,5 +1,5 @@
 /* ================================================================ */
-/* E-Shop Stylesheet v10.3 - Modern Wellness Theme                  */
+/* E-Shop Stylesheet v10.3.1 - Modern Wellness Theme & Hotfix       */
 /* ================================================================ */
 
 /* --- 1. GLOBAL STYLES & NEW COLOR PALETTE --- */
@@ -219,4 +219,26 @@ main { padding: 2rem 0; }
     background-color: var(--accent-color);
     color: #333;
     font-weight: 600;
+}
+
+/* ================================================== */
+/* FIX v10.3.1 - Set Correct Initial Hidden States    */
+/* ================================================== */
+
+/* This ensures the maintenance overlay is hidden by default. 
+   The JavaScript will set it to 'display: flex;' ONLY if maintenance mode is on. */
+#maintenance-overlay {
+    display: none;
+}
+
+/* This ensures the cart modal is hidden by default. 
+   The toggleCart() JavaScript function will set it to 'display: flex;' when the cart icon is clicked. */
+#cart-modal.modal {
+    display: none;
+}
+
+/* This ensures the chat widget starts off-screen to the right. 
+   The toggleChatWidget() JavaScript function will add the '.active' class to slide it into view. */
+#eshop-chat-widget {
+    right: -400px; 
 }
