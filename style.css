@@ -1,5 +1,5 @@
 /* ================================================================ */
-/* E-Shop Stylesheet v10.3.1 - Modern Wellness Theme & Hotfix       */
+/* E-Shop Stylesheet v10.3.2 - Modern Theme & Positioning Fix       */
 /* ================================================================ */
 
 /* --- 1. GLOBAL STYLES & NEW COLOR PALETTE --- */
@@ -16,11 +16,7 @@
     --border-radius: 8px;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
     font-family: 'Poppins', sans-serif;
@@ -29,22 +25,13 @@ body {
     color: var(--text-color);
 }
 
-.container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 0 2rem;
-}
+.container { max-width: 1200px; margin: auto; padding: 0 2rem; }
 
 /* --- 2. LAYOUT: HEADER, NAV, MAIN, FOOTER --- */
-header {
-    background: var(--white);
-    padding: 1rem 0;
-    border-bottom: 1px solid var(--light-gray);
-}
+header { background: var(--white); padding: 1rem 0; border-bottom: 1px solid var(--light-gray); }
 .header-content { display: flex; align-items: center; }
 .header-logo { max-height: 60px; margin-right: 15px; }
 
-/* Sticky Navbar for modern UX */
 nav {
     background: var(--primary-color);
     padding: 0.5rem 0;
@@ -55,14 +42,9 @@ nav {
 }
 #main-nav { list-style: none; display: flex; justify-content: center; }
 #main-nav li a {
-    color: var(--white);
-    text-decoration: none;
-    padding: 10px 20px;
-    display: block;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-    border-radius: var(--border-radius);
-    margin: 0 5px;
+    color: var(--white); text-decoration: none; padding: 10px 20px; display: block;
+    cursor: pointer; transition: background-color 0.2s ease-in-out;
+    border-radius: var(--border-radius); margin: 0 5px;
 }
 #main-nav li a:hover { background: rgba(255, 255, 255, 0.1); }
 .nav-disabled { color: #aaa !important; cursor: not-allowed !important; }
@@ -76,40 +58,22 @@ main { padding: 2rem 0; }
     to   { opacity: 1; transform: translateY(0); }
 }
 
-.footer {
-    background: #333;
-    color: var(--white);
-    text-align: center;
-    padding: 1.5rem 0;
-    margin-top: 2rem;
-}
+.footer { background: #333; color: var(--white); text-align: center; padding: 1.5rem 0; margin-top: 2rem; }
 .disclaimer { font-size: 0.8rem; color: #ccc; margin-top: 10px; }
 
 /* --- 3. COMPONENT REDESIGN --- */
-
-/* Hero Section with background */
 .hero-section {
     padding: 4rem 2rem;
     background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1596799525545-5335123a02c3?auto=format&fit=crop&w=1200&q=80');
-    background-size: cover;
-    background-position: center;
-    border-radius: var(--border-radius);
-    text-align: center;
-    color: var(--white);
-    margin-bottom: 2rem;
+    background-size: cover; background-position: center;
+    border-radius: var(--border-radius); text-align: center; color: var(--white); margin-bottom: 2rem;
 }
 .hero-section h2 { font-size: 2.5rem; margin-bottom: 0.5rem; }
 .hero-section p { font-size: 1.1rem; }
 
-/* Buttons */
 .btn {
-    padding: 12px 20px;
-    border: none;
-    border-radius: 50px; /* Modern rounded buttons */
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 600;
-    transition: all 0.2s ease-in-out;
+    padding: 12px 20px; border: none; border-radius: 50px; cursor: pointer;
+    font-size: 1rem; font-weight: 600; transition: all 0.2s ease-in-out;
 }
 .btn-primary { background-color: var(--primary-color); color: var(--white); }
 .btn-primary:hover { background-color: #004a32; transform: translateY(-2px); }
@@ -117,32 +81,16 @@ main { padding: 2rem 0; }
 .btn-secondary:hover { background-color: #455552; transform: translateY(-2px); }
 .btn:disabled { background-color: #ccc; cursor: not-allowed; transform: none; }
 
-/* Product Cards */
-.product-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 30px;
-}
+.product-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
 .product {
-    background: var(--white);
-    border: 1px solid var(--light-gray);
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    position: relative;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    background: var(--white); border: 1px solid var(--light-gray); border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow); display: flex; flex-direction: column; overflow: hidden;
+    position: relative; transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
-.product:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-}
+.product:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); }
 .halal-badge {
-    position: absolute; top: 10px; right: 10px;
-    background-color: var(--primary-color);
-    color: white; padding: 3px 8px; font-size: 0.8rem;
-    border-radius: 5px; font-weight: bold; z-index: 2;
+    position: absolute; top: 10px; right: 10px; background-color: var(--primary-color);
+    color: white; padding: 3px 8px; font-size: 0.8rem; border-radius: 5px; font-weight: bold; z-index: 2;
 }
 .product-image-container img { width: 100%; height: 280px; object-fit: cover; }
 .product-info { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
@@ -156,89 +104,79 @@ main { padding: 2rem 0; }
 .product-actions .btn-primary { width: 100%; background-color: var(--accent-color); color: #333; }
 .product-actions .btn-primary:hover { background-color: #e4b30c; }
 
+/* --- 4. MODALS & WIDGETS (WITH POSITIONING FIX) --- */
 
-/* Cart Modal */
-.modal-content {
-    background-color: var(--white);
-    padding: 2.5rem;
-    border-radius: var(--border-radius);
-    width: 90%; max-width: 600px;
-    max-height: 90vh; overflow-y: auto;
-    position: relative;
-    box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+/* [FIX] Cart Modal Container: Re-added full-screen positioning */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+    /* Flexbox properties to center the content */
+    justify-content: center;
+    align-items: center;
 }
-.cart-summary .summary-line.total { font-weight: bold; font-size: 1.2rem; border-top: 1px solid var(--light-gray); margin-top: 10px; padding-top: 10px; }
-.customer-info-form input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid var(--light-gray); border-radius: var(--border-radius); font-size: 1rem; }
+.modal-content {
+    background-color: var(--white); padding: 2.5rem; border-radius: var(--border-radius);
+    width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto;
+    position: relative; box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+}
+.cart-summary .summary-line.total {
+    font-weight: bold; font-size: 1.2rem; border-top: 1px solid var(--light-gray);
+    margin-top: 10px; padding-top: 10px;
+}
+.customer-info-form input {
+    width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid var(--light-gray);
+    border-radius: var(--border-radius); font-size: 1rem;
+}
 .customer-info-form input:focus { border-color: var(--primary-color); outline: none; }
 
-
 /* FAB & Chatbot */
-.fab-container { transition: right 0.3s ease-in-out; }
+.fab-container { position: fixed; bottom: 20px; right: 20px; z-index: 999; transition: right 0.3s ease-in-out; }
 .fab {
-    width: 60px; height: 60px;
-    background-color: var(--primary-color);
-    border-radius: 50%;
-    color: var(--white);
-    display: flex; justify-content: center; align-items: center;
-    font-size: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    cursor: pointer; margin-top: 10px; transition: transform 0.2s ease;
+    width: 60px; height: 60px; background-color: var(--primary-color); border-radius: 50%;
+    color: var(--white); display: flex; justify-content: center; align-items: center;
+    font-size: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); cursor: pointer;
+    margin-top: 10px; transition: transform 0.2s ease;
 }
 .fab:hover { transform: scale(1.1); }
 #cart-count { background-color: var(--accent-color); color: #333; font-weight: bold; }
 
+/* [FIX] Chat Widget Container: Re-added fixed positioning and dimensions */
 #eshop-chat-widget {
-    border: none;
+    position: fixed;
+    bottom: 20px;
+    right: -400px; /* Initially hidden off-screen */
+    width: 350px;
+    height: 500px;
+    z-index: 998;
+    background: var(--white);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     transition: right 0.3s ease-in-out;
 }
-#chat-header { background: var(--primary-color); }
-.bot-message { background: var(--light-gray); border-radius: 15px 15px 15px 5px; }
-.user-message { background: var(--primary-color); color: var(--white); border-radius: 15px 15px 5px 15px; }
+#eshop-chat-widget.active { right: 20px; /* Slides into view */ }
+#chat-header { background: var(--primary-color); color: var(--white); padding: 15px; font-weight: bold; }
+#chat-body { flex-grow: 1; padding: 10px; overflow-y: auto; display: flex; flex-direction: column; }
+.chat-message { max-width: 80%; padding: 8px 12px; margin-bottom: 10px; }
+.bot-message { background: var(--light-gray); border-radius: 15px 15px 15px 5px; align-self: flex-start; }
+.user-message { background: var(--primary-color); color: var(--white); border-radius: 15px 15px 5px 15px; align-self: flex-end; }
+#chat-input-container { display: flex; padding: 10px; border-top: 1px solid var(--light-gray); }
+#chat-input { flex-grow: 1; border: 1px solid #ccc; border-radius: 5px; padding: 8px; }
+#chat-send-btn { background: none; border: none; font-size: 20px; color: var(--primary-color); cursor: pointer; padding: 0 10px; }
 
-
-/* --- 4. MISC & UTILITIES --- */
-.search-container {
-    position: relative; margin-bottom: 2rem;
-}
+/* --- 5. MISC & UTILITIES --- */
+.search-container { position: relative; margin-bottom: 2rem; }
 #product-search {
-    width: 100%;
-    padding: 15px 20px 15px 50px; /* Add space for icon */
-    font-size: 1rem;
-    border: 1px solid var(--light-gray);
-    border-radius: 50px;
+    width: 100%; padding: 15px 20px 15px 50px; font-size: 1rem;
+    border: 1px solid var(--light-gray); border-radius: 50px;
 }
-.search-icon {
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #999;
-}
-#promo-running-banner {
-    background-color: var(--accent-color);
-    color: #333;
-    font-weight: 600;
-}
-
-/* ================================================== */
-/* FIX v10.3.1 - Set Correct Initial Hidden States    */
-/* ================================================== */
-
-/* This ensures the maintenance overlay is hidden by default. 
-   The JavaScript will set it to 'display: flex;' ONLY if maintenance mode is on. */
-#maintenance-overlay {
-    display: none;
-}
-
-/* This ensures the cart modal is hidden by default. 
-   The toggleCart() JavaScript function will set it to 'display: flex;' when the cart icon is clicked. */
-#cart-modal.modal {
-    display: none;
-}
-
-/* This ensures the chat widget starts off-screen to the right. 
-   The toggleChatWidget() JavaScript function will add the '.active' class to slide it into view. */
-#eshop-chat-widget {
-    right: -400px; 
-}
+.search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: #999; }
+#promo-running-banner { background-color: var(--accent-color); color: #333; font-weight: 600; }
+#maintenance-overlay { display: none; }
