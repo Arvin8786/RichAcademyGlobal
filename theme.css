@@ -1,17 +1,11 @@
-/* =================================== */
-/* FESTIVAL THEME STYLES (v10.3)     */
-/* Designed for the Modern Theme     */
-/* =================================== */
+/* ================================================================ */
+/* Festival Theme Stylesheet v10.4 - for Luxury Tech Theme        */
+/* ================================================================ */
 
 .festive-layer {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-size: cover;
-    background-position: center;
-    opacity: 0.1;
-    z-index: -1;
-    pointer-events: none;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-size: cover; background-position: center;
+    opacity: 0.1; z-index: -1; pointer-events: none;
 }
 
 /* --- Chinese New Year Theme --- */
@@ -19,17 +13,11 @@ body[data-festival="cny"] {
     --primary-color: #D92328; /* Festive Red */
     --accent-color: #F1C40F;  /* Gold */
 }
-body[data-festival="cny"] .festive-layer {
-    background-image: url('https://www.transparenttextures.com/patterns/az-subtle.png');
-}
 
 /* --- Hari Raya Theme --- */
 body[data-festival="hari-raya"] {
-    /* Base theme green is already perfect, we just change the accent */
+    --primary-color: #006847; /* Deep Green */
     --accent-color: #76c7c0; /* Light Teal */
-}
-body[data-festival="hari-raya"] .festive-layer {
-     background-image: url('https://www.transparenttextures.com/patterns/mosque.png');
 }
 
 /* --- Deepavali Theme --- */
@@ -37,23 +25,9 @@ body[data-festival="deepavali"] {
     --primary-color: #8B008B; /* Magenta */
     --accent-color: #FFD700; /* Gold */
 }
-body[data-festival="deepavali"] .festive-layer {
-     background-image: url('https://www.transparenttextures.com/patterns/pinstripe-light.png');
-}
 
 /* --- Christmas Theme --- */
 body[data-festival="christmas"] {
     --primary-color: #C82333; /* Red */
     --accent-color: #228b22; /* Forest Green */
 }
-body[data-festival="christmas"] .festive-layer {
-     background-image: url('https://www.transparenttextures.com/patterns/snow.png');
-     opacity: 0.2;
-}
-
-/* --- National Day / Malaysia Day Theme --- */
-body[data-festival="national-day"],
-body[data-festival="malaysia-day"] {
-    --primary-color: #000066; /* Flag Blue */
-    --accent-color: #FFCC00; /* Flag Yellow */
-}```
