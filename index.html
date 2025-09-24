@@ -5,15 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Forever Living by Muhd Arvind Isa</title>
   
-  <!-- Main Stylesheet -->
   <link rel="stylesheet" href="style.css">
-  
-  <!-- Festival/Theme Stylesheet (Loads after main styles to override them) -->
   <link rel="stylesheet" href="theme.css">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body data-festival="">
@@ -24,7 +21,7 @@
 <div class="festive-layer"></div>
 <div id="store-wrapper">
   <header>
-    <div class="container"><div class="header-content"><img src="FL.jpg" alt="Business Logo" class="header-logo" onerror="this.style.display='none'"><h1>FOREVER LIVING by Muhd Arvind Isa<span style="font-size: 1rem; color: #555; display: block; font-weight: 400;">Quality Wellness Products</span></h1></div></div>
+    <div class="container"><div class="header-content"><img src="FL.jpg" alt="Business Logo" class="header-logo" onerror="this.style.display='none'"><h1>FOREVER LIVING by Muhd Arvind Isa<span class="header-subtitle">Quality Wellness Products</span></h1></div></div>
   </header>
   <div id="promo-running-banner"><div class="marquee-content" id="promo-banner-text"></div></div>
   <nav>
@@ -49,6 +46,7 @@
       </div>
       <div id="product-list-container"><p style="text-align: center; width: 100%;"><i class="fa-solid fa-spinner fa-spin"></i> Loading products from our catalog...</p></div>
     </div>
+    
     <div id="business" class="tab-content">
       <section class="program-section">
         <h2>Build Your Forever Business</h2>
@@ -84,7 +82,8 @@
       </div>
   </footer>
 </div>
-<!-- CART MODAL -->
+
+<!-- CART MODAL (Full, Correct Structure) -->
 <div id="cart-modal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="toggleCart(true)">×</span>
@@ -105,7 +104,7 @@
         </div>
         <p id="discount-status"></p>
         <div class="customer-info-form">
-          <h3 style="margin-top: 20px;">Customer & Shipping Information</h3>
+          <h3>Customer & Shipping Information</h3>
           <input type="text" id="customer-name" placeholder="Your Full Name" required>
           <input type="tel" id="customer-phone" placeholder="Your WhatsApp Number (e.g., +60123456789)" required>
           <input type="email" id="customer-email" placeholder="Your Email Address (for receipt)" required>
@@ -136,7 +135,7 @@
             <div class="payment-option">
                 <h4>Option 2: Touch 'n Go eWallet</h4>
                 <p>Please scan the QR code below with your TNG app.</p>
-                <img src="https://i.imgur.com/46ddVhc.png" alt="TNG QR Code">
+                <img src="https://i.imgur.com/46ddVhc.png" alt="TNG QR Code" style="max-width: 200px;">
             </div>
         </div>
         <div id="payment-choice-buttons" style="margin-top: 20px;">
@@ -166,7 +165,7 @@
     </div>
 </div>
 
-<!-- FLOATING ACTION BUTTONS CONTAINER -->
+<!-- FLOATING ACTION BUTTONS CONTAINER (Full, Correct Structure) -->
 <div class="fab-container" id="fab-container">
     <div id="floating-cart" class="fab floating-cart-btn" onclick="toggleCart()">
         <i class="fa-solid fa-cart-shopping"></i>
@@ -177,7 +176,7 @@
     </div>
 </div>
 
-<!-- E-SHOP ON-SCREEN CHATBOT WIDGET -->
+<!-- E-SHOP ON-SCREEN CHATBOT WIDGET (Full, Correct Structure) -->
 <div id="eshop-chat-widget">
     <div id="chat-header">
         FL e-Shop Assistant
@@ -192,7 +191,6 @@
     </div>
 </div>
 
-<!-- All the JavaScript is now loaded from this external file -->
 <script src="script.js"></script>
 
 </body>
