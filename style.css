@@ -1,177 +1,64 @@
 /* ================================================================ */
-/* E-Shop Stylesheet v10.4 - Luxury Tech Theme                      */
+/* E-Shop Stylesheet v10.6 - Definitive Visual & Animation Fixes    */
 /* ================================================================ */
 
-/* --- 1. GLOBAL STYLES & NEW COLOR PALETTE --- */
 :root {
-    --primary-color: #1A2A4C;       /* Deep, professional navy blue */
-    --accent-color: #00BFFF;        /* Vibrant, electric cyan/blue */
-    --background-color: #F7F8FA;    /* Clean, light gray background */
-    --text-color: #2c3e50;          /* Soft, dark charcoal for text */
-    --heading-color: #1A2A4C;       /* Navy for headings */
-    --light-gray: #e9ecef;
-    --white: #ffffff;
-    --danger-color: #e74c3c;
-    --box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
-    --border-radius: 12px; /* Slightly more rounded for a modern feel */
+    --primary-color: #1A2A4C; --accent-color: #00BFFF; --background-color: #F7F8FA;
+    --text-color: #2c3e50; --heading-color: #1A2A4C; --light-gray: #e9ecef;
+    --white: #ffffff; --danger-color: #e74c3c; --box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+    --border-radius: 12px;
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-    font-family: 'Poppins', sans-serif;
-    line-height: 1.7;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    -webkit-font-smoothing: antialiased;
-}
-
+body { font-family: 'Poppins', sans-serif; line-height: 1.7; background-color: var(--background-color); color: var(--text-color); }
 .container { max-width: 1200px; margin: auto; padding: 0 2rem; }
-
-/* --- 2. LAYOUT & STRUCTURE --- */
 header { background: var(--white); padding: 1rem 0; border-bottom: 1px solid var(--light-gray); }
-.header-content { display: flex; align-items: center; }
+.header-content { display: flex; align-items: center; text-align: center; }
 .header-logo { max-height: 50px; margin-right: 15px; }
-h1 { color: var(--heading-color); }
-
-nav {
-    background: var(--primary-color); padding: 0.5rem 0;
-    position: sticky; top: 0; z-index: 990;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
+.header-content h1 { flex-grow: 1; color: var(--heading-color); font-size: 1.8rem; line-height: 1.2; }
+/* [FIX] Correctly style the smaller text within the main H1 title */
+.header-content h1 .by-line { font-size: 1.1rem; font-weight: 500; display: block; }
+.header-subtitle { font-size: 0.9rem; color: #555; display: block; font-weight: 400; margin-top: 4px; }
+nav { background: var(--primary-color); padding: 0.5rem 0; position: sticky; top: 0; z-index: 990; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
 #main-nav { list-style: none; display: flex; justify-content: center; }
-#main-nav li a {
-    color: var(--white); text-decoration: none; padding: 10px 20px;
-    display: block; cursor: pointer; transition: background-color 0.2s ease-in-out;
-    border-radius: 8px; margin: 0 5px; font-weight: 500;
-}
+#main-nav li a { color: var(--white); text-decoration: none; padding: 10px 20px; display: block; cursor: pointer; transition: background-color 0.2s; border-radius: 8px; margin: 0 5px; font-weight: 500; }
 #main-nav li a:hover { background: rgba(255, 255, 255, 0.1); }
 .nav-disabled { color: #8d99ae !important; cursor: not-allowed !important; }
-
 main { padding: 3rem 0; }
 .tab-content { display: none; animation: fadeIn 0.5s; }
 .tab-content.active { display: block; }
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
+@keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+.program-section, .about-us-section { background: var(--white); padding: 2rem; border-radius: var(--border-radius); box-shadow: var(--box-shadow); }
+.program-section h2, .about-us-section h2 { text-align: center; margin-bottom: 1.5rem; color: var(--heading-color); }
+.program-section ul { list-style-position: inside; max-width: 700px; margin: 1rem auto; }
+.cta-button { display: table; margin: 1.5rem auto 0; background: #25D366; color: white; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; }
+.owner-profile { display: flex; flex-wrap: wrap; align-items: center; gap: 2rem; }
+.owner-image { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; }
+.owner-details ul { list-style-type: none; padding: 0; }
 .footer { background: #1A2A4C; color: var(--light-gray); text-align: center; padding: 2rem 0; margin-top: 3rem; }
 .disclaimer { font-size: 0.8rem; color: #adb5bd; margin-top: 10px; }
-
-/* --- 3. COMPONENT REDESIGN --- */
-
-.hero-section {
-    padding: 5rem 2rem; background: var(--primary-color);
-    border-radius: var(--border-radius); text-align: center;
-    color: var(--white); margin-bottom: 3rem;
-}
-.hero-section h2 { font-size: 2.8rem; margin-bottom: 0.5rem; }
-.hero-section p { font-size: 1.2rem; color: #ced4da; }
-
-.btn {
-    padding: 12px 25px; border: none; border-radius: 50px;
-    cursor: pointer; font-size: 1rem; font-weight: 600;
-    transition: all 0.2s ease-in-out;
-}
+.hero-section { padding: 5rem 2rem; background: var(--primary-color); border-radius: var(--border-radius); text-align: center; color: var(--white); margin-bottom: 3rem; }
+.btn { padding: 12px 25px; border: none; border-radius: 50px; cursor: pointer; font-size: 1rem; font-weight: 600; transition: all 0.2s ease-in-out; }
 .btn-primary { background-color: var(--accent-color); color: var(--primary-color); }
 .btn-primary:hover { background-color: #00a8e0; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0, 191, 255, 0.3); }
-.btn-secondary { background-color: var(--light-gray); color: var(--heading-color); }
-.btn-secondary:hover { background-color: #dbe1e6; }
-.btn:disabled { background-color: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
-
 .product-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
-.product {
-    background: var(--white); border: 1px solid transparent;
-    border-radius: var(--border-radius); box-shadow: var(--box-shadow);
-    display: flex; flex-direction: column; overflow: hidden;
-    position: relative; transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-}
-.product:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    border-color: var(--accent-color);
-}
-.product-image-container img { width: 100%; height: 280px; object-fit: cover; }
+.product { background: var(--white); border: 1px solid transparent; border-radius: var(--border-radius); box-shadow: var(--box-shadow); display: flex; flex-direction: column; overflow: hidden; position: relative; transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
+.product:hover { transform: translateY(-8px); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border-color: var(--accent-color); }
+.product-image-container img { width: 100%; height: 220px; object-fit: cover; }
 .product-info { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
 .product-info h3 { font-size: 1.25rem; margin-bottom: 10px; font-weight: 600; color: var(--heading-color); }
 .new-price { font-weight: 700; font-size: 1.4rem; color: var(--primary-color); }
 .product-actions { margin-top: auto; }
-
-/* --- 4. [REDESIGNED] Cart & Modal Styles --- */
-
-.modal {
-    display: none; position: fixed; z-index: 1000; left: 0; top: 0;
-    width: 100%; height: 100%; overflow: auto;
-    background-color: rgba(26, 42, 76, 0.7); /* Use primary color for overlay */
-    justify-content: center; align-items: center;
-}
-.modal-content {
-    background-color: var(--white); padding: 2rem;
-    border-radius: var(--border-radius); width: 90%; max-width: 600px;
-    max-height: 90vh; overflow-y: auto; position: relative;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-}
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(26, 42, 76, 0.7); justify-content: center; align-items: center; }
+.modal-content { background-color: var(--white); padding: 2rem; border-radius: var(--border-radius); width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
 .modal-content h2 { font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--heading-color); text-align: center; }
-.close {
-    position: absolute; top: 15px; right: 20px; color: #adb5bd;
-    font-size: 32px; font-weight: bold; cursor: pointer; transition: color 0.2s;
-}
+.close { position: absolute; top: 15px; right: 20px; color: #adb5bd; font-size: 32px; font-weight: bold; cursor: pointer; transition: color 0.2s; }
 .close:hover { color: var(--danger-color); }
-
-.cart-item {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1rem 0; border-bottom: 1px solid var(--light-gray);
-}
-.cart-item-details { flex-grow: 1; }
-.quantity-controls button {
-    background: var(--light-gray); border: none;
-    width: 30px; height: 30px; border-radius: 50%;
-    cursor: pointer; font-size: 1.2rem;
-}
-.cart-summary {
-    margin-top: 1.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--light-gray);
-}
-.summary-line { display: flex; justify-content: space-between; padding: 8px 0; }
-.summary-line.total { font-weight: 700; font-size: 1.3rem; color: var(--heading-color); }
-
-.customer-info-form { margin-top: 2rem; }
-.customer-info-form h3 { font-size: 1.2rem; margin-bottom: 1rem; color: var(--heading-color); }
-.customer-info-form input {
-    width: 100%; padding: 12px; margin-bottom: 10px;
-    border: 1px solid #ced4da; border-radius: 8px; font-size: 1rem;
-}
-.customer-info-form input:focus { border-color: var(--accent-color); outline: none; box-shadow: 0 0 0 3px rgba(0, 191, 255, 0.2); }
-.checkout-btn { width: 100%; margin-top: 1.5rem; padding: 15px; }
-
-/* --- 5. [REDESIGNED] FAB & Chatbot --- */
 .fab-container { position: fixed; bottom: 20px; right: 20px; z-index: 999; }
-.fab {
-    width: 60px; height: 60px; background-color: var(--primary-color);
-    border-radius: 50%; color: var(--white); display: flex;
-    justify-content: center; align-items: center; font-size: 24px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2); cursor: pointer; margin-top: 10px;
-    transition: all 0.2s ease;
-}
+.fab { width: 60px; height: 60px; background-color: var(--primary-color); border-radius: 50%; color: var(--white); font-size: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); cursor: pointer; margin-top: 10px; transition: all 0.2s ease; display: flex; justify-content: center; align-items: center; }
 .fab:hover { transform: scale(1.1); background-color: var(--accent-color); color: var(--primary-color); }
-#cart-count { background-color: var(--accent-color); color: var(--primary-color); font-weight: bold; }
-
-#eshop-chat-widget {
-    position: fixed; bottom: 20px; right: -400px; width: 350px;
-    height: 500px; z-index: 998; background: var(--white);
-    border-radius: var(--border-radius); box-shadow: var(--box-shadow);
-    display: flex; flex-direction: column; overflow: hidden;
-    transition: right 0.3s ease-in-out;
-}
-#eshop-chat-widget.active { right: 20px; }
-#chat-header { background: var(--primary-color); color: var(--white); padding: 15px; font-weight: 600; }
-#chat-body { flex-grow: 1; padding: 10px; display: flex; flex-direction: column; }
-.bot-message { background: #e9ecef; color: #343a40; border-radius: 15px 15px 15px 5px; align-self: flex-start; }
-.user-message { background: var(--accent-color); color: var(--primary-color); border-radius: 15px 15px 5px 15px; align-self: flex-end; }
-
-/* --- 6. MISC & UTILITIES --- */
+#cart-count { position: absolute; top: 0; right: 0; background-color: var(--accent-color); color: var(--primary-color); font-weight: bold; width: 22px; height: 22px; font-size: 14px; display: flex; justify-content: center; align-items: center; }
+/* [FIX] Restore marquee animation for banner */
+#promo-running-banner { background-color: var(--accent-color); color: var(--primary-color); font-weight: 600; padding: 10px 0; overflow: hidden; white-space: nowrap; }
+#promo-running-banner .marquee-content { display: inline-block; padding-left: 100%; animation: marquee 25s linear infinite; }
+@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 #maintenance-overlay { display: none; }
-#promo-running-banner { background-color: var(--accent-color); color: var(--primary-color); font-weight: 600; padding: 10px 0; }
