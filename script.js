@@ -1,7 +1,7 @@
 // =================================================================
 // SECTION A: E-SHOP & CHATBOT SCRIPT (NEW INTEGRATED WORKFLOW)
 // =================================================================
-const googleScriptURL = 'https://script.google.com/macros/s/AKfycbzNs-X3lUN0Da-_6aOjR9aKEmtvW3kC97TAYk1RYbmnV1uen2zrLgrNyH12wpiOluey/exec';
+const googleScriptURL = 'https://script.google.com/macros/s/AKfycbzf3_nbvTeGuMVMEjGBBemGH6FglQ9riZNohbW8kDbhZjTLHQKRanFiPXBI6wThvt12/exec';
 const botServerURL = 'https://whatsapp-eshop-bot.onrender.com/eshop-chat';
 
 let products = []; let cart = []; let activeFestival = null; let activePromotions = [];
