@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Connection Test</title>
+</head>
+<body>
+
+    <h1>Google Apps Script Connection Test</h1>
+    <button onclick="runTest()">Click to Test Connection</button>
+    <p>Result: <span id="result">--</span></p>
+
+    <script>
+        // PASTE YOUR NEW DEPLOYMENT URL FROM THE SIMPLE SCRIPT HERE
+        const testUrl = 'https://script.google.com/macros/s/AKfycbzVztI4drCxYuSwg8OLTJgP1f8_3WQ47IHNarRRxR2b22obBVs5MTxivY1AUqc5392iIw/exec';
+
+        async function runTest() {
+            const resultEl = document.getElementById('result');
+            resultEl.textContent = 'Testing...';
+            try {
+                const response = await fetch(testUrl);
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok. Status: ${response.status}`);
+                }
+                const data = await response.json();
+                
+                // If successful, you will see this message
+                resultEl.textContent = `SUCCESS! Message from server: "${data.message}"`;
+                resultEl.style.color = 'green';
+
+            } catch (error) {
+                // If it fails, you will see this
+                resultEl.textContent = `FAILED! Error: ${error.message}. Please check the browser console (F12) for a 'CORS error' message.`;
+                resultEl.style.color = 'red';
+                console.error(error);
+            }
+        }
+    </script>
+
+</body>
+</html>
