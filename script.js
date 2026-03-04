@@ -1,458 +1,781 @@
 // =================================================================
-// SECTION A: E-SHOP & CHATBOT SCRIPT (NEW INTEGRATED WORKFLOW)
+// E-Shop Frontend Script - v28.0 (FINAL COMPLETE)
+// Features: Themes, Marketing, Maintenance, Login, Cart, Chatbot
 // =================================================================
-const googleScriptURL = 'https://script.google.com/macros/s/AKfycbzf3_nbvTeGuMVMEjGBBemGH6FglQ9riZNohbW8kDbhZjTLHQKRanFiPXBI6wThvt12/exec';
+
+// ===========================================================
+// [ 1.0 ] GLOBAL CONFIGURATION & STATE
+// ===========================================================
+// CRITICAL FIX: Using your latest, correct deployment URL
+const googleScriptURL = 'https://script.google.com/macros/s/AKfycbwgbm0F9tCktQCeLJyrY1qZb3aU9NA8iP-T1FjCnRl2erH1y9Qo6tr4uKAPiFtyXSOU1w/exec';
 const botServerURL = 'https://whatsapp-eshop-bot.onrender.com/eshop-chat';
+const apiKey = '9582967';
 
-let products = []; let cart = []; let activeFestival = null; let activePromotions = [];
-let shippingRules = {}; let availableDiscountCodes = {}; let appliedDiscount = null;
+let products = [];
+let allJobs = [];
+let cart = [];
+let chatSession = {};
 
-let chatSession = {
-    state: 'main_menu', 
-    isVerified: false,
-    pac: null,
-    sessionTimeout: null,
-    nextState: null
-};
-
-const generalEnquiries = {
-    "1": {
-        question: "Shipping & Delivery",
-        answer: "Shipping will be done within 2 working days. You should receive your goods within a maximum of 5 working days after the order is processed."
-    },
-    "2": {
-        question: "Payment Methods",
-        answer: "We currently accept manual payments via Maybank online transfer and Touch 'n Go eWallet. Please follow the instructions during checkout."
-    },
-    "3": {
-        question: "Product Authenticity",
-        answer: "All our products are 100% authentic and sourced directly from Forever Living Products. We guarantee the quality and genuineness of every item."
-    },
-    "4": {
-        question: "Business Opportunity",
-        answer: "We offer a rewarding business opportunity! To learn more, please click on the 'Business Opportunity' tab in the main menu or contact our admin directly via WhatsApp."
-    }
-};
-
+// ===========================================================
+// [ 2.0 ] MAIN CONTROLLER & INITIALIZATION
+// ===========================================================
 document.addEventListener('DOMContentLoaded', () => {
-    fetchData();
+    // --- Attach New Static Listeners ---
+    const loginBtn = document.getElementById('nav-login-btn');
+    if(loginBtn) loginBtn.addEventListener('click', () => toggleLoginModal(true));
+    
+    const closeLoginBtn = document.getElementById('close-login-modal-btn');
+    if(closeLoginBtn) closeLoginBtn.addEventListener('click', () => toggleLoginModal(false));
+
+    const chatSend = document.getElementById('chat-send-btn');
+    if(chatSend) chatSend.addEventListener('click', handleChatSubmit);
+    
     const chatInput = document.getElementById('chat-input');
-    const chatSendBtn = document.getElementById('chat-send-btn');
-    if (chatSendBtn) {
-        chatSendBtn.addEventListener('click', handleChatSubmit);
-        chatInput.addEventListener('keyup', (event) => { if (event.key === "Enter") handleChatSubmit(); });
-    }
+    if(chatInput) chatInput.addEventListener('keyup', (e) => { if (e.key === "Enter") handleChatSubmit(); });
+
+    // --- Standard Listeners (from your original code) ---
+    // Note: Some elements like forms are dynamic, so their listeners are attached in fetchData/render
+    // but we can try to attach static ones here if they exist in HTML source.
+    // Your original code had: document.addEventListener('DOMContentLoaded', fetchData);
+    // We are replacing that single call with this block to ensure everything initializes.
+
+    fetchData();
 });
 
 async function fetchData() {
-    const productListContainer = document.getElementById("product-list-container");
     try {
         const response = await fetch(googleScriptURL);
-        if (!response.ok) throw new Error(`Network response error: ${response.statusText}`);
+        if (!response.ok) throw new Error('Network response failed');
         const data = await response.json();
-        if (data.status !== 'success') throw new Error(data.message || 'Failed to parse data.');
-        const marketingSettings = data.marketing || {};
-        if (marketingSettings.MaintenanceMode === true) {
-            document.getElementById('maintenance-message').textContent = marketingSettings.MaintenanceMessage || "We'll be back shortly!";
-            document.getElementById('maintenance-overlay').style.display = 'flex';
-            return;
-        }
-        products = data.products || [];
-        activeFestival = data.activeFestival || null;
-        activePromotions = data.activePromotions || [];
-        shippingRules = data.shippingRules || {};
-        availableDiscountCodes = data.discountCodes || {};
-        initializeUI(marketingSettings);
-    } catch (error) {
-        console.error("Error fetching store data:", error);
-        if (productListContainer) {
-            productListContainer.innerHTML = `<p style="text-align: center; color: red; width: 100%;"><i class="fa-solid fa-triangle-exclamation"></i> Error loading store data. Please try again later.</p>`;
-        }
-    }
-    document.getElementById('update-timestamp').textContent = `${new Date().toLocaleDateString('en-GB')} (v10.3)`;
-    showTab('products');
-}
+        
+        if (data.status !== 'success') throw new Error(data.message || 'Unknown backend error');
 
-// --- Core E-Shop Functions ---
-function initializeUI(marketingSettings) {
-    const body = document.body;
-    body.removeAttribute("data-festival");
-    if (activeFestival && activeFestival.theme) {
-        const themeMap = { "CNY": "cny", "NationalDay": "national-day", "MalaysiaDay": "malaysia-day", "MooncakeFestival": "mid-autumn", "Thaipusam": "thaipusam", "HariRaya": "hari-raya", "Deepavali": "deepavali", "Christmas": "christmas", "GrandOpening": "grand-opening", "NewYear": "new-year"};
-        const festiveAttr = themeMap[activeFestival.theme];
-        if(festiveAttr) { body.setAttribute("data-festival", festiveAttr); }
-        document.getElementById('hero-title').innerHTML = `<i class="fa-solid fa-gift"></i> ${activeFestival.name}`;
-        document.getElementById('hero-subtitle').textContent = "Enjoy special festive offers!";
-    } else {
-        document.getElementById('hero-title').innerHTML = `<i class="fa-solid fa-store"></i> Welcome to Our Store`;
-        document.getElementById('hero-subtitle').textContent = "Enjoy high-quality wellness products for a healthier lifestyle.";
-    }
-    const banner = document.getElementById('promo-running-banner');
-    const bannerTextEl = document.getElementById('promo-banner-text');
-    if (marketingSettings.BannerText) {
-        bannerTextEl.textContent = `🔥 ${marketingSettings.BannerText} 🔥`;
-        banner.style.display = 'block';
-    } else if (activePromotions.length > 0) {
-        const promoNames = activePromotions.map(p => p.description).join(' | ');
-        bannerTextEl.textContent = `✨ ONGOING PROMOTIONS: ${promoNames} ✨`;
-        banner.style.display = 'block';
-    }
-    renderProducts();
-}
+        // --- NEW: Maintenance Mode & Theme Logic ---
+        const marketingData = data.marketingData || {};
+        const activeTheme = data.activeTheme || null;
 
-function renderProducts(){
-    const productListContainer = document.getElementById("product-list-container");
-    if (!productListContainer) return;
-    if (products.length === 0) {
-        productListContainer.innerHTML = `<p style="text-align: center; width: 100%;">No products found in the catalog.</p>`;
-        return;
-    }
-    let html = "";
-    let displayedProductIds = new Set();
-    if (activePromotions && activePromotions.length > 0) {
-        activePromotions.forEach(promo => {
-            const productsInPromo = products.filter(p => promo.productIDs.includes(p.id));
-            if (productsInPromo.length > 0) {
-                html += `<section class="promo-section"><h2>${promo.description}</h2><div class="product-list">`;
-                productsInPromo.forEach(product => {
-                    html += renderSingleProduct(product);
-                    displayedProductIds.add(product.id);
-                });
-                html += `</div></section>`;
+        // 1. Maintenance Mode Check
+        if (marketingData.MaintenanceMode === 'TRUE') {
+            document.getElementById('store-wrapper').style.display = 'none';
+            const overlay = document.getElementById('maintenance-overlay');
+            if(overlay) {
+                overlay.style.display = 'flex';
+                const msg = document.getElementById('maintenance-message');
+                if(msg) msg.textContent = marketingData.MaintenanceMessage || 'Site is down for maintenance.';
             }
-        });
+            return; // Stop loading the rest of the site
+        }
+
+        // 2. Apply Theme & Marketing Banners
+        if (activeTheme) {
+            applyTheme(activeTheme);
+        }
+        if (marketingData) {
+            applyMarketing(marketingData, activeTheme);
+        }
+
+        // --- Standard Data Loading (Your Original Logic) ---
+        products = data.products || [];
+        allJobs = data.jobsListings || [];
+        
+        renderMainContentShell();
+        renderStaticContent(data.aboutUsContent);
+        renderHomepageContent(data.aboutUsContent, allJobs, data.testimonies);
+        // Updated to pass ProductTagText from Marketing sheet
+        renderProducts(products, marketingData.ProductTagText); 
+        renderAboutUs(data.aboutUsContent);
+        renderJobs(allJobs);
+        
+        buildEnquiryForm();
+        buildCartModal();
+        buildJobApplicationModal();
+        buildFabButtons();
+        buildChatbotWidget();
+        
+        // NEW: Show Popup if configured
+        if (marketingData.PopupMessageText || marketingData.PopupImageURL) {
+            buildPopupModal(marketingData.PopupMessageText, marketingData.PopupImageURL);
+        }
+
+        document.getElementById('update-timestamp').textContent = `${new Date().toLocaleDateString('en-GB')} (v28.0)`;
+        
+        // --- Attach Listeners for Dynamically Created Elements ---
+        const enqForm = document.getElementById('enquiry-form');
+        if(enqForm) enqForm.addEventListener('submit', handleEnquirySubmit);
+        
+        const jobForm = document.getElementById('job-application-form');
+        if(jobForm) jobForm.addEventListener('submit', handleJobApplicationSubmit);
+
+        showTab('homepage');
+
+    } catch (error) {
+        console.error("Fatal Error fetching store data:", error);
+        const main = document.getElementById('main-content');
+        if(main) main.innerHTML = `<p style="text-align: center; color: red;">Error loading store. Please try again later.</p>`;
     }
-    const remainingProducts = products.filter(p => !displayedProductIds.has(p.id));
-    if (remainingProducts.length > 0) {
-        html += `<section class="promo-section"><h2>All Products</h2><div class="product-list">`;
-        remainingProducts.forEach(product => { html += renderSingleProduct(product); });
-        html += `</div></section>`;
-    }
-    productListContainer.innerHTML = html;
 }
 
-function renderSingleProduct(product) {
-    let priceHTML = '';
-    if (product.originalPrice && product.originalPrice > product.price) {
-        priceHTML = `<span class="original-price">RM ${product.originalPrice.toFixed(2)}</span><span class="new-price promo-price">RM ${product.price.toFixed(2)}</span>`;
-    } else {
-        priceHTML = `<span class="new-price">RM ${product.price.toFixed(2)}</span>`;
+// ===========================================================
+// [ 3.0 ] UI & DYNAMIC CONTENT RENDERING
+// ===========================================================
+function renderStaticContent(content) {
+    if (!content) return;
+    document.getElementById('company-name-header').innerHTML = `${content.CompanyName || ''} <span class="by-line">${content.Owner} - ${content.Role}</span> <span class="slogan">${content.Slogan}</span>`;
+    document.getElementById('footer-text').textContent = content.Footer || `© ${new Date().getFullYear()} ${content.CompanyName}`;
+    
+    // Note: Banner logic moved to applyMarketing() to handle overrides properly
+    // But we keep this safe fallthrough just in case
+}
+
+function renderMainContentShell() {
+    const main = document.getElementById('main-content');
+    main.innerHTML = `
+        <div id="homepage" class="tab-content">
+            <section id="homepage-hero" class="hero-section"></section>
+            <section id="why-choose-us" class="dynamic-content-wrapper"></section>
+            <section id="youtube-videos" class="dynamic-content-wrapper"></section>
+            <section id="homepage-testimonies" class="dynamic-content-wrapper"><h2>What Our Customers Say</h2><div id="testimonies-container"></div></section>
+            <section id="homepage-featured-jobs" class="dynamic-content-wrapper"><h2>Join Our Team</h2><div id="featured-jobs-container"></div><a onclick="showTab('jobs')" class="btn btn-secondary" style="display: table; margin: 20px auto 0; max-width: 300px;">View All Career Opportunities</a></section>
+        </div>
+        <div id="products" class="tab-content"><div id="product-list-container"></div></div>
+        <div id="about" class="tab-content"><section id="about-us-content" class="dynamic-content-wrapper"></section></div>
+        <div id="jobs" class="tab-content"><section id="jobs-content" class="dynamic-content-wrapper"><h2>All Career Opportunities</h2><div id="job-listings-container"></div></section></div>
+        <div id="enquiries" class="tab-content"><section id="enquiries-form-content" class="dynamic-content-wrapper"></section></div>
+        <div id="rewards" class="tab-content"><section class="dynamic-content-wrapper"><h2>Rewards</h2><p>This feature is coming soon!</p></section></div>
+    `;
+}
+
+function renderHomepageContent(about, jobs, testimonies) {
+    if (!about) return;
+    const heroContainer = document.getElementById('homepage-hero');
+    if (heroContainer) heroContainer.innerHTML = `<h2>${about.CompanyName || 'Welcome'}</h2><p>${about.Slogan || 'High-quality wellness products'}</p>`;
+    
+    const whyChooseUsContainer = document.getElementById('why-choose-us');
+    if (whyChooseUsContainer) whyChooseUsContainer.innerHTML = `<h2>${about.WhyChooseUs_Title}</h2><div class="why-choose-us-grid"><div><i class="${about.Point1_Icon}"></i><p>${about.Point1_Text}</p></div><div><i class="${about.Point2_Icon}"></i><p>${about.Point2_Text}</p></div><div><i class="${about.Point3_Icon}"></i><p>${about.Point3_Text}</p></div></div>`;
+        
+    const youtubeSection = document.getElementById('youtube-videos');
+    const videoUrls = about.YoutubeURL ? String(about.YoutubeURL).split(',').map(url => url.trim()) : [];
+    if (youtubeSection && videoUrls.length > 0 && videoUrls[0]) {
+        const videosHtml = videoUrls.map(url => {
+            try {
+                const videoId = new URL(url).searchParams.get('v');
+                if (videoId) return `<div class="video-wrapper"><iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe></div>`;
+            } catch(e) { console.error("Invalid YouTube URL:", url); }
+            return '';
+        }).join('');
+        const youtubeTitle = about.YoutubeSection_Title || 'Learn More';
+        youtubeSection.innerHTML = `<h2>${youtubeTitle}</h2><div id="youtube-videos-container">${videosHtml}</div>`;
+    } else if(youtubeSection) {
+        youtubeSection.style.display = 'none';
     }
-    return `
-        <div class="product">
-            <div class="halal-badge">HALAL</div>
-            <div class="product-image-container"><img src="${product.image || 'https://via.placeholder.com/200'}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/200x200?text=Image+Not+Found'"></div>
+
+    const testimoniesContainer = document.getElementById('testimonies-container');
+    if (testimonies && testimonies.length > 0) {
+        testimoniesContainer.innerHTML = testimonies.map(t => {
+            let stars = '';
+            for (let i = 0; i < 5; i++) { stars += `<i class="fa-solid fa-star" style="color: ${i < t.Rating ? 'var(--secondary-color)' : '#ccc'}"></i>`; }
+            return `<div class="testimony-card"><div class="testimony-header"><h4>${t.ClientName}</h4><div class="testimony-rating">${stars}</div></div><p>"${t.Quote}"</p></div>`;
+        }).join('');
+    } else if (testimoniesContainer) {
+        document.getElementById('homepage-testimonies').style.display = 'none';
+    }
+
+    const featuredJobsContainer = document.getElementById('featured-jobs-container');
+    const featuredJobs = jobs ? jobs.filter(j => j.isFeatured) : [];
+    if (featuredJobsContainer && featuredJobs.length > 0) {
+        featuredJobsContainer.innerHTML = featuredJobs.map(job => `<div class="job-listing-summary"><h4>${job.position}</h4><p>${job.location} | ${job.type}</p></div>`).join('');
+    } else if (featuredJobsContainer) {
+        document.getElementById('homepage-featured-jobs').style.display = 'none';
+    }
+}
+
+function renderProducts(productsToRender, tagText) {
+    const container = document.getElementById('product-list-container');
+    if (!productsToRender || productsToRender.length === 0) { container.innerHTML = `<p>No products available.</p>`; return; }
+    
+    // NEW: Add optional marketing tag
+    const tagHtml = tagText ? `<div class="product-tag">${tagText}</div>` : '';
+
+    container.innerHTML = `<div class="product-list">${productsToRender.map(p => `
+        <div class="product" style="position: relative;">
+            ${tagHtml}
+            <div class="product-image-container"><img src="${p.image}" alt="${p.name}"></div>
             <div class="product-info">
-                <h3>${product.name}</h3>
-                <div class="price-section">${priceHTML}</div>
-                <div class="benefits"><strong>Benefits:</strong> ${product.benefits || ''}</div>
-                <div class="consumption"><strong>Usage:</strong> ${product.consumption || ''}</div>
-                <div class="product-actions"><button class="btn btn-primary" onclick="addToCart(${product.id})"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button></div>
+                <h3>${p.name}</h3>
+                <div class="price-section"><span class="new-price">RM ${p.price.toFixed(2)}</span></div>
+                <div class="product-benefits"><strong>Benefits:</strong> ${p.benefits || ''}</div>
+                <div class="product-consumption"><strong>Usage:</strong> ${p.consumption || ''}</div>
+                <div class="product-actions"><button class="btn btn-primary" onclick="addToCart(${p.id})">Add to Cart</button></div>
+            </div>
+        </div>`).join('')}</div>`;
+}
+
+function renderAboutUs(content) {
+    const container = document.getElementById('about-us-content');
+    if (!content) { container.innerHTML = '<p>About information is unavailable.</p>'; return; }
+    const historySection = content.History ? `<div class="about-section"><h4>Our History</h4><p>${content.History}</p></div>` : '';
+    container.innerHTML = `
+        <h2>About ${content.CompanyName}</h2>
+        <div class="owner-profile">
+            <img src="arvind.jpg" alt="${content.Owner}" class="owner-image" onerror="this.style.display='none'">
+            <div class="owner-details">
+                <h3>${content.Owner} - ${content.Role}</h3>
+                <div>${content.MoreDetails}</div>
+            </div>
+        </div>
+        <div class="about-section">
+            <h4>Our Mission</h4>
+            <p>${content.OurMission}</p>
+        </div>
+        <div class="about-section">
+            <h4>Our Vision</h4>
+            <p>${content.OurVision}</p>
+        </div>
+        ${historySection}`;
+}
+
+function renderJobs(jobs) {
+    const container = document.getElementById('job-listings-container');
+    if (!jobs || jobs.length === 0) { container.innerHTML = '<p>There are currently no open positions.</p>'; return; }
+    container.innerHTML = jobs.map(job => `
+        <div class="job-card">
+            <div class="job-header"><h3>${job.position}</h3></div>
+            <div class="job-body">
+                <div class="job-details">
+                    <div class="job-detail-item"><i class="fa-solid fa-location-dot"></i> <span>${job.location} | ${job.type}</span></div>
+                    <div class="job-detail-item"><i class="fa-solid fa-money-bill-wave"></i> <span>${job.salary} RM</span></div>
+                    <div class="job-detail-item"><i class="fa-solid fa-house-user"></i> <span>${job.accommodation}</span></div>
+                    <div class="job-detail-item"><i class="fa-solid fa-calendar-days"></i> <span>${job.workDayPattern}</span></div>
+                </div>
+                <div class="job-description">${job.description}</div>
+                <button class="btn btn-primary" onclick="toggleJobModal(true, '${job.jobId}', '${job.position}')">Apply Now</button>
+            </div>
+        </div>`).join('');
+}
+
+function buildEnquiryForm() {
+    const container = document.getElementById('enquiries-form-content');
+    container.innerHTML = `<h2>Send Us An Enquiry</h2><form id="enquiry-form" class="enquiry-form"><input type="text" id="enquiry-name" placeholder="Your Full Name" required><input type="email" id="enquiry-email" placeholder="Your Email Address" required><input type="tel" id="enquiry-phone" placeholder="Your Phone Number" required><select id="enquiry-type" required><option value="" disabled selected>Select Enquiry Type...</option><option value="General Question">General</option><option value="Product Support">Product</option></select><textarea id="enquiry-message" placeholder="Your Message" rows="6" required></textarea><button type="submit" class="btn btn-primary" style="width: 100%;">Submit</button><p id="enquiry-status"></p></form>`;
+}
+
+function buildCartModal() {
+    const container = document.getElementById('cart-modal');
+    container.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Your Cart</h2>
+                <button class="close" onclick="toggleCart(true)">&times;</button>
+            </div>
+            <div class="modal-body" id="cart-items"><p>Your cart is empty.</p></div>
+            <div id="cart-checkout-area">
+                <div class="modal-footer">
+                    <div class="summary-line"><span>Subtotal</span><span id="cart-subtotal">RM 0.00</span></div>
+                    <div class="summary-line total"><span>Total</span><span id="cart-total">RM 0.00</span></div>
+                </div>
+                <div class="customer-info-form">
+                    <h3>Customer Info</h3>
+                    <input type="text" id="customer-name" placeholder="Full Name" required>
+                    <input type="tel" id="customer-phone" placeholder="WhatsApp Number" required>
+                    <input type="email" id="customer-email" placeholder="Email (Optional)">
+                    <textarea id="customer-address" placeholder="Shipping Address" rows="3" required></textarea>
+                </div>
+                <div style="padding: 0 30px 20px;"><button class="btn btn-primary" style="width: 100%;" onclick="initiateCheckout()">Complete Order</button></div>
             </div>
         </div>`;
 }
 
+function buildJobApplicationModal() {
+    const container = document.getElementById('job-application-modal');
+    container.innerHTML = `<div class="modal-content"><span class="close" onclick="toggleJobModal(false)">&times;</span><h2>Apply for <span id="job-modal-title"></span></h2><form id="job-application-form" class="enquiry-form"><input type="hidden" id="job-id-input"><input type="hidden" id="job-position-input"><input type="text" id="applicant-name" placeholder="Full Name" required><input type="email" id="applicant-email" placeholder="Email" required><input type="tel" id="applicant-phone" placeholder="Phone" required><input type="text" id="applicant-citizenship" placeholder="Citizenship" required><textarea id="applicant-message" placeholder="Tell us about yourself" rows="4"></textarea><label for="applicant-resume">Upload Resume (Mandatory)</label><input type="file" id="applicant-resume" required><button type="submit" class="btn btn-primary">Submit</button><p id="job-application-status"></p></form></div>`;
+}
+
+function buildFabButtons() {
+    const container = document.getElementById('fab-container');
+    container.innerHTML = `<div id="floating-cart" class="fab floating-cart-btn" onclick="toggleCart()"><i class="fa-solid fa-cart-shopping"></i><span id="cart-count">0</span></div><div class="fab chatbot-fab" onclick="toggleChatWidget(true)"><i class="fa-solid fa-robot"></i></div>`;
+}
+
+function buildChatbotWidget() {
+    const container = document.getElementById('eshop-chat-widget');
+    container.innerHTML = `<div id="chat-header"><span>FL e-Shop Assistant</span><button id="close-chat-btn" onclick="toggleChatWidget(false)">&times;</button></div><div id="chat-body"></div><div id="chat-input-container"><input type="text" id="chat-input" placeholder="Type your message..."><button id="chat-send-btn"><i class="fa-solid fa-paper-plane"></i></button></div>`;
+}
+
+// ===========================================================
+// [ 4.0 ] CART LOGIC
+// ===========================================================
 function addToCart(productId) {
-    const productToAdd = products.find(p => p.id === productId);
-    if (!productToAdd) return;
-    const existingItemInCart = cart.find(item => item.id === productId);
-    if (existingItemInCart) {
-        existingItemInCart.quantity++;
-    } else {
-        const productMaster = products.find(p => p.id === productId);
-        cart.push({ id: productToAdd.id, name: productToAdd.name, basePrice: productMaster.originalPrice || productMaster.price, price: productToAdd.price, quantity: 1 });
-    }
+    const product = products.find(p => p.id == productId);
+    const existingItem = cart.find(item => item.id == productId);
+    if (existingItem) { existingItem.quantity++; } else { cart.push({ ...product, quantity: 1 }); }
     updateCartDisplay();
 }
 
-function increaseQuantity(productId) { const item = cart.find(i => i.id === productId); if (item) { item.quantity++; } updateCartDisplay(); }
-function decreaseQuantity(productId) { const item = cart.find(i => i.id === productId); if (item) { item.quantity--; if (item.quantity <= 0) { removeItemFromCart(productId); } else { updateCartDisplay(); } } }
-function removeItemFromCart(productId) { cart = cart.filter(item => item.id !== productId); updateCartDisplay(); }
-function updateCartCount() { document.getElementById('cart-count').textContent = cart.reduce((total, item) => total + item.quantity, 0); }
-
-function applyDiscount() {
-    const input = document.getElementById("discount-code-input"); const statusEl = document.getElementById("discount-status"); const code = input.value.trim().toUpperCase();
-    if (!code) { statusEl.textContent = "Please enter a code."; statusEl.style.color = "orange"; return; }
-    const discountData = availableDiscountCodes[code];
-    if (discountData) { appliedDiscount = { code: code, ...discountData }; statusEl.textContent = `Code "${code}" applied successfully!`; statusEl.style.color = "green"; } 
-    else { appliedDiscount = null; statusEl.textContent = "Invalid or expired discount code."; statusEl.style.color = "red"; }
-    updateCartDisplay();
-}
-
-function calculateCartTotals() {
-    let originalSubtotal = 0, finalSubtotal = 0;
-    let tempCart = JSON.parse(JSON.stringify(cart));
-    tempCart.forEach(item => { const productInfo = products.find(p => p.id === item.id); item.basePrice = productInfo.originalPrice || productInfo.price; originalSubtotal += item.basePrice * item.quantity; });
-    const bundlePromos = activePromotions.filter(p => p.type === 'BUNDLE' && p.bundle);
-    const itemPromos = activePromotions.filter(p => p.type === 'PERCENT' || p.type === 'FIXED');
-    bundlePromos.forEach(promo => {
-        const eligibleItems = tempCart.filter(item => promo.productIDs.includes(item.id));
-        const totalEligibleQuantity = eligibleItems.reduce((sum, item) => sum + item.quantity, 0);
-        const numberOfBundles = Math.floor(totalEligibleQuantity / promo.bundle.quantity);
-        if (numberOfBundles > 0) {
-            finalSubtotal += numberOfBundles * promo.bundle.price;
-            let itemsToDiscount = numberOfBundles * promo.bundle.quantity;
-            eligibleItems.sort((a, b) => a.basePrice - b.basePrice);
-            for (const item of eligibleItems) { const discountable = Math.min(item.quantity, itemsToDiscount); item.quantity -= discountable; itemsToDiscount -= discountable; }
-        }
-    });
-    tempCart.forEach(item => {
-        if (item.quantity > 0) {
-            const itemPromo = itemPromos.find(p => p.productIDs.includes(item.id));
-            let unitPrice = item.basePrice;
-            if (itemPromo) {
-                if (itemPromo.type === 'FIXED') { unitPrice = itemPromo.value; } 
-                else if (itemPromo.type === 'PERCENT') { unitPrice = unitPrice * (1 - parseFloat(itemPromo.value) / 100); }
-            }
-            finalSubtotal += item.quantity * unitPrice;
-        }
-    });
-    let totalDiscount = originalSubtotal - finalSubtotal;
-    if (appliedDiscount) {
-        let discountFromCode = 0;
-        if (appliedDiscount.type.toLowerCase() === 'fixed') { discountFromCode = Math.min(finalSubtotal, parseFloat(appliedDiscount.value)); }
-        else if (appliedDiscount.type.toLowerCase() === 'percentage') { discountFromCode = finalSubtotal * (parseFloat(appliedDiscount.value) / 100); }
-        finalSubtotal -= discountFromCode;
-        totalDiscount += discountFromCode;
-    }
-    const shipping = calculateShipping(cart, finalSubtotal);
-    const finalTotal = finalSubtotal + shipping.fee;
-    return { originalSubtotal, totalDiscount, finalTotal, shipping, totalPoints: Math.floor(finalSubtotal) };
-}
+function increaseQuantity(productId) { const item = cart.find(i => i.id == productId); if (item) { item.quantity++; } updateCartDisplay(); }
+function decreaseQuantity(productId) { const item = cart.find(i => i.id == productId); if (item) { item.quantity--; if (item.quantity <= 0) { removeItemFromCart(productId); } else { updateCartDisplay(); } } }
+function removeItemFromCart(productId) { cart = cart.filter(item => item.id != productId); updateCartDisplay(); }
 
 function updateCartDisplay() {
-    const cartItemsEl = document.getElementById("cart-items"), subtotalEl = document.getElementById("cart-subtotal"), discountLineEl = document.getElementById("discount-line"), discountEl = document.getElementById("cart-discount"), shippingEl = document.getElementById("cart-shipping"), totalEl = document.getElementById("cart-total"), pointsEl = document.getElementById("points-earned-display"), savingsLineEl = document.getElementById("savings-line"), savingsEl = document.getElementById("cart-savings");
-    updateCartCount();
+    const cartItemsContainer = document.getElementById('cart-items');
+    const checkoutArea = document.getElementById('cart-checkout-area');
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    document.getElementById('cart-count').textContent = totalItems;
+    
     if (cart.length === 0) {
-        cartItemsEl.innerHTML = "<p>Your cart is currently empty.</p>";
-        subtotalEl.textContent = "RM 0.00"; shippingEl.textContent = "RM 0.00"; totalEl.textContent = "RM 0.00";
-        pointsEl.innerHTML = ""; discountLineEl.style.display = "none"; savingsLineEl.style.display = "none";
+        cartItemsContainer.innerHTML = '<p style="text-align:center; padding: 20px 0;">Your cart is empty.</p>';
+        checkoutArea.style.display = 'none';
         return;
     }
-    const { originalSubtotal, totalDiscount, finalTotal, shipping, totalPoints } = calculateCartTotals();
-    let itemsHtml = "";
-    cart.forEach(item => { itemsHtml += `<div class="cart-item"><div class="cart-item-details"><strong>${item.name}</strong><div class="quantity-controls"><button class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button><span class="quantity-display">${item.quantity}</span><button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button></div></div><div style="text-align:right">RM ${item.basePrice.toFixed(2)}</div><button class="remove-item-btn" onclick="removeItemFromCart(${item.id})"><i class="fa-solid fa-trash-can"></i></button></div>`; });
-    cartItemsEl.innerHTML = itemsHtml;
-    subtotalEl.textContent = `RM ${originalSubtotal.toFixed(2)}`;
-    if (totalDiscount > 0.01) { discountEl.textContent = `- RM ${totalDiscount.toFixed(2)}`; discountLineEl.style.display = "flex"; savingsEl.textContent = `RM ${totalDiscount.toFixed(2)}`; savingsLineEl.style.display = "flex"; } else { discountLineEl.style.display = "none"; savingsLineEl.style.display = "none"; }
-    shippingEl.innerHTML = shipping.fee === 0 ? `<span style="color:var(--accent-color);font-weight:700">FREE</span>` : `RM ${shipping.fee.toFixed(2)}`;
-    totalEl.textContent = `RM ${finalTotal.toFixed(2)}`;
-    pointsEl.innerHTML = `<div class="points-earned"><i class="fa-solid fa-star"></i> Points to be Earned: ${totalPoints}</div>`;
+    
+    checkoutArea.style.display = 'block';
+    cartItemsContainer.innerHTML = cart.map(item => `
+        <div class="cart-item">
+            <img src="${item.image}" alt="${item.name}" class="cart-item-image"/>
+            <div class="cart-item-details">
+                <strong>${item.name}</strong>
+                <div class="quantity-controls">
+                    <button class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button>
+                    <span>${item.quantity}</span>
+                    <button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button>
+                </div>
+            </div>
+            <strong>RM ${(item.price * item.quantity).toFixed(2)}</strong>
+            <button class="remove-item-btn" onclick="removeItemFromCart(${item.id})"><i class="fa-solid fa-trash-can"></i></button>
+        </div>`).join('');
+        
+    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    document.getElementById('cart-subtotal').textContent = `RM ${subtotal.toFixed(2)}`;
+    document.getElementById('cart-total').textContent = `RM ${subtotal.toFixed(2)}`;
 }
 
-function calculateShipping(currentCart, totalAfterDiscounts) {
-    if (currentCart.length === 0) return { fee: 0 };
-    let applicableRule = null;
-    const defaultRules = Object.values(shippingRules).filter(rule => rule.isDefault);
-    for (const rule of defaultRules) { if (totalAfterDiscounts >= rule.minSpend && totalAfterDiscounts <= rule.maxSpend) { applicableRule = rule; break; } }
-    if (!applicableRule) return { fee: 14 }; // Fallback default
-    return { fee: parseFloat(applicableRule.charge) || 0 };
+function toggleCart(hide = false) {
+    const modal = document.getElementById('cart-modal');
+    modal.style.display = hide ? 'none' : 'flex';
+    if (!hide) updateCartDisplay();
 }
 
-// --- Simplified Checkout Flow ---
-function initiateCheckout() {
-    if (!document.getElementById('consent-checkbox').checked) { alert("You must agree to the data collection consent."); return; }
-    if (cart.length === 0) { alert("Your cart is empty."); return; }
-    const requiredFields = ['customer-name', 'customer-phone', 'customer-email', 'customer-address1', 'customer-city', 'customer-state', 'customer-postcode'];
-    if (requiredFields.some(id => !document.getElementById(id).value.trim())) { alert("Please fill in all required customer and shipping fields."); return; }
-    if (!document.getElementById('customer-phone').value.trim().startsWith('+')) { alert("Invalid phone number. Please include the country code (e.g., +60)."); return; }
-    document.getElementById('cart-view').style.display = 'none';
-    document.getElementById('payment-options-view').style.display = 'block';
-}
+async function initiateCheckout() {
+    const checkoutBtn = document.querySelector('#cart-checkout-area button');
+    checkoutBtn.disabled = true;
+    checkoutBtn.textContent = 'Processing...';
 
-function proceedToUpload() {
-    document.getElementById('payment-options-view').style.display = 'none';
-    document.getElementById('verification-view').style.display = 'block';
-}
+    const name = document.getElementById('customer-name').value.trim();
+    const phone = document.getElementById('customer-phone').value.trim();
+    const address = document.getElementById('customer-address').value.trim();
+    const email = document.getElementById('customer-email').value.trim();
 
-async function uploadProof() {
-    const fileInput = document.getElementById('payment-proof-upload'), statusEl = document.getElementById('upload-status'), uploadBtn = document.getElementById('upload-proof-btn'), paymentMethod = document.getElementById('payment-method').value, file = fileInput.files[0];
-    if (!file) { statusEl.textContent = "Please select a file to upload."; statusEl.style.color = "red"; return; }
-    if (!paymentMethod) { statusEl.textContent = "Please select the payment method you used."; statusEl.style.color = "red"; return; }
-    uploadBtn.disabled = true; statusEl.textContent = "Submitting order & generating proforma invoice..."; statusEl.style.color = "blue";
-    const customerName = document.getElementById('customer-name').value.trim(), customerPhone = document.getElementById('customer-phone').value.trim(), customerEmail = document.getElementById('customer-email').value.trim(), address1 = document.getElementById('customer-address1').value.trim(), address2 = document.getElementById('customer-address2').value.trim(), city = document.getElementById('customer-city').value.trim(), state = document.getElementById('customer-state').value.trim(), postcode = document.getElementById('customer-postcode').value.trim();
-    const totals = calculateCartTotals();
-    const fullAddress = `${address1}, ${address2 ? address2 + ", " : ""}${postcode} ${city}, ${state}.`;
+    if (!name || !phone || !address) {
+        alert('Please fill in all required customer details: Name, Phone, and Address.');
+        checkoutBtn.disabled = false;
+        checkoutBtn.textContent = 'Complete Order';
+        return;
+    }
+
+    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const shippingFee = 0.0; 
+    const totalAmount = subtotal + shippingFee;
+
+    const itemsPurchased = cart.map(item => `${item.id}x${item.quantity}`).join(', ');
+
+    const payload = {
+        action: 'logInitialOrder',
+        data: {
+            customerName: name,
+            customerPhone: phone,
+            customerEmail: email,
+            customerAddress: address,
+            itemsPurchased: itemsPurchased,
+            cart: cart, 
+            totalAmount: totalAmount,
+            shippingFee: shippingFee,
+            totalPointsForThisPurchase: 0 
+        }
+    };
+
     try {
-        const base64File = await getBase64(file);
-        const payload = { action: "logInitialOrderWithProof", customerName, customerPhone, customerEmail, customerAddress: fullAddress, cart: cart, itemsPurchased: cart.map(item => `${item.name} (x${item.quantity})`).join('; '), totalAmount: totals.finalTotal.toFixed(2), shippingFee: totals.shipping.fee.toFixed(2), discountApplied: `Total Discount - RM ${totals.totalDiscount.toFixed(2)}`, discountCodeUsed: appliedDiscount ? appliedDiscount.code : "N/A", totalPointsForThisPurchase: totals.totalPoints, paymentProofFile: base64File.split(",")[1], paymentProofMimeType: file.type, paymentProofFileName: file.name };
-        const response = await fetch(googleScriptURL, { method: "POST", body: JSON.stringify(payload) });
-        const result = await response.json();
-        if (result.status === 'success' && result.proformaUrl) {
-            document.getElementById('verification-view').innerHTML = `<h2 style="color:var(--accent-color);">Order Logged Successfully!</h2><p>Your order (<strong>${result.invoiceId}</strong>) has been submitted. A proforma invoice is ready for your records.</p><p>You will receive a <strong>WhatsApp notification</strong> once payment is verified and your order is processed.</p><a href="${result.proformaUrl}" class="btn btn-primary" target="_blank">Download Proforma Invoice</a><button class="btn btn-secondary" style="margin-top: 20px;" onclick="closeAndResetCart()">Close</button>`;
-            cart = []; appliedDiscount = null; updateCartDisplay();
-        } else { throw new Error(result.message || 'Unknown server error'); }
-    } catch (error) { statusEl.textContent = `Submission Error: ${error.message}`; statusEl.style.color = "red"; uploadBtn.disabled = false; }
+        await postDataToGScript(payload);
+        alert('Your order has been placed successfully! We will contact you via WhatsApp shortly to confirm payment and shipping.');
+        
+        cart = []; 
+        toggleCart(true); 
+        updateCartDisplay(); 
+
+    } catch (error) {
+        console.error('Checkout failed:', error);
+        alert('There was an error placing your order. Please try again or contact us directly.');
+    } finally {
+        checkoutBtn.disabled = false;
+        checkoutBtn.textContent = 'Complete Order';
+    }
 }
 
-function cancelVerification(){ if(confirm("Are you sure? This will clear your cart and cancel the order process.")){ window.location.reload(); } }
-function closeAndResetCart() { toggleCart(true); window.location.reload(); }
+// ===========================================================
+// [ 5.0 ] FORMS LOGIC
+// ===========================================================
+function toggleJobModal(show = false, jobId = '', jobTitle = '') {
+    const modal = document.getElementById('job-application-modal');
+    if (show) {
+        document.getElementById('job-modal-title').textContent = jobTitle;
+        document.getElementById('job-id-input').value = jobId;
+        document.getElementById('job-position-input').value = jobTitle;
+        modal.style.display = 'flex';
+    } else {
+        modal.style.display = 'none';
+        document.getElementById('job-application-form').reset();
+    }
+}
 
-// --- Helper & UI Functions ---
-function toggleCart(t=!1){const e=document.getElementById("cart-modal");if(t)return void(e.style.display="none");"flex"===e.style.display?e.style.display="none":(e.style.display="flex",e.querySelector("#cart-view").style.display="block",e.querySelector("#payment-options-view").style.display="none",e.querySelector("#verification-view").style.display="none",updateCartDisplay())}
-function getBase64(t){return new Promise((e,o)=>{const n=new FileReader;n.readAsDataURL(t),n.onload=()=>e(n.result),n.onerror=t=>o(t)})}
-function filterProducts(){const t=document.getElementById("product-search").value.toLowerCase();document.querySelectorAll(".product-list").forEach(e=>{let o=!1;e.querySelectorAll(".product").forEach(e=>{e.querySelector("h3").textContent.toLowerCase().includes(t)?(e.style.display="flex",o=!0):e.style.display="none"});const n=e.closest(".promo-section");n&&(n.style.display=o?"block":"none")})}
-function toggleCheckoutButton() { document.getElementById('checkout-btn').disabled = !document.getElementById('consent-checkbox').checked; }
-function showTab(tabId) { document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active')); const tab = document.getElementById(tabId); if (tab) tab.classList.add('active'); }
+async function handleEnquirySubmit(event) {
+    event.preventDefault();
+    const statusEl = document.getElementById('enquiry-status');
+    statusEl.textContent = 'Sending...';
+    try {
+        const payload = { action: 'logEnquiry', data: { name: document.getElementById('enquiry-name').value, email: document.getElementById('enquiry-email').value, phone: document.getElementById('enquiry-phone').value, type: document.getElementById('enquiry-type').value, message: document.getElementById('enquiry-message').value } };
+        await postDataToGScript(payload);
+        statusEl.textContent = 'Enquiry sent successfully!';
+        event.target.reset();
+    } catch (error) {
+        statusEl.textContent = 'An error occurred.';
+    }
+}
 
-// =================================================================
-// SECTION B: NEW E-SHOP CHATBOT LOGIC
-// =================================================================
+async function handleJobApplicationSubmit(event) {
+    event.preventDefault();
+    const statusEl = document.getElementById('job-application-status');
+    const fileInput = document.getElementById('applicant-resume');
+    if (fileInput.files.length === 0) {
+        statusEl.textContent = 'Resume upload is mandatory.';
+        return;
+    }
+    statusEl.textContent = 'Submitting...';
+    const file = fileInput.files[0];
+    const base64File = await getBase64(file);
+    const payload = {
+        action: 'logJobApplication',
+        data: {
+            jobId: document.getElementById('job-id-input').value,
+            position: document.getElementById('job-position-input').value,
+            name: document.getElementById('applicant-name').value,
+            email: document.getElementById('applicant-email').value,
+            phone: document.getElementById('applicant-phone').value,
+            citizenship: document.getElementById('applicant-citizenship').value,
+            message: document.getElementById('applicant-message').value,
+            resumeFile: base64File.split(',')[1],
+            resumeMimeType: file.type,
+            resumeFileName: file.name
+        }
+    };
+    try {
+        await postDataToGScript(payload);
+        statusEl.textContent = 'Application submitted successfully!';
+        setTimeout(() => { toggleJobModal(false); }, 3000);
+    } catch (error) {
+        statusEl.textContent = 'An error occurred.';
+    }
+}
 
+function getBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+}
+
+// ===========================================================
+// [ 6.0 ] CHATBOT LOGIC
+// ===========================================================
 function toggleChatWidget(show) {
     const chatWidget = document.getElementById('eshop-chat-widget');
     const fabContainer = document.getElementById('fab-container');
     if (show) {
         chatWidget.classList.add('active');
-        if(fabContainer) fabContainer.style.right = '400px'; 
-        if (document.querySelectorAll('.chat-message').length === 0) { displayMainMenu(); }
+        fabContainer.style.right = '370px';
+        if (document.getElementById('chat-body').innerHTML.trim() === '') {
+            displayMainMenu();
+        }
     } else {
         chatWidget.classList.remove('active');
-        if(fabContainer) fabContainer.style.right = '20px';
+        fabContainer.style.right = '20px';
     }
 }
 
 function addChatMessage(sender, text, type = 'text') {
     const chatBody = document.getElementById('chat-body');
-    const messageDiv = document.createElement('div');
-    messageDiv.classList.add('chat-message', sender === 'bot' ? 'bot-message' : 'user-message');
-    if (type === 'html') { messageDiv.innerHTML = text; } 
-    else { messageDiv.textContent = text; }
-    chatBody.appendChild(messageDiv);
+    const msg = document.createElement('div');
+    msg.classList.add('chat-message', sender === 'bot' ? 'bot-message' : 'user-message');
+    if (type === 'html') { msg.innerHTML = text; } else { msg.textContent = text; }
+    chatBody.appendChild(msg);
     chatBody.scrollTop = chatBody.scrollHeight;
+    return msg;
 }
 
 function displayMainMenu() {
     chatSession.state = 'main_menu';
-    const menuText = `<strong>Welcome to our FL eShop by Muhd Isa</strong><br><br>Please choose an option:<br>1. My Account (Orders & Points)<br>2. General Questions<br>3. Update Account<br>4. Talk to a Human`;
-    addChatMessage('bot', menuText, 'html');
+    const menu = `<strong>Welcome!</strong><br>1. My Account<br>2. Talk to a Human<br>Or ask a question.`;
+    addChatMessage('bot', menu, 'html');
 }
 
 async function handleChatSubmit() {
-    const chatInput = document.getElementById('chat-input');
-    const userInput = chatInput.value.trim();
-    if (!userInput) return;
-    addChatMessage('user', userInput);
-    chatInput.value = ''; chatInput.disabled = true;
-    switch (chatSession.state) {
-        case 'main_menu': await handleMainMenu(userInput); break;
-        case 'general_questions_menu': await handleGeneralQuestions(userInput); break;
-        case 'awaiting_identifier': await startVerification(userInput); break;
-        case 'awaiting_code': await submitVerificationCode(userInput); break;
-        case 'my_account_menu': await handleMyAccountMenu(userInput); break;
-    }
-    chatInput.disabled = false; chatInput.focus();
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text) return;
+    addChatMessage('user', text);
+    input.value = '';
+    const thinkingMsg = addChatMessage('bot', '<i>Thinking...</i>', 'html');
+
+    if (chatSession.state === 'awaiting_identifier') { await startVerification(text); }
+    else if (chatSession.state === 'awaiting_code') { await submitVerificationCode(text); }
+    else if (chatSession.state === 'my_account_menu') { await handleMyAccountMenu(text); }
+    else { await handleMainMenu(text); }
+
+    thinkingMsg.remove();
 }
 
-async function handleMainMenu(userInput) {
-    switch(userInput) {
-        case '1': case '3':
-            if (chatSession.isVerified) {
-                if (userInput === '1') displayMyAccountMenu();
-                else { addChatMessage('bot', 'Update Account feature is coming soon!'); setTimeout(displayMainMenu, 1500); }
-            } else {
-                chatSession.state = 'awaiting_identifier';
-                chatSession.nextState = (userInput === '1') ? 'my_account_menu' : 'update_account_menu';
-                addChatMessage('bot', 'To access your account, please enter your PAC or registered Email address.');
-            }
-            break;
-        case '2':
-            chatSession.state = 'general_questions_menu';
-            let questionsMenu = '<strong>General Questions</strong><br><br>';
-            for (const key in generalEnquiries) { questionsMenu += `${key}. ${generalEnquiries[key].question}<br>`; }
-            questionsMenu += '5. Back to Main Menu';
-            addChatMessage('bot', questionsMenu, 'html');
-            break;
-        case '4':
-            addChatMessage('bot', 'To speak with our admin, please click the link below to contact them directly on WhatsApp:');
-            addChatMessage('bot', '<a href="https://wa.me/601111033154" target="_blank">Contact Admin on WhatsApp</a>', 'html');
-            setTimeout(displayMainMenu, 2000);
-            break;
-        default:
-            addChatMessage('bot', "Invalid option. Please type a number from the menu.");
-            setTimeout(displayMainMenu, 1000);
-            break;
+async function handleMainMenu(text) {
+    if (text === '1') {
+        if (sessionStorage.getItem('eshop_session_token')) {
+            displayMyAccountMenu();
+        } else {
+            chatSession.state = 'awaiting_identifier';
+            addChatMessage('bot', 'Enter your PAC or Email to verify.');
+        }
+    } else if (text === '2') {
+        addChatMessage('bot', '<a href="https://wa.me/601111033154" target="_blank">Contact Admin</a>', 'html');
+    } else {
+        const response = await postToRender('getSmartAnswer', { question: text });
+        addChatMessage('bot', response.answer || 'Sorry, I had trouble finding an answer.');
     }
-}
-
-async function handleGeneralQuestions(userInput) {
-    if (generalEnquiries[userInput]) { addChatMessage('bot', generalEnquiries[userInput].answer); } 
-    else if (userInput !== '5') { addChatMessage('bot', "That's not a valid option."); }
-    setTimeout(displayMainMenu, 2000);
 }
 
 async function startVerification(identifier) {
-    addChatMessage('bot', '<i>Verifying identity...</i>', 'html');
-    try {
-        const response = await fetch(botServerURL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'startChatVerification', data: { identifier }}) });
-        const result = await response.json();
-        if (!result.success) throw new Error(result.message);
+    const result = await postToRender('issueChatVerificationCode', { identifier: identifier });
+    if (result.success) {
         chatSession.state = 'awaiting_code';
         chatSession.pac = result.pac;
-        addChatMessage('bot', `Thank you. A 10-digit verification code has been sent to your registered WhatsApp number. Please enter it here.`);
-    } catch (error) {
-        addChatMessage('bot', `Verification failed: ${error.message}. Please try again.`);
-        setTimeout(displayMainMenu, 2000);
+        addChatMessage('bot', 'A code has been sent to your WhatsApp. Please enter it here.');
+    } else {
+        addChatMessage('bot', `Verification failed: ${result.message}`);
+        chatSession.state = 'main_menu';
     }
 }
 
 async function submitVerificationCode(code) {
-    addChatMessage('bot', '<i>Checking code...</i>', 'html');
-    try {
-        const response = await fetch(botServerURL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'verifyChatCode', data: { pac: chatSession.pac, code }}) });
-        const result = await response.json();
-        if (!result.success) throw new Error(result.message);
-        chatSession.isVerified = true;
-        addChatMessage('bot', '✅ Verification Successful! You are securely logged in for 15 minutes.');
-        clearTimeout(chatSession.sessionTimeout);
-        chatSession.sessionTimeout = setTimeout(() => {
-            chatSession.isVerified = false; chatSession.pac = null;
-            addChatMessage('bot', 'Your secure session has expired. Please log in again for account-related questions.');
-            displayMainMenu();
-        }, 15 * 60 * 1000);
-        if (chatSession.nextState === 'my_account_menu') displayMyAccountMenu();
-        else displayMainMenu();
-    } catch (error) {
-        addChatMessage('bot', `Verification failed: ${error.message}. Please try again.`);
-        setTimeout(displayMainMenu, 2000);
+    const result = await postToRender('verifyChatCode', { pac: chatSession.pac, code: code });
+    if (result.success) {
+        sessionStorage.setItem('eshop_session_token', result.token);
+        addChatMessage('bot', 'Verified!');
+        displayMyAccountMenu();
+    } else {
+        addChatMessage('bot', `Verification failed: ${result.message}`);
+        chatSession.state = 'main_menu';
     }
 }
 
 function displayMyAccountMenu() {
     chatSession.state = 'my_account_menu';
-    const menuText = `<strong>My Account</strong><br><br>1. View My Last 5 Orders<br>2. Check My Total Points<br>3. Back to Main Menu`;
-    addChatMessage('bot', menuText, 'html');
+    addChatMessage('bot', '<strong>My Account</strong><br>1. View My Last 5 Orders<br>2. Check My Total Points<br>3. Back to Main Menu', 'html');
 }
 
-async function handleMyAccountMenu(userInput) {
-    const lastBotMessageContainer = document.querySelector('#chat-body .bot-message:last-child');
-    addChatMessage('bot', '<i>Fetching your data...</i>', 'html');
-    let result = {};
-    try {
-        switch(userInput) {
-            case '1':
-                result = await fetch(botServerURL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'getPurchaseHistory', data: { pac: chatSession.pac }}) }).then(res => res.json());
-                if (!result.success || result.history.length === 0) { addChatMessage('bot', 'You have no purchase history on record.'); } 
-                else {
-                    let historyText = "<strong>Your Last 5 Orders:</strong><br>";
-                    result.history.forEach(order => { historyText += `<br><strong>ID:</strong> ${order.invoiceId}<br><strong>Date:</strong> ${order.date}<br><strong>Total:</strong> RM ${order.totalAmount}<br><strong>Status:</strong> ${order.status}`; });
-                    addChatMessage('bot', historyText, 'html');
-                }
-                break;
-            case '2':
-                result = await fetch(botServerURL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'getPointsHistory', data: { pac: chatSession.pac }}) }).then(res => res.json());
-                if (!result.success) { addChatMessage('bot', 'Could not retrieve your points balance.'); }
-                else { addChatMessage('bot', `Your total accumulated points balance is: <strong>${result.currentBalance}</strong>`, 'html'); }
-                break;
-            case '3':
-                displayMainMenu(); return;
-            default: addChatMessage('bot', "Invalid option."); break;
+async function handleMyAccountMenu(text) {
+    let action = '';
+    if (text === '1') action = 'getPurchaseHistory';
+    else if (text === '2') action = 'getPointsHistory';
+    else if (text === '3') { displayMainMenu(); return; }
+    else { addChatMessage('bot', 'Invalid option.'); return; }
+
+    const token = sessionStorage.getItem('eshop_session_token');
+    const result = await postToRender(action, { token: token });
+    if(result.success) {
+        if(action === 'getPurchaseHistory') {
+            let historyText = "<strong>Your Last 5 Orders:</strong><br>";
+            if (result.history.length === 0) { historyText = 'You have no purchase history.'; }
+            else { result.history.forEach(order => { historyText += `<br><strong>ID:</strong> ${order.invoiceId}<br><strong>Date:</strong> ${order.date}<br><strong>Total:</strong> RM ${order.totalAmount}<br><strong>Status:</strong> ${order.status}`; }); }
+            addChatMessage('bot', historyText, 'html');
+        } else {
+            addChatMessage('bot', `Your total points: <strong>${result.currentBalance}</strong>`, 'html');
         }
-    } catch (error) { addChatMessage('bot', "Sorry, an error occurred while retrieving your data."); }
-    
-    const thinkingMsg = document.querySelector('#chat-body .bot-message:last-child');
-    if (thinkingMsg && thinkingMsg.innerHTML === '<i>Fetching your data...</i>') {
-        thinkingMsg.remove();
+    } else {
+        addChatMessage('bot', `Error: ${result.message}`);
     }
-    setTimeout(displayMyAccountMenu, 3000);
+}
+
+// ===========================================================
+// [ 7.0 ] GLOBAL UTILITIES & API HELPERS
+// ===========================================================
+function showTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+}
+
+async function postDataToGScript(payload) {
+    try {
+        await fetch(googleScriptURL, { method: 'POST', mode: 'no-cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), redirect: 'follow' });
+        return { status: 'success' };
+    } catch (error) {
+        console.error('Error posting to Google Script:', error);
+        throw error;
+    }
+}
+
+async function postToRender(action, data) {
+    try {
+        const response = await fetch(botServerURL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action, apiKey, data })
+        });
+        if (!response.ok) {
+            const err = await response.json();
+            throw new Error(err.message || 'Server error');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error posting to Render:', error);
+        throw error;
+    }
+}
+
+// ===========================================================
+// [ 8.0 ] NEW: THEME, MARKETING & LOGIN MODAL LOGIC
+// ===========================================================
+
+/**
+ * Applies the active theme colors and triggers special effects.
+ */
+function applyTheme(theme) {
+    if (!theme) return;
+    const root = document.documentElement;
+
+    // Define theme colors based on your requirements
+    const themes = {
+        'Christmas': { primary: '#d90429', secondary: '#FFD700', accent: '#004B23' },
+        'HariRaya': { primary: '#006400', secondary: '#f0e68c', accent: '#27ae60' },
+        'CNY': { primary: '#E00000', secondary: '#FFD700', accent: '#C04000' },
+        'Thaipusam': { primary: '#FF9933', secondary: '#4B0082', accent: '#F0E68C' },
+        'NationalDay': { primary: '#000066', secondary: '#FFCC00', accent: '#CC0000' },
+        'MalaysiaDay': { primary: '#000066', secondary: '#FFCC00', accent: '#CC0000' },
+        'MooncakeFestival': { primary: '#C04000', secondary: '#FFD700', accent: '#E00000' },
+        'Deepavali': { primary: '#FF8C00', secondary: '#FF00FF', accent: '#FFD700' },
+        'NewYear': { primary: '#111111', secondary: '#FFD700', accent: '#C0C0C0' },
+        'Valentines': { primary: '#D70040', secondary: '#FFC0CB', accent: '#C71585' },
+        'GrandOpening': { primary: '#1a5276', secondary: '#f39c12', accent: '#27ae60' }
+    };
+
+    const colors = themes[theme.ThemeName];
+
+    if (colors) {
+        root.style.setProperty('--primary-color', colors.primary);
+        root.style.setProperty('--secondary-color', colors.secondary);
+        root.style.setProperty('--accent-color', colors.accent);
+    }
+    
+    // Check for special effects
+    if (theme.ThemeName === 'Christmas') {
+        if (typeof startSnowing === 'function') {
+            startSnowing();
+        }
+    }
+}
+
+function applyMarketing(marketing, theme) {
+    // 1. Running Banner
+    const banner = document.getElementById('promo-running-banner');
+    // Marketing text overrides festival text
+    let bannerText = marketing.BannerText || (theme ? theme.WelcomeMessage : null);
+    
+    if (bannerText) {
+        document.getElementById('promo-banner-text').textContent = bannerText;
+        banner.style.display = 'block';
+    } else {
+        banner.style.display = 'none';
+    }
+}
+
+function buildPopupModal(message, imageUrl) {
+    if (!message && !imageUrl) return; // No popup to show
+
+    // Check if popup has been shown this session
+    if (sessionStorage.getItem('eshopPopupShown') === 'true') {
+        return;
+    }
+
+    const container = document.getElementById('popup-modal');
+    let modalHTML = '';
+
+    if (imageUrl) {
+        modalHTML = `
+        <div class="modal-content" style="max-width: 500px; padding: 0;">
+             <button class="close" style="position: absolute; top: 10px; right: 20px; font-size: 30px; background: white; border-radius: 50%; width: 40px; height: 40px; opacity: 0.8;" onclick="togglePopup(true)">&times;</button>
+             <img src="${imageUrl}" style="width: 100%; border-radius: var(--border-radius);">
+        </div>`;
+    } else {
+        modalHTML = `
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2>Welcome!</h2>
+                <button class="close" onclick="togglePopup(true)">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 30px; font-size: 1.1rem; text-align: center;">
+                ${message}
+            </div>
+        </div>`;
+    }
+    
+    container.innerHTML = modalHTML;
+    togglePopup(false); // Show the popup
+    sessionStorage.setItem('eshopPopupShown', 'true'); // Set session flag
+}
+
+function togglePopup(hide = false) {
+    const modal = document.getElementById('popup-modal');
+    modal.style.display = hide ? 'none' : 'flex';
+}
+
+function toggleLoginModal(show) {
+    const modal = document.getElementById('login-modal');
+    modal.style.display = show ? 'flex' : 'none';
+}
+// [ Helper Function ] Calculate Monthly Sales for Agent Dashboard
+function calculateMonthlySales() {
+    // 1. Get orders from LocalStorage
+    const orders = JSON.parse(localStorage.getItem('orders_DATA')) || [];
+    
+    // 2. Get current month and year
+    const now = new Date();
+    const currentMonth = now.getMonth(); // 0-11
+    const currentYear = now.getFullYear();
+    
+    let totalSales = 0;
+    let count = 0;
+
+    // 3. Loop through orders and sum up only this month's orders
+    orders.forEach(order => {
+        // Use timestamp or date property
+        const orderDate = new Date(order.timestamp || order.date);
+        
+        // Check if the order belongs to the current month and year
+        if (orderDate.getMonth() === currentMonth && orderDate.getFullYear() === currentYear) {
+            // Ensure total is a number (handle string 'RM 50.00' or number 50.00)
+            let orderAmount = parseFloat(order.total);
+            if (!isNaN(orderAmount)) {
+                totalSales += orderAmount;
+                count++;
+            }
+        }
+    });
+
+    // 4. Update the Dashboard Display
+    // This looks for an element with id="monthly-sales" and "monthly-orders-count"
+    const salesDisplay = document.getElementById('monthly-sales');
+    const countDisplay = document.getElementById('monthly-orders-count');
+    
+    if (salesDisplay) {
+        salesDisplay.innerText = 'RM ' + totalSales.toFixed(2);
+    }
+    
+    if (countDisplay) {
+        countDisplay.innerText = count;
+    }
+    
+    return totalSales;
 }
